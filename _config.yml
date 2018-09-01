@@ -79,8 +79,10 @@ theme: tranquilpeak
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://gh_token@github.com/KaizynX/KaizynX.github.io.git
+  repo: https://github.com/KaizynX/KaizynX.github.io.git
+# repo: https://gh_token@github.com/KaizynX/KaizynX.github.io.git
   branch: master
+
 # hexo-admin authentification
 admin:
   username: kaizyn
