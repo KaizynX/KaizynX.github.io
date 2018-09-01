@@ -10,6 +10,9 @@ node_js:
 #  directories:
 #    - node_modules
 
+npm config set proxy false
+npm cache clean --force
+
 branches:
   only:
     - source
