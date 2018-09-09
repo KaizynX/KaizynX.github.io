@@ -5,8 +5,8 @@
 # Site
 title: "Kaizyn's Blog"
 subtitle: "To be built"
-description:
-keywords:
+description: "someone's blog"
+keywords: blog
 author: "Kaizyn"
 language: zh-CN
 timezone:
@@ -73,6 +73,9 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
+plugins:
+#- hexo-algoliasearch
+  - hexo-admin
 theme: tranquilpeak
 
 # Deployment
@@ -88,3 +91,8 @@ admin:
   username: kaizyn
   password_hash: $2a$10$DBQGfLAp2I8/JJKQ.oD4OO3DT5id3X1J8exwQ5k9NwiWOLEfX61k.
   secret: None
+
+feed:
+    type: atom
+    path: atom.xml
+    limit: 20

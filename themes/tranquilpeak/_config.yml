@@ -36,15 +36,15 @@ sidebar:
             icon: fa fa-home
         categories:
             title: global.categories
-            url: /categories
+            url: /all-categories
             icon: fa fa-bookmark
         tags:
             title: global.tags
-            url: /tags
+            url: /all-tags
             icon: fa fa-tags
         archives:
             title: global.archives
-            url: /archives
+            url: /all-archives
             icon: fa fa-archive
         search:
             title: global.search
@@ -61,10 +61,10 @@ sidebar:
             title: global.github
             url: https://github.com/KaizynX
             icon: fab fa-github
-        stack_overflow:
-            title: global.stack_overflow
-            url: http://stackoverflow.com/users
-            icon: fab fa-stack-overflow
+#        stack_overflow:
+#            title: global.stack_overflow
+#            url: http://stackoverflow.com/users
+#            icon: fab fa-stack-overflow
 #       twitter:
 #           title: global.twitter
 #           url: https://twitter.com/
