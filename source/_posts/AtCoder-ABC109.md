@@ -113,7 +113,52 @@ int main()
 求D的最大值
 
 **思路**
+~~一开始还觉得是二分~~
 根据样例可以找到一些规律的
+因为每步走的长度都一样，我们可以采用离散化的思想，把D看成单位长度1
+然后各个点之间的距离都离散一下
+可以发现如果有x1, x2, x3从小到大，且都能到达
+不存在这样的走法1-3-2, 也就是说要到3必须经过2，因为每步一样长
+因此把起点X和各个点Xi放在一起排序，相邻两点的距离一定可以被D整除
+那么就是gcd了
+```cpp
+#include <cstdio>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int Maxn = 1e5+7;
+
+int n, ans, x[Maxn];
+
+int gcd(int a, int b)
+{
+    return b == 0 ? a : gcd(b, a%b);
+}
+
+int main()
+{
+    scanf("%d%d", &n, x);
+    for(int i = 1; i <= n; ++i)
+        scanf("%d", x+i);
+    sort(x, x+n+1);
+    ans = x[1]-x[0];
+    for(int i = 2; i <= n; ++i)
+        ans = gcd(ans, x[i]-x[i-1]);
+    printf("%d\n", ans);
+    return 0;
+}
+
+```
+
+----------
+D题没写出来，感觉挺简单可以写的，然而还是不会
+我一直不服，0不也是偶数吗
+
+
+----------
+最后800名多点了，估计打ARC的都来ABC了，~~自我安慰~~
 
   [1]: https://beta.atcoder.jp/contests/abc109/tasks/abc109_a
   [2]: https://beta.atcoder.jp/contests/abc109/tasks/abc109_b
