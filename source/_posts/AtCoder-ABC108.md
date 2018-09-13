@@ -1,7 +1,10 @@
 ﻿---
 title: AtCoder-ABC108
 date: 2018-09-01 21:49:29
-tags: AtCoder OI 数学
+tags:
+  - AtCoder
+  - OI
+  - 数学
 ---
 
 今日九月一日晚，正是一年一度~~灾难~~开学日
