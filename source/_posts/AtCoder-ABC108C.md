@@ -1,0 +1,308 @@
+---
+title: AtCoder-Triangular-Relationship.md
+date: 2018-09-12 19:30:00
+tags: 
+  - AtCoder
+  - OI
+  - 数学
+ 
+mathjax: true
+---
+
+# AtCoder ABC 108 [C - Triangular Relationship][1] 
+
+## 题意
+
+给出N，K，用1~N组成三元组(a, b, c)
+
+使得a+b, b+c, a+c都是K的倍数
+
+数据范围1≤N, K≤2e5
+
+## 思路
+
+如果K为奇数, a, b, c为K的倍数
+
+如果K为偶数, a, b, c为K/2的倍数
+
+
+**简单证明**:
+
+设a = na*K+x(na为自然数)
+
+因为 a+b 是K的倍数
+
+所以 b = nb*K-x(nb为自然数)
+
+又因为 a+c 是K的倍数
+
+所以 c = nc*K-x(nc为自然数)
+
+又因为 b+c 也是K的倍数
+
+所以 b+c = (nb+nc)*K - 2*x
+
+即 2*x 是K的倍数
+
+综上所述:
+
+如果K为奇数, x是K的倍数
+
+如果K为偶数, x是K/2的倍数
+
+结论:
+
+如果K为奇数, a, b, c为K的倍数
+
+如果K为偶数, a, b, c为K/2的倍数
+
+**证毕**
+
+不妨设 a $\geq$ b $\geq$ c
+
+1. 当 a == b == c 时 只有一种排列组合
+2. 当 a == b > c 时 有$C_3^1$种排列组合
+3. 当 a > b == c 时 有$C_3^1$种排列组合
+4. 当 a > b > c 时 有$A_3^3$种排列组合
+   
+如果我们按 a $\geq$ b $\geq$ c 的顺序找下去
+
+对于 a 取不同的值,容易证明这些排列组合不会重复
+
+**tip**: 显然也可以看出K==1时候有N^3种，会爆int
+
+---
+
+1. 超级暴力O(n^3)
+    
+    枚举每种a, b, c的情况
+```cpp
+#include <cstdio>
+#include <iostream>
+
+using namespace std;
+
+const int Maxn = 2e5+7;
+
+int n, k, add;
+long long ans;
+
+int main()
+{
+    scanf("%d%d", &n, &k);
+    add = k&1 ? k : k/2;
+    for(int i = add; i <= n; i += add)
+    {
+        for(int j = i; j > 0; j -= k)
+        {
+            for(int j2 = j; j2 > 0; j2 -= k)
+            {
+                if(i == j && j == j2) ans++;
+                else if(i == j || j == j2 || i == j2) ans += 3;
+                else ans += 6;
+            }
+        }
+    }
+    printf("%lld\n", ans);
+    return 0;
+}
+```
+---
+2. 简单优化至O(n^2)
+   
+    当确定a, b的值时, 就已经可以确定c的值了
+
+    如果K为奇数, b 取 nb*K
+
+    那么c 就是 K ~ nb*K
+
+    - 当 b == c 时 三种
+
+    - 当 b > c 时， 即 c 在 K ~ (nb-1)*K 时，每类有6种
+
+        用一个简单的求和公式就可以求得总数为
+
+        $\frac{(1+(nb-1))*(nb-1)}{2} = \frac{nb*(nb-1)}{2}$
+
+    代码不在累赘
+
+---
+3. 进一步计算得到O(n)
+   
+   当 a 确定时, 即可计算出b, c的取值的方法总数
+
+   当 a 取 na*K
+
+   - 当 a == b == c 时, 一种
+   - 当 a == b 时 c 取值 K ~ (na-1)*K, 故有3 * (na-1)种
+   - 当 b == c 时b,c取值 K ~ (na-1)*K, 也有3 * (na-1)种
+   - 当 a > b > c 时, 每种6个排列组合
+  
+        当 b = (na-1)*K, c 有 na-2 种
+
+        当 b = (na-2)*K, c 有 na-3 种
+
+        ...
+
+        当 b = 2*K, c 有 1 种
+
+      就有$6*\sum_{i=2}^{na-1}{i-1}$ 种
+
+      所以只需用一个数组保存一下这个前缀和
+
+    当时在比赛中就只想到这种地步了, 毕竟可以O(n)过了
+
+    数据也才10^5 (虽然有点奇怪怎么不是10^6)
+
+    然后我就把大部分时间花在处理K为奇偶数的问题上
+
+    还写了一个很骚皮的滚动数组
+
+```cpp
+#include <cstdio>
+#include <iostream>
+
+using namespace std;
+
+const int Maxn = 2e5+7;
+
+int n, k, cnt, add;
+long long ans;
+long long s[2][Maxn];
+
+int main()
+{
+    scanf("%d%d", &n, &k);
+    if(k == 1)
+    {
+        printf("%lld\n", 1ll*n*n*n);
+        return 0;
+    }
+    add = k&1 ? k : k/2;
+    for(int i = add, cnt = 1; i <= n; i += add, ++cnt)
+    {
+        // i i i
+        ans++;
+        // i i j && i j j
+        ans += (i/k-(i%k == 0))*3*2;
+        s[0][cnt] = s[0][cnt-1];
+        s[1][cnt] = s[1][cnt-1];
+        s[i%k == 0][cnt] += i/k-(i%k == 0);
+        // i j j2
+        ans += s[i%k == 0][cnt-1]*6;
+    }
+    printf("%lld\n", ans);
+    return 0;
+}
+```
+ 聪明的你不难发现 $\sum_{i=2}^{na-1}{i-1}$ 是可以轻而易举求和的
+ 
+ $=\sum_{i=1}^{na-2}{i} = \frac{(nb-1)*(nb-2)}{2}$
+
+ 这连O(n)的辅助空间的省去了
+ 
+
+
+---
+
+4. 数论奥秘之O(1)
+   
+   以下就是比赛结束后我看见的大佬的代码
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+long long cub(int x) {
+    return 1ll * x * x * x;
+}
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    if (k & 1) {
+        cout << cub(n/k) << endl;
+    } else {
+        k /= 2;
+        cout << cub((n+k)/k/2) + cub(n/k/2) << endl;
+    }
+    return 0;
+}
+```
+
+我琢磨了好几天终于搞明白了
+
+就是在O(n)的基础上再数~~玄~~学推导
+
+当 a 取 na*K
+
+   - 当 a == b == c 时, 一种
+   - 当 a == b 时 c 取值 K ~ (na-1)*K, 故有3 * (na-1)种
+   - 当 b == c 时b,c取值 K ~ (na-1)*K, 也有3 * (na-1)种
+   - 当 a > b > c 时, 每种6个排列组合
+  
+        当 b = (na-1)*K, c 有 na-2 种
+
+        当 b = (na-2)*K, c 有 na-3 种
+
+        ...
+
+        当 b = 2*K, c 有 1 种
+
+      就有$6*\sum_{i=2}^{na-1}{i-1}$ 种
+
+      $= 6*\sum_{i=1}^{na-2}{i}$
+      
+      $= 6*\frac{(nb-1)*(nb-2)}{2}$
+
+      $= 3*(nb-1)*(nb-2)$
+
+综上: 
+
+设$F{(i)}$是 a 取 i*K 时
+
+$F(i) = 1+6*(na-1)+3*(nb-1)*(nb-2)$
+
+$= 3*{i^2} - 3*i + 1$
+
+所以:
+
+先设 a 的取值可以有 K ~ X*K
+
+$\sum_{i=1}^{X}F(i)$
+
+$= 3*\sum_{i=1}^{X}{i^2}+3*\sum_{i=1}^{X}{i}+3*\sum_{i=1}^{X}{1}$
+
+关于$\sum_{i=1}^{X}{i^2}$其实我并不会, 百度可以查到的
+
+$\sum_{i=1}^{n}{i^2}=\frac{n(n+1)(2n+1)}{6}$
+
+所以$\sum_{i=1}^{X}F(i)$
+
+$=一系列的化简略略略$
+
+$=X^3$
+
+多么惊喜,多么意外
+
+最后分类讨论
+
+- 当 N 为奇数
+
+  显然有 X = ⌊$\frac{N}{K}$⌋
+
+  即 a = $K, 2K, 3K...⌊\frac{N}{K}⌋*K$
+
+- 当 N 为偶数
+  
+  a = $\frac{1}{2}K, K,\frac{3}{2}K...⌊\frac{N}{\frac{1}{2}K}⌋*K$
+
+  我们可以分为 $K,2K...$ 和 $\frac{1}{2}K,\frac{3}{2}K...$
+
+  前一类有 ⌊$\frac{N}{K}$⌋个, 后一类就有 ⌊$\frac{N+K}{K}$⌋
+
+**证毕!**
+      
+
+  [1]: https://beta.atcoder.jp/contests/abc108/tasks/arc102_a
