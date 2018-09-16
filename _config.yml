@@ -83,8 +83,3 @@ deploy:
   repo: https://gh_token@github.com/KaizynX/KaizynX.github.io.git
   branch: master
 
-# hexo-admin authentification
-admin:
-  username: kaizyn
-  password_hash: $2a$10$DBQGfLAp2I8/JJKQ.oD4OO3DT5id3X1J8exwQ5k9NwiWOLEfX61k.
-  secret: None
