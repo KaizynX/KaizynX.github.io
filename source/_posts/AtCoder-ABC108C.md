@@ -1,5 +1,5 @@
 ---
-title: AtCoder-Triangular-Relationship.md
+title: AtCoder-Triangular-Relationship
 date: 2018-09-12 19:30:00
 tags: 
   - AtCoder
