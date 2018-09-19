@@ -1,5 +1,5 @@
 ---
-title: Codeforces Round #509 (Div. 2) 
+title: Codeforces Round 509 (Div. 2) 
 date: 2018-09-16 20:54:00
 tags: 
   - Codeforces
@@ -429,7 +429,7 @@ int main()
 
 解释
 
-![](CodeforcesR509div2D.png)
+![D](CodeforcesR509div2/CodeforcesR509div2D.png)
 
 如果从x=1跳,如图蓝线所示
 
