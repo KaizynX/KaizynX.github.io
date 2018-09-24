@@ -5,6 +5,8 @@ categories:
   - Luogu
 tags:
   - 数学
+
+mathjax: true
 ---
 
 # [小凯的数字](https://www.luogu.org/problemnew/show/U32670)

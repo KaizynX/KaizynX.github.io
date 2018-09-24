@@ -5,6 +5,8 @@ categories:
   - AtCoder
 tags:
   - 数学
+
+mathjax: true
 ---
 
 哈哈，又是每周一次的ABC

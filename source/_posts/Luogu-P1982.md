@@ -6,6 +6,8 @@ categories:
 tags:
   - NOIP
   - DP
+
+mathjax: true
 ---
 
 ## 题意

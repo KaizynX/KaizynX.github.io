@@ -5,6 +5,8 @@ categories:
   - Luogu
 tags:
   - 数学
+  
+mathjax: true
 ---
 
 # [T44705 【开学毒瘤赛T4】毒瘤的slay.three](https://www.luogu.org/problemnew/show/T44705)
@@ -180,3 +182,5 @@ int main()
 埋下伏笔先
 
 而且就算不用搞什么取最小也能A
+
+正解是二分+DP

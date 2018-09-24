@@ -5,6 +5,8 @@ categories:
   - AtCoder
 tags:
   - 数学
+
+mathjax: true
 ---
 
 今日九月一日晚，正是一年一度~~灾难~~开学日

@@ -7,6 +7,8 @@ tags:
   - 数学
   - 离散化
   - 排列组合
+
+mathjax: true
 ---
 
 # [Luogu P4889 kls与flag](https://www.luogu.org/problemnew/show/P4889)

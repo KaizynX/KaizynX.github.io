@@ -5,6 +5,8 @@ categories:
   - Luogu
 tags:
   - DP
+
+mathjax: true
 ---
 
 **摘自tinylic的题解**:

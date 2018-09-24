@@ -5,6 +5,8 @@ categories:
   - AtCoder
 tags:
   - 数学
+
+mathjax: true
 ---
 
 只写出第一道签到题目

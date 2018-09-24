@@ -8,6 +8,8 @@ tags:
   - 排列组合
   - 质因数分解
   - 乘法逆元
+
+mathjax: true
 ---
 
 # [Factorization](https://beta.atcoder.jp/contests/abc110/tasks/abc110_d)

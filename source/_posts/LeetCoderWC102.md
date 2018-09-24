@@ -5,6 +5,8 @@ categories:
   - LeetCode
 tags:
   - 数学
+
+mathjax: true
 ---
 
 # 905. [按奇偶校验排序数组](https://leetcode-cn.com/contest/weekly-contest-102/problems/sort-array-by-parity)
