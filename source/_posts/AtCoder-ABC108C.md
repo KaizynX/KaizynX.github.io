@@ -122,7 +122,7 @@ int main()
 
         用一个简单的求和公式就可以求得总数为
 
-        $\frac{(1+(nb-1))*(nb-1)}{2} = \frac{nb*(nb-1)}{2}$
+        $\frac { ( 1+(nb-1) ) \times ( nb-1 ) }{2} = \frac { nb \times (nb-1) } {2}$
 
     代码不在累赘
 
@@ -197,7 +197,7 @@ int main()
 ```
  聪明的你不难发现 $\sum_{i=2}^{na-1}{i-1}$ 是可以轻而易举求和的
  
- $=\sum_{i=1}^{na-2}{i} = \frac{(nb-1)*(nb-2)}{2}$
+ $=\sum_{i=1}^{na-2}{i} = \frac{(nb-1) \times (nb-2)}{2}$
 
  这连O(n)的辅助空间的省去了
  
@@ -250,21 +250,21 @@ int main() {
 
         当 b = 2*K, c 有 1 种
 
-      就有$6*\sum_{i=2}^{na-1}{i-1}$ 种
+      就有$6 \times \sum_{i=2}^{na-1}{i-1}$ 种
 
-      $= 6*\sum_{i=1}^{na-2}{i}$
+      $= 6 \times \sum_{i=1}^{na-2}{i}$
       
-      $= 6*\frac{(nb-1)*(nb-2)}{2}$
+      $= 6 \times \frac{(nb-1)*(nb-2)}{2}$
 
-      $= 3*(nb-1)*(nb-2)$
+      $= 3 \times (nb-1) \times (nb-2)$
 
 综上: 
 
 设$F{(i)}$是 a 取 i*K 时
 
-$F(i) = 1+6*(na-1)+3*(nb-1)*(nb-2)$
+$F(i) = 1+6 \times (na-1)+3 \times (nb-1)\times (nb-2)$
 
-$= 3*{i^2} - 3*i + 1$
+$= 3 \times {i^2} - 3 \times i + 1$
 
 所以:
 
@@ -272,7 +272,7 @@ $= 3*{i^2} - 3*i + 1$
 
 $\sum_{i=1}^{X}F(i)$
 
-$= 3*\sum_{i=1}^{X}{i^2}+3*\sum_{i=1}^{X}{i}+3*\sum_{i=1}^{X}{1}$
+$= 3 \times \sum_{i=1}^{X}{i^2}+3 \times \sum_{i=1}^{X}{i}+3 \times \sum_{i=1}^{X}{1}$
 
 关于$\sum_{i=1}^{X}{i^2}$其实我并不会, 百度可以查到的
 
