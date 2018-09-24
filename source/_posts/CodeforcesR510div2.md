@@ -1,10 +1,12 @@
 ---
 title: Codeforces Round 510 (Div. 2) 
 date: 2018-09-18 13:04:00
-tags: 
+categories:
   - Codeforces
-  - OI
+tags: 
   - 数学
+  - 树状数组
+  - 枚举
 mathjax: true
 ---
 

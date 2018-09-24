@@ -1,10 +1,13 @@
 ---
 title: hby与tkw的基情
 date: 2018-09-13 10:17:00
-tags:
+categories:
   - Luogu
-  - OI
+tags:
   - 数学
+  - 快速幂
+  - 排列组合
+  - 乘法逆元
 
 mathjax: true
 ---

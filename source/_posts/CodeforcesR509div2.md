@@ -1,10 +1,13 @@
 ---
 title: Codeforces Round 509 (Div. 2) 
 date: 2018-09-16 20:54:00
-tags: 
+categories:
   - Codeforces
-  - OI
+tags: 
   - 数学
+  - 贪心
+  - 优先队列
+  - 单调队列
  
 mathjax: true
 ---

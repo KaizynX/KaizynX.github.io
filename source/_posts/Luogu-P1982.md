@@ -1,6 +1,8 @@
 ---
 title: NOIP普及组2013 小朋友的数字
 date: 2018-09-13 21:33:36
+categories:
+  - NOIP
 tags:
   - NOIP
   - DP

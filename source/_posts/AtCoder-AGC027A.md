@@ -1,9 +1,9 @@
 ---
 title: Candy Distribution Again
 date: 2018-09-16 09:16:00
-tags:
+categories:
   - AtCoder
-  - OI
+tags:
   - 数学
 ---
 

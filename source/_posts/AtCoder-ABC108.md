@@ -1,9 +1,9 @@
 ﻿---
 title: AtCoder-ABC108
 date: 2018-09-01 21:49:29
-tags:
+categories:
   - AtCoder
-  - OI
+tags:
   - 数学
 ---
 

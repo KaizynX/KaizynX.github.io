@@ -1,10 +1,11 @@
 ---
 title: Oier们的幸运数字
 date: 2018-09-13 10:17:00
-tags:
+categories:
   - Luogu
-  - OI
+tags:
   - 数学
+  - 质因数分解
   
 mathjax: true
 ---

@@ -1,9 +1,9 @@
 ---
 title: AtCoder-Triangular-Relationship
 date: 2018-09-12 19:30:00
-tags: 
+categories:
   - AtCoder
-  - OI
+tags: 
   - 数学
  
 mathjax: true

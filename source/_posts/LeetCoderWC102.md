@@ -1,8 +1,9 @@
 ---
 title: LeetCode Weekly Contest 102
 date: 2018-09-16 11:30:00
-tags:
+categories:
   - LeetCode
+tags:
   - 数学
 ---
 
