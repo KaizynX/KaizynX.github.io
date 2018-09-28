@@ -46,7 +46,7 @@ cache:
 # Then need to rename & redefine they on any other names, otherwise icons from Next will rewrite your custom icons in Hexo.
 favicon:
   small: /images/favicon16x16.png
-  medium: /images/favicon32x32.png
+  #medium: /images/favicon32x32.png
   apple_touch_icon: /images/apple-touch-icon-next.png
   safari_pinned_tab: /images/logo.svg
   #android_manifest: /images/manifest.json
