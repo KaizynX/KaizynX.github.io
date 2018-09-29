@@ -516,7 +516,7 @@ valine:
 # Gitment
 # Introduction: https://imsun.net/posts/gitment-introduction/
 gitment:
-  enable: true
+  enable: false
   mint: true # RECOMMEND, A mint on Gitment, to support count, language and proxy_gateway
   count: true # Show comments count in post meta area
   lazy: true # Comments lazy loading with a button
@@ -829,14 +829,14 @@ pace_theme: pace-theme-minimal
 
 # Canvas-nest
 # Dependencies: https://github.com/theme-next/theme-next-canvas-nest
-canvas_nest: true
+canvas_nest: false
 
 # JavaScript 3D library.
 # Dependencies: https://github.com/theme-next/theme-next-three
 # three_waves
 three_waves: false
 # canvas_lines
-canvas_lines: false
+canvas_lines: true
 # canvas_sphere
 canvas_sphere: false
 
