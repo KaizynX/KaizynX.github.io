@@ -8,6 +8,7 @@ tags:
   
 mathjax: true
 ---
+# 错误解法,请勿模仿
 
 # [T44705 【开学毒瘤赛T4】毒瘤的slay.three](https://www.luogu.org/problemnew/show/T44705)
 
