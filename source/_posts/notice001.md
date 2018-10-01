@@ -6,12 +6,19 @@ categories:
 
 top: true
 ---
+![pic](notice001/message.jpg)
 
 评论系统今日起开通
+
+{%note info%}
 
 Powered By **[Valine](https://valine.js.org/)** v1.3.3
 
 头像由 **[Gravatar 全球公认的头像](http://cn.gravatar.com/)** 提供
+
+{%endnote%}
+
+<!--more-->
 
 默认头像就是 Gravatar (蓝色背景加一个大写的 G )
 
