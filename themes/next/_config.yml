@@ -60,7 +60,7 @@ rss: /atom.xml
 footer:
   # Specify the date when the site was setup.
   # If not defined, current year will be used.
-  #since: 2015
+  since: 2018
 
   # Icon between year and copyright info.
   icon:
@@ -236,6 +236,7 @@ sidebar:
   # Pisces | Gemini: 240
   #width: 300
 
+  # 展示侧栏(右边的那个)
   # Sidebar Display, available value (only for Muse | Mist):
   #  - post    expand on posts automatically. Default.
   #  - always  expand for all pages automatically
@@ -299,6 +300,7 @@ symbols_count_time:
   awl: 4
   wpm: 275
 
+# 代码复制
 codeblock:
   # Manual define the border radius in codeblock
   # Leave it empty for the default 1
@@ -315,6 +317,7 @@ codeblock:
   #qcode: /path/to/your/wechatqcode ex. /uploads/wechat-qcode.jpg
   #description: ex. subscribe to my blog by scanning my public wechat account
 
+# 打赏
 # Reward
 reward_comment: 求抱养
 #wechatpay: /images/wechatpay.jpg
@@ -468,10 +471,12 @@ math:
     # Bootcss, works great in China, but not so well in other region
     #cdn: //cdn.bootcss.com/KaTeX/0.7.1/katex.min.css
 
+# 支持汉字?
 # Han Support
 # Dependencies: https://github.com/theme-next/theme-next-han
 han: false
 
+# 好像是在中英文间加空格,称为[盘古空格]
 # Pangu Support
 # Dependencies: https://github.com/theme-next/theme-next-pangu
 # For more information: https://github.com/vinta/pangu.js
@@ -542,6 +547,7 @@ gitment:
 # addthis Share, see: https://www.addthis.com/
 #add_this_id:
 
+# 分享条
 # NeedMoreShare2
 # Dependencies: https://github.com/theme-next/theme-next-needmoreshare2
 # See: https://github.com/revir/need-more-share2
@@ -554,16 +560,16 @@ gitment:
 #           Technorati,Posterous,Tumblr,GoogleBookmarks,Newsvine,
 #           Evernote,Friendfeed,Vkontakte,Odnoklassniki,Mailru
 needmoreshare2:
-  enable: false
+  enable: true
   postbottom:
-    enable: false
+    enable: true
     options:
       iconStyle: box
       boxForm: horizontal
       position: bottomCenter
       networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook
   float:
-    enable: false
+    enable: true
     options:
       iconStyle: box
       boxForm: horizontal
@@ -636,9 +642,9 @@ rating:
 # Show number of visitors to each article.
 # You can visit https://leancloud.cn get AppID and AppKey.
 leancloud_visitors:
-  enable: false
-  app_id: #<app_id>
-  app_key: #<app_key>
+  enable: true
+  app_id: thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz #<app_id>
+  app_key: RztxTMKSVDyuAaC0BVM1wPM1 #<app_key>
   # Dependencies: https://github.com/theme-next/hexo-leancloud-counter-security
   # If you don't care about security in lc counter and just want to use it directly
   # (without hexo-leancloud-counter-security plugin), set the `security` to `false`.
@@ -655,10 +661,11 @@ firestore:
   projectId: #required
   bluebird: false #enable this if you want to include bluebird 3.5.1(core version) Promise polyfill
 
+# 不蒜子,即开即用好
 # Show Views/Visitors of the website/page with busuanzi.
 # Get more information on http://ibruce.info/2015/04/04/busuanzi/
 busuanzi_count:
-  enable: true
+  enable: false
   total_visitors: true
   total_visitors_icon: user
   total_views: true
@@ -675,7 +682,7 @@ busuanzi_count:
 
 
 # Enable baidu push so that the blog will push the url to baidu automatically which is very helpful for SEO
-baidu_push: false
+baidu_push: true
 
 # Google Calendar
 # Share your recent schedule to others via calendar page
@@ -706,6 +713,7 @@ algolia_search:
     hits_empty: "We didn't find any results for the search: ${query}"
     hits_stats: "${hits} results found in ${time} ms"
 
+# 本地搜索
 # Local search
 # Dependencies: https://github.com/theme-next/hexo-generator-searchdb
 local_search:
@@ -795,20 +803,24 @@ motion:
     # Only for Pisces | Gemini.
     sidebar: slideUpIn
 
+# 图片放大
 # Fancybox. There is support for old version 2 and new version 3.
 # Please, choose only any one variant, do not need to install both.
 # For install 2.x: https://github.com/theme-next/theme-next-fancybox
 # For install 3.x: https://github.com/theme-next/theme-next-fancybox3
-fancybox: false
+fancybox: true
 
+# 解决延迟点击?
 # Added switch option for separated repo in 6.0.0.
 # Dependencies: https://github.com/theme-next/theme-next-fastclick
 fastclick: false
 
+# 图片延迟加载
 # Added switch option for separated repo in 6.0.0.
 # Dependencies: https://github.com/theme-next/theme-next-jquery-lazyload
 lazyload: false
 
+# 页面加载进度条
 # Progress bar in the top during page loading.
 # Dependencies: https://github.com/theme-next/theme-next-pace
 pace: true
@@ -828,21 +840,27 @@ pace: true
 #pace-theme-minimal
 # For example
 # pace_theme: pace-theme-center-simple
-pace_theme: pace-theme-minimal
+pace_theme: pace-theme-center-atom
 
+# 背景动画
 # Canvas-nest
 # Dependencies: https://github.com/theme-next/theme-next-canvas-nest
 canvas_nest: false
 
+# cpu占用太大
 # JavaScript 3D library.
 # Dependencies: https://github.com/theme-next/theme-next-three
 # three_waves
+# 点点波浪(像海面)cpu占用极高
 three_waves: false
 # canvas_lines
-canvas_lines: true
+# 点线几何体,占用最低(还是高)
+canvas_lines: false
 # canvas_sphere
+# 球上凸点(柱?)占用高
 canvas_sphere: false
 
+# 背景彩色线条,这个不占cpu但是只适合pisces主题(唉)
 # Only fit scheme Pisces
 # Dependencies: https://github.com/theme-next/theme-next-canvas-ribbon
 # Canvas-ribbon
@@ -964,11 +982,6 @@ css: css
 js: js
 images: images
 
-# Specify the date when the site was setup
-since: 2018 # 建站年份
-
-# icon between year and author @Footer
-# authoricon:
-
+# 点击烟花效果(cpu占用略微)
 # Fireworks
-fireworks: false
+fireworks: true
