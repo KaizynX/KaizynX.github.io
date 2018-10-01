@@ -26,6 +26,8 @@ install:
     #  - npm install jsdom
     #  - npm install jquery
   - npm install hexo-asset-image --save
+  - npm install hexo-generator-search --save
+  - npm install --save hexo-generator-feed
 
 # ִ���建�棬������ҳ����
 script:
