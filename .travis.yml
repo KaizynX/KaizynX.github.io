@@ -22,12 +22,16 @@ before_install:
 
 install:
   - npm install
+  # 部署到github
   - npm install hexo-deployer-git --save
-    #  - npm install jsdom
-    #  - npm install jquery
+  # 上传图片到网页
   - npm install hexo-asset-image --save
+  # 本地搜索
   - npm install hexo-generator-search --save
+  # rss
   - npm install --save hexo-generator-feed
+  # 置顶
+  - npm install hexo-generator-index-pin-top --save
 
 # ִ���建�棬������ҳ����
 script:
