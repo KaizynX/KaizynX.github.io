@@ -4,13 +4,51 @@ date: 2018-09-24 13:46:00
 categories:
   - Luogu
 tags:
-  - 数学
+  - 二分
+  - DP
   
 mathjax: true
 ---
-# 错误解法,请勿模仿
 
 # [T44705 【开学毒瘤赛T4】毒瘤的slay.three](https://www.luogu.org/problemnew/show/T44705)
+
+## 思路
+
+二分+DP
+
+## 代码
+```cpp
+#include<iostream>
+#include<cstdio>
+using namespace std;
+int n,a[20001],mx[20001],mn[20001],ans;
+int check(int x)
+{
+    mn[1]=mx[1]=a[1];
+    for(int i=2;i<=n;i++)
+        mx[i]=min(a[i],a[1]-mn[i-1]),mn[i]=max(0,a[1]+a[i-1]+a[i]-mx[i-1]-x);
+    if(!mn[n]) return 1;
+    return 0;
+}
+int main()
+{
+    int l=0,r=0;
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++) scanf("%d",&a[i]),l=max(l,a[i]+a[i-1]);
+    r=2*l+1;
+    while(l<=r)
+    {
+        int mid=(l+r)>>1;
+        if(check(mid)) ans=mid,r=mid-1;
+        else l=mid+1;
+    }
+    printf("%d\n",ans);
+    return 0;
+}
+```
+---
+
+# 以下错误解法,请勿模仿
 
 ## 思路
 

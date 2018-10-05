@@ -6,7 +6,7 @@ categories:
 tags:
   - DP
   - 状压DP
-  - 二进制
+  - 位运算
 mathjax: true
 ---
 # [Luogu T47092 作业](https://www.luogu.org/problemnew/show/T47092)
