@@ -4,7 +4,8 @@ date: 2018-10-01 21:46:00
 categories:
   - Luogu
 tags:
-  - 暴力
+  - 暴力优化
+  - 搜索
 mathjax: true
 ---
 

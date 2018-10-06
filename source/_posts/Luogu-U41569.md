@@ -5,6 +5,7 @@ categories:
   - Luogu
 tags:
   - DP
+  - 背包
 ---
 
 # [Luogu U41568 Portal1](https://www.luogu.org/problemnew/show/U41569)

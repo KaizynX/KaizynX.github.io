@@ -224,8 +224,7 @@ int main() {
     if (k & 1) {
         cout << cub(n/k) << endl;
     } else {
-        k /= 2;
-        cout << cub((n+k)/k/2) + cub(n/k/2) << endl;
+        cout << cub((n+k)/k) + cub(n/k) << endl;
     }
     return 0;
 }
@@ -288,13 +287,13 @@ $=X^3$
 
 最后分类讨论
 
-- 当 N 为奇数
+- 当 K 为奇数
 
   显然有 X = ⌊$\frac{N}{K}$⌋
 
   即 a = $K, 2K, 3K...⌊\frac{N}{K}⌋*K$
 
-- 当 N 为偶数
+- 当 K 为偶数
   
   a = $\frac{1}{2}K, K,\frac{3}{2}K...⌊\frac{N}{\frac{1}{2}K}⌋*K$
 
@@ -302,7 +301,79 @@ $=X^3$
 
   前一类有 ⌊$\frac{N}{K}$⌋个, 后一类就有 ⌊$\frac{N+K}{K}$⌋
 
+  后一类怎么出来的?
+
+  假设我们把 $\frac{1}{2}K,\frac{3}{2}K...$ 乘上2
+
+  就是 $K,3K,5K...$
+
+  就是 $(0+1)K, (2+1)K, (4+1)K...$
+
+  再把2除回去...
+
+  大致是这个意思吧...
+
 **证毕!**
-      
+
+--- 
+
+*更新于2018-10-05*
+
+## 正解
+
+就在我得意地证明出了这一切
+
+回头看了看官方的题解,瞬间爆炸
+
+原文:
+
+{% note default %}
+
+K が奇数の時、 a,b,c を K で割ったあまりはすべて 0 である必要があります。 K が偶数の時、 a,b,c をK で割ったあまりはすべて 0 であるか、あるいはすべて K/2 である必要があります。このような組の個数は、 N 以下で K で割って 0 あまるものの個数と K/2 あまるものの個数から求めることができるので、この問題を解くことができました。
+
+{% endnote %}
+
+就是这么短,标程都懒得给了
+
+意思大致是:
+
+1. 当 K 是奇数时
+
+    根据我上面的推理
+
+    a, b, c 可以选的是 K, 2K, 3K ...
+
+    每个有 $\frac{N}{K}$ 种选择
+
+    所以一共就有  $(\frac{N}{K})^3$ 种
+
+2. 当 K 是偶数的时候
+
+    同理
+
+    注意此时是要分开算的
+
+    K 的整数倍还是有 $\lfloor \frac{N}{K} \rfloor$ 种选择
+
+    K 的整数加半个倍的有 (这里想到一个简单理解的)
+
+    因为一共有 $\lfloor \frac{N}{K/2} \rfloor$
+
+    所以这个就是 $\lfloor \frac{N}{K/2} \rfloor - \lfloor \frac{N}{K} \rfloor$
+
+### 再现超短代码
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+int n, k;
+inline long long calc(int x) { return 1ll*x*x*x; }
+int main()
+{
+    cin >> n >> k;
+    if(k&1) cout << calc(n/k) << endl;
+    else cout << calc(n/k)+calc(n/(k/2)-n/k) << endl;
+    return 0;
+}
+```
 
   [1]: https://beta.atcoder.jp/contests/abc108/tasks/arc102_a
