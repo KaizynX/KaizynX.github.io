@@ -15,7 +15,7 @@ mathjax: true
 
 ~~参考自[题解](https://www.luogu.org/problemnew/solution/P1447)~~
 
-分析某个点的连接线段上有几个植物
+分析某个点的连接线段上有几个植物(包括本身)
 
 设这个点的坐标是 $(i, j)$, 答案就是 $\gcd (i, j)$
 
@@ -23,7 +23,9 @@ mathjax: true
 
 不要再深入解释了吧... 方案就是 $i \div \frac{i}{\gcd} = \gcd$
 
-总结果是 $\sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} \gcd (i,j)$
+总结果是 $\sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} 2\times(\gcd (i,j) - 1)+1$
+
+$= 2 \times \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} (\gcd (i,j)) - nm$
 
 然后暴力枚举, 80分 get...
 
@@ -47,11 +49,7 @@ $g[x]$ 很好求, $g[x] = \frac{n}{x} \times \frac{m}{x}$
 
 ### 时间复杂度
 
-$\sum\limits_{i=1}^{N} \frac{N}{i}$
-
-不清楚具体多少, $10^5$ 大致对应 $10^7$
-
-介于$O(\sqrt{N})$ 和 $O(\log N)$ 之间,勉强水过...
+$\sum\limits_{i=1}^{n} \frac{n}{i} = n\log n$
 
 ---
 

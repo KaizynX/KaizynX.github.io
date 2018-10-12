@@ -10,7 +10,7 @@ tags:
 mathjax: true
 ---
 
-#[Luogu  P4910 帕秋莉的手环](https://www.luogu.org/problemnew/show/P4910)
+# [Luogu  P4910 帕秋莉的手环](https://www.luogu.org/problemnew/show/P4910)
 
 来自比赛[东方国庆大赛](https://www.luogu.org/contestnew/show/11029) A 题
 

@@ -140,10 +140,10 @@ int main()
 紧接着用**线性规划**
 
 $$\begin{cases}
-x+y \geq d\\
-x+y \leq 2n-d\\
-x-y \geq -d\\
-x-y \leq d
+x+y \geq d \\
+x+y \leq 2n-d \\
+x-y \geq -d \\
+x-y \leq d 
 \end{cases}
 $$
 
