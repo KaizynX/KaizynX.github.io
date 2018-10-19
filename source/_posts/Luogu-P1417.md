@@ -1,5 +1,5 @@
 ﻿---
-title: Luogu P1417 烹调方案
+title: 烹调方案
 date: 2018-08-31 21:33:36
 categories:
   - Luogu
@@ -8,6 +8,8 @@ tags:
 
 mathjax: true
 ---
+
+# [Luogu P1417 烹调方案](https://www.luogu.org/problemnew/show/P1417)
 
 **摘自tinylic的题解**:
 
