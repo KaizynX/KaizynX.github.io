@@ -6,46 +6,7 @@ categories:
 tags:
 ---
 
-## vim配置
-
-```
-set nu "行号
-set nobackup "禁止临时文件
-set noundofile
-set noswapfile
-set tabstop=4 "tab宽度
-set softtabstop=4
-set shiftwidth=4
-set expandtab "空格代替tab
-set cin
-set autoindent "自动缩进
-set cindent
-set showmatch "括号匹配高亮
-set clipboard+=unnamed "windonws剪贴板
-set guifont=Consolas:h12 "字体
-syntax on "语法
-colorscheme koeler "配色
-
-inoremap ( ()<ESC>i
-inoremap " ""<ESC>i
-inoremap ' ''<ESC>i
-inoremap [ []<ESC>i
-inoremap { {<CR>}<ESC>O
-
-map <F5> : call Compile() <CR>
-map <F6> : ! %< <CR>
-map <F7> : ! gdb %< <CR>
-
-func! Compile()
-    exec "w"
-    exec "! g++ % -o %< -g -Wall -Wextra -Wconversion"
-endfunc
-```
-
----
-
 ## 快读快写
-
 ```cpp
 template <typename T> inline void read(T &x)
 {
@@ -62,12 +23,13 @@ template <typename T> void write(T x)
     if(x > 9) write(x/10);
     putchar(x%10+'0');
 }
-
+```
+```cpp
+ios::sync_with_stdio(false);
+cin.tie(NULL);
 ```
 ---
-
 ## [堆](https://www.luogu.org/problemnew/show/P3378)
-
 ```cpp
 struct Heap
 {
@@ -103,9 +65,7 @@ struct Heap
 ```
 ---
 ## 字符串
-
 ### [manacher算法](https://www.luogu.org/problemnew/show/P3805)(回文字符串)
-
 ```cpp
 inline int manacher(const char *str, char *buf, int *p)
 {
@@ -126,13 +86,39 @@ inline int manacher(const char *str, char *buf, int *p)
     return ans;
 }
 ```
-
 ### [KMP](https://www.luogu.org/problemnew/show/P3375)
-
+```cpp
+len_a = strlen(a+1);
+len_b = strlen(b+1);
+for(int i = 2, k = 0; i <= len_b; ++i)
+{
+    while(k && b[k+1] != b[i]) k = _next[k];
+    if(b[k+1] == b[i]) ++k;
+    _next[i] = k;
+}
+for(int i = 1, j = 0; i <= len_a; ++i)
+{
+    while(j && a[i] != b[j+1]) j = _next[j];
+    if(b[j+1] == a[i]) ++j;
+    if(j == len_b)
+    {
+        cout << i-len_b+1 << endl;
+        j = _next[j];
+    }
+}
+```
+### [字符串哈希](https://www.luogu.org/problemnew/show/P3370)
+```cpp
+inline unsigned long long _hash(const string &s)
+{
+    unsigned long long res = 0;
+    for(int i = 0; i < s.length(); ++i)
+        res = (res*Base+s[i])%Mod+Prime;
+    return res;
+}
+```
 ---
-
 ## 快排
-
 ```cpp
 void quick_sort(int l, int r)
 {
@@ -151,13 +137,9 @@ void quick_sort(int l, int r)
 }
 ```
 ---
-
 ## 求第K大数
-
 [HDOJ 2665](http://acm.hdu.edu.cn/showproblem.php?pid=2665)
-
 [POJ 2104](http://poj.org/problem?id=2104)
-
 ```cpp
 int kth_element(int l, int r, int k)
 {
@@ -177,15 +159,12 @@ int kth_element(int l, int r, int k)
     else return kth_element(i+1, r, k);
 }
 ```
-STL (排序,无返回值)
+**STL** (排序,无返回值)
 ```cpp
 nth_element(a+1, a+k+1, a+n+1);
 ```
-
 ---
-
 ## [求逆序对(归并排序)](https://www.luogu.org/problemnew/show/P1908)
-
 ```cpp
 void merge_sort(int l, int r)
 {
@@ -207,11 +186,26 @@ void merge_sort(int l, int r)
 }
 ```
 ---
-
-## [线段树](https://www.luogu.org/problemnew/show/P3372)
-
+## 树
+### [树的重心](https://www.luogu.org/problemnew/show/P2986)
+```cpp
+void treedp(int cur, int fa)
+{
+    s[cur] = c[cur];
+    for(int i = fir[cur]; i; i = nex[i])
+    {
+        if(e[i] == fa) continue;
+        treedp(e[i], cur);
+        s[cur] += s[e[i]];
+        maxs[cur] = max(maxs[cur], s[e[i]]);
+    }
+    maxs[cur] = max(maxs[cur], sum-s[cur]);
+}
+```
+### 二叉查找树
+### [平衡树](https://www.luogu.org/problemnew/show/P3369)
+### [线段树](https://www.luogu.org/problemnew/show/P3372)
 区间修改区间查询
-
 ```cpp
 struct Tree
 {
@@ -281,13 +275,9 @@ inline long long query_tree(int i, int l, int r)
 }
 ```
 ---
-
-## 树状数组
-
+### 树状数组
 [单点修改区间查询](https://www.luogu.org/problemnew/show/P3374)
-
 [区间修改单点查询](https://www.luogu.org/problemnew/show/P3368)
-
 ```cpp
 // 单点修改 add(x, k);
 // 区间修改 add(x, k); add(y+1, -k);
@@ -312,30 +302,8 @@ inline int query(int x, int y)
 }
 ```
 ---
-
-## [线性筛](https://www.luogu.org/problemnew/show/P3383)
-
-```cpp
-inline void init()
-{
-    check[1] = true;
-    for(int i = 2; i <= n; ++i)
-    {
-        if(!check[i]) prime[++cnt] = i;
-        for(int j = 1; j <= cnt && i*prime[j] <= n; ++j)
-        {
-            check[ i*prime[j] ] = true;
-            if(i % prime[j] == 0) break;
-        }
-    }
-}
-```
----
-
 ## 矩阵
-
-矩阵乘法
-
+**矩阵乘法**
 ```cpp
 struct Match
 {
@@ -356,12 +324,10 @@ struct Match
     }
 }
 ```
-[矩阵快速幂](https://www.luogu.org/problemnew/show/P3390)
+**[矩阵快速幂](https://www.luogu.org/problemnew/show/P3390)** (略)
 
 ---
-
 ## [快速幂](https://www.luogu.org/problemnew/show/P1226)
-
 ```cpp
 inline long long qpow(long long a, long long p, long long mo)
 {
@@ -377,13 +343,9 @@ inline long long qpow(long long a, long long p, long long mo)
     return ans;
 }
 ```
-
 ---
-
 ## [最小生成树](https://www.luogu.org/problemnew/show/P3366)
-
-[Prim](https://www.luogu.org/problemnew/show/P1265)
-
+**[Prim](https://www.luogu.org/problemnew/show/P1265)**
 ```cpp
 inline void prim()
 {
@@ -402,15 +364,11 @@ inline void prim()
     }
 }
 ```
-
-Kruskra (略)
+**Kruskra** (略)
 
 ---
-
 ## [二分图匹配](https://www.luogu.org/problemnew/show/P3386)
-
-匈牙利算法
-
+**匈牙利算法**
 ```cpp
 // vector<int> _e[Maxn];
 bool check(int cur)
@@ -439,10 +397,8 @@ int solve()
     }
     return ans;
 }
-
 ```
 ---
-
 ## [LCA](https://www.luogu.org/problemnew/show/P3379)
 
 ```cpp
@@ -474,14 +430,105 @@ int lca(int x, int y)
     return f[x][0];
 }
 ```
-
 ---
+## [网络流](https://www.luogu.org/problemnew/show/P3376)
+**增广路**
+```cpp
+// while(bfs()) update();
+bool bfs()
+{
+    memset(v, 0, sizeof v);
+    queue<int> q;
+    q.push(s);
+    v[s] = true;
+    incf[s] = INF;
+    while(q.size())
+    {
+        int cur = q.front();
+        q.pop();
+        for(int i = fir[cur], to; i; i = nex[i])
+        {
+            to = ver[i];
+            if(!edge[i] || v[to]) continue;
+            incf[to] = min(incf[cur], edge[i]);
+            pre[to] = i;
+            if(to == t) return true;
+            q.push(to);
+            v[to] = true;
+        }
+    }
+    return false;
+}
 
+void update()
+{
+    int cur = t, e;
+    while(cur != s)
+    {
+        e = pre[cur];
+        edge[e] -= incf[t];
+        edge[e^1] += incf[t];
+        cur = ver[e^1];
+    }
+    maxflow += incf[t];
+}
+```
+**Dinic**
+```cpp
+main()
+{
+    int flow = 0;
+    while(bfs())
+        while((flow = dinic(s, INF)))
+            maxflow += flow;
+}
+
+bool bfs()
+{
+    memset(d, 0, sizeof d);
+    queue<int> q;
+    q.push(s);
+    d[s] = 1;
+    int cur;
+    while(q.size())
+    {
+        cur = q.front(); q.pop();
+        for(int i = fir[cur], to; i; i = nex[i])
+        {
+            to = ver[i];
+            if(d[to] || !edge[i]) continue;
+            d[to] = d[cur]+1;
+            if(to == t) return true;
+            q.push(to);
+        }
+    }
+    return false;
+}
+
+int dinic(int cur, int flow)
+{
+    if(cur == t) return flow;
+    int rest = flow;
+    for(int i = fir[cur], to, now; i; i = nex[i])
+    {
+        to = ver[i];
+        if(d[to] != d[cur]+1 || !edge[i]) continue;
+        now = dinic(to, min(rest, edge[i]));
+        if(!now) d[to] = 0;
+        else
+        {
+            edge[i] -= now;
+            edge[i^1] += now;
+            rest -= now;
+        }
+    }
+    return flow - rest;
+}
+```
+---
 ## 最短路
-
 [弱化](https://www.luogu.org/problemnew/show/P3371)
 [标准](https://www.luogu.org/problemnew/show/P4779)
-
 ### Floyd
 略
 ### Dijiskra
@@ -531,11 +578,8 @@ inline void SPFA()
     }
 }
 ```
-
 ---
-
 ## [负环](https://www.luogu.org/problemnew/show/P3385)
-
 ```cpp
 // 返回true有负环,返回false没负环
 inline bool SPFA()
@@ -568,9 +612,7 @@ inline bool SPFA()
 }
 ```
 ---
-
 ## [ST表](https://www.luogu.org/problemnew/show/P3865)
-
 ```cpp
 // for(int i = 2; i <= n; ++i) log_2[i] = log_2[i>>1]+1;
 
@@ -606,9 +648,7 @@ int query(int l, int r)
 }
 ```
 ---
-
 ## [割点](https://www.luogu.org/problemnew/show/P3388)
-
 ```cpp
 void tarjan(int cur, int fa)
 {
@@ -629,13 +669,81 @@ void tarjan(int cur, int fa)
 }
 ```
 ---
-
 ## [缩点](https://www.luogu.org/problemnew/show/P3387)
+```cpp
+void tarjan(int cur)
+{
+    dfn[cur] = low[cur] = ++_dfn;
+    q[++tail] = cur;
+    vis[cur] = 1;
+   
+    for(int i = fir[cur], to; i; i = nex[i])
+    {
+        to = ver[i];
+        if(!dfn[to])
+        {
+            tarjan(to);
+            low[cur] = min(low[cur], low[to]);
+        }
+        else if(vis[to])
+            low[cur] = min(low[cur], dfn[to]);
+    }
 
+    if(dfn[cur] == low[cur])
+    {
+        int sum = 0;
+        _col++;
+        do
+        {
+            col[q[tail]] = _col;
+            vis[q[tail]] = 0;
+            sum += a[q[tail]];
+        } while(q[tail--] != cur);
+        w[_col] = sum;
+    }
+}
+
+inline void DAGdp()
+{
+    for(int i = 1; i <= n; ++i)
+        for(int k = fir[i], to; k; k = nex[k])
+        {
+            to = ver[k];
+            if(col[i] != col[to])
+            {
+                du[col[to]]++;
+                add_cedge(col[i], col[to]);
+            }
+        }
+
+    head = tail = 0;
+    for(int i = 1; i <= _col; ++i)
+    {
+        if(!du[i])
+        {
+            q[++tail] = i;
+            f[i] = w[i];
+            ans = max(ans, f[i]);
+        }
+    }
+    while(head < tail)
+    {
+        int cur = q[++head];
+        for(int k = cfir[cur], to; k; k = cnex[k])
+        {
+            to = cver[k];
+            if(--du[to] == 0)
+            {
+                q[++tail] = to;
+                f[to] = max(f[to], f[cur]+w[to]);
+                ans = max(ans, f[to]);
+            }
+        }
+    }
+}
+```
 ---
-
 ## [并查集](https://www.luogu.org/problemnew/show/P3367)
-
 ```cpp
 inline void init() { for(int i = 1; i <= n; ++i) fa[i] = i; }
 int getf(int s) { return fa[s] == s ? s : fa[s] = getf(fa[s]); }
@@ -645,11 +753,10 @@ inline void connect(int x, int y)
     if(fx != fy) fa[fx] = fy;
 }
 ```
-
 ---
-
+## 二分
+---
 ## 欧几里得
-
 ### 最大公因数 gcd
 ```cpp
 int gcd(int a, int b) { return b ? gcd(b, a%b) : a; }
@@ -667,11 +774,8 @@ void exgcd(int a, int b, int &x, int &y)
     y -= a/b*y;
 }
 ```
-
 ---
-
 ## [乘法逆元](https://www.luogu.org/problemnew/show/P3811)
-
 ### 拓展欧几里得
 ```cpp
 inline void mul_inverse(int a, int mo)
@@ -699,17 +803,36 @@ inline void mul_inverse(int *inv, int mo)
 }
 ```
 ---
-
-## 分解质因数
-
-懒
-
+## [线性筛](https://www.luogu.org/problemnew/show/P3383)
+```cpp
+inline void init()
+{
+    check[1] = true;
+    for(int i = 2; i <= n; ++i)
+    {
+        if(!check[i]) prime[++cnt] = i;
+        for(int j = 1; j <= cnt && i*prime[j] <= n; ++j)
+        {
+            check[ i*prime[j] ] = true;
+            if(i % prime[j] == 0) break;
+        }
+    }
+}
+```
 ---
-
+## [分解质因数](https://www.luogu.org/problemnew/show/P1075)
+```cpp
+// x = pi^ki...
+for(int i = 2; i*i <= x; ++i)
+    if(x%i == 0) {
+        p[++tot] = i;
+        for(; x%i == 0; x /= i) k[tot]++;
+    }
+if(x > 1) p[++tot] = x, k[tot] = 1;
+```
+---
 ## BSGS
-
-[luogu 4884](https://www.luogu.org/problemnew/show/P4884)
-
+**[luogu 4884](https://www.luogu.org/problemnew/show/P4884)**
 ```cpp
 // map<long long, int> mmp;
 inline long long BSGS(long long a, long long x, long long m) // a^n = x
@@ -732,25 +855,16 @@ inline long long BSGS(long long a, long long x, long long m) // a^n = x
 }
 ```
 ---
-
 ## 欧拉函数
-
 ## 莫比乌斯函数
-
 ---
-
 ## 背包问题
-
 ### 01背包
-
 ### 完全背包
-
+### 混合背包
 ### [分组背包](https://www.luogu.org/problemnew/show/P1757)
-
 ### [多重背包](https://www.luogu.org/problemnew/show/P1776)
-
-二进制拆分
-
+**二进制拆分**
 ```cpp
 for(int i = 1, cnt, vi, wi, m; i <= n; ++i)
 {
@@ -770,9 +884,7 @@ for(int i = 0; i < w.size(); ++i)
     for(int j = W; j >= w[i]; --j)
         b[j] = max(b[j], b[j-w[i]]+v[i]);
 ```
-
-单调队列
-
+**单调队列**
 ```cpp
 for(int i = 1; i <= n; ++i)
 {
@@ -799,5 +911,376 @@ for(int i = 1; i <= n; ++i)
 int ans = 0;
 for(int i = 1; i <= W; ++i)
     ans = max(ans, f[i]);
+```
+---
+## DP
+(我**全**都不会)
+### 记忆化搜索
+### 线性DP
+#### [最长上升子序列LIS](http://codevs.cn/problem/1576/)
+```cpp
+for(int i = 1; i <= n; ++i)
+{
+    f[i] = 1;
+    for(int j = 1; j < i; ++j)
+        if(a[i] > a[j]) f[i] = max(f[i],f[j]+1);
+}
+```
+#### 最长公共子序列LCS
+```cpp
+f[i][j] = max{  f[i-1][j],
+                f[i][j-1],
+                f[i-1][j-1]+1 (if A[i] == B[j])}
+```
+#### 数字三角形
+### 区间DP
+### [树形DP](https://www.luogu.org/problemnew/show/P1352)
+### 状压DP
+### 队列优化
+### 斜率优化
+---
+## STL
+### 数据结构
+```cpp
+// const N
+// typename T
+vector<T>
+stack<T>
+deque<T>
+queue<T>
+priority_queue<T>
+set<T>
+bitset<N>
+map<T, T>
+```
+### 函数
+```cpp
+// vector<T> a;
+sort(a.begin(), a.end(), cmp);
+reverse(a.begin(), a.end());
+unique(a.begin(), a.end());
+next_permutation(a.begin(), a.end());
+lower_bound(a.begin(), a.end(), val); // >=
+upper_bound(a.begin(), a.end(), val); // >
+fill(a.begin(), a.end(), val);
+memset(a, 0, sizeof a);
+memcpy(a, b, sizeof b); // b --> a
+// string s
+s.find(target_string, start_pos); // 找不到返回s.npos
+s.substr(start_pos, len);
+s.replace(start_pos, len, target_string);
+```
+---
+## 高精度
+```cpp
+//高精度压位+vector
+struct BigInteger
+{
+	static const int BASE = 1e4; // % 下来一个单位就是 0 ~ 9999
+	static const int WIDTH = 4;  // 一个单位宽度
+
+	vector<int> v;
+	bool tag = 0 ;                // 符号位 0 +  1 -
+
+	//构造函数 赋值运算符被重载
+	BigInteger( long long num = 0 ) { *this = num; }
+	BigInteger( const string &str ) { *this = str; }
+
+	//重载赋值运算符 long long 版本
+	BigInteger operator = (long long num)
+	{
+		v.clear();
+		if(num < 0)
+		{
+			tag = true;
+			num = - num; // 使它转化为正数
+		}
+		else tag = false;
+		//使用 do while 防止 num == 0
+		do{
+			// 如下是强制类型转换 (因为看不爽Waring)
+			v.push_back( static_cast<int>(num % BASE) );
+			num /= BASE;
+		}while(num > 0);
+		return *this;
+	}
+	//重载赋值运算符 string 版本
+	BigInteger operator = (const string &former_str)
+	{
+		string str;
+		v.clear();
+		if(former_str[0] == '-')
+		{
+			tag = true;
+			str = former_str.substr(1); // 去掉第一位
+		}
+		else
+		{
+			tag = false;
+			str = former_str;
+		}
+		/* len 的神奇运算使其保证合理
+		 * strlen  len  (设k为常数)
+		 *  k*B-1   k
+		 *  k*B     k
+		 *  k*B+1   k               */
+		int tmp, len = (str.length() - 1) / WIDTH + 1, head = 0;
+		for(int i = 0; i < len; ++i)
+		{
+			int end = str.length() - i * WIDTH;
+			// 存到最高位时 i = len-1
+			int start = max(head, end - WIDTH);
+			/* sscanf 从 char[] 中 scanf
+			 * str.substr(start, length) 在str中从start开始截取长度length的字符串
+			 * .c_str 将 string 转化为 char[]                                  */
+			sscanf( str.substr(start, end-start).c_str(), "%d", &tmp);
+			v.push_back(tmp);
+		}
+		return *this;
+	}
+
+	// 重载比较运算符
+	bool operator < (const BigInteger &b)const
+	{
+		if(tag != b.tag)                   // 比较符号
+			return tag > b.tag;            // 1 > 0 <==> 负 < 正
+		if(tag && b.tag)                   // 负数比较,结果相反
+			return ( -b < -*this );
+
+		if(v.size() != b.v.size())         // 比较长度
+			return v.size() < b.v.size();
+		for(int i = v.size()-1; i>=0; --i) // 从最高位开始比
+		{
+			if(v[i] != b.v[i])
+				return v[i] < b.v[i];
+		}
+		return false;                      //相等
+	}
+
+	bool operator >  (const BigInteger &b) const { return b < *this; }
+	bool operator <= (const BigInteger &b) const { return !(b < *this); }
+	bool operator >= (const BigInteger &b) const { return !(*this < b); }
+	bool operator != (const BigInteger &b) const { return b < *this || *this < b; }
+	bool operator == (const BigInteger &b) const { return !(b < *this) && !(*this <b); }
+
+	// 重载四则运算符
+	BigInteger operator + (const BigInteger &b) const
+	{
+		if(  tag && !b.tag ) return ( b - (-*this) ); // 负 + 正 --> 正 - (-负)
+		if( !tag &&  b.tag ) return ( *this - (-b) ); // 正 + 负 --> 正 - (-负)
+		BigInteger res;
+		res.v.clear();
+		if(tag && b.tag) res.tag = true;              // 负 + 负
+		else res.tag = false;
+		int g = 0;                                 // g为0或1
+		// 以下为 正 + 正
+		for(unsigned i = 0; ; ++i)
+		{
+			// 当进位全进了,相加的两个数的每一位都加完了 break
+			if(g == 0 && i >= v.size() && i >= b.v.size())
+				break;
+			int tmp = g;
+			if(i < v.size()) tmp += v[i];
+			if(i < b.v.size()) tmp += b.v[i];
+			res.v.push_back( tmp % BASE );
+			g = tmp / BASE;
+		}
+		return res;
+	}
+
+	// 一元 - 运算符
+	BigInteger operator - ()const
+	{
+		BigInteger res(*this);
+		res.tag = ! tag; // 符号位取反
+		return res;
+	}
+
+	BigInteger operator - (const BigInteger &b)const
+	{
+		if( !(!tag && !b.tag) ) return ( *this + (-b) ); // 只要不是 正 - 正
+		BigInteger res;
+		res.v.clear();
+		// 转化为 大 减 小
+		if(*this < b) return -( b - *this );
+		// 以下为 正 - 正
+		res.tag = false;
+		int g = 0; // g 为0或-1
+		for(unsigned i = 0; ; ++i)
+		{
+			if(g == 0 && i >= v.size() && i >= b.v.size())
+				break;
+			int tmp = g; // tmp -9999 ~ 9999
+			if(i < v.size()) tmp += v[i];
+			if(i < b.v.size()) tmp -= b.v[i];
+			g = (tmp < 0 ? -1 : 0);
+			if(tmp < 0) tmp += BASE;
+			res.v.push_back( tmp );
+		}
+		// 去掉最高位的0,最小为0
+		while(!res.v.back() && res.v.size()>1)
+			res.v.pop_back();
+		return res;
+	}
+
+	BigInteger operator * (const BigInteger &b)const
+	{
+		if(*this == 0 || b == 0)return 0;
+		BigInteger res;
+		res.v.resize( v.size() + b.v.size() , 0);
+		for(size_t i = 0; i < v.size(); ++i )
+		{
+			for(size_t j = 0; j < b.v.size(); ++j)
+			{
+				res.v[i+j] += v[i] * b.v[j];
+				res.v[i+j+1] += res.v[i+j] / BASE;
+				res.v[i+j] %= BASE;
+			}
+		}
+		if(res.v.back() ==0 )
+			res.v.pop_back();
+
+		res.tag = tag ^ b.tag; // ^异或
+
+		return res;
+	}
+
+	BigInteger operator / (const BigInteger &b)const
+	{
+		BigInteger divisor,dividend(b),res,tmp;             // 除数 被除数 结果
+		divisor.v.clear();
+		res.v.clear();
+		divisor.tag = false;
+		dividend.tag = false;                               // 转化为正
+		bool res_init = false;
+		int l, r, mid ,need;
+		for(int i = v.size() - 1; i >= 0; --i)          // 从最高位开始
+		{
+			divisor.v.insert(divisor.v.begin(), v[i] ); // 插入的是低位,插到前面
+			if(divisor < dividend) continue;
+			// 二分
+			l = 0; r = BASE - 1, need = -1;
+			while(l <= r)
+			{
+				mid = (l + r) / 2;
+				tmp = dividend * mid;
+				if(tmp == divisor)
+				{
+					need = mid;
+					break;
+				}
+				if(tmp < divisor) l = mid + 1;
+				else r = mid - 1;
+			}
+
+			if(need == -1) need = l < r ? l : r;        // need = min(l, r);
+			if(!res_init) 
+			{
+				res.v.resize(i + 1, 0);
+				res_init = true;
+			}
+			divisor -= dividend * need;
+			res.v[i] = need;
+			/*  减法,效率低下
+			while( divisor >= b )
+			{
+				divisor -= b;
+				if(!res_init)                           // res.v需要初始化
+				{
+					res.v.resize(i + 1, 0);
+					res_init = true;
+				}
+				res.v[i]++;
+			}
+			*/
+		}
+		// if res == 0
+		if(!res.v.size()) res = 0;
+		res.tag = tag ^ b.tag; // ^异或
+		return res;
+	}
+
+	BigInteger operator %  (const BigInteger &b) const
+	{ 
+		BigInteger p_a, p_b, res;   // 把 this 和 b 转化为正
+		p_a = (*this < 0 ? -*this : *this);
+		p_b = (b < 0 ? -b : b);
+		res = p_a - p_a / p_b * p_b;
+		res.tag = tag;              // 结果的正负与this相同
+		return res;
+	}
+
+	// 扩展
+	BigInteger operator ++ () { *this += 1; return *this; }
+	BigInteger operator -- () { *this -= 1; return *this; }
+	BigInteger operator += (const BigInteger &b) { *this = *this + b; return *this; }
+	BigInteger operator -= (const BigInteger &b) { *this = *this - b; return *this; }
+	BigInteger operator *= (const BigInteger &b) { *this = *this * b; return *this; }
+	BigInteger operator /= (const BigInteger &b) { *this = *this / b; return *this; }
+	BigInteger operator %= (const BigInteger &b) { *this = *this % b; return *this; }
+};
+
+// 重载 >> 运算符
+istream& operator >> (istream &in, BigInteger &bigint)
+{
+	string str;
+	if( in >> str )   // 成功读入str
+		bigint = str; // 重载过的赋值运算符
+	return in;
+}
+
+// 重载 << 运算符
+ostream& operator << (ostream &out, BigInteger &bigint)
+{
+	if(bigint.tag) out << "-" ;                  // 负号
+	out<< bigint.v.back();                       // 直接输出最高位
+	for(int i( bigint.v.size()-2 ); i >= 0; --i) // 最高位已经输出,故-2开始
+	{
+		char buf[10];                            // 定义临时的字符数组
+		sprintf(buf, "%04d", bigint.v[i]);       // sprintf 用 printf 输入到 char[] 中
+		for(unsigned j = 0; j < strlen(buf); ++j)
+			out << buf[j];
+	}
+	return out;
+}
+
+BigInteger abs (const BigInteger &a)
+{
+	return a < 0 ? -a : a;
+}
+
+BigInteger sqrt (const BigInteger &a)
+{
+	BigInteger l, r(a), mid, power_value;
+	// 二分找答案
+	while(l <= r)
+	{
+		mid = (l + r) / 2;
+		power_value = mid * mid;                  // power_value = mid ^ 2
+		if(power_value == a ) return mid;
+		else if(power_value < a ) l = mid + 1;
+		else r = mid - 1;                         // power_value > *this
+	}
+	// 向下取整return min(l, r)
+	return l < r ? l : r;
+}
+
+BigInteger pow (const BigInteger &a, const long long k)
+{
+	if( k == 0 ) return 1;
+	if( k == 1 ) return a;
+	if( k == 2 ) return a * a;
+	if( k %  2 ) return a * pow(a, k - 1);
+	return pow( pow(a, k / 2), 2);
+}
+
+BigInteger pow (const BigInteger &a, const BigInteger &k)
+{
+	if( k == 0 ) return 1;
+	if( k == 1 ) return a;
+	if( k == 2 ) return a * a;
+	if( k.v.back() % 2 ) return a * pow(a, k - 1);
+	return pow( pow(a, k / 2), 2);
+}
 ```
 ---
