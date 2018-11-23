@@ -17,4 +17,6 @@ tags:
 
 [题解地址](https://www.luogu.org/problemnew/solution/P4981)
 
-先埋个坑,改日再填
+emmmm其实我只是找到了规律,并没有推出来
+
+记录一下,这是道好题,嗯...
