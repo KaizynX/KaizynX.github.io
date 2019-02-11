@@ -841,6 +841,20 @@ inline void init()
 }
 ```
 ---
+## 判断素数(质数)
+ 某较优方法
+```cpp
+inline bool is_prime(long long x)
+{
+    if(x == 1) return false;
+    if(x == 2 || x == 3) return true;
+    if(x%6 != 1 && x%6 != 5) return false;
+    for(long long i = 5; i*i <= x; i += 6)
+        if(x%i == 0 || x%(i+2) == 0) return false;
+    return true;
+}
+```
+---
 ## [分解质因数](https://www.luogu.org/problemnew/show/P1075)
 ```cpp
 // x = pi^ki...
