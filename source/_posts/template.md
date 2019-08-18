@@ -4,6 +4,7 @@ date: 2018-11-05 07:00:00
 categories:
   - NOIP
 tags:
+top: true
 ---
 # NOIP2018模板
 ---
@@ -11,6 +12,7 @@ tags:
 ```cpp
 while(true) ++++++ ++++++ ++++++ RP;
 ```
+<!--more-->
 ---
 ## 快读快写
 ```cpp
@@ -113,6 +115,76 @@ for(int i = 1, j = 0; i <= len_a; ++i)
     }
 }
 ```
+[大佬的KMP](https://blog.csdn.net/v_july_v/article/details/7041827)
+```cpp
+inline void GetNext(char *str, int *_nex)
+{
+    int len = strlen(str);
+    int k = -1, j = 0;
+    _nex[0] = -1;
+    while (j < len-1) {
+        if (k == -1 || str[k] == str[j]) {
+            ++k; ++j;
+            _nex[j] = (str[k] == str[j] ? _nex[k] : j);
+        } else {
+            k = _nex[k];
+        }
+    }
+}
+
+inline int KMP(char *s, char *p)
+{
+    int i = 0, j = 0;
+    int lens = strlen(s), lenp = strlen(p);
+    while (i < lens && j < lenp) {
+        if(j == -1 || s[i] == p[j]) {
+            ++i; ++j;
+        } else {
+            j = nex[j];
+        }
+    }
+    return j == lenp ? i-j : -1;
+}
+```
+### BM算法
+### Sunday算法
+### [扩展KMP(Z函数)](https://subetter.com/algorithm/extended-kmp-algorithm.html)
+```cpp
+inline void GetNext(char *s, int *_nex)
+{
+    int len = strlen(s);
+    int a = 0, p = 0;
+    _nex[0] = len;
+    for (int i = 1; i < len; ++i) {
+        if (i >= p || i+_nex[i-a] >= p) {
+            if (i > p) p = i;
+            while (p < len && s[p] == s[p-i]) ++p;
+            a = i;
+            _nex[i] = p-i;
+        } else {
+            _nex[i] = _nex[i-a];
+        }
+    }
+}
+
+inline void GetExtend(char *s, char *ss, int *_ext, int *_nex)
+{
+    int lens = strlen(s), lenss = strlen(ss);
+    int a = 0, p = 0;
+    for (int i = 0; i < lens; ++i) {
+        if (i >= p || i+_nex[i-a] >= p) {
+            if (i > p) p = i;
+            while (p < lens && p-i < lenss && s[p] == ss[p-i]) ++p;
+            a = i;
+            _ext[i] = p-i;
+        } else {
+            _ext[i] = _nex[i-a];
+        }
+    }
+}
+```
+
+
 ### [字符串哈希](https://www.luogu.org/problemnew/show/P3370)
 ```cpp
 inline unsigned long long _hash(const string &s)
@@ -280,6 +352,7 @@ inline long long query_tree(int i, int l, int r)
     return res;
 }
 ```
+### ZKW线段树
 ---
 ### 树状数组
 [单点修改区间查询](https://www.luogu.org/problemnew/show/P3374)
@@ -347,6 +420,33 @@ inline long long qpow(long long a, long long p, long long mo)
         p >>= 1;
     }
     return ans;
+}
+```
+---
+## 快速乘
+```cpp
+inline long long qmul(long long x, long long y, long long mo)
+{
+    long long res = 0;
+    while (y) {
+        if (y&1) res = (res+x)%mo;
+        x = (x<<1)%mo;
+        y >>= 1;
+    }
+    return res;
+}
+
+inline long long qmul(long long x, long long y, long long mo)
+{
+    return (long long)((__int128)x*y%mo);
+}
+
+inline long long qmul(long long x, long long y, long long mo)
+{
+    // x*y - floor(x*y/mo)*mo
+    typedef unsigned long long ull;
+    typedef long double ld;
+    return ((ull)x*y-(ull)((ld)x/mo*y)*mo+mo)%mo;
 }
 ```
 ---
@@ -792,14 +892,14 @@ void exgcd(int a, int b, int &x, int &y)
 {
     if(!b) { x = 1; y = 0; return; }
     exgcd(b, a%b, y, x);
-    y -= a/b*y;
+    y -= a/b*x;
 }
 ```
 ---
 ## [乘法逆元](https://www.luogu.org/problemnew/show/P3811)
 ### 拓展欧几里得
 ```cpp
-inline void mul_inverse(int a, int mo)
+inline int mul_inverse(int a, int mo)
 {
     int x, y;
     exgcd(a, mo, x, y);
@@ -808,7 +908,7 @@ inline void mul_inverse(int a, int mo)
 ```
 ### 费马小定理
 ```cpp
-inline void mul_inverse(int a, int mo)
+inline int mul_inverse(int a, int mo)
 {
     // a^(mo-2)%mo
     return qpow(a, mo-2, mo);
@@ -822,6 +922,40 @@ inline void mul_inverse(int *inv, int mo)
     for(int i = 2; i <= n; ++i)
         inv[i] = mo-mo/i*inv[mo%i]%mo;
 }
+```
+---
+## [中国剩余定理](https://blog.csdn.net/niiick/article/details/80229217)
+### [中国剩余定理CRT(m互质)](https://www.luogu.org/problem/P3868)
+```cpp
+inline long long CRT(int a[], int m[])
+{
+    long long res = 0, M = 1;
+    for (int i = 1; i <= n; ++i)
+        M *= m[i];
+    for (int i = 1; i <= n; ++i)
+        res = (res + a[i]*(M/m[i])*mul_inverse(M/m[i], m[i]))%M;
+    return (res+M)%M;
+}
+```
+### [扩展中国剩余定理EXCRT(m不互质)](https://www.luogu.org/problem/P4777)
+```cpp
+inline long long EXCRT(long long a[], long long m[])
+{
+    // M*x + m[i]*y = a[i]-res (mod m[i])
+    // res = res+x*M;
+    long long M = m[1], res = a[1], x, y, c, d;
+    for (int i = 2; i <= n; ++i) {
+        d = exgcd(M, m[i], x, y);
+        c = (a[i]-res%m[i]+m[i])%m[i];
+        if (c%d != 0) return -1;
+        x = (c/d)*x%(m[i]/d);
+        res += x*M;
+        M *= m[i]/d;
+        res = (res%M+M)%M;
+    }
+    return res;
+}
+
 ```
 ---
 ## [线性筛](https://www.luogu.org/problemnew/show/P3383)
