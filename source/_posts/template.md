@@ -358,6 +358,20 @@ inline long long query_tree(int i, int l, int r)
 [单点修改区间查询](https://www.luogu.org/problemnew/show/P3374)
 [区间修改单点查询](https://www.luogu.org/problemnew/show/P3368)
 ```cpp
+struct BinaryIndexedTree
+{
+    // set your type
+    typedef int T;
+    T tr[MAXN];
+    BinaryIndexedTree() { memset(tr, 0, sizeof tr); }
+    inline void clear() { for (int i = 1; i <= n; ++i) tr[i] = 0; }
+    inline void update(int x, T v) { for ( ; x <= n; x += x&-x) tr[x] += v; }
+    inline void update(int x, int y, T v) { update(x, v); update(y+1, -v); }
+    inline T query(int x) { T res = 0; for ( ; x; x -= x&-x) res += tr[x]; return res; }
+    inline T query(int x, int y) { return query(y)-query(x-1); }
+} BIT;
+```
+```cpp
 // 单点修改 add(x, k);
 // 区间修改 add(x, k); add(y+1, -k);
 inline void add(int i, int k)
@@ -1135,6 +1149,46 @@ memcpy(a, b, sizeof b); // b --> a
 s.find(target_string, start_pos); // 找不到返回s.npos
 s.substr(start_pos, len);
 s.replace(start_pos, len, target_string);
+```
+---
+## 模数
+```cpp
+template <int _MOD> struct Mint
+{
+    int v = 0;
+    Mint() {}
+    Mint(int _v) : v((_v%_MOD+_MOD)%_MOD) {}
+    Mint(long long _v) : v(static_cast<int>((_v%_MOD+_MOD)%_MOD)) {}
+    Mint operator = (const int _v) { this->v = _v; return *this; }
+    Mint operator = (const long long _v) { this->v = static_cast<int>(_v%_MOD); return *this; }
+    bool operator < (const Mint &b) const { return v < b.v; }
+    bool operator > (const Mint &b) const { return v > b.v; }
+    bool operator == (const Mint &b) const { return v == b.v; }
+    bool operator != (const Mint &b) const { return v != b.v; }
+    bool operator <= (const Mint &b) const { return v < b.v || v == b.v; }
+    bool operator >= (const Mint &b) const { return v > b.v || v == b.v; }
+    Mint operator + (const Mint &b) { return Mint(v+b.v); }
+    Mint operator - (const Mint &b) { return Mint(v-b.v); }
+    Mint operator * (const Mint &b) { return Mint(1ll*v*b.v); }
+    Mint operator / (const Mint &b) { return Mint(b.inv()*v); }
+    Mint operator += (const Mint &b) { return *this = *this+b; }
+    Mint operator -= (const Mint &b) { return *this = *this-b; }
+    Mint operator *= (const Mint &b) { return *this = *this*b; }
+    Mint operator /= (const Mint &b) { return *this = *this/b; }
+    Mint pow(int p) const {
+        Mint res(1), x(*this);
+        while (p) {
+            if (p&1) res = res*x;
+            x *= x;
+            p >>= 1;
+        }
+        return res;
+    }
+    Mint inv() const { return pow(_MOD-2); }
+    friend istream& operator >> (istream &is, Mint &mt) { return is >> mt.v; }
+    friend ostream& operator << (ostream &os, const Mint &mt) { return os << mt.v; }
+};
+using mint = Mint<MOD>;
 ```
 ---
 ## 高精度
