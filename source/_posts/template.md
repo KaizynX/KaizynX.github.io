@@ -394,6 +394,146 @@ inline int query(int x, int y)
     return resy - resx;
 }
 ```
+### [分块](http://hzwer.com/8053.html#comment-8306)
+```cpp
+struct FenKuai
+{
+    typedef long long T;
+    int t; // 每组大小
+    static const int NN = static_cast<int>(sqrt(N))+7;
+    T a[N], sum[NN], add[NN];
+
+    FenKuai()
+    {
+        memset(a, 0, sizeof a);
+        memset(sum, 0, sizeof sum);
+        memset(add, 0, sizeof add);
+    }
+
+    void init()
+    {
+        t = static_cast<int>(sqrt(n)+0.5);
+        for (int i = 0; i < n; ++i) sum[i/t] += a[i];
+    }
+
+    void update(int x, T k) { a[x] += k; sum[x/t] += k; }
+    void update(int x, int y, T k)
+    {
+        for ( ; x <= y && x%t; ++x) a[x] += k, sum[x/t] += k;
+        for ( ; x+t-1 <= y; x += t) sum[x/t] += k*t, add[x/t] += k;
+        for ( ; x <= y; ++x) a[x] += k, sum[x/t] += k;
+    }
+
+    T query(int x) { return a[x]+add[x/t]; }
+    T query(int x, int y)
+    {
+        T res = 0;
+        for ( ; x <= y && x%t; ++x) res += a[x]+add[x/t];
+        for ( ; x+t-1 <= y; x += t) res += sum[x/t];
+        for ( ; x <= y; ++x) res += a[x]+add[x/t];
+        return res;
+    }
+} B;
+```
+```cpp
+struct FenKuai
+{
+    typedef int T;
+    int t; // 每组大小
+    T a[N], b[N], add[N];
+
+    FenKuai()
+    {
+        memset(a, 0, sizeof a);
+        memset(b, 0, sizeof b);
+        memset(add, 0, sizeof add);
+    }
+
+    void build(int x)
+    {
+        for (int i = x*t; i < min(x*t+t, n); ++i) b[i] = a[i];
+        sort(b+x*t, b+min(x*t+t, n));
+    }
+
+    void init()
+    {
+        t = static_cast<int>(sqrt(n)+0.5);
+        for (int i = 0; i*t < n; ++i) build(i);
+    }
+
+    void update(int x, int y, T c)
+    {
+        int i = x;
+        for ( ; i <= y && i%t; ++i) a[i] += c;
+        build(x/t);
+        for ( ; i+t-1 <= y; i += t) add[i/t] += c;
+        for ( ; i <= y; ++i) a[i] += c;
+        build(y/t);
+    }
+
+    T query(int x, int y, long long c)
+    {
+        T res = 0; int i = x;
+        for ( ; i <= y && i%t; ++i) res += (a[i]+add[i/t] < c*c);
+        for ( ; i+t-1 <= y; i += t) res += lower_bound(b+i, b+i+t, c*c-add[i/t])-(b+i);
+        for ( ; i <= y; ++i) res += (a[i]+add[i/t] < c*c);
+        return res;
+    }
+} B;
+```
+```cpp
+struct FenKuai
+{
+    typedef int T;
+    int t, sz;
+    static const int NN = static_cast<int>(sqrt(N))+7;
+    T a[N];
+    deque<int> q[NN];
+
+    void init(int _n)
+    {
+        sz = _n;
+        t = static_cast<int>(sqrt(sz*1.5)+0.5);
+        for (int i = 0; i < sz; ++i) q[i/t].push_back(a[i]);
+    }
+
+    void update(int x, int k)
+    {
+        stack<int> tmp;
+        for (int i = 0; i != x%t; ++i) {
+            tmp.push(q[x/t].front());
+            q[x/t].pop_front();
+        }
+        q[x/t].push_front(k);
+        while (tmp.size()) {
+            q[x/t].push_front(tmp.top());
+            tmp.pop();
+        }
+        ++sz;
+        if (sz/t == x/t) return;
+        for (int i = x/t, val; i < sz/t; ++i) {
+            val = q[i].back();
+            q[i].pop_back();
+            q[i+1].push_front(val);
+        }
+    }
+
+    T query(int x)
+    {
+        stack<int> tmp;
+        for (int i = 0; i != x%t; ++i) {
+            tmp.push(q[x/t].front());
+            q[x/t].pop_front();
+        }
+        int res = q[x/t].front();
+        while (tmp.size()) {
+            q[x/t].push_front(tmp.top());
+            tmp.pop();
+        }
+        return res;
+    }
+} B;
+```
 ---
 ## 矩阵
 **矩阵乘法**
@@ -791,73 +931,40 @@ void tarjan(int cur, int fa)
 ---
 ## [缩点](https://www.luogu.org/problemnew/show/P3387)
 ```cpp
-void tarjan(int cur)
+void tarjan(int u)
 {
-    dfn[cur] = low[cur] = ++_dfn;
-    q[++tail] = cur;
-    vis[cur] = 1;
-   
-    for(int i = fir[cur], to; i; i = nex[i])
-    {
-        to = ver[i];
-        if(!dfn[to])
-        {
-            tarjan(to);
-            low[cur] = min(low[cur], low[to]);
+    dfn[u] = low[u] = ++_dfn;
+    vis[u] = 1;
+    sta[++top] = u;
+    for (int v : e[u]) {
+        if (!dfn[v]) {
+            tarjan(v);
+            low[u] = min(low[u], low[v]);
+        } else if (vis[v]) {
+            low[u] = min(low[u], low[v]);
         }
-        else if(vis[to])
-            low[cur] = min(low[cur], dfn[to]);
     }
-
-    if(dfn[cur] == low[cur])
-    {
-        int sum = 0;
-        _col++;
-        do
-        {
-            col[q[tail]] = _col;
-            vis[q[tail]] = 0;
-            sum += a[q[tail]];
-        } while(q[tail--] != cur);
-        w[_col] = sum;
+    if (dfn[u] == low[u]) {
+        w_col[++_col] = 0;
+        do {
+            col[sta[top]] = _col;
+            vis[sta[top]] = 0;
+            w_col[_col] += w[sta[top]];
+        } while (sta[top--] != u);
     }
 }
 
-inline void DAGdp()
+inline void suodian()
 {
-    for(int i = 1; i <= n; ++i)
-        for(int k = fir[i], to; k; k = nex[k])
-        {
-            to = ver[k];
-            if(col[i] != col[to])
-            {
-                du[col[to]]++;
-                add_cedge(col[i], col[to]);
-            }
-        }
-
-    head = tail = 0;
-    for(int i = 1; i <= _col; ++i)
-    {
-        if(!du[i])
-        {
-            q[++tail] = i;
-            f[i] = w[i];
-            ans = max(ans, f[i]);
-        }
+    for (int i = 1; i <= n; ++i) {
+        if (!dfn[i]) tarjan(i);
     }
-    while(head < tail)
-    {
-        int cur = q[++head];
-        for(int k = cfir[cur], to; k; k = cnex[k])
-        {
-            to = cver[k];
-            if(--du[to] == 0)
-            {
-                q[++tail] = to;
-                f[to] = max(f[to], f[cur]+w[to]);
-                ans = max(ans, f[to]);
-            }
+    for (int i = 1; i <= n; ++i) {
+        for (int j : e[i]) {
+            if (col[i] == col[j]) continue;
+            // if (mp.count({col[i], col[j]})) continue;
+            // mp.insert({{col[i], col[j]}, 1});
+            e_col[col[i]].push_back(col[j]);
         }
     }
 }
@@ -894,7 +1001,9 @@ while(l < r)
 ## 欧几里得
 ### 最大公因数 gcd
 ```cpp
+__gcd(a, b); // <algorithm>
 int gcd(int a, int b) { return b ? gcd(b, a%b) : a; }
+inline int gcd(int a, int b) { while (b) a %= b, swap(a, b); return a; }
 ```
 ### 最小公倍数 lcm
 ```cpp
@@ -1149,6 +1258,38 @@ memcpy(a, b, sizeof b); // b --> a
 s.find(target_string, start_pos); // 找不到返回s.npos
 s.substr(start_pos, len);
 s.replace(start_pos, len, target_string);
+```
+### unordered_map 重载
+```cpp
+struct Node
+{
+    int a, b;
+    // 重载 ==
+    friend bool operator == (const Node &x, const Node &y) {
+        return x.a == y.a && x.b == y.b;
+    }
+};
+
+// 方法一
+namespace std {
+    template <>
+    struct hash<Node>
+    {
+        size_t operator () (const Node &x) const {
+            return x.a+x.b;
+        }
+    };
+}
+unordered_map<Node, int> mp;
+
+// 方法二
+struct KeyHasher
+{
+    size_t operator () (const Node &x) const {
+        return x.a+x.b;
+    }
+};
+unordered_map<Node, int, KeyHasher> mmp;
 ```
 ---
 ## 模数
