@@ -377,6 +377,88 @@ struct Splay
     #undef root
 };
 ```
+区间反转
+```cpp
+struct Splay
+{
+    typedef int T;
+    struct node
+    {
+        T v = 0;
+        int ch[2] = { 0, 0 };
+        int fa = 0, sum = 0, cnt = 0, tag = 0;
+    } e[N];
+    int sz, &root = e[0].ch[1];
+    void update(int x) { e[x].sum = e[e[x].ch[0]].sum+e[e[x].ch[1]].sum+e[x].cnt; }
+    int identify(int x) { return x == e[e[x].fa].ch[1]; }
+    void connect(int x,int f,int son) { e[x].fa = f; e[f].ch[son] = x; }
+    void rotate(int x) {
+        int y = e[x].fa,
+            r = e[y].fa,
+            rson = identify(y),
+            yson = identify(x),
+            b = e[x].ch[yson^1];
+        connect(b, y, yson);
+        connect(y, x, yson^1);
+        connect(x, r, rson);
+        update(y); update(x);
+    }
+    void splay(int at,int to = 0) {
+        to = e[to].fa;
+        int up;
+        while((up = e[at].fa) != to) {
+            if(e[up].fa != to)
+                rotate(identify(up) == identify(at) ? up : at);
+            rotate(at);
+        }
+    }
+    int add_point(T v, int fa) {
+        ++sz; e[sz].v = v; e[sz].fa = fa; e[sz].sum = e[sz].cnt = 1;
+        return sz;
+    }
+    int find(int x) {
+        if (x > e[root].sum) return -INF;
+        int now = root;
+        while (true) {
+            push_down(now);
+            if (x <= e[e[now].ch[0]].sum) now = e[now].ch[0];
+            else if ((x -= e[e[now].ch[0]].sum) <= e[now].cnt) break;
+            else x -= e[now].cnt, now = e[now].ch[1];
+        }
+        return now;
+    }
+    int build(int l, int r, int fa) {
+        if (l > r) return 0;
+        int mid = (l+r)>>1,
+            now = add_point(mid, fa);
+        e[now].ch[0] = build(l, mid-1, now);
+        e[now].ch[1] = build(mid+1, r, now);
+        update(now);
+        return now;
+    }
+    void push_down(int x) {
+        if (x && e[x].tag) {
+            e[e[x].ch[0]].tag ^= 1;
+            e[e[x].ch[1]].tag ^= 1;
+            swap(e[x].ch[0], e[x].ch[1]);
+            e[x].tag = 0;
+        }
+    }
+    void reverse(int l, int r) {
+        int pl = find(l-1+1), pr = find(r+1+1);
+        splay(pl); splay(pr, pl);
+        e[e[e[root].ch[1]].ch[0]].tag ^= 1;
+    }
+    void print_LMR(int x) {
+        if (!x) return;
+        push_down(x);
+        print_LMR(e[x].ch[0]);
+        if (e[x].v != 0 && e[x].v != n+1)
+            write(a[e[x].v]), putchar(' ');
+        print_LMR(e[x].ch[1]);
+    }
+} tree;
+```
 ### [线段树](https://www.luogu.org/problemnew/show/P3372)
 区间修改区间查询
 ```cpp
@@ -1067,13 +1149,18 @@ inline void suodian()
 ---
 ## [并查集](https://www.luogu.org/problemnew/show/P3367)
 ```cpp
-inline void init() { for(int i = 1; i <= n; ++i) fa[i] = i; }
-int getf(int s) { return fa[s] == s ? s : fa[s] = getf(fa[s]); }
-inline void connect(int x, int y)
+struct DSU
 {
-    int fx = getf(x), fy = getf(y);
-    if(fx != fy) fa[fx] = fy;
-}
+    int fa[N];
+    void init(int sz) { for (int i = 0; i <= sz; ++i) fa[i] = i; }
+    int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
+    int& operator [] (int i) { return fa[get(i)]; }
+    bool connect(int x, int y) {
+        int fx = get(x), fy = get(y);
+        if (fx == fy) return false;
+        fa[fx] = fy; return true;
+    }
+} dsu;
 ```
 ---
 ## 二分

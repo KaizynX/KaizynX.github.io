@@ -4,7 +4,7 @@ date: 2019-11-05 19:35:00
 categories:
   - Codeforces
 tags:
-  - 动态规划
+  - DP
   - 数学
 
 mathjax: true

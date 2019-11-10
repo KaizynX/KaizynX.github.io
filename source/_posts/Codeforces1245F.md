@@ -6,7 +6,7 @@ categories:
 tags:
   - 数学
   - 位运算
-  - 动态规划
+  - DP
 
 mathjax: true
 ---

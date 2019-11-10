@@ -1,5 +1,5 @@
 ---
-title: CF143F - Distinct Numbers
+title: ABC143F - Distinct Numbers
 date: 2019-10-29 13:50:00
 categories:
   - AtCoder
