@@ -37,6 +37,20 @@ ios::sync_with_stdio(false);
 cin.tie(NULL);
 ```
 ---
+## 随机数
+```cpp
+#include <random>
+// 范围 unsigned int
+mt19937 rnd(time(NULL));
+cout << rnd() << endl;
+```
+```cpp
+std::random_device rd;  //获取随机数种子
+std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+std::uniform_int_distribution<> dis(0, 9);
+std::cout << dis(gen) << endl;
+```
+---
 ## [堆](https://www.luogu.org/problemnew/show/P3378)
 ```cpp
 struct Heap
@@ -1155,10 +1169,27 @@ struct DSU
     void init(int sz) { for (int i = 0; i <= sz; ++i) fa[i] = i; }
     int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
     int& operator [] (int i) { return fa[get(i)]; }
-    bool connect(int x, int y) {
+    bool merge(int x, int y) {
         int fx = get(x), fy = get(y);
         if (fx == fy) return false;
         fa[fx] = fy; return true;
+    }
+} dsu;
+```
+加上按秩合并
+```cpp
+struct DSU
+{
+    int fa[N], num[N];
+    void init(int sz) { for (int i = 0; i <= sz; ++i) fa[i] = i, num[i] = 1; }
+    int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
+    int& operator [] (int i) { return fa[get(i)]; }
+    bool merge(int x, int y) {
+        int fx = get(x), fy = get(y);
+        if (fx == fy) return false;
+        if (num[fx] >= num[fy]) num[fx] += num[fy], fa[fy] = fx;
+        else num[fy] += num[fx], fa[fx] = fy;
+        return true;
     }
 } dsu;
 ```
@@ -1263,21 +1294,58 @@ inline long long EXCRT(long long a[], long long m[])
 
 ```
 ---
-## [线性筛](https://www.luogu.org/problemnew/show/P3383)
+## 欧拉函数
+
+### 筛法
 ```cpp
-inline void init()
+struct Euler
 {
-    check[1] = true;
-    for(int i = 2; i <= n; ++i)
-    {
-        if(!check[i]) prime[++cnt] = i;
-        for(int j = 1; j <= cnt && i*prime[j] <= n; ++j)
-        {
-            check[ i*prime[j] ] = true;
-            if(i % prime[j] == 0) break;
+    int phi[N], check[N];
+    vector<int> prime;
+    void init(int sz) {
+        for (int i = 1; i <= sz; ++i) check[i] = 1;
+        phi[1] = 1; check[1] = 0;
+        for (int i = 2; i <= sz; ++i) {
+            if (check[i]) {
+                prime.emplace_back(i);
+                phi[i] = i-1;
+            }
+            for (int j : prime) {
+                if (i*j > sz) break;
+                check[i*j] = 0;
+                if (i%j) {
+                    phi[i*j] = (j-1)*phi[i];
+                } else {
+                    phi[i*j] = j*phi[i];
+                    break;
+                }
+            }
         }
     }
-}
+} E;
+```
+---
+## [线性筛](https://www.luogu.org/problemnew/show/P3383)
+```cpp
+struct Euler
+{
+    int tot = 0;
+    int prime[N];
+    bool check[N];
+    bool& operator [] (const int i) { return check[i]; }
+    void init(int sz) {
+        tot = 0;
+        for (int i = 1; i <= sz; ++i) check[i] = true;
+        check[1] = false;
+        for (register int i = 2, j; i <= sz; ++i) {
+            if (check[i]) prime[++tot] = i;
+            for (j = 1; j <= tot && i*prime[j] <= sz; ++j) {
+                check[i*prime[j]] = false;
+                if (i%prime[j] == 0) break;
+            }
+        }
+    }
+} E;
 ```
 ---
 ## 判断素数(质数)
@@ -1290,6 +1358,24 @@ inline bool is_prime(long long x)
     if(x%6 != 1 && x%6 != 5) return false;
     for(long long i = 5; i*i <= x; i += 6)
         if(x%i == 0 || x%(i+2) == 0) return false;
+    return true;
+}
+```
+### Miller-Rabin 素性测试
+```cpp
+inline bool MillerRabin(int x)
+{
+    static const int test_time = 10;
+    if (x < 3) return x == 2;
+    int a = x-1, b = 0;
+    while (!(a&1)) a >>= 1, ++b;
+    for (int i = 1, j, v; i <= test_time; ++i) {
+        v = (qpow(rnd()%(x-2)+2, a, x));
+        if (v == 1 || v == x-1) continue;
+        for (j = 0; j < b && v != x-1; ++j)
+            v = static_cast<int>(1ll*v*v%x);
+        if (j >= b) return false;
+    }
     return true;
 }
 ```
