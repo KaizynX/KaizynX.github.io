@@ -51,6 +51,237 @@ std::uniform_int_distribution<> dis(0, 9);
 std::cout << dis(gen) << endl;
 ```
 ---
+## 啥玩意
+
+计算log2
+```cpp
+inline void init()
+{
+    // lg2[i] = lg2(i) +1
+    for(int i = 1; i <= n; ++i)
+        lg2[i] = lg2[i>>1]+1;
+}
+```
+快速开根号(牛顿迭代法)
+```cpp
+double sqrt(const double &a)
+{
+    double x = a, y = .0;
+    while (abs(x-y) > err) {
+        y = x;
+        x = .5*(x+a/x);
+    }
+    return x;
+}
+```
+---
+## 计算几何
+```cpp
+struct Point
+{
+    typedef double T;
+    T x, y;
+    int id;
+    Point(){}
+    Point(const T &_x, const T &_y, const int &_i = 0) : x(_x), y(_y), id(_i) {}
+    friend Point operator + (const Point &p1, const Point &p2) {
+        return Point(p1.x+p2.x, p1.y+p2.y, p1.id);
+    }
+    friend Point operator - (const Point &p1, const Point &p2) {
+        return Point(p1.x-p2.x, p1.y-p2.y, p1.id);
+    }
+    friend Point operator - (const Point &p) {
+        return Point(-p.x, -p.y, p.id);
+    }
+    friend T operator * (const Point &p1, const Point &p2) {
+        return p1.x*p2.y-p1.y*p2.x;
+    }
+    template <typename TT>
+    friend Point operator / (const Point &p, const TT &k) {
+        return Point(p.x/k, p.y/k, p.id);
+    }
+    template <typename TT>
+    friend Point operator * (const Point &p, const TT &k) {
+        return Point(p.x*k, p.y*k, p.id);
+    }
+    Point operator += (const Point &p) { return *this = *this+p; }
+    Point operator -= (const Point &p) { return *this = *this+p; }
+    template <typename TT>
+    Point operator *= (const TT &k) { return *this = *this*k; }
+    template <typename TT>
+    Point operator /= (const TT &k) { return *this = *this/k; }
+    friend bool operator < (const Point &p1, const Point &p2) {
+        return make_pair(p1.x, p1.y) < make_pair(p2.x, p2.y);
+    }
+    friend bool operator > (const Point &p1, const Point &p2) {
+        return make_pair(p1.x, p1.y) > make_pair(p2.x, p2.y);
+    }
+    friend bool operator == (const Point &p1, const Point &p2) {
+        return p1.x == p2.x && p1.y == p2.y;
+    }
+    friend bool operator != (const Point &p1, const Point &p2) {
+        return p1.x != p2.x || p1.y != p2.y;
+    }
+    friend istream& operator >> (istream &is, Point &p) {
+        return is >> p.x >> p.y;
+    }
+    friend ostream& operator << (ostream &os, Point &p) {
+        return os << p.x << " " << p.y << " " << p.id << endl;
+    }
+    double length() { return sqrt(1.0*x*x+1.0*y*y); }
+    friend double dis(const Point &p1, const Point &p2) { return (p2-p1).length(); }
+    double dis(const Point &p) { return (p-*this).length(); }
+    friend T dot(const Point &p1, const Point &p2) { return p1.x*p2.x+p1.y*p2.y; }
+    T dot(const Point &p) { return x*p.x+y*p.y; }
+    friend Point rotate_90_c(const Point &p) { return Point(p.y, -p.x, p.id); }
+    Point rotate_90_c() { return Point(y, -x, id); }
+};
+
+struct Line
+{
+    Point p1, p2;
+    Line(){}
+    Line(const Point &_p1, const Point &_p2) : p1(_p1), p2(_p2) {}
+    friend bool cross(const Line &l1, const Line &l2) {
+        #define SJ1(x) max(l1.p1.x, l1.p2.x) < min(l2.p1.x, l2.p2.x) || \
+                       max(l2.p1.x, l2.p2.x) < min(l1.p1.x, l1.p2.x)
+        if (SJ1(x) || SJ1(y)) return false;
+        #undef SJ1
+        #define SJ2(a, b, c, d) ((a-b)*(a-c))*((a-b)*(a-d)) <= 0
+        return SJ2(l1.p1, l1.p2, l2.p1, l2.p2) &&
+               SJ2(l2.p1, l2.p2, l1.p1, l1.p2);
+        #undef SJ2
+    }
+    friend bool on_line(const Line &l, const Point &p) {
+        return abs((l.p1-l.p2)*(l.p1-p)) < err;
+    }
+    friend Point cross_point(const Line &l1, const Line &l2) {
+        Point v1 = l1.p2-l1.p1, v2 = l2.p2-l2.p1;
+        if (abs(v1*v2) < err) return Point(0, 0); // no cross_point
+        double t = (l2.p1-l1.p1)*v2/(v1*v2);
+        return l1.p1+v1*t;
+    }
+};
+
+struct Circular
+{
+    Point o;
+    double r;
+    Circular(){}
+    Circular(const Point &_o, const double &_r) : o(_o), r(_r) {}
+    template <typename T>
+    Circular(const T &_x, const T &_y, const double &_r) : o(Point(_x, _y)), r(_r) {}
+    friend bool in_cir(const Circular &c, const Point &p) { return dis(c.o, p) <= c.r; }
+    bool in_cir(const Point &p) { return dis(o, p) <= r; }
+};
+
+inline Circular get_cir(const Point &p1, const Point &p2, const Point &p3)
+{
+    Circular res;
+    res.o = cross_point(Line((p1+p2)/2, (p1+p2)/2+(p2-p1).rotate_90_c()),
+                        Line((p1+p3)/2, (p1+p3)/2+(p3-p1).rotate_90_c()));
+    res.r = dis(res.o, p1);
+    return res;
+}
+```
+---
+### [二维凸包](https://www.luogu.com.cn/problem/P2742)
+```cpp
+int n;
+int stk[N], used[N], tp;
+Point p[N];
+
+inline void Andrew()
+{
+    sort(p+1, p+n+1);
+    tp = 0;
+    stk[++tp] = 1;
+    for (int i = 2; i <= n; ++i) {
+        while (tp >= 2 && (p[stk[tp]]-p[stk[tp-1]])*(p[i]-p[stk[tp]]) <= 0)
+            used[stk[tp--]] = 0;
+        used[i] = 1;
+        stk[++tp] = i;
+    }
+    int tmp = tp;
+    for (int i = n-1; i; --i) {
+        if (used[i]) continue;
+        while (tp >= tmp && (p[stk[tp]]-p[stk[tp-1]])*(p[i]-p[stk[tp]]) <= 0)
+            used[stk[tp--]] = 0;
+        used[i] = 1;
+        stk[++tp] = i;
+    }
+}
+```
+---
+### [平面最近点对](https://www.luogu.com.cn/problem/P1429)
+```cpp
+Point a[N];
+int n, ansa, ansb;
+double mindist;
+
+inline bool cmp_y(const Point &p1, const Point &p2) { return p1.y < p2.y; }
+
+void upd_ans(const Point &p1, const Point &p2)
+{
+    double dist = dis(p1, p2);
+    if (dist < mindist) mindist = dist, ansa = p1.id, ansb = p2.id;
+}
+
+void rec(int l, int r)
+{
+    if (r-l <= 3) {
+        for (int i = l; i < r; ++i)
+            for (int j = i+1; j <= r; ++j)
+                upd_ans(a[i], a[j]);
+        sort(a+l, a+r+1, cmp_y);
+        return;
+    }
+
+    static Point t[N];
+    int m = (l+r)>>1, midx = a[m].x;
+    rec(l, m); rec(m+1, r);
+    merge(a+l, a+m+1, a+m+1, a+r+1, t, cmp_y);
+    copy(t, t+r-l+1, a+l);
+
+    int tsz = 0;
+    for (int i = l; i <= r; ++i)
+        if (abs(a[i].x-midx) <= mindist) {
+            for (int j = tsz; j && a[i].y-t[j].y < mindist; --j)
+                upd_ans(a[i], t[j]);
+            t[++tsz] = a[i];
+        }
+}
+
+inline void mindist_pair()
+{
+    sort(a+1, a+n+1);
+    mindist = INF;
+    rec(1, n);
+}
+```
+---
+### [最小圆覆盖](https://www.luogu.com.cn/problem/P1742)
+```cpp
+inline Circular RIA()
+{
+    Circular cir;
+    random_shuffle(a+1, a+n+1);
+    for (int i = 1; i <= n; ++i) {
+        if (cir.in_cir(a[i])) continue;
+        cir = Circular(a[i], 0);
+        for (int j = 1; j < i; ++j) {
+            if (cir.in_cir(a[j])) continue;
+            cir = Circular((a[i]+a[j])/2, dis(a[i], a[j])/2);
+            for (int k = 1; k < j; ++k) {
+                if (cir.in_cir(a[k])) continue;
+                cir = get_cir(a[i], a[j], a[k]);
+            }
+        }
+    }
+    return cir;
+}
+```
+---
 ## [堆](https://www.luogu.org/problemnew/show/P3378)
 ```cpp
 struct Heap
@@ -293,6 +524,54 @@ void treedp(int cur, int fa)
     }
     maxs[cur] = max(maxs[cur], sum-s[cur]);
 }
+```
+### 字典树
+```cpp
+struct TireTree
+{
+    static const int NN = 5e5+7;
+    static const int SZ = 26;
+    char beg;
+    int nex[NN][SZ], num[NN], cnt;
+    bool exist[NN];
+    TireTree(char _beg = 'a') : beg(_beg) {
+        memset(nex, 0, sizeof nex);
+        memset(num, 0, sizeof num);
+        memset(exist, 0, sizeof exist);
+        cnt = 0;
+    }
+    void insert(const char *s) {
+        int len = strlen(s), p = 0;
+        for (int i = 0, c; i < len; ++i) {
+            c = s[i]-beg;
+            if (!nex[p][c]) nex[p][c] = ++cnt;
+            p = nex[p][c];
+            ++num[p];
+        }
+        exist[p] = true;
+    }
+    bool find(const char *s) {
+        int len = strlen(s), p = 0;
+        for (int i = 0, c; i < len; ++i) {
+            c = s[i]-beg;
+            if (!nex[p][c]) return false;
+            p = nex[p][c];
+        }
+        return exist[p];
+    }
+    int count(const char *s) {
+        int len = strlen(s), p = 0;
+        for (int i = 0, c; i < len; ++i) {
+            c = s[i]-beg;
+            if (!nex[p][c]) return 0;
+            p = nex[p][c];
+        }
+        return num[p];
+    }
+    void insert(const string &s) { insert(s.c_str()); }
+    bool find(const string &s) { return find(s.c_str()); }
+    int count(const string &s) { return count(s.c_str()); }
+};
 ```
 ### 二叉查找树
 ### [平衡树](https://www.luogu.org/problemnew/show/P3369)
@@ -553,7 +832,7 @@ struct BinaryIndexedTree
 {
     // set your type
     typedef int T;
-    T tr[MAXN];
+    T tr[N];
     BinaryIndexedTree() { memset(tr, 0, sizeof tr); }
     inline void clear() { for (int i = 1; i <= n; ++i) tr[i] = 0; }
     inline void update(int x, T v) { for ( ; x <= n; x += x&-x) tr[x] += v; }
@@ -729,7 +1008,7 @@ struct FenKuai
 ## 矩阵
 **矩阵乘法**
 ```cpp
-struct Match
+struct Matrix
 {
     long long m[Maxn][Maxn];
     Match(){ memset(m, 0, sizeof m); }
@@ -795,6 +1074,41 @@ inline long long qmul(long long x, long long y, long long mo)
 }
 ```
 ---
+## 最大团
+```cpp
+struct MaxClique
+{
+    vector<int> res, tmp, cnt;
+    bool dfs(int p) {
+        for (int i = p+1, flag; i <= n; ++i) {
+            if (cnt[i]+tmp.size() <= res.size()) return false;
+            if (!g[p][i]) continue;
+            flag = 1;
+            for (int j : tmp)
+                if (!g[i][j]) flag = 0;
+            if (!flag) continue;
+            tmp.push_back(i);
+            if (dfs(i)) return true;
+            tmp.pop_back();
+        }
+        if (tmp.size() > res.size()) {
+            res = tmp;
+            return true;
+        }
+        return false;
+    }
+    void solve() {
+        vector<int>(n+1, 0).swap(cnt);
+        vector<int>().swap(res);
+        for (int i = n; i; --i) {
+            vector<int>(1, i).swap(tmp);
+            dfs(i);
+            cnt[i] = res.size();
+        }
+    }
+} MC;
+```
+---
 ## [最小生成树](https://www.luogu.org/problemnew/show/P3366)
 **[Prim](https://www.luogu.org/problemnew/show/P1265)**
 ```cpp
@@ -815,7 +1129,7 @@ inline void prim()
     }
 }
 ```
-**Kruskra** (略)
+**Kruskal** (略)
 
 ---
 ## [二分图匹配](https://www.luogu.org/problemnew/show/P3386)
@@ -1064,6 +1378,68 @@ inline bool SPFA()
 ```
 ---
 ## [ST表](https://www.luogu.org/problemnew/show/P3865)
+一维
+```cpp
+template <typename T, typename U = std::greater<T>>
+struct ST
+{
+    static const int NN = (int)log2(N)+3;
+    static const T INF = 1e9;
+    U cmp = U();
+    T rmq[N][NN]; // rmq[i][j] ==> [i-2^j+1, i]
+    ST() { init(); }
+    ST(const T &val) { init(val); }
+    T& operator [] (const int &i) { return rmq[i][0]; }
+    void init(){ fill(rmq[0], rmq[0]+N*NN, cmp(-INF, +INF) ? INF : -INF); }
+    void init(const T &val) { fill(rmq[0], rmq[0]+N*NN, val); }
+    T mv(const T &x, const T &y) { return cmp(x, y) ? x : y; }
+    void build(T a[], const int &n) {
+        for (int i = 1; i <= n; ++i) {
+            rmq[i][0] = a[i];
+            for (int j = 1; j <= log_2[i]; ++j)
+                rmq[i][j] =  mv(rmq[i][j-1], rmq[i-(1<<(j-1))][j-1]);
+        }
+    }
+    T query(const int &l, const int &r) {
+        int k = log_2[r-l+1];
+        return mv(rmq[r][k], rmq[l+(1<<k)-1][k]);
+    }
+};
+ST<int, greater<int>> st;
+```
+二维
+```cpp
+template <typename T, typename U = std::greater<T>>
+struct ST
+{
+    static const int NN = (int)log2(N)+3;
+    static const T INF = 1e9;
+    U cmp = U();
+    T rmq[N][N][NN][NN]; // rmq[i][j][k][l] [i, j] [i+2^k-1, j+2^l-1]
+    ST() { init(); }
+    ST(const T &val) { init(val); }
+    T& operator [] (const int &i) { return rmq[i][0]; }
+    void init(){ fill(rmq[0][0][0], rmq[0][0][0]+N*N*NN*NN, cmp(-INF, +INF) ? INF : -INF); }
+    void init(const T &val) { fill(rmq[0][0][0], rmq[0][0][0]+N*N*NN*NN, val); }
+    T mv(const T &x, const T &y) { return cmp(x, y) ? x : y; }
+    void build(T a[N][N], const int &n, const int &m) {
+        for (int k = 0; k <= log_2[n]; ++k)
+        for (int l = 0; l <= log_2[m]; ++l)
+        for (int i = 1; i+(1<<k)-1 <= n; ++i)
+        for (int j = 1; j+(1<<l)-1 <= m; ++j) {
+            T &cur = rmq[i][j][k][l];
+            if (!k && !l) cur = a[i][j];
+            else if (!l) cur = mv(rmq[i][j][k-1][l], rmq[i+(1<<(k-1))][j][k-1][l]);
+            else cur = mv(rmq[i][j][k][l-1], rmq[i][j+(1<<(l-1))][k][l-1]);
+        }
+    }
+    T query(const int &r1, const int &c1, const int &r2, const int &c2) {
+        int k = log_2[r2-r1+1], l = log_2[c2-c1+1];
+        return mv(mv(rmq[r1][c1][k][l], rmq[r2-(1<<k)+1][c2-(1<<l)+1][k][l]),
+                  mv(rmq[r2-(1<<k)+1][c1][k][l], rmq[r1][c2-(1<<l)+1][k][l]));
+    }
+};
+```
 ```cpp
 // for(int i = 2; i <= n; ++i) log_2[i] = log_2[i>>1]+1;
 
@@ -1211,6 +1587,98 @@ while(l < r)
 }
 ```
 ---
+## 复数
+```cpp
+struct complex
+{
+    double real = 0.0, imag = 0.0;
+    complex () {}
+    complex (int _real, int _imag) : real(_real), imag(_imag) {}
+    complex (double _real, double _imag) : real(_real), imag(_imag) {}
+    complex operator + (const complex &b) {
+        return complex(this->real+b.real, this->imag+b.imag);
+    }
+    complex operator - (const complex &b) {
+        return complex(this->real-b.real, this->imag-b.imag);
+    }
+    complex operator * (const complex &b) {
+        return complex(this->real*b.real-this->imag*b.imag, this->real*b.imag+this->imag*b.real);
+    }
+    complex operator *= (const complex &b) {
+        return *this = *this*b;
+    }
+};
+```
+---
+## [FFT](https://www.luogu.com.cn/problem/P3803)
+```cpp
+void FFT(complex a[], int flag)
+{
+    for (int i = 0; i < len; ++i)
+        if (i < rev[i]) swap(a[i], a[rev[i]]);
+
+    for (int base = 1; base < len; base <<= 1) {
+        complex w, wn = { cos(PI/base), flag*sin(PI/base) };
+        for (int i = 0; i < len; i += base*2) {
+            w = { 1.0, 0.0 };
+            for (int j = 0; j < base; ++j) {
+                complex x = a[i+j], y = w*a[i+j+base];
+                a[i+j] = x+y;
+                a[i+j+base] = x-y;
+                w *= wn;
+            }
+        }
+    }
+}
+int main()
+{
+    // read f[n] g[m]
+    while (len <= n+m) len <<= 1, ++bit;
+    for (int i = 0; i < len; ++i)
+        rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
+
+    FFT(f, 1); FFT(g, 1);
+    for (int i = 0; i <= len; ++i) f[i] *= g[i];
+    FFT(f, -1);
+    for (int i = 0; i <= n+m; ++i)
+        printf("%d%c", static_cast<int>(f[i].real/len+0.5), " \n"[i==n+m]);
+}
+```
+---
+## NTT
+```cpp
+void NTT(long long a[], int flag)
+{
+    for (int i = 0; i < len; ++i)
+        if (i < rev[i]) swap(a[i], a[rev[i]]);
+
+    for (int base = 1; base < len; base <<= 1) {
+        long long wn = qpow(G, (MOD-1)/(base*2)), w;
+        if (flag == -1) wn = qpow(wn, MOD-2);
+        for (int i = 0; i < len; i += base*2) {
+            w = 1;
+            for (int j = 0; j < base; ++j) {
+                long long x = a[i+j], y = w*a[i+j+base]%MOD;
+                a[i+j] = (x+y)%MOD;
+                a[i+j+base] = (x-y+MOD)%MOD;
+                w = w*wn%MOD;
+            }
+        }
+    }
+}
+// main() the same as FFT
+```
+---
+## 约瑟夫环
+### [O(n)](https://blog.csdn.net/weixin_42659809/article/details/82596676)
+```cpp
+int solve(int n, int v) {
+    return n == 1 ? 0 : (solve(n-1, v)+v)%n;
+}
+// res = solve(num, step)+1
+```
+```
+---
 ## 欧几里得
 ### 最大公因数 gcd
 ```cpp
@@ -1220,9 +1688,9 @@ inline int gcd(int a, int b) { while (b) a %= b, swap(a, b); return a; }
 ```
 ### 最小公倍数 lcm
 ```cpp
-inline int lcm(int a, int b) { return a*b/gcd(a, b); }
+inline int lcm(int a, int b) { return a/gcd(a, b)*b; }
 ```
-### 拓展欧几里得([同余方程](https://www.luogu.org/problemnew/show/P1082))
+### 扩展欧几里得([同余方程](https://www.luogu.org/problemnew/show/P1082))
 ```cpp
 void exgcd(int a, int b, int &x, int &y)
 {
@@ -1295,7 +1763,18 @@ inline long long EXCRT(long long a[], long long m[])
 ```
 ---
 ## 欧拉函数
-
+```cpp
+inline long long phi(long long x) {
+    long long res = x;
+    for (long long i = 2; i*i <= x; ++i) {
+        if (x%i) continue;
+        res = res/i*(i-1);
+        while (x%i == 0) x /= i;
+    }
+    if (x > 1) res = res/x*(x-1);
+    return res;
+}
+```
 ### 筛法
 ```cpp
 struct Euler
@@ -1584,6 +2063,11 @@ template <int _MOD> struct Mint
     Mint operator -= (const Mint &b) { return *this = *this-b; }
     Mint operator *= (const Mint &b) { return *this = *this*b; }
     Mint operator /= (const Mint &b) { return *this = *this/b; }
+    Mint operator - () { return Mint(-v); }
+    Mint &operator ++ () { return *this += 1; }
+    Mint &operator -- () { return *this -= 1; }
+    Mint operator ++ (int) { Mint tmp = *this; *this += 1; return tmp; }
+    Mint operator -- (int) { Mint tmp = *this; *this -= 1; return tmp; }
     Mint pow(int p) const {
         Mint res(1), x(*this);
         while (p) {
