@@ -1,19 +1,20 @@
 ---
-title: NOIP模板
+title: ACM模板
 date: 2018-11-05 07:00:00
 categories:
   - NOIP
+  - ACM
 tags:
 top: true
 ---
-# NOIP2018模板
----
-## 前言
+
+# 前言
 ```cpp
 while(true) ++++++ ++++++ ++++++ RP;
 ```
 <!--more-->
 ---
+# 杂项
 ## 快读快写
 ```cpp
 template <typename T> inline void read(T &x)
@@ -51,18 +52,14 @@ std::uniform_int_distribution<> dis(0, 9);
 std::cout << dis(gen) << endl;
 ```
 ---
-## 啥玩意
-
-计算log2
+## 计算log2
 ```cpp
-inline void init()
-{
-    // lg2[i] = lg2(i) +1
-    for(int i = 1; i <= n; ++i)
-        lg2[i] = lg2[i>>1]+1;
-}
+// lg2[i] = lg2(i) +1
+for(int i = 1; i <= n; ++i) lg2[i] = lg2[i>>1]+1;
+// lg2[i] = (int)log2(i)
+for(int i = 1; i <= n; ++i) lg2[i] = lg2[i>>1]+1;
 ```
-快速开根号(牛顿迭代法)
+## 快速开根号|牛顿迭代法
 ```cpp
 double sqrt(const double &a)
 {
@@ -75,7 +72,8 @@ double sqrt(const double &a)
 }
 ```
 ---
-## 计算几何
+# 计算几何
+## 向量 坐标 直线 圆 (结构体)
 ```cpp
 struct Point
 {
@@ -135,7 +133,25 @@ struct Point
     T dot(const Point &p) { return x*p.x+y*p.y; }
     friend Point rotate_90_c(const Point &p) { return Point(p.y, -p.x, p.id); }
     Point rotate_90_c() { return Point(y, -x, id); }
+    friend double atan(const Point &p) { return atan2(p.y, p.x); }
 };
+
+inline bool polar_angle1(const Point &p1, const Point &p2)
+{
+    double d1 = atan(p1), d2 = atan(p2); 
+    return d1 == d2 ? p1 < p2 : d1 < d2;
+}
+
+inline bool polar_angle2(const Point &p1, const Point &p2)
+{
+    auto tmp = p1*p2;
+    return tmp == 0 ? p1 < p2 : tmp > 0;
+}
+
+inline long long S(const Point &p1, const Point &p2, const Point &p3)
+{
+    return abs(p1.x*p2.y+p1.y*p3.x+p2.x*p3.y-p1.x*p3.y-p1.y*p2.x-p2.y*p3.x);
+}
 
 struct Line
 {
@@ -185,7 +201,7 @@ inline Circular get_cir(const Point &p1, const Point &p2, const Point &p3)
 }
 ```
 ---
-### [二维凸包](https://www.luogu.com.cn/problem/P2742)
+## [二维凸包](https://www.luogu.com.cn/problem/P2742)
 ```cpp
 int n;
 int stk[N], used[N], tp;
@@ -193,6 +209,7 @@ Point p[N];
 
 inline void Andrew()
 {
+    memset(used, 0, sizeof used);
     sort(p+1, p+n+1);
     tp = 0;
     stk[++tp] = 1;
@@ -213,7 +230,7 @@ inline void Andrew()
 }
 ```
 ---
-### [平面最近点对](https://www.luogu.com.cn/problem/P1429)
+## [平面最近点对](https://www.luogu.com.cn/problem/P1429)
 ```cpp
 Point a[N];
 int n, ansa, ansb;
@@ -260,7 +277,7 @@ inline void mindist_pair()
 }
 ```
 ---
-### [最小圆覆盖](https://www.luogu.com.cn/problem/P1742)
+## [最小圆覆盖|随即增量法](https://www.luogu.com.cn/problem/P1742)
 ```cpp
 inline Circular RIA()
 {
@@ -282,6 +299,7 @@ inline Circular RIA()
 }
 ```
 ---
+# 数据结构
 ## [堆](https://www.luogu.org/problemnew/show/P3378)
 ```cpp
 struct Heap
@@ -316,216 +334,7 @@ struct Heap
     }
 };
 ```
----
-## 字符串
-### [manacher算法](https://www.luogu.org/problemnew/show/P3805)(回文字符串)
-```cpp
-inline int manacher(const char *str, char *buf, int *p)
-{
-    int str_len = strlen(str), buf_len = 2;
-    buf[0] = buf[1] = '#';
-    for(int i = 0; i < str_len; ++i)
-        buf[buf_len++] = str[i], buf[buf_len++] = '#';
-
-    int mx = 0, id, ans = 0;
-    for(int i = 1; i < buf_len; ++i)
-    {
-        if(i <= mx) p[i] = min(p[id*2-i], mx-i);
-        else p[i] = 1;
-        while(buf[i-p[i]] == buf[i+p[i]]) p[i]++;
-        if(i+p[i] > mx) mx = i+p[i], id = i;
-        ans = max(ans, p[i]-1);
-    }
-    return ans;
-}
-```
-### [KMP](https://www.luogu.org/problemnew/show/P3375)
-```cpp
-len_a = strlen(a+1);
-len_b = strlen(b+1);
-for(int i = 2, k = 0; i <= len_b; ++i)
-{
-    while(k && b[k+1] != b[i]) k = _next[k];
-    if(b[k+1] == b[i]) ++k;
-    _next[i] = k;
-}
-for(int i = 1, j = 0; i <= len_a; ++i)
-{
-    while(j && a[i] != b[j+1]) j = _next[j];
-    if(b[j+1] == a[i]) ++j;
-    if(j == len_b)
-    {
-        cout << i-len_b+1 << endl;
-        j = _next[j];
-    }
-}
-```
-[大佬的KMP](https://blog.csdn.net/v_july_v/article/details/7041827)
-```cpp
-inline void GetNext(char *str, int *_nex)
-{
-    int len = strlen(str);
-    int k = -1, j = 0;
-    _nex[0] = -1;
-    while (j < len-1) {
-        if (k == -1 || str[k] == str[j]) {
-            ++k; ++j;
-            _nex[j] = (str[k] == str[j] ? _nex[k] : j);
-        } else {
-            k = _nex[k];
-        }
-    }
-}
-
-inline int KMP(char *s, char *p)
-{
-    int i = 0, j = 0;
-    int lens = strlen(s), lenp = strlen(p);
-    while (i < lens && j < lenp) {
-        if(j == -1 || s[i] == p[j]) {
-            ++i; ++j;
-        } else {
-            j = nex[j];
-        }
-    }
-    return j == lenp ? i-j : -1;
-}
-```
-### BM算法
-### Sunday算法
-### [扩展KMP(Z函数)](https://subetter.com/algorithm/extended-kmp-algorithm.html)
-```cpp
-inline void GetNext(char *s, int *_nex)
-{
-    int len = strlen(s);
-    int a = 0, p = 0;
-    _nex[0] = len;
-    for (int i = 1; i < len; ++i) {
-        if (i >= p || i+_nex[i-a] >= p) {
-            if (i > p) p = i;
-            while (p < len && s[p] == s[p-i]) ++p;
-            a = i;
-            _nex[i] = p-i;
-        } else {
-            _nex[i] = _nex[i-a];
-        }
-    }
-}
-
-inline void GetExtend(char *s, char *ss, int *_ext, int *_nex)
-{
-    int lens = strlen(s), lenss = strlen(ss);
-    int a = 0, p = 0;
-    for (int i = 0; i < lens; ++i) {
-        if (i >= p || i+_nex[i-a] >= p) {
-            if (i > p) p = i;
-            while (p < lens && p-i < lenss && s[p] == ss[p-i]) ++p;
-            a = i;
-            _ext[i] = p-i;
-        } else {
-            _ext[i] = _nex[i-a];
-        }
-    }
-}
-```
-
-
-### [字符串哈希](https://www.luogu.org/problemnew/show/P3370)
-```cpp
-inline unsigned long long _hash(const string &s)
-{
-    unsigned long long res = 0;
-    for(int i = 0; i < s.length(); ++i)
-        res = (res*Base+s[i])%Mod+Prime;
-    return res;
-}
-```
----
-## 快排
-```cpp
-void quick_sort(int l, int r)
-{
-    if(l >= r) return;
-    swap(a[l], a[l+rand()%(r-l)]);
-    int i = l, j = r, mid = a[l];
-    while(i < j)
-    {
-        while(i < j && a[j] >= mid) --j;
-        swap(a[i], a[j]);
-        while(i < j && a[i] < mid) ++i;
-        swap(a[i], a[j]);
-    }
-    quick_sort(l, i-1);
-    quick_sort(i+1, r);
-}
-```
----
-## 求第K大数
-[HDOJ 2665](http://acm.hdu.edu.cn/showproblem.php?pid=2665)
-[POJ 2104](http://poj.org/problem?id=2104)
-```cpp
-int kth_element(int l, int r, int k)
-{
-    if(l == r) return a[l];
-    swap(a[l], a[l+rand()%(r-l)]);
-    int mid = a[l], i = l, j = r;
-    while(i < j)
-    {
-        while(i < j && a[j] >= mid) --j;
-        swap(a[i], a[j]);
-        while(i < j && a[i] < mid) ++i;
-        swap(a[i], a[j]);
-    }
-    a[i] = mid;
-    if(i == k) return mid;
-    else if(i > k) return kth_element(l, i-1, k);
-    else return kth_element(i+1, r, k);
-}
-```
-**STL** (排序,无返回值)
-```cpp
-nth_element(a+1, a+k+1, a+n+1);
-```
----
-## [求逆序对(归并排序)](https://www.luogu.org/problemnew/show/P1908)
-```cpp
-void merge_sort(int l, int r)
-{
-    if(l == r) return;
-    int mid = (l+r)>>1;
-    merge_sort(l, mid);
-    merge_sort(mid+1, r);
-    int i = l, j = mid+1, k = l;
-    while(k <= r)
-    {
-        if(j <= r && (i > mid || a[j] < a[i]))
-        {
-            ans += mid-i+1;
-            b[k++] = a[j++];
-        }
-        else b[k++] = a[i++];
-    }
-    memcpy(a+l, b+l, sizeof(int)*(r-l+1));
-}
-```
----
-## 树
-### [树的重心](https://www.luogu.org/problemnew/show/P2986)
-```cpp
-void treedp(int cur, int fa)
-{
-    s[cur] = c[cur];
-    for(int i = fir[cur]; i; i = nex[i])
-    {
-        if(e[i] == fa) continue;
-        treedp(e[i], cur);
-        s[cur] += s[e[i]];
-        maxs[cur] = max(maxs[cur], s[e[i]]);
-    }
-    maxs[cur] = max(maxs[cur], sum-s[cur]);
-}
-```
-### 字典树
+## 字典树
 ```cpp
 struct TireTree
 {
@@ -534,7 +343,8 @@ struct TireTree
     char beg;
     int nex[NN][SZ], num[NN], cnt;
     bool exist[NN];
-    TireTree(char _beg = 'a') : beg(_beg) {
+    TireTree(char _beg = 'a') : beg(_beg) { clear(); }
+    void clear() {
         memset(nex, 0, sizeof nex);
         memset(num, 0, sizeof num);
         memset(exist, 0, sizeof exist);
@@ -573,9 +383,9 @@ struct TireTree
     int count(const string &s) { return count(s.c_str()); }
 };
 ```
-### 二叉查找树
-### [平衡树](https://www.luogu.org/problemnew/show/P3369)
-#### [Splay](https://www.luogu.org/blog/user19027/solution-p3369)
+## 二叉查找树
+## [平衡树](https://www.luogu.org/problemnew/show/P3369)
+### [Splay](https://www.luogu.org/blog/user19027/solution-p3369)
 ```cpp
 struct Splay
 {
@@ -752,79 +562,239 @@ struct Splay
     }
 } tree;
 ```
-### [线段树](https://www.luogu.org/problemnew/show/P3372)
+## [线段树](https://www.luogu.org/problemnew/show/P3372)
 区间修改区间查询
 ```cpp
-struct Tree
+template <typename T>
+struct SegmentTree
 {
-    int l, r;
-    long long sum, add;
-    Tree(){ sum = add = 0; }
-} tr[Maxn<<2];
-
-inline int ls(int x) { return x<<1; }
-inline int rs(int x) { return x<<1|1; }
-inline void push_up(int);
-inline void push_down(int);
-inline void build_tree(int, int, int);
-inline void update_tree(int, int, int, long long);
-inline long long query_tree(int, int, int);
-
-inline void push_up(int i)
-{
-    tr[i].sum = tr[ls(i)].sum+tr[rs(i)].sum;
-}
-
-inline void push_down(int i)
-{
-    if(!tr[i].add) return;
-    int len = tr[i].r-tr[i].l+1;
-    tr[ls(i)].add += tr[i].add;
-    tr[rs(i)].add += tr[i].add;
-    tr[ls(i)].sum += tr[i].add*(len-len/2);
-    tr[rs(i)].sum += tr[i].add*(len/2);
-    tr[i].add = 0;
-}
-
-inline void build_tree(int i, int l, int r)
-{
-    tr[i].l = l; tr[i].r = r;
-    if(l == r) { tr[i].sum = a[l]; return; }
-    int mid = (l+r)>>1;
-    build_tree(ls(i), l, mid);
-    build_tree(rs(i), mid+1, r);
-    push_up(i);
-}
-
-inline void update_tree(int i, int l, int r, long long k)
-{
-    if(tr[i].l >= l && tr[i].r <= r)
-    {
-        tr[i].sum += k*(tr[i].r-tr[i].l+1);
-        tr[i].add += k;
-        return;
+    T tr[N<<2], lazy[N<<2];
+    SegmentTree(){}
+    void push_up(const int &i) { tr[i] = tr[i<<1]+tr[i<<1|1]; }
+    void push_down(const int &i, const int &len) {
+        if (!lazy[i]) return;
+        tr[i<<1] += lazy[i]*(len-len/2);
+        tr[i<<1|1] += lazy[i]*(len/2);
+        lazy[i<<1] += lazy[i];
+        lazy[i<<1|1] += lazy[i];
+        lazy[i] = 0;
     }
-    push_down(i);
-    int mid = (tr[i].l+tr[i].r)>>1;
-    if(l <= mid) update_tree(ls(i), l, r, k);
-    if(r > mid)  update_tree(rs(i), l, r, k);
-    push_up(i);
-}
-
-inline long long query_tree(int i, int l, int r)
-{
-    if(tr[i].l >= l && tr[i].r <= r) return tr[i].sum;
-    push_down(i);
-    int mid = (tr[i].l+tr[i].r)>>1;
-    long long res = 0;
-    if(l <= mid) res += query_tree(ls(i), l, r);
-    if(r > mid)  res += query_tree(rs(i), l, r);
-    return res;
-}
+    void build(const int &l, const int &r, const int &i = 1) {
+        lazy[i] = 0;
+        if (l == r) { tr[i] = 0; return; }
+        int mid = (l+r)>>1;
+        build(l, mid, i<<1);
+        build(mid+1, r, i<<1|1);
+        push_up(i);
+    }
+    template <typename TT>
+    void build(const TT a[], const int &l, const int &r, const int &i = 1) {
+        lazy[i] = 0;
+        if (l == r) { tr[i] = a[l]; return; }
+        int mid = (l+r)>>1;
+        build(a, l, mid, i<<1);
+        build(a, mid+1, r, i<<1|1);
+        push_up(i);
+    }
+    void modify(const int &x, const T &k, const int &trl, const int &trr, const int &i = 1) {
+        if (trl == x && trr == x) {
+            tr[i] = k;
+            lazy[i] = 0;
+            return;
+        }
+        push_down(i, trr-trl+1);
+        int mid = (trl+trr)>>1;
+        if (x <= mid) update(x, k, trl, mid, i<<1);
+        else update(x, k, mid+1, trr, i<<1|1);
+        push_up(i);
+    }
+    void add(const int &l, const int &r, const T &k, const int &trl, const int &trr, const int &i = 1) {
+        if (trl >= l && trr <= r) {
+            tr[i] += k*(trr-trl+1);
+            lazy[i] += k;
+            return;
+        }
+        push_down(i, trr-trl+1);
+        int mid = (trl+trr)>>1;
+        if (l <= mid) add(l, r, k, trl, mid, i<<1);
+        if (r >  mid) add(l, r, k, mid+1, trr, i<<1|1);
+        push_up(i);
+    }
+    T query(const int &l, const int &r, const int &trl, const int &trr, const int &i = 1) {
+        if (trl >= l && trr <= r) return tr[i];
+        push_down(i, trr-trl+1);
+        int mid = (trl+trr)>>1;
+        T res = 0;
+        if (l <= mid) res += query(l, r, trl, mid, i<<1);
+        if (r >  mid) res += query(l, r, mid+1, trr, i<<1|1);
+        return res;
+    }
+};
 ```
-### ZKW线段树
+线段树RMQ
+```cpp
+template <typename T, typename U = greater<T>>
+struct SegmentTree
+{
+    U cmp = U();
+    T tr[M<<2], lazy[M<<2], init_val = cmp(0, 1) ? INF : -INF;
+    SegmentTree(){}
+    T mv(const T &x, const T &y) { return cmp(x, y) ? x : y;}
+    void push_up(const int &i) { tr[i] = mv(tr[i<<1], tr[i<<1|1]); }
+    /*
+    void push_down(const int &i) {
+        tr[i<<1] = mv(tr[i<<1], lazy[i]);
+        tr[i<<1|1] = mv(tr[i<<1|1], lazy[i]);
+        lazy[i<<1] = mv(lazy[i<<1], lazy[i]);
+        lazy[i<<1|1] = mv(lazy[i<<1|1], lazy[i]);
+        lazy[i] = init_val;
+    }
+    */
+    void push_down(const int &i) {
+        if (!lazy[i]) return;
+        tr[i<<1] += lazy[i];
+        tr[i<<1|1] += lazy[i];
+        lazy[i<<1] += lazy[i];
+        lazy[i<<1|1] += lazy[i];
+        lazy[i] = 0;
+    }
+    void build(const int &l, const int &r, const int &i = 1) {
+        lazy[i] = 0;
+        if (l == r) { tr[i] = 0; return; }
+        int mid = (l+r)>>1;
+        build(l, mid, i<<1);
+        build(mid+1, r, i<<1|1);
+        push_up(i);
+    }
+    template <typename TT>
+    void build(const TT a[], const int &l, const int &r, const int &i = 1) {
+        lazy[i] = 0;
+        if (l == r) { tr[i] = a[l]; return; }
+        int mid = (l+r)>>1;
+        build(a, l, mid, i<<1);
+        build(a, mid+1, r, i<<1|1);
+        push_up(i);
+    }
+    void modify(const int &x, const T &k, const int &trl, const int &trr, const int &i = 1) {
+        if (trl == x && trr == x) {
+            tr[i] = k;
+            return;
+        }
+        push_down(i);
+        int mid = (trl+trr)>>1;
+        if (x <= mid) update(x, k, trl, mid, i<<1);
+        else update(x, k, mid+1, trr, i<<1|1);
+        push_up(i);
+    }
+    void add(const int &l, const int &r, const T &k, const int &trl, const int &trr, const int &i = 1) {
+        if (trl >= l && trr <= r) {
+            tr[i] += k;
+            lazy[i] += k;
+            return;
+        }
+        push_down(i);
+        int mid = (trl+trr)>>1;
+        if (l <= mid) add(l, r, k, trl, mid, i<<1);
+        if (r >  mid) add(l, r, k, mid+1, trr, i<<1|1);
+        push_up(i);
+    }
+    T query(const int &l, const int &r, const int &trl, const int &trr, const int &i = 1) {
+        if (trl >= l && trr <= r) return tr[i];
+        push_down(i);
+        int mid = (trl+trr)>>1;
+        T res = init_val;
+        if (l <= mid) res = mv(res, query(l, r, trl, mid, i<<1));
+        if (r >  mid) res = mv(res, query(l, r, mid+1, trr, i<<1|1));
+        return res;
+    }
+};
+```
+## ZKW线段树
+```cpp
+template <typename T>
+struct zkwSegmentTree
+{
+    int sz;
+    T sum[N<<2], mn[N<<2], mx[N<<2], add[N<<2];
+    void update(const int &x) {
+        T tmp;
+        tmp = min(mn[x], mn[x^1]); mn[x] -= tmp; mn[x^1] -= tmp; mn[x>>1] += tmp;
+        tmp = max(mx[x], mx[x^1]); mx[x] -= tmp; mx[x^1] -= tmp; mx[x>>1] += tmp;
+    }
+    template <typename TT>
+    void build(const TT a[], const int &n) {
+        for (sz = 1; sz <= n+1; sz <<= 1);
+        for (int i = sz+1; i <= sz+n; ++i)
+            sum[i] = mn[i] = mx[i] = a[i-sz];
+        for (int i = sz-1; i; --i) {
+            sum[i] = sum[i<<1]+sum[i<<1|1];
+            mn[i] = min(mn[i<<1], mn[i<<1|1]); mn[i<<1] -= mn[i]; mn[i<<1|1] -= mn[i];
+            mx[i] = max(mx[i<<1], mx[i<<1|1]); mx[i<<1] -= mx[i]; mx[i<<1|1] -= mx[i];
+        }
+    }
+    void update(int x, const T &v) {
+        x += sz; mx[x] += v; mn[x] += v; sum[x] += v;
+        for ( ; x > 1; x >>= 1) {
+            sum[x] += v;
+            update(x);
+        }
+    }
+    void update(int s, int t, const T &v) {
+        int lc = 0, rc = 0, len = 1;
+        for (s += sz-1, t += sz+1; s^t^1; s >>= 1, t >>= 1, len <<= 1) {
+            if (~s&1) add[s^1] += v, lc += len, mn[s^1] += v, mx[s^1] += v;
+            if ( t&1) add[t^1] += v, rc += len, mn[t^1] += v, mx[t^1] += v;
+            sum[s>>1] += v*lc; sum[t>>1] += v*rc;
+            update(s); update(t);
+        }
+        for (lc += rc; s; s >>= 1) {
+            sum[s>>1] += v*lc;
+            update(s);
+        }
+    }
+    T query(int x) {
+        T res = 0;
+        for (x += sz; x; x >>= 1) res += mn[x];
+        return res;
+    }
+    T query_sum(int s, int t) {
+        int lc = 0, rc = 0, len = 1;
+        T res = 0;
+        for (s += sz-1, t += sz+1; s^t^1; s >>= 1, t >>= 1, len <<= 1) {
+            if (~s&1) res += sum[s^1]+len*add[s^1], lc += len;
+            if ( t&1) res += sum[t^1]+len*add[t^1], rc += len;
+            if (add[s>>1]) res += add[s>>1]*lc;
+            if (add[t>>1]) res += add[t>>1]*rc;
+        }
+        for (lc += rc, s >>= 1; s; s >>= 1) if (add[s]) res += add[s]*lc;
+        return res;
+    }
+    T query_min(int s, int t) {
+        if (s == t) return query(s);
+        T l = 0, r = 0, res = 0;
+        for (s += sz, t += sz; s^t^1; s >>= 1, t >>= 1) {
+            l += mn[s]; r += mn[t];
+            if (~s^1) l = min(l, mn[s^1]);
+            if ( t^1) r = min(r, mn[t^1]);
+        }
+        for (res = min(l, r), s >>= 1; s; s >>= 1) res += mn[s];
+        return res;
+    }
+    T query_max(int s, int t) {
+        if (s == t) return query(s);
+        T l = 0, r = 0, res = 0;
+        for (s += sz, t += sz; s^t^1; s >>= 1, t >>= 1) {
+            l += mx[s]; r += mx[t];
+            if (~s^1) l = max(l, mx[s^1]);
+            if ( t^1) r = max(r, mx[t^1]);
+        }
+        for (res = max(l, r), s >>= 1; s; s >>= 1) res += mx[s];
+        return res;
+    }
+};
+```
 ---
-### 树状数组
+## 树状数组
 [单点修改区间查询](https://www.luogu.org/problemnew/show/P3374)
 [区间修改单点查询](https://www.luogu.org/problemnew/show/P3368)
 ```cpp
@@ -841,30 +811,61 @@ struct BinaryIndexedTree
     inline T query(int x, int y) { return query(y)-query(x-1); }
 } BIT;
 ```
+## [可持久化线段树(主席树)](https://www.luogu.com.cn/problem/P3834)
 ```cpp
-// 单点修改 add(x, k);
-// 区间修改 add(x, k); add(y+1, -k);
-inline void add(int i, int k)
+template <typename T>
+struct PersistenceSegmentTree
 {
-    for( ; i <= n; i += i & -i) tr[i] += k;
-}
-// 单点查询
-inline int query(int x)
-{
-    int res = 0;
-    for( ; x; x -= x & -x) res += tr[x];
-    return res;
-}
-// 区间查询
-inline int query(int x, int y)
-{
-    int resx = 0, resy = 0;
-    for( ; y; y -= y & -y) resy += tr[y];
-    for(--x; x; x -= x & -x) resx += tr[x];
-    return resy - resx;
-}
+    static const int NN = N*(log2(N)+3);
+    int rt[N], sum[NN], ls[NN], rs[NN], tot, sz;
+    vector<T> des;
+    void build(const T a[], const int &n) {
+        vector<T>(a+1, a+n+1).swap(des);
+        sort(des.begin(), des.end());
+        des.erase(unique(des.begin(), des.end()), des.end());
+        sz = des.size();
+        tot = 0;
+        rt[0] = _build(1, sz);
+        for (int i = 1; i <= n; ++i) {
+            int t = lower_bound(des.begin(), des.end(), a[i])-des.begin()+1;
+            rt[i] = _update(rt[i-1], 1, sz, t);
+        }
+    }
+    void update(const int &id, const T &k) {
+        int t = lower_bound(des.begin(), des.end(), k)-des.begin()+1;
+        rt[id] = _update(rt[id-1], 1, sz, t);
+    }
+    T query(const int &l, const int &r, const int &k) {
+        return des[_query(rt[l-1], rt[r], 1, sz, k)-1];
+    }
+private:
+    int _build(const int &l, const int &r) {
+        int cur = ++tot;
+        sum[++cur] = 0;
+        if (l >= r) return cur;
+        int mid = (l+r)>>1;
+        ls[cur] = _build(l, mid);
+        rs[cur] = _build(mid+1, r);
+        return cur;
+    }
+    int _update(const int &pre, const int &l, const int &r, const int &k) {
+        int cur = ++tot;
+        ls[cur] = ls[pre]; rs[cur] = rs[pre]; sum[cur] = sum[pre]+1;
+        if (l >= r) return cur;
+        int mid = (l+r)>>1;
+        if (k <= mid) ls[cur] = _update(ls[pre], l, mid, k);
+        else rs[cur] = _update(rs[pre], mid+1, r, k);
+        return cur;
+    }
+    int _query(const int &u, const int &v, const int &l, const int &r, const int &k) {
+        if (l >= r) return l;
+        int num = sum[ls[v]]-sum[ls[u]], mid = (l+r)>>1;
+        if (num >= k) return _query(ls[u], ls[v], l, mid, k);
+        else return _query(rs[u], rs[v], mid+1, r, k-num);
+    }
+};
 ```
-### [分块](http://hzwer.com/8053.html#comment-8306)
+## [分块](http://hzwer.com/8053.html#comment-8306)
 ```cpp
 struct FenKuai
 {
@@ -1004,76 +1005,241 @@ struct FenKuai
     }
 } B;
 ```
----
-## 矩阵
-**矩阵乘法**
+## [ST表](https://www.luogu.org/problemnew/show/P3865)
+一维
 ```cpp
-struct Matrix
+template <typename T, typename U = std::greater<T>>
+struct ST
 {
-    long long m[Maxn][Maxn];
-    Match(){ memset(m, 0, sizeof m); }
-    inline void init() { for(int i = 0; i < Maxn; ++i) m[i][i] = 1; }
-    Match operator * (const Match &b) const
-    {
-        Match res;
-        for(int i = 1; i <= n; ++i)
-            for(int j = 1; j <= n; ++j)
-            {
-                long long &cur = res.m[i][j];
-                for(int k = 1; k <= n; ++k)
-                    cur = (cur+m[i][k]*b.m[k][j])%MOD;
-            }
-        return res;
+    static const int NN = (int)log2(N)+3;
+    static const T INF = 1e9;
+    U cmp = U();
+    T rmq[N][NN]; // rmq[i][j] ==> [i-2^j+1, i]
+    ST() { init(); }
+    ST(const T &val) { init(val); }
+    T& operator [] (const int &i) { return rmq[i][0]; }
+    void init(){ fill(rmq[0], rmq[0]+N*NN, cmp(-INF, +INF) ? INF : -INF); }
+    void init(const T &val) { fill(rmq[0], rmq[0]+N*NN, val); }
+    T mv(const T &x, const T &y) { return cmp(x, y) ? x : y; }
+    void build(T a[], const int &n) {
+        for (int i = 1; i <= n; ++i) {
+            rmq[i][0] = a[i];
+            for (int j = 1; j <= log_2[i]; ++j)
+                rmq[i][j] =  mv(rmq[i][j-1], rmq[i-(1<<(j-1))][j-1]);
+        }
     }
-}
+    T query(const int &l, const int &r) {
+        int k = log_2[r-l+1];
+        return mv(rmq[r][k], rmq[l+(1<<k)-1][k]);
+    }
+};
+ST<int, greater<int>> st;
 ```
-**[矩阵快速幂](https://www.luogu.org/problemnew/show/P3390)** (略)
-
----
-## [快速幂](https://www.luogu.org/problemnew/show/P1226)
+二维
 ```cpp
-inline long long qpow(long long a, long long p, long long mo)
+template <typename T, typename U = std::greater<T>>
+struct ST
 {
-    if(p == 0) return 1 % mo;
-    long long ans = 1;
-    a %= mo;
-    while(p)
+    static const int NN = (int)log2(N)+3;
+    static const T INF = 1e9;
+    U cmp = U();
+    T rmq[N][N][NN][NN]; // rmq[i][j][k][l] [i, j] [i+2^k-1, j+2^l-1]
+    ST() { init(); }
+    ST(const T &val) { init(val); }
+    T& operator [] (const int &i) { return rmq[i][0]; }
+    void init(){ fill(rmq[0][0][0], rmq[0][0][0]+N*N*NN*NN, cmp(-INF, +INF) ? INF : -INF); }
+    void init(const T &val) { fill(rmq[0][0][0], rmq[0][0][0]+N*N*NN*NN, val); }
+    T mv(const T &x, const T &y) { return cmp(x, y) ? x : y; }
+    void build(T a[N][N], const int &n, const int &m) {
+        for (int k = 0; k <= log_2[n]; ++k)
+        for (int l = 0; l <= log_2[m]; ++l)
+        for (int i = 1; i+(1<<k)-1 <= n; ++i)
+        for (int j = 1; j+(1<<l)-1 <= m; ++j) {
+            T &cur = rmq[i][j][k][l];
+            if (!k && !l) cur = a[i][j];
+            else if (!l) cur = mv(rmq[i][j][k-1][l], rmq[i+(1<<(k-1))][j][k-1][l]);
+            else cur = mv(rmq[i][j][k][l-1], rmq[i][j+(1<<(l-1))][k][l-1]);
+        }
+    }
+    T query(const int &r1, const int &c1, const int &r2, const int &c2) {
+        int k = log_2[r2-r1+1], l = log_2[c2-c1+1];
+        return mv(mv(rmq[r1][c1][k][l], rmq[r2-(1<<k)+1][c2-(1<<l)+1][k][l]),
+                  mv(rmq[r2-(1<<k)+1][c1][k][l], rmq[r1][c2-(1<<l)+1][k][l]));
+    }
+};
+```
+---
+## [并查集](https://www.luogu.org/problemnew/show/P3367)
+```cpp
+struct DSU
+{
+    int fa[N];
+    void init(int sz) { for (int i = 0; i <= sz; ++i) fa[i] = i; }
+    int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
+    int& operator [] (int i) { return fa[get(i)]; }
+    bool merge(int x, int y) {
+        int fx = get(x), fy = get(y);
+        if (fx == fy) return false;
+        fa[fx] = fy; return true;
+    }
+} dsu;
+```
+加上按秩合并
+```cpp
+struct DSU
+{
+    int fa[N], num[N];
+    void init(int sz) { for (int i = 0; i <= sz; ++i) fa[i] = i, num[i] = 1; }
+    int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
+    int& operator [] (int i) { return fa[get(i)]; }
+    bool merge(int x, int y) {
+        int fx = get(x), fy = get(y);
+        if (fx == fy) return false;
+        if (num[fx] >= num[fy]) num[fx] += num[fy], fa[fy] = fx;
+        else num[fy] += num[fx], fa[fx] = fy;
+        return true;
+    }
+} dsu;
+```
+---
+# 字符串
+## [回文字符串|manacher算法](https://www.luogu.org/problemnew/show/P3805)
+```cpp
+inline int manacher(const char *str, char *buf, int *p)
+{
+    int str_len = strlen(str), buf_len = 2;
+    buf[0] = buf[1] = '#';
+    for(int i = 0; i < str_len; ++i)
+        buf[buf_len++] = str[i], buf[buf_len++] = '#';
+
+    int mx = 0, id, ans = 0;
+    for(int i = 1; i < buf_len; ++i)
     {
-        if(p&1) ans = ans*a%mo;
-        a = a*a%mo;
-        p >>= 1;
+        if(i <= mx) p[i] = min(p[id*2-i], mx-i);
+        else p[i] = 1;
+        while(buf[i-p[i]] == buf[i+p[i]]) p[i]++;
+        if(i+p[i] > mx) mx = i+p[i], id = i;
+        ans = max(ans, p[i]-1);
     }
     return ans;
 }
 ```
----
-## 快速乘
+## [KMP](https://www.luogu.org/problemnew/show/P3375)
 ```cpp
-inline long long qmul(long long x, long long y, long long mo)
+len_a = strlen(a+1);
+len_b = strlen(b+1);
+for(int i = 2, k = 0; i <= len_b; ++i)
 {
-    long long res = 0;
-    while (y) {
-        if (y&1) res = (res+x)%mo;
-        x = (x<<1)%mo;
-        y >>= 1;
+    while(k && b[k+1] != b[i]) k = _next[k];
+    if(b[k+1] == b[i]) ++k;
+    _next[i] = k;
+}
+for(int i = 1, j = 0; i <= len_a; ++i)
+{
+    while(j && a[i] != b[j+1]) j = _next[j];
+    if(b[j+1] == a[i]) ++j;
+    if(j == len_b)
+    {
+        cout << i-len_b+1 << endl;
+        j = _next[j];
     }
+}
+```
+[大佬的KMP](https://blog.csdn.net/v_july_v/article/details/7041827)
+```cpp
+inline void GetNext(char *str, int *_nex)
+{
+    int len = strlen(str);
+    int k = -1, j = 0;
+    _nex[0] = -1;
+    while (j < len-1) {
+        if (k == -1 || str[k] == str[j]) {
+            ++k; ++j;
+            _nex[j] = (str[k] == str[j] ? _nex[k] : j);
+        } else {
+            k = _nex[k];
+        }
+    }
+}
+
+inline int KMP(char *s, char *p)
+{
+    int i = 0, j = 0;
+    int lens = strlen(s), lenp = strlen(p);
+    while (i < lens && j < lenp) {
+        if(j == -1 || s[i] == p[j]) {
+            ++i; ++j;
+        } else {
+            j = nex[j];
+        }
+    }
+    return j == lenp ? i-j : -1;
+}
+```
+## BM算法
+## Sunday算法
+## [扩展KMP|Z函数](https://subetter.com/algorithm/extended-kmp-algorithm.html)
+```cpp
+inline void GetNext(char *s, int *_nex)
+{
+    int len = strlen(s);
+    int a = 0, p = 0;
+    _nex[0] = len;
+    for (int i = 1; i < len; ++i) {
+        if (i >= p || i+_nex[i-a] >= p) {
+            if (i > p) p = i;
+            while (p < len && s[p] == s[p-i]) ++p;
+            a = i;
+            _nex[i] = p-i;
+        } else {
+            _nex[i] = _nex[i-a];
+        }
+    }
+}
+
+inline void GetExtend(char *s, char *ss, int *_ext, int *_nex)
+{
+    int lens = strlen(s), lenss = strlen(ss);
+    int a = 0, p = 0;
+    for (int i = 0; i < lens; ++i) {
+        if (i >= p || i+_nex[i-a] >= p) {
+            if (i > p) p = i;
+            while (p < lens && p-i < lenss && s[p] == ss[p-i]) ++p;
+            a = i;
+            _ext[i] = p-i;
+        } else {
+            _ext[i] = _nex[i-a];
+        }
+    }
+}
+```
+## [字符串哈希](https://www.luogu.org/problemnew/show/P3370)
+```cpp
+inline unsigned long long _hash(const string &s)
+{
+    unsigned long long res = 0;
+    for(int i = 0; i < s.length(); ++i)
+        res = (res*Base+s[i])%Mod+Prime;
     return res;
-}
-
-inline long long qmul(long long x, long long y, long long mo)
-{
-    return (long long)((__int128)x*y%mo);
-}
-
-inline long long qmul(long long x, long long y, long long mo)
-{
-    // x*y - floor(x*y/mo)*mo
-    typedef unsigned long long ull;
-    typedef long double ld;
-    return ((ull)x*y-(ull)((ld)x/mo*y)*mo+mo)%mo;
 }
 ```
 ---
+# 图论|树论
+## [树的重心](https://www.luogu.org/problemnew/show/P2986)
+```cpp
+void treedp(int cur, int fa)
+{
+    s[cur] = c[cur];
+    for(int i = fir[cur]; i; i = nex[i])
+    {
+        if(e[i] == fa) continue;
+        treedp(e[i], cur);
+        s[cur] += s[e[i]];
+        maxs[cur] = max(maxs[cur], s[e[i]]);
+    }
+    maxs[cur] = max(maxs[cur], sum-s[cur]);
+}
+```
 ## 最大团
 ```cpp
 struct MaxClique
@@ -1109,6 +1275,48 @@ struct MaxClique
 } MC;
 ```
 ---
+## 稳定婚姻匹配
+```cpp
+template <typename T = int> struct Stable_Marriage
+{
+    int t[N], b[N], g[N], rkb[N][N], rkg[N][N];
+    T wb[N][N], wg[N][N];
+    queue<int> q;
+    void init(const int &n) {
+        queue<int>().swap(q);
+        memset(t, 0, sizeof(int)*(n+3));
+        memset(b, 0, sizeof(int)*(n+3));
+        memset(g, 0, sizeof(int)*(n+3));
+        for (int i = 1; i <= n; ++i) {
+            q.push(i);
+            for (int j = 1; j <= n; ++j)
+                rkb[i][j] = rkg[i][j] = j;
+            sort(rkb[i]+1, rkb[i]+n+1,
+                 [&](const int &x, const int &y) { return wb[i][y] < wb[i][x]; });
+            //sort(rkg[i]+1, rkg[i]+n+1,
+            //     [&](const int &x, const int &y) { return wg[i][y] < wg[i][x]; });
+        }
+    }
+    bool match(const int &x, const int &y) {
+        if (g[y]) {
+            if (wg[y][x] < wg[y][g[y]]) return false;
+            b[g[y]] = 0;
+            q.push(g[y]);
+        }
+        b[x] = y; g[y] = x;
+        return true;
+    }
+    void gale_shapely(const int &n) {
+        init(n);
+        while (q.size()) {
+            int x = q.front(); q.pop();
+            int y = rkb[x][++t[x]];
+            if (!match(x, y)) q.push(x);
+        }
+    }
+};
+```
+---
 ## [最小生成树](https://www.luogu.org/problemnew/show/P3366)
 **[Prim](https://www.luogu.org/problemnew/show/P1265)**
 ```cpp
@@ -1135,63 +1343,53 @@ inline void prim()
 ## [二分图匹配](https://www.luogu.org/problemnew/show/P3386)
 **匈牙利算法**
 ```cpp
-// vector<int> _e[Maxn];
-bool check(int cur)
+bool check(int u)
 {
-    for(unsigned i = 0, len = _e[cur].size(); i < len; ++i)
-    {
-        int nex = _e[cur][i];
-        if(vis[nex]) continue;
-        vis[nex] = true;
-        if(!co[nex] || check(co[nex]))
-        {
-            co[nex] = cur;
+    for (int v : e[u]) {
+        if (vis[v]) continue;
+        vis[v] = 1;
+        if (!co[v] || check(co[v])) {
+            co[v] = u;
             return true;
         }
     }
     return false;
 }
 
-int solve()
+inline int solve()
 {
-    int ans = 0;
-    for(int i = 1; i <= n; ++i)
-    {
-        memset(vis, 0, sizeof vis);
-        if(check(i)) ++ans;
+    int res = 0;
+    memset(co, 0, sizeof co);
+    for (int i = 1; i <= n; ++i) {
+        memset(vis, 0, sizeof(int)*(n+3));
+        res += check(i);
     }
-    return ans;
+    return res;
 }
 ```
 ---
 ## [LCA](https://www.luogu.org/problemnew/show/P3379)
 
 ```cpp
-void build_tree(int cur, int fa)
+void build_tree(int u, int fa)
 {
-    d[cur] = d[fa]+1;
-    f[cur][0] = fa;
-    for(int i = 1; (1<<i) <= d[cur]; ++i)
-        f[cur][i] = f[f[cur][i-1]][i-1];
-    for(int k = fir[cur]; k; k = nex[k])
-    {
-        if(e[k] == fa) continue;
-        build_tree(e[k], cur);
-    }
+    d[u] = d[fa]+1;
+    f[u][0] = fa;
+    for (int i = 1; (1<<i) <= d[u]; ++i)
+        f[u][i] = f[f[u][i-1]][i-1];
+    for (int v : e[u]) if (v != fa)
+        build_tree(v, u);
 }
 
-int lca(int x, int y)
+inline int lca(int x, int y)
 {
-    if(d[x] < d[y]) swap(x, y);
-    while(d[x] > d[y])
-        x = f[x][ lg2[ d[x]-d[y] ]-1 ];
-    if(x == y) return x;
-    for(int i = lg2[d[x]]; i >= 0; --i)
+    if (d[x] < d[y]) swap(x, y);
+    while (d[x] > d[y])
+        x = f[x][lg2[d[x]-d[y]]];
+    if (x == y) return x;
+    for (int i = lg2[d[x]]; i >= 0; --i)
         if(f[x][i] != f[y][i])
-        {
-            x = f[x][i];
-            y = f[y][i];
-        }
+            x = f[x][i], y = f[y][i];
     return f[x][0];
 }
 ```
@@ -1377,104 +1575,6 @@ inline bool SPFA()
 }
 ```
 ---
-## [ST表](https://www.luogu.org/problemnew/show/P3865)
-一维
-```cpp
-template <typename T, typename U = std::greater<T>>
-struct ST
-{
-    static const int NN = (int)log2(N)+3;
-    static const T INF = 1e9;
-    U cmp = U();
-    T rmq[N][NN]; // rmq[i][j] ==> [i-2^j+1, i]
-    ST() { init(); }
-    ST(const T &val) { init(val); }
-    T& operator [] (const int &i) { return rmq[i][0]; }
-    void init(){ fill(rmq[0], rmq[0]+N*NN, cmp(-INF, +INF) ? INF : -INF); }
-    void init(const T &val) { fill(rmq[0], rmq[0]+N*NN, val); }
-    T mv(const T &x, const T &y) { return cmp(x, y) ? x : y; }
-    void build(T a[], const int &n) {
-        for (int i = 1; i <= n; ++i) {
-            rmq[i][0] = a[i];
-            for (int j = 1; j <= log_2[i]; ++j)
-                rmq[i][j] =  mv(rmq[i][j-1], rmq[i-(1<<(j-1))][j-1]);
-        }
-    }
-    T query(const int &l, const int &r) {
-        int k = log_2[r-l+1];
-        return mv(rmq[r][k], rmq[l+(1<<k)-1][k]);
-    }
-};
-ST<int, greater<int>> st;
-```
-二维
-```cpp
-template <typename T, typename U = std::greater<T>>
-struct ST
-{
-    static const int NN = (int)log2(N)+3;
-    static const T INF = 1e9;
-    U cmp = U();
-    T rmq[N][N][NN][NN]; // rmq[i][j][k][l] [i, j] [i+2^k-1, j+2^l-1]
-    ST() { init(); }
-    ST(const T &val) { init(val); }
-    T& operator [] (const int &i) { return rmq[i][0]; }
-    void init(){ fill(rmq[0][0][0], rmq[0][0][0]+N*N*NN*NN, cmp(-INF, +INF) ? INF : -INF); }
-    void init(const T &val) { fill(rmq[0][0][0], rmq[0][0][0]+N*N*NN*NN, val); }
-    T mv(const T &x, const T &y) { return cmp(x, y) ? x : y; }
-    void build(T a[N][N], const int &n, const int &m) {
-        for (int k = 0; k <= log_2[n]; ++k)
-        for (int l = 0; l <= log_2[m]; ++l)
-        for (int i = 1; i+(1<<k)-1 <= n; ++i)
-        for (int j = 1; j+(1<<l)-1 <= m; ++j) {
-            T &cur = rmq[i][j][k][l];
-            if (!k && !l) cur = a[i][j];
-            else if (!l) cur = mv(rmq[i][j][k-1][l], rmq[i+(1<<(k-1))][j][k-1][l]);
-            else cur = mv(rmq[i][j][k][l-1], rmq[i][j+(1<<(l-1))][k][l-1]);
-        }
-    }
-    T query(const int &r1, const int &c1, const int &r2, const int &c2) {
-        int k = log_2[r2-r1+1], l = log_2[c2-c1+1];
-        return mv(mv(rmq[r1][c1][k][l], rmq[r2-(1<<k)+1][c2-(1<<l)+1][k][l]),
-                  mv(rmq[r2-(1<<k)+1][c1][k][l], rmq[r1][c2-(1<<l)+1][k][l]));
-    }
-};
-```
-```cpp
-// for(int i = 2; i <= n; ++i) log_2[i] = log_2[i>>1]+1;
-
-// st[i][j] --> [i-2^j+1, i]
-inline void init_ST(int *a, int st[][20])
-{
-    for(int i = 1; i <= n; ++i)
-    {
-        st[i][0] = a[i];
-        for(int j = 1; j <= log_2[i]; ++j)
-            st[i][j] = max(st[i][j-1], st[i-(1<<(j-1))][j-1]);
-    }
-}
-
-inline int query(int l, int r, int st[][20])
-{
-    int k = log_2[r-l+1];
-    return max(st[r][k], st[l+(1<<k)-1][k]);
-}
-
-// st[i][j] --> [i, i+2^j-1]
-void init()
-{
-    for(int j = 1; j <= log_2[n]; ++j)
-        for(int i = 1; 1<<j <= n-i+1; ++i) // i + 1<<j - 1 <= n
-            st[i][j] = max(st[i][j-1], st[i+(1<<(j-1))][j-1]);
-}
-
-int query(int l, int r)
-{
-    int k = log_2[r-l+1];
-    return max(st[l][k], st[r-(1<<k)+1][k]);
-}
-```
----
 ## [割点](https://www.luogu.org/problemnew/show/P3388)
 ```cpp
 void tarjan(int cur, int fa)
@@ -1537,53 +1637,141 @@ inline void suodian()
 }
 ```
 ---
-## [并查集](https://www.luogu.org/problemnew/show/P3367)
+# 数论
+## 快排
 ```cpp
-struct DSU
+void quick_sort(int l, int r)
 {
-    int fa[N];
-    void init(int sz) { for (int i = 0; i <= sz; ++i) fa[i] = i; }
-    int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
-    int& operator [] (int i) { return fa[get(i)]; }
-    bool merge(int x, int y) {
-        int fx = get(x), fy = get(y);
-        if (fx == fy) return false;
-        fa[fx] = fy; return true;
+    if(l >= r) return;
+    swap(a[l], a[l+rand()%(r-l)]);
+    int i = l, j = r, mid = a[l];
+    while(i < j)
+    {
+        while(i < j && a[j] >= mid) --j;
+        swap(a[i], a[j]);
+        while(i < j && a[i] < mid) ++i;
+        swap(a[i], a[j]);
     }
-} dsu;
-```
-加上按秩合并
-```cpp
-struct DSU
-{
-    int fa[N], num[N];
-    void init(int sz) { for (int i = 0; i <= sz; ++i) fa[i] = i, num[i] = 1; }
-    int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
-    int& operator [] (int i) { return fa[get(i)]; }
-    bool merge(int x, int y) {
-        int fx = get(x), fy = get(y);
-        if (fx == fy) return false;
-        if (num[fx] >= num[fy]) num[fx] += num[fy], fa[fy] = fx;
-        else num[fy] += num[fx], fa[fx] = fy;
-        return true;
-    }
-} dsu;
+    quick_sort(l, i-1);
+    quick_sort(i+1, r);
+}
 ```
 ---
-## 二分
+## 求第K大数
+[HDOJ 2665](http://acm.hdu.edu.cn/showproblem.php?pid=2665)
+[POJ 2104](http://poj.org/problem?id=2104)
 ```cpp
-int l, r, mid;
-while(l < r)
+int kth_element(int l, int r, int k)
 {
-    mid = (l+r+1)>>1;
-    if(check(mid)) l = mid;
-    r = mid-1;
+    if(l == r) return a[l];
+    swap(a[l], a[l+rand()%(r-l)]);
+    int mid = a[l], i = l, j = r;
+    while(i < j)
+    {
+        while(i < j && a[j] >= mid) --j;
+        swap(a[i], a[j]);
+        while(i < j && a[i] < mid) ++i;
+        swap(a[i], a[j]);
+    }
+    a[i] = mid;
+    if(i == k) return mid;
+    else if(i > k) return kth_element(l, i-1, k);
+    else return kth_element(i+1, r, k);
 }
-while(l < r)
+```
+**STL** (排序,无返回值)
+```cpp
+nth_element(a+1, a+k+1, a+n+1);
+```
+---
+## [求逆序对(归并排序)](https://www.luogu.org/problemnew/show/P1908)
+```cpp
+void merge_sort(int l, int r)
 {
-    mid = (l+r)>>1;
-    if(check(mid)) l = mid+1;
-    r = mid;
+    if(l == r) return;
+    int mid = (l+r)>>1;
+    merge_sort(l, mid);
+    merge_sort(mid+1, r);
+    int i = l, j = mid+1, k = l;
+    while(k <= r)
+    {
+        if(j <= r && (i > mid || a[j] < a[i]))
+        {
+            ans += mid-i+1;
+            b[k++] = a[j++];
+        }
+        else b[k++] = a[i++];
+    }
+    memcpy(a+l, b+l, sizeof(int)*(r-l+1));
+}
+```
+---
+## 矩阵
+**矩阵乘法**
+```cpp
+struct Matrix
+{
+    long long m[Maxn][Maxn];
+    Match(){ memset(m, 0, sizeof m); }
+    inline void init() { for(int i = 0; i < Maxn; ++i) m[i][i] = 1; }
+    Match operator * (const Match &b) const
+    {
+        Match res;
+        for(int i = 1; i <= n; ++i)
+            for(int j = 1; j <= n; ++j)
+            {
+                long long &cur = res.m[i][j];
+                for(int k = 1; k <= n; ++k)
+                    cur = (cur+m[i][k]*b.m[k][j])%MOD;
+            }
+        return res;
+    }
+}
+```
+**[矩阵快速幂](https://www.luogu.org/problemnew/show/P3390)** (略)
+
+---
+## [快速幂](https://www.luogu.org/problemnew/show/P1226)
+```cpp
+inline long long qpow(long long a, long long p, long long mo)
+{
+    if(p == 0) return 1 % mo;
+    long long ans = 1;
+    a %= mo;
+    while(p)
+    {
+        if(p&1) ans = ans*a%mo;
+        a = a*a%mo;
+        p >>= 1;
+    }
+    return ans;
+}
+```
+---
+## 快速乘
+```cpp
+inline long long qmul(long long x, long long y, long long mo)
+{
+    long long res = 0;
+    while (y) {
+        if (y&1) res = (res+x)%mo;
+        x = (x<<1)%mo;
+        y >>= 1;
+    }
+    return res;
+}
+
+inline long long qmul(long long x, long long y, long long mo)
+{
+    return (long long)((__int128)x*y%mo);
+}
+
+inline long long qmul(long long x, long long y, long long mo)
+{
+    // x*y - floor(x*y/mo)*mo
+    typedef unsigned long long ull;
+    typedef long double ld;
+    return ((ull)x*y-(ull)((ld)x/mo*y)*mo+mo)%mo;
 }
 ```
 ---
@@ -1666,31 +1854,79 @@ void NTT(long long a[], int flag)
         }
     }
 }
-// main() the same as FFT
+int main()
+{
+    while (len <= n+m) len <<= 1, ++bit;
+    for (int i = 0; i < len; ++i)
+        rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
+
+    FFT(f, 1);
+    FFT(g, 1);
+    for (int i = 0; i <= len; ++i) {
+        f[i] *= g[i];
+    }
+    FFT(f, -1);
+    long long inv = qpow(len, MOD-2);
+    for (int i = 0; i <= n+m; ++i) {
+        printf("%lld", f[i]*inv%MOD);
+        putchar((i == n+m ? '\n' : ' '));
+    }
+}
+```
+---
+## [第二类斯特林数](https://www.luogu.com.cn/problem/P5395)
+```cpp
+inline void stirling(const int &n)
+{
+    S[0][0] = 1;
+    // 注意取模
+    for (int i = 1; i <= n; ++i)
+        for (int j = 1; j <= i; ++j)
+            S[i][j] = S[i-1][j-1]+S[i-1][j]*j;
+}
+```
+```cpp
+void stirling(const int &n)
+{
+    inv[0] = inv[1] = 1;
+    for(int i = 2; i <= n; ++i)
+        inv[i] = MOD-MOD/i*inv[MOD%i]%MOD;
+    for (int i = 1; i <= n; ++i)
+        inv[i] = inv[i-1]*inv[i]%MOD;
+    while (len <= (n<<1)) len <<= 1, ++bit;
+    for (int i = 0; i < len; ++i)
+        rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
+    for (int i = 0, one = 1; i <= n; ++i, one = MOD-one) {
+        f[i] = one*inv[i]%MOD;
+        g[i] = qpow(i, n)*inv[i]%MOD;
+    }
+    NTT(f, 1); NTT(g, 1);
+    for (int i = 0; i < len; ++i) f[i] = f[i]*g[i]%MOD;
+    NTT(f, -1);
+    long long invv = qpow(len, MOD-2);
+    for (int i = 0; i <= n; ++i)
+        printf("%lld%c", f[i]*invv%MOD, " \n"[i==n]);
+}
 ```
 ---
 ## 约瑟夫环
 ### [O(n)](https://blog.csdn.net/weixin_42659809/article/details/82596676)
 ```cpp
-int solve(int n, int v) {
-    return n == 1 ? 0 : (solve(n-1, v)+v)%n;
-}
+int solve(int n, int v) { return n == 1 ? 0 : (solve(n-1, v)+v)%n; }
 // res = solve(num, step)+1
 ```
-```
 ---
-## 欧几里得
-### 最大公因数 gcd
+## 最大公因数 gcd
 ```cpp
 __gcd(a, b); // <algorithm>
 int gcd(int a, int b) { return b ? gcd(b, a%b) : a; }
 inline int gcd(int a, int b) { while (b) a %= b, swap(a, b); return a; }
 ```
-### 最小公倍数 lcm
+## 最小公倍数 lcm
 ```cpp
 inline int lcm(int a, int b) { return a/gcd(a, b)*b; }
 ```
-### 扩展欧几里得([同余方程](https://www.luogu.org/problemnew/show/P1082))
+## 扩展欧几里得([同余方程](https://www.luogu.org/problemnew/show/P1082))
 ```cpp
 void exgcd(int a, int b, int &x, int &y)
 {
@@ -1894,6 +2130,32 @@ inline long long BSGS(long long a, long long x, long long m) // a^n = x
 }
 ```
 ---
+# 动态规划 DP
+(我**全**都不会)
+## 记忆化搜索
+## 线性DP
+### [最长上升子序列LIS](http://codevs.cn/problem/1576/)
+```cpp
+for(int i = 1; i <= n; ++i)
+{
+    f[i] = 1;
+    for(int j = 1; j < i; ++j)
+        if(a[i] > a[j]) f[i] = max(f[i],f[j]+1);
+}
+```
+### 最长公共子序列LCS
+```cpp
+f[i][j] = max{  f[i-1][j],
+                f[i][j-1],
+                f[i-1][j-1]+1 (if A[i] == B[j])}
+```
+### 数字三角形
+## 区间DP
+## [树形DP](https://www.luogu.org/problemnew/show/P1352)
+## 状压DP
+## 队列优化
+## 斜率优化
+
 ## 背包问题
 ### 01背包
 ### 完全背包
@@ -1949,33 +2211,7 @@ for(int i = 1; i <= W; ++i)
     ans = max(ans, f[i]);
 ```
 ---
-## DP
-(我**全**都不会)
-### 记忆化搜索
-### 线性DP
-#### [最长上升子序列LIS](http://codevs.cn/problem/1576/)
-```cpp
-for(int i = 1; i <= n; ++i)
-{
-    f[i] = 1;
-    for(int j = 1; j < i; ++j)
-        if(a[i] > a[j]) f[i] = max(f[i],f[j]+1);
-}
-```
-#### 最长公共子序列LCS
-```cpp
-f[i][j] = max{  f[i-1][j],
-                f[i][j-1],
-                f[i-1][j-1]+1 (if A[i] == B[j])}
-```
-#### 数字三角形
-### 区间DP
-### [树形DP](https://www.luogu.org/problemnew/show/P1352)
-### 状压DP
-### 队列优化
-### 斜率优化
----
-## STL
+# STL
 ### 数据结构
 ```cpp
 // const N
@@ -2039,7 +2275,7 @@ struct KeyHasher
 unordered_map<Node, int, KeyHasher> mmp;
 ```
 ---
-## 模数
+# 模数
 ```cpp
 template <int _MOD> struct Mint
 {
@@ -2084,7 +2320,7 @@ template <int _MOD> struct Mint
 using mint = Mint<MOD>;
 ```
 ---
-## 高精度
+# 高精度
 [压位+vector+符号 版本](https://github.com/KaizynX/Oier/blob/master/BigInteger/BigInteger.cpp)
 [一本通习题](http://ybt.ssoier.cn:8088/)
 [洛谷习题](https://www.luogu.org/problemnew/lists?name=a%2Bb)
