@@ -1176,8 +1176,6 @@ inline int KMP(char *s, char *p)
     return j == lenp ? i-j : -1;
 }
 ```
-## BM算法
-## Sunday算法
 ## [扩展KMP|Z函数](https://subetter.com/algorithm/extended-kmp-algorithm.html)
 ```cpp
 inline void GetNext(char *s, int *_nex)
@@ -1213,6 +1211,8 @@ inline void GetExtend(char *s, char *ss, int *_ext, int *_nex)
     }
 }
 ```
+## BM算法
+## Sunday算法
 ## [字符串哈希](https://www.luogu.org/problemnew/show/P3370)
 ```cpp
 inline unsigned long long _hash(const string &s)
