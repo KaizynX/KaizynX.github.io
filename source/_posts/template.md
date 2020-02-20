@@ -2,7 +2,6 @@
 title: ACM模板
 date: 2018-11-05 07:00:00
 categories:
-  - NOIP
   - ACM
 tags:
 top: true
@@ -34,8 +33,7 @@ template <typename T> void write(T x)
 }
 ```
 ```cpp
-ios::sync_with_stdio(false);
-cin.tie(NULL);
+ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 ```
 ---
 ## 随机数
@@ -568,8 +566,18 @@ struct Splay
 template <typename T>
 struct SegmentTree
 {
+    int sz;
     T tr[N<<2], lazy[N<<2];
     SegmentTree(){}
+    void build(const int &n) { sz = n; _build(1, n); }
+    template <typename TT>
+    void build(const TT a[], const int &n) { sz = n; _build(a, 1, n); }
+    void modify(const int &x, const T &k) { _modify(x, k, 1, sz); }
+    void add(const int &x, const T &k) { _add(x, x, k, 1, sz); }
+    void add(const int &l, const int &r, const T &k) { _add(l, r, k, 1, sz); }
+    void query(const int &x) { _query(x, x, 1, sz); }
+    void query(const int &l, const int &r) { _query(l, r, 1, sz); }
+private :
     void push_up(const int &i) { tr[i] = tr[i<<1]+tr[i<<1|1]; }
     void push_down(const int &i, const int &len) {
         if (!lazy[i]) return;
@@ -579,24 +587,24 @@ struct SegmentTree
         lazy[i<<1|1] += lazy[i];
         lazy[i] = 0;
     }
-    void build(const int &l, const int &r, const int &i = 1) {
+    void _build(const int &l, const int &r, const int &i = 1) {
         lazy[i] = 0;
         if (l == r) { tr[i] = 0; return; }
         int mid = (l+r)>>1;
-        build(l, mid, i<<1);
-        build(mid+1, r, i<<1|1);
+        _build(l, mid, i<<1);
+        _build(mid+1, r, i<<1|1);
         push_up(i);
     }
     template <typename TT>
-    void build(const TT a[], const int &l, const int &r, const int &i = 1) {
+    void _build(const TT a[], const int &l, const int &r, const int &i = 1) {
         lazy[i] = 0;
         if (l == r) { tr[i] = a[l]; return; }
         int mid = (l+r)>>1;
-        build(a, l, mid, i<<1);
-        build(a, mid+1, r, i<<1|1);
+        _build(a, l, mid, i<<1);
+        _build(a, mid+1, r, i<<1|1);
         push_up(i);
     }
-    void modify(const int &x, const T &k, const int &trl, const int &trr, const int &i = 1) {
+    void _modify(const int &x, const T &k, const int &trl, const int &trr, const int &i = 1) {
         if (trl == x && trr == x) {
             tr[i] = k;
             lazy[i] = 0;
@@ -604,11 +612,11 @@ struct SegmentTree
         }
         push_down(i, trr-trl+1);
         int mid = (trl+trr)>>1;
-        if (x <= mid) update(x, k, trl, mid, i<<1);
-        else update(x, k, mid+1, trr, i<<1|1);
+        if (x <= mid) _modify(x, k, trl, mid, i<<1);
+        else _modify(x, k, mid+1, trr, i<<1|1);
         push_up(i);
     }
-    void add(const int &l, const int &r, const T &k, const int &trl, const int &trr, const int &i = 1) {
+    void _add(const int &l, const int &r, const T &k, const int &trl, const int &trr, const int &i = 1) {
         if (trl >= l && trr <= r) {
             tr[i] += k*(trr-trl+1);
             lazy[i] += k;
@@ -616,20 +624,21 @@ struct SegmentTree
         }
         push_down(i, trr-trl+1);
         int mid = (trl+trr)>>1;
-        if (l <= mid) add(l, r, k, trl, mid, i<<1);
-        if (r >  mid) add(l, r, k, mid+1, trr, i<<1|1);
+        if (l <= mid) _add(l, r, k, trl, mid, i<<1);
+        if (r >  mid) _add(l, r, k, mid+1, trr, i<<1|1);
         push_up(i);
     }
-    T query(const int &l, const int &r, const int &trl, const int &trr, const int &i = 1) {
+    T _query(const int &l, const int &r, const int &trl, const int &trr, const int &i = 1) {
         if (trl >= l && trr <= r) return tr[i];
         push_down(i, trr-trl+1);
         int mid = (trl+trr)>>1;
         T res = 0;
-        if (l <= mid) res += query(l, r, trl, mid, i<<1);
-        if (r >  mid) res += query(l, r, mid+1, trr, i<<1|1);
+        if (l <= mid) res += _query(l, r, trl, mid, i<<1);
+        if (r >  mid) res += _query(l, r, mid+1, trr, i<<1|1);
         return res;
     }
 };
+
 ```
 线段树RMQ
 ```cpp
@@ -1369,29 +1378,164 @@ inline int solve()
 ```
 ---
 ## [LCA](https://www.luogu.org/problemnew/show/P3379)
-
 ```cpp
-void build_tree(int u, int fa)
+struct LCA
 {
-    d[u] = d[fa]+1;
-    f[u][0] = fa;
-    for (int i = 1; (1<<i) <= d[u]; ++i)
-        f[u][i] = f[f[u][i-1]][i-1];
-    for (int v : e[u]) if (v != fa)
-        build_tree(v, u);
-}
-
-inline int lca(int x, int y)
+    static const int NN = (int)log2(N)+3;
+    int f[N][NN], d[N], lg2[N];
+    LCA() { for (int i = 2; i < N; ++i) lg2[i] = lg2[i>>1]+1; }
+    template <typename TT>
+    void build(const TT e[], const int &u = 1, const int &fa = 0) {
+        d[u] = d[fa]+1;
+        f[u][0] = fa;
+        for (int i = 1; (1<<i) <= d[u]; ++i)
+            f[u][i] = f[f[u][i-1]][i-1];
+        for (auto v : e[u]) if (v != fa)
+            build(e, v, u);
+    }
+    int get(int x, int y) {
+        if (d[x] < d[y]) swap(x, y);
+        while (d[x] > d[y])
+            x = f[x][lg2[d[x]-d[y]]];
+        if (x == y) return x;
+        for (int i = lg2[d[x]]; i >= 0; --i)
+            if(f[x][i] != f[y][i])
+                x = f[x][i], y = f[y][i];
+        return f[x][0];
+    }
+};
+```
+[带权LCA](https://www.luogu.com.cn/problem/P1967)
+```cpp
+template <typename T>
+struct LCA
 {
-    if (d[x] < d[y]) swap(x, y);
-    while (d[x] > d[y])
-        x = f[x][lg2[d[x]-d[y]]];
-    if (x == y) return x;
-    for (int i = lg2[d[x]]; i >= 0; --i)
-        if(f[x][i] != f[y][i])
-            x = f[x][i], y = f[y][i];
-    return f[x][0];
-}
+    static const int NN = (int)log2(N)+3;
+    int f[N][NN], d[N], lg2[N];
+    T w[N][NN], init_val = INF;
+    LCA() {
+        for (int i = 2; i < N; ++i) lg2[i] = lg2[i>>1]+1;
+        fill(w[0], w[0]+N*NN, init_val);
+    }
+    // set sum or min or max, and don't forget to ser init_val
+    T update(const T &x, const T &y) { return min(x, y); }
+    template <typename TT>
+    void build(const TT e[], const int &u = 1, const int &fa = 0) {
+        d[u] = d[fa]+1;
+        f[u][0] = fa;
+        for (int i = 1; (1<<i) <= d[u]; ++i) {
+            f[u][i] = f[f[u][i-1]][i-1];
+            w[u][i] = update(w[u][i-1], w[f[u][i-1]][i-1]);
+        }
+        for (auto v : e[u]) if (v.first != fa) {
+            w[v.first][0] = v.second;
+            build(e, v.first, u);
+        }
+    }
+    T get(int x, int y) {
+        T res = init_val;
+        if (d[x] < d[y]) swap(x, y);
+        while (d[x] > d[y]) {
+            res = update(res, w[x][lg2[d[x]-d[y]]]);
+            x = f[x][lg2[d[x]-d[y]]];
+        }
+        if (x == y) return res;
+        for (int i = lg2[d[x]]; i >= 0; --i)
+            if(f[x][i] != f[y][i]) {
+                res = update(res, w[x][i]);
+                res = update(res, w[y][i]);
+                x = f[x][i], y = f[y][i];
+            }
+        return update(res, update(w[x][0], w[y][0]));
+    }
+};
+```
+## [树上差分](https://www.luogu.com.cn/problem/P3128)
+```cpp
+template <typename T>
+struct Tree
+{
+    T val[N];
+    void update_point(const int &x, const int &y, const T &k) {
+        int _lca = lca(x, y);
+        val[x] += k; val[y] += k;
+        val[_lca] -= k; val[f[_lca][0]] -= k;
+    }
+    void update_edge(const int &x, const int &y, const T &k) {
+        int _lca = lca(x, y);
+        val[x] += k; val[y] += k; val[_lca] -= 2*k;
+    }
+    void dfs(const int &u = 1, const int &fa = 0) {
+        for (int v : e[u]) if (v != fa) {
+            dfs(v, u);
+            val[u] += val[v];
+        }
+    }
+};
+```
+## [树链剖分](https://www.luogu.com.cn/problem/P3384)
+```cpp
+template <typename T>
+struct ShuPou
+{
+    int dfn;
+    int f[N], d[N], num[N], son[N], rk[N], id[N], tp[N];
+    T init_val[N];
+    SegmentTree<T> ST;
+    template <typename TT, typename EDGE>
+    void build(const EDGE e[], const TT a[], const int &n, const int &rt = 1) {
+        memset(son, 0, sizeof son);
+        d[0] = num[0] = dfn = 0;
+        dfs1(e, rt);
+        dfs2(e, rt, rt);
+        for (int i = 1; i <= n; ++i)
+            init_val[i] = a[rk[i]];
+        ST.build(init_val, n);
+    }
+    template <typename EDGE>
+    void dfs1(const EDGE e[], const int &u = 1, const int &fa = 0) {
+        f[u] = fa;
+        d[u] = d[fa]+1;
+        num[u] = 1;
+        for (auto v : e[u]) if (v != fa) {
+            dfs1(e, v, u);
+            num[u] += num[v];
+            if (num[v] > num[son[u]])
+                son[u] = v;
+        }
+    }
+    template <typename EDGE>
+    void dfs2(const EDGE e[], const int &u = 1, const int &t = 1) {
+        tp[u] = t;
+        id[u] = ++dfn;
+        rk[dfn] = u;
+        if (!son[u]) return;
+        dfs2(e, son[u], t);
+        for (auto v : e[u]) if (v != son[u] && v != f[u])
+            dfs2(e, v, v);
+    }
+    void add_sons(const int &x, const T &k) { ST.add(id[x], id[x]+num[x]-1, k); }
+    void add(int x, int y, const T &k) {
+        while (tp[x] != tp[y]) {
+            if (d[tp[x]] < d[tp[y]]) swap(x, y);
+            ST.add(id[tp[x]], id[x], k);
+            x = f[tp[x]];
+        }
+        if (d[x] > d[y]) swap(x, y);
+        ST.add(id[x], id[y], k);
+    }
+    T query_sons(const int &x) { return ST.query(id[x], id[x]+num[x]-1); }
+    T query(int x, int y) {
+        T res = 0;
+        while (tp[x] != tp[y]) {
+            if (d[tp[x]] < d[tp[y]]) swap(x, y);
+            res += ST.query(id[tp[x]], id[x]);
+            x = f[tp[x]];
+        }
+        if (d[x] > d[y]) swap(x, y);
+        return res+ST.query(id[x], id[y]);
+    }
+};
 ```
 ---
 ## [网络流](https://www.luogu.org/problemnew/show/P3376)
@@ -2212,7 +2356,7 @@ for(int i = 1; i <= W; ++i)
 ```
 ---
 # STL
-### 数据结构
+## 数据结构
 ```cpp
 // const N
 // typename T
@@ -2225,7 +2369,7 @@ set<T>
 bitset<N>
 map<T, T>
 ```
-### 函数
+## 函数
 ```cpp
 // vector<T> a;
 sort(a.begin(), a.end(), cmp);
@@ -2242,7 +2386,7 @@ s.find(target_string, start_pos); // 找不到返回s.npos
 s.substr(start_pos, len);
 s.replace(start_pos, len, target_string);
 ```
-### unordered_map 重载
+## unordered_map 重载
 ```cpp
 struct Node
 {
@@ -2276,6 +2420,7 @@ unordered_map<Node, int, KeyHasher> mmp;
 ```
 ---
 # 模数
+## 结构体
 ```cpp
 template <int _MOD> struct Mint
 {
@@ -2283,25 +2428,26 @@ template <int _MOD> struct Mint
     Mint() {}
     Mint(int _v) : v((_v%_MOD+_MOD)%_MOD) {}
     Mint(long long _v) : v(static_cast<int>((_v%_MOD+_MOD)%_MOD)) {}
-    Mint operator = (const int _v) { this->v = _v; return *this; }
-    Mint operator = (const long long _v) { this->v = static_cast<int>(_v%_MOD); return *this; }
+    Mint operator = (const int &_v) { return *this = Mint(_v); }
+    Mint operator = (const long long &_v) { return *this = Mint(_v); }
+    bool operator ! () const { return !this->v; }
     bool operator < (const Mint &b) const { return v < b.v; }
     bool operator > (const Mint &b) const { return v > b.v; }
     bool operator == (const Mint &b) const { return v == b.v; }
     bool operator != (const Mint &b) const { return v != b.v; }
     bool operator <= (const Mint &b) const { return v < b.v || v == b.v; }
     bool operator >= (const Mint &b) const { return v > b.v || v == b.v; }
-    Mint operator + (const Mint &b) { return Mint(v+b.v); }
-    Mint operator - (const Mint &b) { return Mint(v-b.v); }
-    Mint operator * (const Mint &b) { return Mint(1ll*v*b.v); }
-    Mint operator / (const Mint &b) { return Mint(b.inv()*v); }
-    Mint operator += (const Mint &b) { return *this = *this+b; }
-    Mint operator -= (const Mint &b) { return *this = *this-b; }
-    Mint operator *= (const Mint &b) { return *this = *this*b; }
-    Mint operator /= (const Mint &b) { return *this = *this/b; }
-    Mint operator - () { return Mint(-v); }
-    Mint &operator ++ () { return *this += 1; }
-    Mint &operator -- () { return *this -= 1; }
+    Mint operator + (const Mint &b) const { return Mint(v+b.v); }
+    Mint operator - (const Mint &b) const { return Mint(v-b.v); }
+    Mint operator * (const Mint &b) const { return Mint(1ll*v*b.v); }
+    Mint operator / (const Mint &b) const { return Mint(b.inv()*v); }
+    Mint& operator += (const Mint &b) { return *this = *this+b; }
+    Mint& operator -= (const Mint &b) { return *this = *this-b; }
+    Mint& operator *= (const Mint &b) { return *this = *this*b; }
+    Mint& operator /= (const Mint &b) { return *this = *this/b; }
+    Mint operator - () const { return Mint(-v); }
+    Mint& operator ++ () { return *this += 1; }
+    Mint& operator -- () { return *this -= 1; }
     Mint operator ++ (int) { Mint tmp = *this; *this += 1; return tmp; }
     Mint operator -- (int) { Mint tmp = *this; *this -= 1; return tmp; }
     Mint pow(int p) const {
@@ -2319,9 +2465,168 @@ template <int _MOD> struct Mint
 };
 using mint = Mint<MOD>;
 ```
+tourist的模板(用不来)
+```cpp
+template <typename T>
+class Modular {
+ public:
+  using Type = typename decay<decltype(T::value)>::type;
+ 
+  constexpr Modular() : value() {}
+  template <typename U>
+  Modular(const U& x) {
+    value = normalize(x);
+  }
+ 
+  template <typename U>
+  static Type normalize(const U& x) {
+    Type v;
+    if (-mod() <= x && x < mod()) v = static_cast<Type>(x);
+    else v = static_cast<Type>(x % mod());
+    if (v < 0) v += mod();
+    return v;
+  }
+ 
+  const Type& operator()() const { return value; }
+  template <typename U>
+  explicit operator U() const { return static_cast<U>(value); }
+  constexpr static Type mod() { return T::value; }
+ 
+  Modular& operator+=(const Modular& other) { if ((value += other.value) >= mod()) value -= mod(); return *this; }
+  Modular& operator-=(const Modular& other) { if ((value -= other.value) < 0) value += mod(); return *this; }
+  template <typename U> Modular& operator+=(const U& other) { return *this += Modular(other); }
+  template <typename U> Modular& operator-=(const U& other) { return *this -= Modular(other); }
+  Modular& operator++() { return *this += 1; }
+  Modular& operator--() { return *this -= 1; }
+  Modular operator++(int) { Modular result(*this); *this += 1; return result; }
+  Modular operator--(int) { Modular result(*this); *this -= 1; return result; }
+  Modular operator-() const { return Modular(-value); }
+ 
+  template <typename U = T>
+  typename enable_if<is_same<typename Modular<U>::Type, int>::value, Modular>::type& operator*=(const Modular& rhs) {
+#ifdef _WIN32
+    uint64_t x = static_cast<int64_t>(value) * static_cast<int64_t>(rhs.value);
+    uint32_t xh = static_cast<uint32_t>(x >> 32), xl = static_cast<uint32_t>(x), d, m;
+    asm(
+      "divl %4; \n\t"
+      : "=a" (d), "=d" (m)
+      : "d" (xh), "a" (xl), "r" (mod())
+    );
+    value = m;
+#else
+    value = normalize(static_cast<int64_t>(value) * static_cast<int64_t>(rhs.value));
+#endif
+    return *this;
+  }
+  template <typename U = T>
+  typename enable_if<is_same<typename Modular<U>::Type, int64_t>::value, Modular>::type& operator*=(const Modular& rhs) {
+    int64_t q = static_cast<int64_t>(static_cast<long double>(value) * rhs.value / mod());
+    value = normalize(value * rhs.value - q * mod());
+    return *this;
+  }
+  template <typename U = T>
+  typename enable_if<!is_integral<typename Modular<U>::Type>::value, Modular>::type& operator*=(const Modular& rhs) {
+    value = normalize(value * rhs.value);
+    return *this;
+  }
+ 
+  Modular& operator/=(const Modular& other) { return *this *= Modular(inverse(other.value, mod())); }
+ 
+  template <typename U>
+  friend const Modular<U>& abs(const Modular<U>& v) { return v; }
+ 
+  template <typename U>
+  friend bool operator==(const Modular<U>& lhs, const Modular<U>& rhs);
+ 
+  template <typename U>
+  friend bool operator<(const Modular<U>& lhs, const Modular<U>& rhs);
+ 
+  template <typename U>
+  friend std::istream& operator>>(std::istream& stream, Modular<U>& number);
+ 
+ private:
+  Type value;
+};
+ 
+template <typename T> bool operator==(const Modular<T>& lhs, const Modular<T>& rhs) { return lhs.value == rhs.value; }
+template <typename T, typename U> bool operator==(const Modular<T>& lhs, U rhs) { return lhs == Modular<T>(rhs); }
+template <typename T, typename U> bool operator==(U lhs, const Modular<T>& rhs) { return Modular<T>(lhs) == rhs; }
+ 
+template <typename T> bool operator!=(const Modular<T>& lhs, const Modular<T>& rhs) { return !(lhs == rhs); }
+template <typename T, typename U> bool operator!=(const Modular<T>& lhs, U rhs) { return !(lhs == rhs); }
+template <typename T, typename U> bool operator!=(U lhs, const Modular<T>& rhs) { return !(lhs == rhs); }
+ 
+template <typename T> bool operator<(const Modular<T>& lhs, const Modular<T>& rhs) { return lhs.value < rhs.value; }
+ 
+template <typename T> Modular<T> operator+(const Modular<T>& lhs, const Modular<T>& rhs) { return Modular<T>(lhs) += rhs; }
+template <typename T, typename U> Modular<T> operator+(const Modular<T>& lhs, U rhs) { return Modular<T>(lhs) += rhs; }
+template <typename T, typename U> Modular<T> operator+(U lhs, const Modular<T>& rhs) { return Modular<T>(lhs) += rhs; }
+ 
+template <typename T> Modular<T> operator-(const Modular<T>& lhs, const Modular<T>& rhs) { return Modular<T>(lhs) -= rhs; }
+template <typename T, typename U> Modular<T> operator-(const Modular<T>& lhs, U rhs) { return Modular<T>(lhs) -= rhs; }
+template <typename T, typename U> Modular<T> operator-(U lhs, const Modular<T>& rhs) { return Modular<T>(lhs) -= rhs; }
+ 
+template <typename T> Modular<T> operator*(const Modular<T>& lhs, const Modular<T>& rhs) { return Modular<T>(lhs) *= rhs; }
+template <typename T, typename U> Modular<T> operator*(const Modular<T>& lhs, U rhs) { return Modular<T>(lhs) *= rhs; }
+template <typename T, typename U> Modular<T> operator*(U lhs, const Modular<T>& rhs) { return Modular<T>(lhs) *= rhs; }
+ 
+template <typename T> Modular<T> operator/(const Modular<T>& lhs, const Modular<T>& rhs) { return Modular<T>(lhs) /= rhs; }
+template <typename T, typename U> Modular<T> operator/(const Modular<T>& lhs, U rhs) { return Modular<T>(lhs) /= rhs; }
+template <typename T, typename U> Modular<T> operator/(U lhs, const Modular<T>& rhs) { return Modular<T>(lhs) /= rhs; }
+ 
+template<typename T, typename U>
+Modular<T> power(const Modular<T>& a, const U& b) {
+  assert(b >= 0);
+  Modular<T> x = a, res = 1;
+  U p = b;
+  while (p > 0) {
+    if (p & 1) res *= x;
+    x *= x;
+    p >>= 1;
+  }
+  return res;
+}
+ 
+template <typename T>
+bool IsZero(const Modular<T>& number) {
+  return number() == 0;
+}
+ 
+template <typename T>
+string to_string(const Modular<T>& number) {
+  return to_string(number());
+}
+ 
+template <typename T>
+std::ostream& operator<<(std::ostream& stream, const Modular<T>& number) {
+  return stream << number();
+}
+ 
+template <typename T>
+std::istream& operator>>(std::istream& stream, Modular<T>& number) {
+  typename common_type<typename Modular<T>::Type, int64_t>::type x;
+  stream >> x;
+  number.value = Modular<T>::normalize(x);
+  return stream;
+}
+ 
+/*
+using ModType = int;
+ 
+struct VarMod { static ModType value; };
+ModType VarMod::value;
+ModType& md = VarMod::value;
+using Mint = Modular<VarMod>;
+*/
+ 
+constexpr int md = 998244353;
+using Mint = Modular<std::integral_constant<decay<decltype(md)>::type, md>>;
+```
 ---
 # 高精度
+## vector版本
 [压位+vector+符号 版本](https://github.com/KaizynX/Oier/blob/master/BigInteger/BigInteger.cpp)
+## int[]版本
 [一本通习题](http://ybt.ssoier.cn:8088/)
 [洛谷习题](https://www.luogu.org/problemnew/lists?name=a%2Bb)
 

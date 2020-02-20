@@ -193,10 +193,14 @@ links_title: 友情链接
 links_layout: inline
 links:
   #Title: http://example.com/
+  axiomofchoice: https://www.cnblogs.com/axiomofchoice
+  edwiv: https://edwiv.com/
+  jiedai: https://blog.csdn.net/qq_35963183/
+  K0ule: https://blog.nowcoder.net/wcyctmd/
   Spaceless: https://oier.xyz/
+  Tommy1123: https://me.csdn.net/weixin_39708759
   Onglu: http://onglu.xyz/
-  withghost: https://withghost.github.io/
-  TzhsOJ: http://10.208.93.158/
+  wz: https://wzyxv1n.top/
 # Sidebar Avatar
 avatar: 
   # in theme directory(source/images): /images/avatar.gif
