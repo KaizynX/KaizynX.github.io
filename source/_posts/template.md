@@ -36,6 +36,15 @@ template <typename T> void write(T x)
 ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 ```
 ---
+## 正则表达式
+```cpp
+char str[];
+scanf("%3s", str); // 读取长度为n的字符串
+scanf("%[abc]", str); // 读取a,b,c,读到之外的立即停止
+scanf("%[a-z0-9]", str); // 同上,读取小写字母和数字
+scanf("%*[a-z]%s", str); // 过滤掉小写字母读取
+scanf("%[^a-z]", str); // 读取小写字符外字符,^表示非 
+```
 ## 随机数
 ```cpp
 #include <random>
@@ -561,7 +570,7 @@ struct Splay
 } tree;
 ```
 ## [线段树](https://www.luogu.org/problemnew/show/P3372)
-区间修改区间查询
+### 区间加减区间和
 ```cpp
 template <typename T>
 struct SegmentTree
@@ -569,14 +578,14 @@ struct SegmentTree
     int sz;
     T tr[N<<2], lazy[N<<2];
     SegmentTree(){}
-    void build(const int &n) { sz = n; _build(1, n); }
+    void build(const int &n, const T &k = 0) { sz = n; _build(1, n, k); }
     template <typename TT>
     void build(const TT a[], const int &n) { sz = n; _build(a, 1, n); }
     void modify(const int &x, const T &k) { _modify(x, k, 1, sz); }
     void add(const int &x, const T &k) { _add(x, x, k, 1, sz); }
-    void add(const int &l, const int &r, const T &k) { _add(l, r, k, 1, sz); }
-    void query(const int &x) { _query(x, x, 1, sz); }
-    void query(const int &l, const int &r) { _query(l, r, 1, sz); }
+    void add(int l, int r, const T &k) { if (l > r) swap(l, r); _add(l, r, k, 1, sz); }
+    T query(const int &x) { return _query(x, x, 1, sz); }
+    T query(int l, int r) { if (l > r) swap(l, r); return _query(l, r, 1, sz); }
 private :
     void push_up(const int &i) { tr[i] = tr[i<<1]+tr[i<<1|1]; }
     void push_down(const int &i, const int &len) {
@@ -587,9 +596,9 @@ private :
         lazy[i<<1|1] += lazy[i];
         lazy[i] = 0;
     }
-    void _build(const int &l, const int &r, const int &i = 1) {
+    void _build(const int &l, const int &r, const T &k = 0, const int &i = 1) {
         lazy[i] = 0;
-        if (l == r) { tr[i] = 0; return; }
+        if (l == r) { tr[i] = k; return; }
         int mid = (l+r)>>1;
         _build(l, mid, i<<1);
         _build(mid+1, r, i<<1|1);
@@ -638,17 +647,93 @@ private :
         return res;
     }
 };
-
 ```
-线段树RMQ
+### 区间修改区间和
+```cpp
+template <typename T>
+struct SegmentTree
+{
+    int sz;
+    int tag[N<<2];
+    T tr[N<<2], lazy[N<<2];
+    SegmentTree(){}
+    void build(const int &n, const T &k = 0) { sz = n; _build(1, n, k); }
+    template <typename TT>
+    void build(const TT a[], const int &n) { sz = n; _build(a, 1, n); }
+    void update(const int &x, const T &k) { _update(x, x, k, 1, sz); }
+    void update(int l, int r, const T &k) { if (l > r) swap(l, r); _update(l, r, k, 1, sz); }
+    T query(const int &x) { return _query(x, x, 1, sz); }
+    T query(int l, int r) { if (l > r) swap(l, r); return _query(l, r, 1, sz); }
+private :
+    void push_up(const int &i) { tr[i] = tr[i<<1]+tr[i<<1|1]; }
+    void push_down(const int &i, const int &len) {
+        if (!tag[i]) return;
+        tr[i<<1] = lazy[i]*(len-len/2);
+        tr[i<<1|1] = lazy[i]*(len/2);
+        lazy[i<<1] = lazy[i<<1|1] = lazy[i];
+        tag[i<<1] = tag[i<<1|1] = 1;
+        tag[i] = 0;
+    }
+    void _build(const int &l, const int &r, const T &k = 0, const int &i = 1) {
+        lazy[i] = tag[i] = 0;
+        if (l == r) { tr[i] = k; return; }
+        int mid = (l+r)>>1;
+        _build(l, mid, k, i<<1);
+        _build(mid+1, r, k, i<<1|1);
+        push_up(i);
+    }
+    template <typename TT>
+    void _build(const TT a[], const int &l, const int &r, const int &i = 1) {
+        lazy[i] = tag[i] = 0;
+        if (l == r) { tr[i] = a[l]; return; }
+        int mid = (l+r)>>1;
+        _build(a, l, mid, i<<1);
+        _build(a, mid+1, r, i<<1|1);
+        push_up(i);
+    }
+    void _update(const int &l, const int &r, const T &k, const int &trl, const int &trr, const int &i = 1) {
+        if (trl >= l && trr <= r) {
+            tr[i] = k*(trr-trl+1);
+            lazy[i] = k;
+            tag[i] = 1;
+            return;
+        }
+        push_down(i, trr-trl+1);
+        int mid = (trl+trr)>>1;
+        if (l <= mid) _update(l, r, k, trl, mid, i<<1);
+        if (r >  mid) _update(l, r, k, mid+1, trr, i<<1|1);
+        push_up(i);
+    }
+    T _query(const int &l, const int &r, const int &trl, const int &trr, const int &i = 1) {
+        if (trl >= l && trr <= r) return tr[i];
+        push_down(i, trr-trl+1);
+        int mid = (trl+trr)>>1;
+        T res = 0;
+        if (l <= mid) res += _query(l, r, trl, mid, i<<1);
+        if (r >  mid) res += _query(l, r, mid+1, trr, i<<1|1);
+        return res;
+    }
+};
+```
+### 区间加减区间最值
 ```cpp
 template <typename T, typename U = greater<T>>
 struct SegmentTree
 {
     U cmp = U();
-    T tr[M<<2], lazy[M<<2], init_val = cmp(0, 1) ? INF : -INF;
+    int n;
+    T tr[N<<2], lazy[N<<2], init_val = cmp(0, 1) ? INF : -INF;
     SegmentTree(){}
     T mv(const T &x, const T &y) { return cmp(x, y) ? x : y;}
+    void build(const int &_n) { n = _n; _build(1, n); }
+    template <typename TT>
+    void build(const TT a[], const int &_n) { n = _n; _build(a, 1, n); }
+    void modify(const int &x, const T &k) { _modify(x, k, 1, n); }
+    void add(const int &x, const T &k) { _add(x, x, k, 1, n); }
+    void add(const int &l, const int &r, const T &k) { _add(l, r, k, 1, n); }
+    T query(const int &x) { return _query(x, x, 1, n); }
+    T query(const int &l, const int &r) { return _query(l, r, 1, n); }
+private :
     void push_up(const int &i) { tr[i] = mv(tr[i<<1], tr[i<<1|1]); }
     /*
     void push_down(const int &i) {
@@ -667,35 +752,35 @@ struct SegmentTree
         lazy[i<<1|1] += lazy[i];
         lazy[i] = 0;
     }
-    void build(const int &l, const int &r, const int &i = 1) {
+    void _build(const int &l, const int &r, const int &i = 1) {
         lazy[i] = 0;
         if (l == r) { tr[i] = 0; return; }
         int mid = (l+r)>>1;
-        build(l, mid, i<<1);
-        build(mid+1, r, i<<1|1);
+        _build(l, mid, i<<1);
+        _build(mid+1, r, i<<1|1);
         push_up(i);
     }
     template <typename TT>
-    void build(const TT a[], const int &l, const int &r, const int &i = 1) {
+    void _build(const TT a[], const int &l, const int &r, const int &i = 1) {
         lazy[i] = 0;
         if (l == r) { tr[i] = a[l]; return; }
         int mid = (l+r)>>1;
-        build(a, l, mid, i<<1);
-        build(a, mid+1, r, i<<1|1);
+        _build(a, l, mid, i<<1);
+        _build(a, mid+1, r, i<<1|1);
         push_up(i);
     }
-    void modify(const int &x, const T &k, const int &trl, const int &trr, const int &i = 1) {
+    void _modify(const int &x, const T &k, const int &trl, const int &trr, const int &i = 1) {
         if (trl == x && trr == x) {
             tr[i] = k;
             return;
         }
         push_down(i);
         int mid = (trl+trr)>>1;
-        if (x <= mid) update(x, k, trl, mid, i<<1);
-        else update(x, k, mid+1, trr, i<<1|1);
+        if (x <= mid) _modify(x, k, trl, mid, i<<1);
+        else _modify(x, k, mid+1, trr, i<<1|1);
         push_up(i);
     }
-    void add(const int &l, const int &r, const T &k, const int &trl, const int &trr, const int &i = 1) {
+    void _add(const int &l, const int &r, const T &k, const int &trl, const int &trr, const int &i = 1) {
         if (trl >= l && trr <= r) {
             tr[i] += k;
             lazy[i] += k;
@@ -703,22 +788,24 @@ struct SegmentTree
         }
         push_down(i);
         int mid = (trl+trr)>>1;
-        if (l <= mid) add(l, r, k, trl, mid, i<<1);
-        if (r >  mid) add(l, r, k, mid+1, trr, i<<1|1);
+        if (l <= mid) _add(l, r, k, trl, mid, i<<1);
+        if (r >  mid) _add(l, r, k, mid+1, trr, i<<1|1);
         push_up(i);
     }
-    T query(const int &l, const int &r, const int &trl, const int &trr, const int &i = 1) {
+    T _query(const int &l, const int &r, const int &trl, const int &trr, const int &i = 1) {
         if (trl >= l && trr <= r) return tr[i];
         push_down(i);
         int mid = (trl+trr)>>1;
         T res = init_val;
-        if (l <= mid) res = mv(res, query(l, r, trl, mid, i<<1));
-        if (r >  mid) res = mv(res, query(l, r, mid+1, trr, i<<1|1));
+        if (l <= mid) res = mv(res, _query(l, r, trl, mid, i<<1));
+        if (r >  mid) res = mv(res, _query(l, r, mid+1, trr, i<<1|1));
         return res;
     }
 };
+
 ```
 ## ZKW线段树
+`warning:区间最值尚为验证`
 ```cpp
 template <typename T>
 struct zkwSegmentTree
@@ -804,21 +891,61 @@ struct zkwSegmentTree
 ```
 ---
 ## 树状数组
+### 一维
 [单点修改区间查询](https://www.luogu.org/problemnew/show/P3374)
 [区间修改单点查询](https://www.luogu.org/problemnew/show/P3368)
 ```cpp
+template <typename T>
 struct BinaryIndexedTree
 {
-    // set your type
-    typedef int T;
+    int n;
     T tr[N];
     BinaryIndexedTree() { memset(tr, 0, sizeof tr); }
-    inline void clear() { for (int i = 1; i <= n; ++i) tr[i] = 0; }
-    inline void update(int x, T v) { for ( ; x <= n; x += x&-x) tr[x] += v; }
-    inline void update(int x, int y, T v) { update(x, v); update(y+1, -v); }
-    inline T query(int x) { T res = 0; for ( ; x; x -= x&-x) res += tr[x]; return res; }
-    inline T query(int x, int y) { return query(y)-query(x-1); }
-} BIT;
+    void init(const int &_n) { n = _n; clear(); }
+    void clear() { for (int i = 1; i <= n; ++i) tr[i] = 0; }
+    void add(const int &x, const T &v) { for (int i = x ; i <= n; i += i&-i) tr[i] += v; }
+    void add(const int &x, const int &y, const T &v) { add(x, v); add(y+1, -v); }
+    T query(const int &x) { T res = 0; for (int i = x ; i; i -= i&-i) res += tr[i]; return res; }
+    T query(const int &x, const int &y) { return query(y)-query(x-1); }
+};
+```
+### 二维
+#### 单点修改区间查询
+```cpp
+template <typename T>
+struct BIT_2D
+{
+    int n, m;
+    T a[N][N], tr[N][N];
+    BIT_2D() { memset(tr, 0, sizeof tr); }
+    void init(const int &_n, const int &_m) {
+        n = _n; m = _m;
+        memset(a, 0, sizeof a);
+        memset(tr, 0, sizeof tr);
+    }
+    void add(const int &x, const int &y, const T &k) {
+        a[x][y] += k;
+        for (int i = x; i <= n; i += i&-i)
+            for (int j = y; j <= m; j += j&-j)
+                tr[i][j] += k;
+    }
+    T query(const int &x, const int &y) {
+        return a[x][y];
+        // return query(x, y, x, y);
+    }
+    T query(int r1, int c1, int r2, int c2) {
+        if (r1 > r2) swap(r1, r2);
+        if (c1 > c2) swap(c1, c2);
+        return _query(r2, c2)-_query(r1-1, c2)-_query(r2, c1-1)+_query(r1-1, c1-1);
+    }
+    T _query(const int &x, const int &y) {
+        T res = 0;
+        for (int i = x; i; i -= i&-i)
+            for (int j = y; j; j -= j&-j)
+                res += tr[i][j];
+        return res;
+    }
+};
 ```
 ## [可持久化线段树(主席树)](https://www.luogu.com.cn/problem/P3834)
 ```cpp
@@ -874,7 +1001,8 @@ private:
     }
 };
 ```
-## [分块](http://hzwer.com/8053.html#comment-8306)
+## [分块](http://hzwer.com/8053.html)
+[例题](https://loj.ac/problems/search?keyword=%E5%88%86%E5%9D%97)
 ```cpp
 struct FenKuai
 {
@@ -1250,6 +1378,7 @@ void treedp(int cur, int fa)
 }
 ```
 ## 最大团
+最大独立集数=补图的最大团
 ```cpp
 struct MaxClique
 {
@@ -1349,7 +1478,8 @@ inline void prim()
 **Kruskal** (略)
 
 ---
-## [二分图匹配](https://www.luogu.org/problemnew/show/P3386)
+## 二分图
+### [二分图匹配](https://www.luogu.org/problemnew/show/P3386)
 **匈牙利算法**
 ```cpp
 bool check(int u)
@@ -1376,6 +1506,15 @@ inline int solve()
     return res;
 }
 ```
+### 二分图最小顶点覆盖
+定义：假如选了一个点就相当于覆盖了以它为端点的所有边。最小顶点覆盖就是选择最少的点来覆盖所有的边。
+
+定理：最小顶点覆盖等于二分图的最大匹配。
+### 最大独立集
+
+定义：选出一些顶点使得这些顶点两两不相邻，则这些点构成的集合称为独立集。找出一个包含顶点数最多的独立集称为最大独立集。
+
+定理：最大独立集 = 所有顶点数 - 最小顶点覆盖 = 所有顶点数 -   最大匹配
 ---
 ## [LCA](https://www.luogu.org/problemnew/show/P3379)
 ```cpp
