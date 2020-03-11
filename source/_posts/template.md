@@ -1989,6 +1989,83 @@ void merge_sort(int l, int r)
 }
 ```
 ---
+## 线性基
+求最大值[Luogu3812](https://www.luogu.com.cn/problem/P3812)
+
+求第k大数[HDOJ3949](http://acm.hdu.edu.cn/showproblem.php?pid=3949)
+```cpp
+template <typename T>
+struct XXJ
+{
+    int sz = sizeof(T)*8, zero;
+    T tot;
+    vector<T> b, rb, p;
+    XXJ(){ init(); }
+    void init() {
+        tot = zero = 0;;
+        vector<T>(sz, 0).swap(b);
+        vector<T>().swap(rb);
+        vector<T>().swap(p);
+    }
+    template <typename TT>
+    void build(TT a[], const int &n) {
+        init();
+        for (int i = 1; i <= n; ++i) insert(a[i]);
+    }
+    void merge(const XXJ xj) {
+        for (int i : xj.b) if (i) insert(i);
+    }
+    void insert(T x) {
+        for (int i = sz-1; i >= 0; --i) if ((x>>i)&1) {
+            if (!b[i]) { b[i] = x; return; }
+            x ^= b[i];
+        }
+        zero = 1;
+    }
+    bool find(T x) {
+        for (int i = sz-1; i >= 0; --i) if ((x>>i)&1) {
+            if (!b[i]) { return false; }
+            x ^= b[i];
+        }
+        return true;
+    }
+    T max_xor() {
+        T res = 0;
+        for (int i = sz-1; i >= 0; --i)
+            if (~(res>>i)&1) res ^= b[i];
+            // res = max(res, res^b[i]);
+        return res;
+    }
+    T min_xor() {
+        if (zero) return 0;
+        for (int i = 0; i < sz; ++i)
+            if (b[i]) return b[i];
+    }
+    void rebuild() {
+        rb = b;
+        vector<T>().swap(p);
+        for (int i = sz-1; i >= 0; --i)
+            for (int j = i-1; j >= 0; --j)
+                if ((rb[i]>>j)&1) rb[i] ^= rb[j];
+        for (int i = 0; i < sz; ++i)
+            if (rb[i]) p.emplace_back(rb[i]);
+        tot = ((T)1<<p.size())+zero;
+    }
+    T kth_min(T k) {
+        if (k >= tot || k < 1) return -1;
+        if (zero && k == 1) return 0;
+        if (zero) --k;
+        T res = 0;
+        for (int i = (int)p.size()-1; i >= 0; --i)
+            if ((k>>i)&1) res ^= p[i];
+        return res;
+    }
+    T kth_max(const T &k) {
+        return kth_min(tot-k);
+    }
+};
+```
+---
 ## 矩阵
 **矩阵乘法**
 ```cpp
@@ -2012,7 +2089,35 @@ struct Matrix
 }
 ```
 **[矩阵快速幂](https://www.luogu.org/problemnew/show/P3390)** (略)
-
+## [高斯消元](https://www.luogu.com.cn/problem/P3389)
+```cpp
+struct GaussElimination
+{
+    double a[N][N];
+    void init() { memset(a, 0, sizeof a); }
+    void init(const int &n) {
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= n+1; ++j)
+                a[i][j] = 0;
+    }
+    // ans is a[i][n+1]
+    bool solve(const int &n) {
+        for (int i = 1, j, k; i <= n; ++i) {
+            for (j = i+1, k = i; j <= n; ++j)
+                if (abs(a[j][i]) > abs(a[k][i])) k = j;
+            if (abs(a[k][i]) < eps) return false;
+            swap(a[k], a[i]);
+            for (j = 1; j <= n; ++j) if (i != j) {
+                double d = a[j][i]/a[i][i];
+                for (k = i+1; k <= n+1; ++k)
+                    a[j][k] -= d*a[i][k];
+            }
+        }
+        for (int i = 1; i <= n; ++i) a[i][n+1] /= a[i][i];
+        return true;
+    }
+};
+```
 ---
 ## [快速幂](https://www.luogu.org/problemnew/show/P1226)
 ```cpp
