@@ -2206,28 +2206,85 @@ struct XXJ
 ```
 ---
 ## 矩阵
-**矩阵乘法**
+### [矩阵快速幂](https://www.luogu.org/problemnew/show/P3390)
+### [矩阵求逆](https://www.luogu.com.cn/problem/P4783)
 ```cpp
-struct Matrix
-{
-    long long m[Maxn][Maxn];
-    Match(){ memset(m, 0, sizeof m); }
-    inline void init() { for(int i = 0; i < Maxn; ++i) m[i][i] = 1; }
-    Match operator * (const Match &b) const
-    {
-        Match res;
-        for(int i = 1; i <= n; ++i)
-            for(int j = 1; j <= n; ++j)
-            {
-                long long &cur = res.m[i][j];
-                for(int k = 1; k <= n; ++k)
-                    cur = (cur+m[i][k]*b.m[k][j])%MOD;
-            }
+template <typename T>
+struct Martix {
+    int n, m;
+    T a[N][N];
+    Martix(){}
+    Martix(const int &_n) : n(_n), m(_n) { init(); }
+    Martix(const int &_n, const int &_m) : n(_n), m(_m) { init(); }
+    T* operator [] (const int &i) { return a[i]; }
+    void init(const int &tag = 0) {
+        for (int i = 1; i <= n; ++i) memset(a[i], 0, sizeof(T)*(n+1));
+        for (int i = 1; i <= n; ++i) a[i][i] = tag;
+    }
+    friend Martix operator * (const Martix &m1, const Martix &m2) {
+        Martix res(m1.n, m2.m);
+        for (int i = 1; i <= res.n; ++i)
+            for (int j = 1; j <= res.m; ++j)
+                for (int k = 1; k <= m1.m; ++k)
+                    res.a[i][j] = (res.a[i][j]+m1.a[i][k]*m2.a[k][j])%MOD;
         return res;
     }
-}
+    Martix& operator *= (const Martix &mx) { return *this = *this*mx; }
+    template <typename TT>
+    Martix pow(const TT &p) const {
+        Martix res(n, m), a = *this;
+        res.init(1);
+        for (TT i = p; i; i >>= 1, a *= a) if (i&1) res *= a;
+        return res;
+    }
+    Martix inv() const {
+        Martix res = *this;
+        vector<int> is(n+1), js(n+1);
+        for (int k = 1; k <= n; ++k) {
+            for (int i = k; i <= n; ++i)
+                for (int j = k; j <= n; ++j) if (res.a[i][j]) {
+                    is[k] = i; js[k] = j; break;
+                }
+            for (int i = 1; i <= n; ++i) swap(res.a[k][i], res.a[is[k]][i]);
+            for (int i = 1; i <= n; ++i) swap(res.a[i][k], res.a[i][js[k]]);
+            if (!res.a[k][k]) return Martix(0);
+            res.a[k][k] = mul_inverse(res.a[k][k]); // get inv of number
+            for (int j = 1; j <= n; ++j) if (j != k)
+                res.a[k][j] = res.a[k][j]*res.a[k][k]%MOD;
+            for (int i = 1; i <= n; ++i) if (i != k)
+                for (int j = 1; j <= n; ++j) if (j != k)
+                    res.a[i][j] = (res.a[i][j]+MOD-res.a[i][k]*res.a[k][j]%MOD)%MOD;
+            for (int i = 1; i <= n; ++i) if (i != k)
+                res.a[i][k] = (MOD-res.a[i][k]*res.a[k][k]%MOD)%MOD;
+        }
+        for (int k = n; k; --k) {
+            for (int i = 1; i <= n; ++i) swap(res.a[js[k]][i], res.a[k][i]);
+            for (int i = 1; i <= n; ++i) swap(res.a[i][is[k]], res.a[i][k]);
+        }
+        return res;
+    }
+    T det() {
+        long long res = 1;
+        Martix cpy = *this;
+        for (int i = 1; i <= n; ++i) {
+            for (int j = i+1; j <= n; ++j) while (cpy.a[j][i]) {
+                long long t = cpy.a[i][i]/cpy.a[j][i];
+                for (int k = i; k <= n; ++k)
+                    cpy.a[i][k] = (cpy.a[i][k]+MOD-t*cpy.a[j][k]%MOD)%MOD;
+                swap(cpy.a[i], cpy.a[j]);
+                res = -res;
+            }
+            res = res*cpy.a[i][i]%MOD;
+        }
+        return (res+MOD)%MOD;
+    }
+    void print() {
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= m; ++j)
+                cout << a[i][j] << " \n"[j==m];
+    }
+};
 ```
-**[矩阵快速幂](https://www.luogu.org/problemnew/show/P3390)** (略)
 ## [高斯消元](https://www.luogu.com.cn/problem/P3389)
 ```cpp
 struct GaussElimination
@@ -2258,20 +2315,49 @@ struct GaussElimination
 };
 ```
 ---
+## [拉格朗日插值](https://www.luogu.com.cn/problem/P4781)
+```cpp
+template <typename T, typename H, typename P>
+long long Largrange(const T &k, const int &n, const H x[], const P y[])
+{
+    long long res = 0, s1 = 1, s2 = 1;
+    for (int i = 1; i <= n; ++i, s1 = s2 = 1) {
+        for (int j = 1; j <= n; ++j) if (i != j) {
+            s1 = s1*(x[i]-x[j]+MOD)%MOD;
+            s2 = s2*(k-x[j]+MOD)%MOD;
+        }
+        res = (res+y[i]*s2%MOD*mul_inverse(s1)%MOD)%MOD;
+    }
+    return res;
+}
+```
+```cpp
+template <typename T, typename P> // x[i] = i -> y[i] = f(i)
+long long Largrange(const T &k, const int &n, const P y[])
+{
+    if (k <= n) return y[k];
+    static long long pre[N], suf[N];
+    long long res = 0;
+    pre[0] = suf[n+1] = 1;
+    for (int i = 1; i <= n; ++i) pre[i] = pre[i-1]*(k-i)%MOD;
+    for (int i = n; i >= 1; --i) suf[i] = suf[i+1]*(k-i)%MOD;
+    for (int i = 1; i <= n; ++i) {
+        res = (res+y[i]*(pre[i-1]*suf[i+1]%MOD)%MOD
+            *mul_inverse(((n-i)&1 ? -1 : 1)*fac[i-1]*fac[n-i]%MOD)%MOD)%MOD;
+    }
+    return (res+MOD)%MOD;
+}
+```
+---
 ## [快速幂](https://www.luogu.org/problemnew/show/P1226)
 ```cpp
-inline long long qpow(long long a, long long p, long long mo)
+template <typename T, typename H>
+inline T qpow(const T &a, const H &p, const int &mo = MOD)
 {
-    if(p == 0) return 1 % mo;
-    long long ans = 1;
-    a %= mo;
-    while(p)
-    {
-        if(p&1) ans = ans*a%mo;
-        a = a*a%mo;
-        p >>= 1;
-    }
-    return ans;
+    long long res = 1, x = a;
+    for (H i = p; i; i >>= 1, x = x*x%mo)
+        if (i&1) res = res*x%mo;
+    return static_cast<T>(res);
 }
 ```
 ---
@@ -2287,12 +2373,14 @@ inline long long qmul(long long x, long long y, long long mo)
     }
     return res;
 }
-
+```
+```cpp
 inline long long qmul(long long x, long long y, long long mo)
 {
     return (long long)((__int128)x*y%mo);
 }
-
+```
+```cpp
 inline long long qmul(long long x, long long y, long long mo)
 {
     // x*y - floor(x*y/mo)*mo
@@ -2455,30 +2543,33 @@ inline int lcm(int a, int b) { return a/gcd(a, b)*b; }
 ```
 ## 扩展欧几里得([同余方程](https://www.luogu.org/problemnew/show/P1082))
 ```cpp
-void exgcd(int a, int b, int &x, int &y)
+template <typename T>
+T exgcd(const T a, const T b, T &x, T &y)
 {
-    if(!b) { x = 1; y = 0; return; }
-    exgcd(b, a%b, y, x);
+    if (!b) { x = 1; y = 0; return a; }
+    T d = exgcd(b, a%b, y, x);
     y -= a/b*x;
+    return d;
 }
 ```
 ---
 ## [乘法逆元](https://www.luogu.org/problemnew/show/P3811)
 ### 拓展欧几里得
 ```cpp
-inline int mul_inverse(int a, int mo)
+template <typename T>
+inline T mul_inverse(const T &a, const T &mo = MOD)
 {
-    int x, y;
+    T x, y;
     exgcd(a, mo, x, y);
     return (x%mo+mo)%mo;
 }
 ```
 ### 费马小定理
 ```cpp
-inline int mul_inverse(int a, int mo)
+template <typename T>
+inline T mul_inverse(const T &a, const int &mo = MOD)
 {
-    // a^(mo-2)%mo
-    return qpow(a, mo-2, mo);
+    return qpow(a, mo-2);
 }
 ```
 ### 线性递推
