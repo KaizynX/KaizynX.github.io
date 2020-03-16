@@ -9,7 +9,7 @@ top: true
 
 # 前言
 ```cpp
-while(true) ++++++ ++++++ ++++++ RP;
+while (true) ++++++ ++++++ ++++++ RP;
 ```
 <!--more-->
 ---
@@ -1401,55 +1401,51 @@ inline int manacher(const char *str, char *buf, int *p)
 }
 ```
 ## [KMP](https://www.luogu.org/problemnew/show/P3375)
+`.c_str() 未知异常 Segment Fault`
 ```cpp
-len_a = strlen(a+1);
-len_b = strlen(b+1);
-for(int i = 2, k = 0; i <= len_b; ++i)
+inline void get_next(const string &s, int nex[]) { get_next(s.c_str(), nex); }
+inline void get_next(const char *s, int nex[])
 {
-    while(k && b[k+1] != b[i]) k = _next[k];
-    if(b[k+1] == b[i]) ++k;
-    _next[i] = k;
-}
-for(int i = 1, j = 0; i <= len_a; ++i)
-{
-    while(j && a[i] != b[j+1]) j = _next[j];
-    if(b[j+1] == a[i]) ++j;
-    if(j == len_b)
-    {
-        cout << i-len_b+1 << endl;
-        j = _next[j];
-    }
-}
-```
-[大佬的KMP](https://blog.csdn.net/v_july_v/article/details/7041827)
-```cpp
-inline void GetNext(char *str, int *_nex)
-{
-    int len = strlen(str);
-    int k = -1, j = 0;
-    _nex[0] = -1;
-    while (j < len-1) {
-        if (k == -1 || str[k] == str[j]) {
-            ++k; ++j;
-            _nex[j] = (str[k] == str[j] ? _nex[k] : j);
-        } else {
-            k = _nex[k];
-        }
+    nex[0] = nex[1] = 0;
+    for (int i = 1, j = 0, l = strlen(s); i < l; ++i) {
+        while (j && s[i] != s[j]) j = nex[j];
+        nex[i+1] = s[i] == s[j] ? ++j : 0;
     }
 }
 
-inline int KMP(char *s, char *p)
+inline void kmp(const string &s1, const string &s2, int nex[]) { kmp(s1.c_str(), s2.c_str(), nex); }
+inline void kmp(const char *s1, const char *s2, int nex[])
 {
-    int i = 0, j = 0;
-    int lens = strlen(s), lenp = strlen(p);
-    while (i < lens && j < lenp) {
-        if(j == -1 || s[i] == p[j]) {
-            ++i; ++j;
-        } else {
+    for (int i = 0, j = 0, l1 = strlen(s1), l2 = strlen(s2); i < l1; ++i) {
+        while (j && s1[i] != s2[j]) j = nex[j];
+        if (s1[i] == s2[j]) ++j;
+        if (j == l2) {
+            cout << i-l2+2 << endl;
             j = nex[j];
         }
     }
-    return j == lenp ? i-j : -1;
+}
+```
+```cpp
+inline void get_next(const string &s, int nex[])
+{
+    nex[0] = nex[1] = 0;
+    for (int i = 1, j = 0; i < (int)s.size(); ++i) {
+        while (j && s[i] != s[j]) j = nex[j];
+        nex[i+1] = s[i] == s[j] ? ++j : 0;
+    }
+}
+
+inline void kmp(const string &s1, const string &s2, int nex[])
+{
+    for (int i = 0, j = 0; i < (int)s1.size(); ++i) {
+        while (j && s1[i] != s2[j]) j = nex[j];
+        if (s1[i] == s2[j]) ++j;
+        if (j == (int)s2.size()) {
+            cout << i-s2.size()+2 << endl;
+            j = nex[j];
+        }
+    }
 }
 ```
 ## [扩展KMP|Z函数](https://subetter.com/algorithm/extended-kmp-algorithm.html)
@@ -2538,6 +2534,9 @@ int gcd(int a, int b) { return b ? gcd(b, a%b) : a; }
 inline int gcd(int a, int b) { while (b) a %= b, swap(a, b); return a; }
 ```
 ## 最小公倍数 lcm
+$LCM(\frac{a}{b},\frac{c}{d})=\frac{LCM(a, c)}{GCD(b,d)}$
+
+$LCM(\frac{a_1}{b_1},\frac{a_2}{b_2},...)=\frac{LCM(a1, a2,...)}{GCD(b1, b2,...)}$
 ```cpp
 inline int lcm(int a, int b) { return a/gcd(a, b)*b; }
 ```
@@ -2877,7 +2876,7 @@ namespace std {
     struct hash<Node>
     {
         size_t operator () (const Node &x) const {
-            return x.a+x.b;
+            return hash<int>()(x.a)^hash<int>()(x.b);
         }
     };
 }
@@ -2887,7 +2886,7 @@ unordered_map<Node, int> mp;
 struct KeyHasher
 {
     size_t operator () (const Node &x) const {
-        return x.a+x.b;
+        return hash<int>()(x.a)^hash<int>()(x.b);
     }
 };
 unordered_map<Node, int, KeyHasher> mmp;
@@ -3120,26 +3119,22 @@ struct BigInteger
     BigInteger(long long num = 0) { *this = num; }
     BigInteger(const string &str) { *this = str; }
     // long long 转 BigInteger
-    BigInteger operator = (long long num)
-    {
+    BigInteger operator = (long long num) {
         len = tag = 0;
         memset(v, 0, sizeof v);
-        do
-        {
+        do {
             v[++len] = (int)(num%BASE);
             num /= BASE;
-        } while(num > 0);
+        } while (num > 0);
         return *this;
     }
     // string 转 BigInteger
-    BigInteger operator = (const string &str)
-    {
+    BigInteger operator = (const string &str) {
         string buf;
         int r = (int)str.length()-1, l = max(0, r-WIDTH+1);
         len = tag = 0;
         memset(v, 0, sizeof v);
-        while(r >= 0)
-        {
+        while (r >= 0) {
             buf = str.substr(l, r-l+1);
             sscanf(buf.c_str(), "%d", &v[++len]);
             r -= WIDTH; l = max(0, r-WIDTH+1);
@@ -3147,22 +3142,19 @@ struct BigInteger
         return *this;
     }
     // 比较运算
-    bool operator < (const BigInteger &b) const
-    {
+    bool operator < (const BigInteger &b) const {
         if(len != b.len) return len < b.len;
         for(int i = len; i; --i)
             if(v[i] != b.v[i]) return v[i] < b.v[i];
         return false;
     }
-
     bool operator > (const BigInteger &b) const { return b < *this; }
     bool operator <= (const BigInteger &b) const { return !(b < *this); }
     bool operator >= (const BigInteger &b) const { return !(*this < b); }
     bool operator != (const BigInteger &b) const { return *this < b || b < *this; }
     bool operator == (const BigInteger &b) const { return !(*this < b) && !(b < *this); }
     // 四则运算
-    BigInteger operator + (const BigInteger &b) const
-    {
+    BigInteger operator + (const BigInteger &b) const {
         BigInteger res = b;
         res.len = max(len, b.len);
         for(int i = 1; i <= len; ++i)
@@ -3175,15 +3167,12 @@ struct BigInteger
     }
     // 单目运算
     BigInteger operator + () const { return *this; }
-    BigInteger operator - () const
-    {
+    BigInteger operator - () const {
         BigInteger res = *this;
         res.tag ^= 1;
         return res;
     }
-
-    BigInteger operator - (const BigInteger &b) const
-    {
+    BigInteger operator - (const BigInteger &b) const {
         if(*this < b) return -(b-*this);
         BigInteger res = *this;
         for(int i = 1; i <= b.len; ++i)
@@ -3196,13 +3185,11 @@ struct BigInteger
         return res;
     }
     // 高精度乘低精度
-    BigInteger operator * (int b) const
-    {
+    BigInteger operator * (int b) const {
         BigInteger res;
         long long tmp;
         res.len = len;
-        for(int i = 1; i <= len; ++i)
-        {
+        for(int i = 1; i <= len; ++i) {
             tmp = 1ll*b*v[i];
             res.v[i] += (int)(tmp%BASE);
             res.v[i+1] += (int)(tmp/BASE+res.v[i]/BASE);
@@ -3212,13 +3199,11 @@ struct BigInteger
         return res;
     }
     // 高精度乘高精度
-    BigInteger operator * (const BigInteger &b) const
-    {
+    BigInteger operator * (const BigInteger &b) const {
         BigInteger res;
         res.len = len+b.len;
         for(int i = 1; i <= len; ++i)
-            for(int j = 1; j <= b.len; ++j)
-            {
+            for(int j = 1; j <= b.len; ++j) {
                 res.v[i+j-1] += v[i]*b.v[j];
                 res.v[i+j] += res.v[i+j-1]/BASE;
                 res.v[i+j-1] %= BASE;
@@ -3227,12 +3212,10 @@ struct BigInteger
         return res;
     }
     // 高精度除低精度
-    BigInteger operator / (int b) const
-    {
+    BigInteger operator / (int b) const {
         long long divisor = 0;
         BigInteger res;
-        for(int i = len; i; --i)
-        {
+        for(int i = len; i; --i) {
             divisor = divisor*BASE+v[i];
             if(divisor < b) continue;
             res.v[i] = (int)(divisor/b);
@@ -3242,12 +3225,10 @@ struct BigInteger
         return res;
     }
     // 高精度除高精度
-    BigInteger operator / (const BigInteger &b) const
-    {
+    BigInteger operator / (const BigInteger &b) const {
         BigInteger divisor, res;
         int l, r, mid;
-        for(int i = len; i; --i)
-        {
+        for(int i = len; i; --i) {
             divisor = divisor*BASE+v[i];
             /*
             memcpy(divisor.v+1, divisor.v, sizeof(int)*(divisor.len+1));
@@ -3256,8 +3237,7 @@ struct BigInteger
             */
             if(divisor < b) continue;
             l = 0; r = BASE-1;
-            while(l < r)
-            {
+            while(l < r) {
                 mid = (l+r+1)>>1;
                 if(b*mid <= divisor) l = mid;
                 else r = mid-1;
@@ -3268,66 +3248,64 @@ struct BigInteger
         }
         return res;
     }
-
     BigInteger operator % (const BigInteger &b) const { return *this-*this/b*b; }
-
     BigInteger operator ++ () { return *this = *this+1; }
     BigInteger operator -- () { return *this = *this-1; }
-    BigInteger operator += (const BigInteger &b) { return *this = *this+b; }
-    BigInteger operator -= (const BigInteger &b) { return *this = *this-b; }
-    BigInteger operator *= (const BigInteger &b) { return *this = *this*b; }
-    BigInteger operator /= (const BigInteger &b) { return *this = *this/b; }
-    BigInteger operator %= (const BigInteger &b) { return *this = *this%b; }
-    BigInteger operator *= (int b) { return *this = *this*b; }
-    BigInteger operator /= (int b) { return *this = *this/b; }
-    BigInteger operator %= (int b) { return *this = *this%b; }
+    BigInteger& operator += (const BigInteger &b) { return *this = *this+b; }
+    BigInteger& operator -= (const BigInteger &b) { return *this = *this-b; }
+    BigInteger& operator *= (const BigInteger &b) { return *this = *this*b; }
+    BigInteger& operator /= (const BigInteger &b) { return *this = *this/b; }
+    BigInteger& operator %= (const BigInteger &b) { return *this = *this%b; }
+    BigInteger& operator *= (int b) { return *this = *this*b; }
+    BigInteger& operator /= (int b) { return *this = *this/b; }
+    BigInteger& operator %= (int b) { return *this = *this%b; }
+    // 重载输入运算符
+    friend istream& operator >> (istream &is, BigInteger &big) {
+        string buf;
+        if (is >> buf) big = buf;
+        return is;
+    }
+    // 重载输出运算符
+    friend ostream& operator << (ostream &os, const BigInteger &big)
+    {
+        static char buf[10];
+        if (big.tag) os << '-';
+        os << big.v[big.len];
+        for (int i = big.len-1; i; --i) {
+            sprintf(buf, "%04d", big.v[i]);
+            for (int j = 0; j < 4; ++j) os << buf[j];
+        }
+        return os;
+    }
+    // 幂
+    template <typename T>
+    friend BigInteger pow (BigInteger a, T p) {
+        if(p == 0) return 1;
+        BigInteger res = 1;
+        while(p) {
+            if(p%2) res *= a;
+            a *= a;
+            p /= 2;
+        }
+        return res;
+    }
+    // 开根
+    friend BigInteger sqrt(const BigInteger &a, const int p = 2) {
+        BigInteger l, r = a, mid;
+        while(l < r) {
+            mid = (l+r+1)/2;
+            if(pow(mid, p) <= a) l = mid;
+            else r = mid-1;
+        }
+        return l;
+    }
+    friend BigInteger gcd(BigInteger a, BigInteger b) {
+        while (b > 0) a %= b, swap(a, b);
+        return a;
+    }
+    friend BigInteger lcm(const BigInteger &a, const BigInteger &b) {
+        return a/gcd(a, b)*b;
+    }
 };
-
-// 重载输入运算符
-istream &operator >> (istream &in, BigInteger &big)
-{
-    string buf;
-    if(in >> buf) big = buf;
-    return in;
-}
-// 重载输出运算符
-ostream &operator << (ostream &os, const BigInteger &big)
-{
-    char buf[10];
-    if(big.tag) os << '-';
-    os << big.v[big.len];
-    for(int i = big.len-1; i; --i)
-    {
-        sprintf(buf, "%04d", big.v[i]);
-        for(int j = 0; j < 4; ++j) os << buf[j];
-    }
-    return os;
-}
-// 幂
-template <typename T>
-BigInteger pow (BigInteger a, T p)
-{
-    if(p == 0) return 1;
-    BigInteger res = 1;
-    while(p)
-    {
-        if(p%2) res *= a;
-        a *= a;
-        p /= 2;
-    }
-    return res;
-}
-// 开根
-BigInteger sqrt(const BigInteger &a, const int p = 2)
-{
-    BigInteger l, r = a, mid;
-    while(l < r)
-    {
-        mid = (l+r+1)/2;
-        if(pow(mid, p) <= a) l = mid;
-        else r = mid-1;
-    }
-    return l;
-}
 ```
 ---
