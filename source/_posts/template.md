@@ -1650,6 +1650,7 @@ inline int solve()
 定义：选出一些顶点使得这些顶点两两不相邻，则这些点构成的集合称为独立集。找出一个包含顶点数最多的独立集称为最大独立集。
 
 定理：最大独立集 = 所有顶点数 - 最小顶点覆盖 = 所有顶点数 -   最大匹配
+
 ---
 ## [LCA](https://www.luogu.org/problemnew/show/P3379)
 ```cpp
@@ -1686,13 +1687,16 @@ struct LCA
 {
     static const int NN = (int)log2(N)+3;
     int f[N][NN], d[N], lg2[N];
-    T w[N][NN], init_val = INF;
+    T w[N][NN], init_val = 0;
     LCA() {
         for (int i = 2; i < N; ++i) lg2[i] = lg2[i>>1]+1;
-        fill(w[0], w[0]+N*NN, init_val);
+        init();
     }
-    // set sum or min or max, and don't forget to ser init_val
-    T update(const T &x, const T &y) { return min(x, y); }
+    // set sum or min or max, and don't forget to set init_val
+    T update(const T &x, const T &y) { return x+y; }
+    void init(const int &n = N-1) {
+        fill(w[0], w[0]+(n+1)*NN, init_val);
+    }
     template <typename TT>
     void build(const TT e[], const int &u = 1, const int &fa = 0) {
         d[u] = d[fa]+1;
@@ -1724,6 +1728,15 @@ struct LCA
     }
 };
 ```
+## 最小环
+
+[参考博客](https://blog.csdn.net/aqa2037299560/article/details/85009252)
+
+[例题HDU6005](http://acm.hdu.edu.cn/showproblem.php?pid=6005)
+
+建立 **最小生成树** 并 建立 **带权LCA**, 最小环由 可以保证最小环就是由最小生成树上的边再加上一条非生成树上的边构成的
+
+---
 ## [树上差分](https://www.luogu.com.cn/problem/P3128)
 ```cpp
 template <typename T>
@@ -2310,6 +2323,46 @@ struct GaussElimination
     }
 };
 ```
+### [异或方程组](http://www.cppblog.com/MatoNo1/archive/2012/05/20/175404.html)
+[luogu 2962](https://www.luogu.com.cn/problem/P2962)
+```cpp
+// -1 : no solution, 0 : multi , 1 : one
+template <typename T>
+int XorGauss(T a[N], const int &n)
+{
+    int flag = 1;
+    for (int i = 1, j, k; i <= n; ++i) {
+        for (k = i; !a[k][i] && k <= n; ++k) {}
+        if (k > n) {
+            if (a[i][n+1]) return -1;
+            flag = 0; continue;
+        }
+        swap(a[k], a[i]);
+        for (j = 1; j <= n; ++j) if (i != j && a[j][i])
+            for (k = i; k <= n+1; ++k) a[j][k] ^= a[i][k];
+            // a[j] ^= a[i]; // bitset<N> a[N]
+    }
+    return flag;
+}
+// dfs(n, 0)
+void dfs(const int &u, const int &num)
+{
+    if (num >= res) return;
+    if (u <= 0) { res = num; return; }
+    if (a[u][u]) {
+        int t = a[u][n+1];
+        for (int i = u+1; i <= n; ++i) {
+            if (a[u][i]) t ^= used[i];
+        }
+        dfs(u-1, num+t);
+    } else { // 自由元
+        dfs(u-1, num);
+        used[u] = 1;
+        dfs(u-1, num+1);
+        used[u] = 0;
+    }
+}
+```
 ---
 ## [拉格朗日插值](https://www.luogu.com.cn/problem/P4781)
 ```cpp
@@ -2891,9 +2944,15 @@ struct KeyHasher
 };
 unordered_map<Node, int, KeyHasher> mmp;
 ```
+## 定义函数
+```cpp
+function<void(int&, int)> f = [&](int &x, int y) -> void {
+    x += y;
+};
+```
 ---
 # 模数
-## 结构体
+## 弟弟操作
 ```cpp
 template <int _MOD> struct Mint
 {
@@ -2938,7 +2997,7 @@ template <int _MOD> struct Mint
 };
 using mint = Mint<MOD>;
 ```
-tourist的模板(用不来)
+## tourist的模板(用不来)
 ```cpp
 template <typename T>
 class Modular {
