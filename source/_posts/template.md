@@ -1497,6 +1497,7 @@ inline unsigned long long _hash(const string &s)
 ```
 ---
 # 图论|树论
+## [DFS树](https://codeforces.com/blog/entry/68138)
 ## [树的重心](https://www.luogu.org/problemnew/show/P2986)
 ```cpp
 void treedp(int cur, int fa)
@@ -1728,13 +1729,15 @@ struct LCA
     }
 };
 ```
-## 最小环
+## 最小环 (伪算法)
 
 [参考博客](https://blog.csdn.net/aqa2037299560/article/details/85009252)
 
 [例题HDU6005](http://acm.hdu.edu.cn/showproblem.php?pid=6005)
 
 建立 **最小生成树** 并 建立 **带权LCA**, 最小环由 可以保证最小环就是由最小生成树上的边再加上一条非生成树上的边构成的
+
+**假算法 最小环可以有超过一条边不在生成树上的(考虑边权全相同时易得反例)**
 
 ---
 ## [树上差分](https://www.luogu.com.cn/problem/P3128)
@@ -2823,6 +2826,20 @@ f[i][j] = max{  f[i-1][j],
 ## 区间DP
 ## [树形DP](https://www.luogu.org/problemnew/show/P1352)
 ## 状压DP
+### 枚举子集
+```cpp
+for (int i = s; i; i = (i-1)&s) {}
+```
+### 枚举n个元素大小为k的二进制子集
+```cpp
+int s=(1<<k)-1;
+while(s<(1<<n)){
+    work(s);
+    int x=s&-s,y=s+x;
+    s=((s&~y)/x>>1)|y; //这里有一个位反~
+}
+```
+
 ## 队列优化
 ## 斜率优化
 
@@ -2880,6 +2897,8 @@ int ans = 0;
 for(int i = 1; i <= W; ++i)
     ans = max(ans, f[i]);
 ```
+---
+## [SOS DP](https://codeforces.com/blog/entry/45223)
 ---
 # STL
 ## 数据结构
