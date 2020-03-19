@@ -67,23 +67,23 @@ photos:
 
 只要在 `.travis.yml` 文件中的 `install:` 部分加上一行即可
 
-  # S: Build Lifecycle
-  before_install:
-  - npm install hexo-cli -g
-
-  install:
-  - npm install
-  - npm install hexo-deployer-git --save
-  - npm install [在这里] --save
-    
-  script:
-  - hexo clean
-  - hexo generate
-
-  after_script:
-  # 略略略
-  # End: Build LifeCycle
-
+```
+ 
+# S: Build Lifecycle
+before_install:
+- npm install hexo-cli -g
+install:
+- npm install
+- npm install hexo-deployer-git --save
+- npm install [在这里] --save
+  
+script:
+- hexo clean
+- hexo generate
+after_script:
+# 略略略
+# End: Build LifeCycle
+```
 ---
 
 ## 提一下自动部署
@@ -103,6 +103,7 @@ photos:
 这里提一下,我们在主题的 `_config.yml` 配置文件中看到很多集成的插件,例如
 
 ```cpp
+ 
 # 分享条
 # NeedMoreShare2
 # Dependencies: https://github.com/theme-next/theme-next-needmoreshare2
@@ -131,6 +132,7 @@ needmoreshare2:
       boxForm: horizontal
       position: middleRight
       networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook
+
 ```
 
 把 `enable: false` 改成 `enable: true` 
@@ -162,6 +164,7 @@ needmoreshare2:
     我现在的 `.gitignore` 如下
 
     ```.gitignore
+        
     .DS_Store
     .idea/
     *.log
@@ -234,6 +237,7 @@ needmoreshare2:
 光按百度上说法直接改 `true` 无效
 
 ```yml
+ 
 # 背景动画
 # Canvas-nest
 # 大部分都是这种,网络上应该能轻易找到样例
@@ -266,6 +270,7 @@ canvas_ribbon:
   size: 300
   alpha: 0.6
   zIndex: -1
+
 ```
 
 我之所以没加这个特效是因为占用太大了
@@ -289,6 +294,7 @@ canvas_ribbon:
 然后这里说说使用本地图片的方法
 
 ```
+ 
 body {
     background:url(/images/bg.jpg);
     background-repeat: no-repeat;
