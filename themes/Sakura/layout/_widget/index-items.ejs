@@ -26,6 +26,14 @@
             <a href="<%- url_for(category.path) %>"><%= category.name %></a>
           <% }) %>
         </span>
+        <!--置顶 -->
+        <span>
+          <% if (post.top){ %>
+            <i class="fa fa-thumb-tack"></i>
+            <font color=ff9999>置顶</font>
+            <span class="post-meta-divider"> | </span>
+          <% } %>
+        </span>
       </div>
       <div class="float-content">
         <p><%= post.description %></p>

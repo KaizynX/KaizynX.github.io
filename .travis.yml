@@ -24,7 +24,7 @@ install:
   # 博文加密
   - npm install hexo-blog-encrypt --save
   # 上传图片到网页
-  - npm install hexo-asset-image --save
+  # - npm install hexo-asset-image --save
   # 本地搜索
   # - npm install hexo-generator-search --save
   # rss
