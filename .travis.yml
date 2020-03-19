@@ -21,14 +21,16 @@ install:
   - npm install
   # 部署到github
   - npm install hexo-deployer-git --save
+  # 博文加密
+  - npm install hexo-blog-encrypt --save
   # 上传图片到网页
-  # - npm install hexo-asset-image --save
+  - npm install hexo-asset-image --save
   # 本地搜索
   # - npm install hexo-generator-search --save
   # rss
   # - npm install --save hexo-generator-feed
   # 置顶
-  # - npm install hexo-generator-index-pin-top --save
+  - npm install hexo-generator-index-pin-top --save
 
 script:
   - hexo clean

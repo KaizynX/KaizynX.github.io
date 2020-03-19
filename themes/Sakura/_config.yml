@@ -1,5 +1,5 @@
 # site name
-prefixName: Kaizyn
+prefixName: Kaizyn's
 siteName: Blog
 # favicon and site master avatar
 # ico
@@ -19,7 +19,7 @@ mathjax: 1
 # 站点首页的公告信息
 notice: 博客完善中..
 # 懒加载的加载中图片
-lazyloadImg: https://cdn.jsdelivr.net/gh/KaizynX/cdn/images/post-loading.gif
+lazyloadImg: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif
 
 # 图标来自：https://fontawesome.com/icons
 menus:
@@ -70,13 +70,13 @@ bgclass:
 # startdash 面板(置顶?) url, title, desc img
 startdash: 
   - {url: /theme-sakura/, title: Sakura, desc: 本站 hexo 主题, img: /img/startdash/sakura.md.png}
-  - {url: /2018/11/05/template/, title: ACM模板, desc: 某菜鸡整理的板子, img: /img/startdash/acm.jpg}
-  - {url: /, title: hojun的万事屋, desc: 技术服务, img: /img/startdash/wangshiwu.jpg}
+  - {url: https://kaizynx.github.io/2018/11/04/template/, title: ACM模板, desc: 某菜鸡整理的板子, img: /img/startdash/acm.jpg}
+  - {url: /, title: 空缺广告位, desc: qwq, img: /img/startdash/wangshiwu.jpg}
 
 
 
 # your site build time or founded date
-siteBuildingTime: 10/24/2018
+siteBuildingTime: 9/24/2018
 
 #社交按钮social  url, img PC端配置
 social:
@@ -85,7 +85,8 @@ social:
   # wangyiyun: {url: http://weibo.com/mashirozx?is_all=1, img: /img/social/wangyiyun.png}
   zhihu: {url: http://www.zhihu.com/people/kaizyn, img: /img/social/zhihu.png}
   email: {url: mailto:2291443901@qq.com, img: /img/social/email.svg}
-  wechat: {url: /#, qrcode: /img/custom/wechat.jpg, img: /img/social/wechat.png}
+  qq: {url: tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2291443901, img: /img/social/qq.png}
+  # wechat: {url: /#, qrcode: /img/custom/wechat.jpg, img: /img/social/wechat.png}
   # wechat2: {url: /#, qrcode: /img/custom/wechat.jpg, img: /img/social/wechat.png}
 
 #social  url, img 移动端配置
@@ -122,3 +123,10 @@ aplayer:
 valine: true
 v_appId: thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz
 v_appKey: RztxTMKSVDyuAaC0BVM1wPM1
+
+
+# 文章加密
+encrypt:
+  enable: true
+  default_abstract: 该文章被一股不可抗击的力量封印了
+  default_message: 我们的接头暗号是?

@@ -1,0 +1,225 @@
+---
+title: 毒瘤的slay.three
+date: 2018-09-24 13:46:00
+categories:
+  - Luogu
+tags:
+  - 二分
+  - DP
+  
+mathjax: true
+---
+
+# [T44705 【开学毒瘤赛T4】毒瘤的slay.three](https://www.luogu.org/problemnew/show/T44705)
+
+## 思路
+
+二分+DP
+
+## 代码
+```cpp
+#include<iostream>
+#include<cstdio>
+using namespace std;
+int n,a[20001],mx[20001],mn[20001],ans;
+int check(int x)
+{
+    mn[1]=mx[1]=a[1];
+    for(int i=2;i<=n;i++)
+        mx[i]=min(a[i],a[1]-mn[i-1]),mn[i]=max(0,a[1]+a[i-1]+a[i]-mx[i-1]-x);
+    if(!mn[n]) return 1;
+    return 0;
+}
+int main()
+{
+    int l=0,r=0;
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++) scanf("%d",&a[i]),l=max(l,a[i]+a[i-1]);
+    r=2*l+1;
+    while(l<=r)
+    {
+        int mid=(l+r)>>1;
+        if(check(mid)) ans=mid,r=mid-1;
+        else l=mid+1;
+    }
+    printf("%d\n",ans);
+    return 0;
+}
+```
+---
+
+# 以下错误解法,请勿模仿
+
+## 思路
+
+这个样例倒是太不贴心了
+
+不过因此我们也可以发现当 $n \leq 3$ 时
+
+参数无法重复利用
+
+**暴力做法**是:
+
+对每一个直接填
+
+按顺序下来
+
+前两个比赛新增参数
+
+假设选取参数1, 2, 3...
+
+当进行到第 $i$ 个时
+
+我们就把 $i-2$ 用过的参数重复利用了
+
+用一个数组记录某个参数是否用过
+
+就这样暴力循环找
+
+最坏情况每一个都时新参数
+
+就是 $\sum a$ (也说明不可能没有方案)
+
+看到数据范围一点都不友好
+
+遂放弃
+
+**理智地思考**
+
+我们先考虑中间情况,暂时不考虑围成一个圈后什么首尾的
+
+其实并不需要清楚选的是那些参数
+
+只需要考虑参数的个数即可
+
+当到了 $a_i$ 的时候
+
+$a_{i-2}$ 中的全部参数是可以用的
+
+如果 $a_{i-2} < a_{i}$
+
+那么我们有 $a_{i-2}$ 个可以重复利用
+
+还需要新增 $a_i - a_{i-2}$ 个
+
+但如果 $a_{i-2} \geq a_{i}$
+
+那么 $a_i$ 就不需要在新增参数
+
+还可以多出 $a_{i-2} - a_i$ 个
+
+**注意** 这多出来的几个还可以直接被 $a_{i+1}$ 利用
+
+因此我们回到 $ai$ 重新考虑
+
+$ai$ 可以重复利用的参数是 
+
+$a_{i-2}$ 刚腾出来的**加上** $a_{i-1}$ 用剩下的 
+
+于是我们用 $b_i$ 记录第 $i$ 个用剩下的
+
+所以:
+
+$a_i$ 可用: $a_{i-2} + b_{i-1}$
+
+如果 $a_i >$ 可用,剩下 $b_i = 0$
+
+且需要新增 ($a_i -$当前可用)个参数
+
+如果 $a_i \leq$ 可用,剩下 $b_i =$ 可用 $- a_i$
+
+然后我们再来考虑特殊状态
+
+$a_1, a_2$ 是必须要新增的
+
+$b_1 = b_2 = 0$
+
+接着我们考虑到最后一个 $a_n$
+
+$a_i$ 会影响 $a_{i-1}, a_{i+1}$
+
+因为是从前往后考虑
+
+让 $a_i$ 适应 $a_{i-1}$
+
+再让 $a_{i+1}$ 适应 $a_i$
+
+故决策不会受到印象
+
+而 $a_n$ 不仅受到 $a_{n-1}$ 影响
+
+还受到 $a_1$ 影响
+
+当然受到影响的前提是 $a_1$ 的参数被 $a_n$ 重复利用
+
+也就是 $a_i$ 的参数存在于 $b_{i-1}$ 中
+
+因为这种影响不是必然的,所以我想该如何避免这种情况
+
+那么想为什么会出现这种情况,何时,怎么出现
+
+想到是 $a_1$ 太大的,它留下的一直被延续利用至 $a_n$
+
+这么想有点夸张,不过在理
+
+*下面三行先当玩笑*
+
+那么我们就令最小的 $a$ 为 $a_1$ 吧
+
+反正都是环
+
+于是再不妨令 $a$ 的下标从0开始
+
+## 代码
+
+```cpp
+#include <cstdio>
+#include <iostream>
+
+using namespace std;
+
+const int Maxn = 2e4+7;
+
+int n, sum, sta, a[Maxn], b[Maxn];
+
+int main()
+{
+    scanf("%d", &n);
+    for(int i = 0; i < n; ++i)
+    {
+        scanf("%d", a+i);
+        sum += a[i];
+        if(a[i] < a[sta]) sta = i;
+    }
+    if(n <= 3)
+    {
+        printf("%d\n", sum);
+        return 0;
+    }
+    sum = a[sta]+a[(sta+1)%n];
+    for(int i = 2, rest, now; i < n; ++i)
+    {
+        now = (sta+i)%n;
+        rest = b[(now-1+n)%n]+a[(now-2+n)%n];
+        if(rest >= a[now]) b[now] = rest-a[now];
+        else sum += a[now]-rest;
+    }
+    printf("%lld\n", 3ll*sum);
+    return 0;
+}
+```
+
+## ps
+
+当有这样一组数据
+
+    5
+    1 1 1 1 1
+
+正确答案应该是9而我AC程序是6
+
+埋下伏笔先
+
+而且就算不用搞什么取最小也能A
+
+正解是二分+DP

@@ -128,3 +128,33 @@ $ https://cdn.jsdelivr.net/gh/Fofade/cnblogsThemes/live2dw/assets/z16.model.json
   <img src="">
 </center>
 ```
+
+## 代码渲染问题
+
+根目录下的 `_config.yml` 文件
+
+```yml
+highlight: 
+  enable: false
+  line_number: false
+  auto_detect: false
+  tab_replace:
+```
+
+上面三个选项之前全写了 `true` 导致渲染出错
+
+## 置顶 和 加密
+
+[参考博客](https://blog.csdn.net/cungudafa/article/details/104346521)
+
+挖坑
+
+## 最后
+
+从昨晚一直折腾到今天下午三点半，总算是初步建立好了，累die
+
+总的来说，想折腾一个好看的博客，可能并不是需要你学多少专业的知识，会多少专业的技能
+
+而是看你有没有耐心，一颗坚持不懈的狂热的心
+
+你需要的是借鉴模仿，以及如何从百度等搜索引擎找到解决问题方法的能力

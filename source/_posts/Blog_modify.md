@@ -126,3 +126,31 @@ hexo g
 之后就是配置这个主题了呜呼
 
 之前下载的主题问题应该是，那个不是 `hexo` 的主题，是 `wordpress` 的主题
+
+## 找到解决方法
+
+第二天进行博客迁徙
+
+通过一篇一篇复制，终于找到了问题所在
+
+错误信息
+```
+FATAL Something's wrong. Maybe you can find the solution here: https://hexo.io/docs/troubleshooting.html
+Nunjucks Error:  [Line 108, Column 4] unknown block tag: note
+```
+
+错误原因是某篇 `.md` 中用了一下语法
+
+```md
+{% note default %}
+
+K が奇数の時、 a,b,c を K で割ったあまりはすべて 0 である必要があります。 K が偶数の時、 a,b,c をK で割ったあまりはすべて 0 であるか、あるいはすべて K/2 である必要があります。このような組の個数は、 N 以下で K で割って 0 あまるものの個数と K/2 あまるものの個数から求めることができるので、この問題を解くことができました。
+
+{% endnote %}
+```
+
+出错的就是 `note`
+
+原来这个语法是 `Next` 主题的特性，该死
+
+删掉即可
