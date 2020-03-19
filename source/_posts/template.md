@@ -1735,16 +1735,7 @@ struct LCA
     }
 };
 ```
-## 最小环 (伪算法)
-
-[参考博客](https://blog.csdn.net/aqa2037299560/article/details/85009252)
-
-[例题HDU6005](http://acm.hdu.edu.cn/showproblem.php?pid=6005)
-
-建立 **最小生成树** 并 建立 **带权LCA**, 最小环由 可以保证最小环就是由最小生成树上的边再加上一条非生成树上的边构成的
-
-**假算法 最小环可以有超过一条边不在生成树上的(考虑边权全相同时易得反例)**
-
+## 最小环 
 ---
 ## [树上差分](https://www.luogu.com.cn/problem/P3128)
 ```cpp
@@ -1835,98 +1826,201 @@ struct ShuPou
 ```
 ---
 ## [网络流](https://www.luogu.org/problemnew/show/P3376)
-**增广路**
+### EK
 ```cpp
-// while(bfs()) update();
-bool bfs()
+template <typename T>
+struct EK
 {
-    memset(v, 0, sizeof v);
-    queue<int> q;
-    q.push(s);
-    v[s] = true;
-    incf[s] = INF;
-    while(q.size())
+    struct Edge
     {
-        int cur = q.front();
-        q.pop();
-        for(int i = fir[cur], to; i; i = nex[i])
-        {
-            to = ver[i];
-            if(!edge[i] || v[to]) continue;
-            incf[to] = min(incf[cur], edge[i]);
-            pre[to] = i;
-            if(to == t) return true;
-            q.push(to);
-            v[to] = true;
+        int v, nex;
+        T w;
+    } e[M<<1];
+    int tot = 0, n;
+    int fir[N], vis[N], pre[N];
+    T incf[N];
+    T work(const int &s, const int &t) {
+        T res = 0;
+        while (bfs(s, t)) {
+            int u = t, id;
+            while (u != s) {
+                id = pre[u];
+                e[id].w -= incf[t];
+                e[id^1].w -= incf[t];
+                u = e[id^1].v;
+            }
+            res += incf[t];
         }
+        return res;
     }
-    return false;
-}
-
-void update()
-{
-    int cur = t, e;
-    while(cur != s)
-    {
-        e = pre[cur];
-        edge[e] -= incf[t];
-        edge[e^1] += incf[t];
-        cur = ver[e^1];
+    void init(const int &sz) {
+        n = sz;
+        tot = 0;
+        memset(fir, -1, sizeof(int)*(n+3));
     }
-    maxflow += incf[t];
-}
+    void add_edge(const int &u, const int &v, const T &w) {
+        e[tot] = {v, fir[u], w}; fir[u] = tot++;
+        e[tot] = {u, fir[v], 0}; fir[v] = tot++;
+    }
+    bool bfs(const int &s, const int &t) {
+        queue<int> q;
+        memset(vis, 0, sizeof(int)*(n+3));
+        q.push(s);
+        vis[s] = 1;
+        incf[s] = INF;
+        while (q.size()) {
+            int u = q.front();
+            q.pop();
+            for (int i = fir[u], v; i != -1; i = e[i].nex) {
+                v = e[i].v;
+                if (vis[v] || !e[i].w) continue;
+                incf[v] = min(incf[u], e[i].w);
+                pre[v] = i;
+                if (v == t) return true;
+                q.push(v);
+                vis[v] = 1;
+            }
+        }
+        return false;
+    }
+};
 ```
-**Dinic**
+### Dinic
 ```cpp
-main()
+template <typename T>
+struct Dinic
 {
-    int flow = 0;
-    while(bfs())
-        while((flow = dinic(s, INF)))
+    struct EDGE
+    {
+        int v, nex;
+        T w;
+    } e[M<<1];
+    int tot, n;
+    int fir[N], vis[N], dep[N];
+    T work(const int &s, const int &t) {
+        T maxflow = 0, flow;
+        while (bfs(s, t))
+            while ((flow = dfs(s, t, INF)))
+                maxflow += flow;
+        return maxflow;
+    }
+    void init(const int &sz) {
+        n = sz;
+        tot = 0;
+        memset(fir, -1, sizeof(int)*(n+3));
+    }
+    void add_edge(const int &u, const int &v, const T &w) {
+        e[tot] = {v, fir[u], w}; fir[u] = tot++;
+        e[tot] = {u, fir[v], 0}; fir[v] = tot++;
+    }
+    bool bfs(const int &s, const int &t) {
+        queue<int> q;
+        memset(dep, 0, sizeof(int)*(n+3));
+        q.push(s);
+        dep[s] = 1;
+        while (q.size()) {
+            int u = q.front();
+            q.pop();
+            for (int i = fir[u], v; i != -1; i = e[i].nex) {
+                v = e[i].v;
+                if (dep[v] || !e[i].w) continue;
+                dep[v] = dep[u]+1;
+                if (v == t) return true;
+                q.push(v);
+            }
+        }
+        return false;
+    }
+    T dfs(const int &u, const int &t, const T &flow) {
+        if (!flow || u == t) return flow;
+        T rest = flow, now;
+        for (int i = fir[u], v; i != -1; i = e[i].nex) {
+            v = e[i].v;
+            if (dep[v] != dep[u]+1 || !e[i].w) continue;
+            now = dfs(v, t, min(rest, e[i].w));
+            if (!now) {
+                dep[v] = 0;
+            } else {
+                e[i].w -= now;
+                e[i^1].w += now;
+                rest -= now;
+                if (rest == flow) break;
+            }
+        }
+        return flow-rest;
+    }
+};
+```
+### [ISAP](https://www.luogu.com.cn/blog/ONE-PIECE/jiu-ji-di-zui-tai-liu-suan-fa-isap-yu-hlpp)
+```cpp
+template <typename T>
+struct ISAP
+{
+    struct EDGE
+    {
+        int v, nex;
+        T w;
+    } e[M<<1];
+    int tot, n, s, t;
+    T maxflow;
+    int fir[N], gap[N], dep[N];
+    T work(const int &_s, const int &_t) {
+        s = _s; t = _t;
+        maxflow = 0;
+        bfs();
+        while (dep[s] < n) dfs(s, INF);
+        return maxflow;
+    }
+    void init(const int &sz) {
+        n = sz;
+        tot = 0;
+        memset(fir, -1, sizeof(int)*(n+3));
+    }
+    void add_edge(const int &u, const int &v, const T &w) {
+        e[tot] = {v, fir[u], w}; fir[u] = tot++;
+        e[tot] = {u, fir[v], 0}; fir[v] = tot++;
+    }
+    void bfs() {
+        queue<int> q;
+        memset(dep, -1, sizeof(int)*(n+3));
+        memset(gap, 0, sizeof(int)*(n+3));
+        dep[t] = 0;
+        gap[0] = 1;
+        q.push(t);
+        while (q.size()) {
+            int u = q.front();
+            q.pop();
+            for (int i = fir[u], v; i != -1; i = e[i].nex) {
+                v = e[i].v;
+                if (dep[v] != -1) continue;
+                q.push(v);
+                dep[v] = dep[u]+1;
+                ++gap[dep[v]];
+            }
+        }
+    }
+    T dfs(const int &u, const T &flow) {
+        if (u == t) {
             maxflow += flow;
-}
-
-bool bfs()
-{
-    memset(d, 0, sizeof d);
-    queue<int> q;
-    q.push(s);
-    d[s] = 1;
-    int cur;
-    while(q.size())
-    {
-        cur = q.front(); q.pop();
-        for(int i = fir[cur], to; i; i = nex[i])
-        {
-            to = ver[i];
-            if(d[to] || !edge[i]) continue;
-            d[to] = d[cur]+1;
-            if(to == t) return true;
-            q.push(to);
+            return flow;
         }
-    }
-    return false;
-}
-
-int dinic(int cur, int flow)
-{
-    if(cur == t) return flow;
-    int rest = flow;
-    for(int i = fir[cur], to, now; i; i = nex[i])
-    {
-        to = ver[i];
-        if(d[to] != d[cur]+1 || !edge[i]) continue;
-        now = dinic(to, min(rest, edge[i]));
-        if(!now) d[to] = 0;
-        else
-        {
-            edge[i] -= now;
-            edge[i^1] += now;
-            rest -= now;
+        T used = 0;
+        for (int i = fir[u], v; i != -1; i = e[i].nex) {
+            v = e[i].v;
+            if (!e[i].w || dep[v]+1 != dep[u]) continue;
+            T minf = dfs(v, min(e[i].w, flow-used));
+            if (minf) {
+                e[i].w -= minf;
+                e[i^1].w += minf;
+                used += minf;
+            }
+            if (used == flow) return used;
         }
+        if (--gap[dep[u]] == 0) dep[s] = n+1;
+        ++gap[++dep[u]];
+        return used;
     }
-    return flow - rest;
-}
+};
 ```
 ---
 ## 最短路
