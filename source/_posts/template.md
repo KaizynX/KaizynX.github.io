@@ -1,10 +1,16 @@
 ---
 title: ACM模板
+author: Kaizyn
+avatar: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg
+authorLink: https://kaizynx.github.io/
 date: 2018-11-05 07:00:00
 categories:
   - ACM
 tags:
 top: true
+keywords: ACM模板
+description:  某菜鸡收集的板子
+photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/template/cover.jpg
 ---
 
 # 前言

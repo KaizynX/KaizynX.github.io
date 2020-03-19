@@ -1,9 +1,15 @@
 ﻿---
 title: 博客搭建
+author: Kaizyn
+avatar: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg
+authorLink: https://kaizynx.github.io/
 date: 2018-09-01 12:48:55
 categories:
   - 技术
 tags:
+  - Blog
+description: 该博客搭建之初的摸爬滚打
+photos: 
 ---
 
 ----------
@@ -450,77 +456,77 @@ TravisCI上就能顺利运行了，自动帮你**hexo三部曲**了
 而我用的则是在TravisCI上执行hexo d
 
 最后给出我成功的`.travis.yml`代码
-```yml
-# 指定语言环境
-language: node_js
-# 指定需要sudo权限
-sudo: required
-# 指定node_js版本
-node_js: 
-  - stable
-# 指定缓存模块，可选。缓存可加快编译速度。
-#cache:
-#  directories:
-#    - node_modules
 
-branches:
-  only:
-    - source
+    # 指定语言环境
+    language: node_js
+    # 指定需要sudo权限
+    sudo: required
+    # 指定node_js版本
+    node_js: 
+    - stable
+    # 指定缓存模块，可选。缓存可加快编译速度。
+    #cache:
+    #  directories:
+    #    - node_modules
 
-# S: Build Lifecycle
-before_install:
-  - npm install hexo-cli -g
+    branches:
+    only:
+        - source
 
-install:
-  - npm install
-  - npm install hexo-deployer-git --save
-  - npm install jsdom
-  - npm install jquery
+    # S: Build Lifecycle
+    before_install:
+    - npm install hexo-cli -g
 
-# 执行清缓存，生成网页操作
-script:
-  - hexo clean
-  - hexo generate
+    install:
+    - npm install
+    - npm install hexo-deployer-git --save
+    - npm install jsdom
+    - npm install jquery
 
-# 设置git提交名，邮箱；替换真实token到_config.yml文件，最后depoy部署
-after_script:
-  - git config user.name "KaizynX"
-  - git config user.email "2291443901@qq.com"
-  # 替换同目录下的_config.yml文件中gh_token字符串为travis后台刚才配置的变量，注意此处sed命令用了双引号。单引号无效！
-  - sed -i "s/gh_token/${GH_TOKEN}/g" ./_config.yml
-  - hexo deploy
-# End: Build LifeCycle
+    # 执行清缓存，生成网页操作
+    script:
+    - hexo clean
+    - hexo generate
+
+    # 设置git提交名，邮箱；替换真实token到_config.yml文件，最后depoy部署
+    after_script:
+    - git config user.name "KaizynX"
+    - git config user.email "2291443901@qq.com"
+    # 替换同目录下的_config.yml文件中gh_token字符串为travis后台刚才配置的变量，注意此处sed命令用了双引号。单引号无效！
+    - sed -i "s/gh_token/${GH_TOKEN}/g" ./_config.yml
+    - hexo deploy
+    # End: Build LifeCycle
 
 
-# 方法一
-#after_script:
-# - cd ./public
-# - git init
-# - git config user.name "KaizynX"
-# - git config user.email "2291443901@qq.com"
-# - git add .
-# - git commit -m "Update Blog"
-# - git push --force --quiet "https://${GITHUB_TOKEN}@${GH_REF}" master:master
-# E: Build LifeCycle
+    # 方法一
+    #after_script:
+    # - cd ./public
+    # - git init
+    # - git config user.name "KaizynX"
+    # - git config user.email "2291443901@qq.com"
+    # - git add .
+    # - git commit -m "Update Blog"
+    # - git push --force --quiet "https://${GITHUB_TOKEN}@${GH_REF}" master:master
+    # E: Build LifeCycle
 
-#env:
-# global:
-#  - GH_REF: github.com:KaizynX/KaizynX.github.io.git
-```
+    #env:
+    # global:
+    #  - GH_REF: github.com:KaizynX/KaizynX.github.io.git
+
 我还遇到过的一个坑是在TravisCI连
 
     npm install hexo-cli -g
     
 都运行不了，报错，这个百度可以解决好像是什么缓存问题
 错误代码如下
-```
 
-npm ERR! code ERR_TLS_CERT_ALTNAME_INVALID
+    npm ERR! code ERR_TLS_CERT_ALTNAME_INVALID
 
-npm ERR! errno ERR_TLS_CERT_ALTNAME_INVALID
+    npm ERR! errno ERR_TLS_CERT_ALTNAME_INVALID
 
-npm ERR! request to https://registry.npmjs.org/hexo-cli failed, reason: Hostname/IP does not match certificate's altnames: Host: registry.npmjs.org. is not in the cert's altnames: DNS:a.sni.fastly.net, DNS:a.sni.global-ssl.fastly.net
-```
+    npm ERR! request to https://registry.npmjs.org/hexo-cli failed, reason: Hostname/IP does not match certificate's altnames: Host: registry.npmjs.org. is not in the cert's altnames: DNS:a.sni.fastly.net, DNS:a.sni.global-ssl.fastly.net
+
+
 解决吗我也没实质性解决过吧，你们自己百度吧
 
 ----------

@@ -1,12 +1,9 @@
-# ָ�����Ի���
 language: node_js
-# ָ����ҪsudoȨ��
 sudo: required
-# ָ��node_js�汾
 node_js: 
 #  - stable
-  - 10.8.0
-# ָ������ģ�飬��ѡ������ɼӿ�����ٶȡ�
+  - 12.16.1
+
 #cache:
 #  directories:
 #    - node_modules
@@ -25,24 +22,21 @@ install:
   # 部署到github
   - npm install hexo-deployer-git --save
   # 上传图片到网页
-  - npm install hexo-asset-image --save
+  # - npm install hexo-asset-image --save
   # 本地搜索
-  - npm install hexo-generator-search --save
+  # - npm install hexo-generator-search --save
   # rss
-  - npm install --save hexo-generator-feed
+  # - npm install --save hexo-generator-feed
   # 置顶
-  - npm install hexo-generator-index-pin-top --save
+  # - npm install hexo-generator-index-pin-top --save
 
-# ִ���建�棬������ҳ����
 script:
   - hexo clean
   - hexo generate
 
-# ����git�ύ�������䣻�滻��ʵtoken��_config.yml�ļ������depoy����
 after_script:
   - git config user.name "KaizynX"
   - git config user.email "2291443901@qq.com"
-  # �滻ͬĿ¼�µ�_config.yml�ļ���gh_token�ַ���Ϊtravis��̨�ղ����õı�����ע��˴�sed��������˫���š���������Ч��
   - sed -i "s/gh_token/${GH_TOKEN}/g" ./_config.yml
   - hexo deploy
 # End: Build LifeCycle

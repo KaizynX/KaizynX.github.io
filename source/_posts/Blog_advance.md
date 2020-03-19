@@ -1,9 +1,15 @@
 ---
 title: 博客进阶
+author: Kaizyn
+avatar: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg
+authorLink: https://kaizynx.github.io/
 date: 2018-10-12 21:00:00
 categories:
   - 技术
 tags:
+  - Blog
+description: 博客主题配置,自动部署
+photos: 
 ---
 
 # 进阶指南
@@ -60,24 +66,24 @@ tags:
 如果要使得 `Travis CI` 上也能加载插件
 
 只要在 `.travis.yml` 文件中的 `install:` 部分加上一行即可
-```yml
-# S: Build Lifecycle
-before_install:
-- npm install hexo-cli -g
 
-install:
-- npm install
-- npm install hexo-deployer-git --save
-- npm install [在这里] --save
-  
-script:
-- hexo clean
-- hexo generate
+  # S: Build Lifecycle
+  before_install:
+  - npm install hexo-cli -g
 
-after_script:
-# 略略略
-# End: Build LifeCycle
-```
+  install:
+  - npm install
+  - npm install hexo-deployer-git --save
+  - npm install [在这里] --save
+    
+  script:
+  - hexo clean
+  - hexo generate
+
+  after_script:
+  # 略略略
+  # End: Build LifeCycle
+
 ---
 
 ## 提一下自动部署
