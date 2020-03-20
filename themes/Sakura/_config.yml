@@ -24,28 +24,33 @@ lazyloadImg: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif
 # 图标来自：https://fontawesome.com/icons
 menus:
   首页: { path: /, fa: fa-fort-awesome faa-shake }
-  归档: { path: /archives, fa: fa-archive faa-shake, submenus: { 
-    技术: {path: /categories/技术/, fa: fa-code }, 
-    生活: {path: /categories/生活/, fa: fa-file-text-o }, 
-    资源: {path: /categories/资源/, fa: fa-cloud-download }, 
-    随想: {path: /categories/随想/, fa: fa-commenting-o },
-    转载: {path: /categories/转载/, fa: fa-book }
+  归档: { path: /archives, fa: fa-archive faa-shake}
+  # 归档: { path: /archives, fa: fa-archive faa-shake, submenus: { 
+    # 技术: {path: /categories/技术/, fa: fa-code }, 
+    # 生活: {path: /categories/生活/, fa: fa-file-text-o }, 
+    # 资源: {path: /categories/资源/, fa: fa-cloud-download }, 
+    # 随想: {path: /categories/随想/, fa: fa-commenting-o },
+    # 转载: {path: /categories/转载/, fa: fa-book }
+  # } }
+  目录: { path: /categories, fa: fa-list-ul faa-vertical, submenus: { 
+    技术: {path: /categories/技术/, fa: fa-code } 
   } }
-  清单: { path: javascript:;, fa: fa-list-ul faa-vertical, submenus: { 
-    书单: {path: /tags/悦读/, fa: fa-th-list faa-bounce }, 
-    番组: {path: /bangumi/, fa: fa-film faa-vertical }, 
-    歌单: {path: /music/, fa: fa-headphones },
-    图集: {path: /tags/图集/, fa: fa-photo }
-  } }
+  标签: { path: /tags, fa: fa-tags }
+  # 清单: { path: javascript:;, fa: fa-list-ul faa-vertical, submenus: { 
+    # 书单: {path: /tags/悦读/, fa: fa-th-list faa-bounce }, 
+    # 番组: {path: /bangumi/, fa: fa-film faa-vertical }, 
+    # 歌单: {path: /music/, fa: fa-headphones },
+    # 图集: {path: /tags/图集/, fa: fa-photo }
+  # } }
   留言板: { path: /comment/, fa: fa-pencil-square-o faa-tada }
-  友人帐: { path: /links/, fa: fa-link faa-shake }
+  大佬链: { path: /links/, fa: fa-link faa-shake }
   赞赏: { path: /donate/, fa: fa-heart faa-pulse }
   关于: { path: /, fa: fa-leaf faa-wrench , submenus: { 
-    我？: {path: /about/, fa: fa-meetup}, 
-    主题: {path: /theme-sakura/, fa: iconfont icon-sakura },
-    Lab: {path: /lab/, fa: fa-cogs },
+    不是我: {path: /about/, fa: fa-meetup}, 
+    主题: {path: https://github.com/honjun/hexo-theme-sakura, fa: iconfont icon-sakura },
+    # Lab: {path: /lab/, fa: fa-cogs },
   } }
-  客户端: { path: /client/, fa: fa-android faa-vertical }
+  # 客户端: { path: /client/, fa: fa-android faa-vertical }
   RSS: { path: /atom.xml, fa: fa-rss faa-pulse }
 
 
@@ -69,7 +74,7 @@ bgclass:
 
 # startdash 面板(置顶?) url, title, desc img
 startdash: 
-  - {url: /theme-sakura/, title: Sakura, desc: 本站 hexo 主题, img: /img/startdash/sakura.md.png}
+  - {url: https://github.com/honjun/hexo-theme-sakura, title: Sakura, desc: 本站 hexo 主题, img: /img/startdash/sakura.md.png}
   - {url: https://kaizynx.github.io/2018/11/04/template/, title: ACM模板, desc: 某菜鸡整理的板子, img: /img/startdash/acm.jpg}
   - {url: /, title: 空缺广告位, desc: qwq, img: /img/startdash/wangshiwu.jpg}
 

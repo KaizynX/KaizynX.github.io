@@ -1386,6 +1386,7 @@ struct DSU
 ---
 # 字符串
 ## [回文字符串|manacher算法](https://www.luogu.org/problemnew/show/P3805)
+从 0 开始，第 i 位对应 p[i*2+2]
 ```cpp
 inline int manacher(const char *str, char *buf, int *p)
 {
@@ -1406,6 +1407,11 @@ inline int manacher(const char *str, char *buf, int *p)
     return ans;
 }
 ```
+### 判断s[l, r]是否为回文
+```cpp
+p[l+r+2]-1 >= r-l+1
+```
+---
 ## [KMP](https://www.luogu.org/problemnew/show/P3375)
 `.c_str() 未知异常 Segment Fault`
 ```cpp

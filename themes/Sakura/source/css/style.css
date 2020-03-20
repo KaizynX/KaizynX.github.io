@@ -2128,7 +2128,7 @@ i.iconfont.hotpost {
     background:rgba(254,250,199,1);
     color:#e67474;
     word-break:break-word;
-    font-family:'Source Code Pro',monospace,Helvetica,Tahoma,Arial,STXihei,"STHeiti Light","Microsoft YaHei",sans-serif;
+    font-family:'Consolas','Source Code Pro',monospace,Helvetica,Tahoma,Arial,STXihei,"STHeiti Light","Microsoft YaHei",sans-serif;
     padding:2px;
     text-shadow:none;
     border-radius:5px
@@ -7324,7 +7324,7 @@ to {
     background:#1d1f21;
     color:#fff;
     word-break:break-word;
-    font-family:'Source Code Pro',monospace,Helvetica,Tahoma,Arial,STXihei,"STHeiti Light","Microsoft YaHei",sans-serif;
+    font-family:'Consolas','Source Code Pro',monospace,Helvetica,Tahoma,Arial,STXihei,"STHeiti Light","Microsoft YaHei",sans-serif;
     padding:2px;
     text-shadow:none;
     border-radius:0 0 5px 5px;
@@ -7410,7 +7410,7 @@ to {
     text-align:center;
     color:#888f96;
     background:#1d1f21;
-    font-family:'Source Code Pro',monospace,Helvetica,Tahoma,Arial,STXihei,"STHeiti Light","Microsoft YaHei",sans-serif;
+    font-family:'Consolas','Source Code Pro',monospace,Helvetica,Tahoma,Arial,STXihei,"STHeiti Light","Microsoft YaHei",sans-serif;
     vertical-align:top;
     position:absolute;
     left:0;
@@ -7447,10 +7447,10 @@ to {
     overflow:hidden
 }
 .chinese-font {
-    font-family:'Merriweather Sans',Helvetica,Tahoma,Arial,'PingFang SC','Hiragino Sans GB','Microsoft Yahei','WenQuanYi Micro Hei',sans-serif
+    font-family:'Microsoft YaHei UI','Merriweather Sans',Helvetica,Tahoma,Arial,'PingFang SC','Hiragino Sans GB','Microsoft Yahei','WenQuanYi Micro Hei',sans-serif
 }
 .chinese-tranditional-font {
-    font-family:Helvetica,Tahoma,Arial,"文泉驛正黑","WenQuanYi Zen Hei","儷黑 Pro","LiHei Pro","微軟正黑體","Microsoft JhengHei","標楷體",DFKai-SB,sans-serif
+    font-family:'Microsoft YaHei UI',Helvetica,Tahoma,Arial,"文泉驛正黑","WenQuanYi Zen Hei","儷黑 Pro","LiHei Pro","微軟正黑體","Microsoft JhengHei","標楷體",DFKai-SB,sans-serif
 }
 .japanese-font {
     font-family:游ゴシック体,'Yu Gothic',YuGothic,'ヒラギノ角ゴシック Pro','Hiragino Kaku Gothic Pro',メイリオ,Meiryo,Osaka,'ＭＳ Ｐゴシック','MS PGothic',sans-serif
@@ -7459,7 +7459,7 @@ to {
     font-family:'Noto Serif CJK SC','Noto Serif CJK',serif
 }
 .code-font {
-    font-family:'Source Code Pro',monospace
+    font-family:'Consolas','Source Code Pro',monospace
 }
 .Ubuntu-font {
     font-family:'Ubuntu',sans-serif
@@ -7789,7 +7789,7 @@ td.hljs-ln-numbers {
     text-align: center;
     color: #888f96;
     background: #1d1f21;
-    font-family: 'Source Code Pro',monospace,Helvetica,Tahoma,Arial,STXihei,"STHeiti Light","Microsoft YaHei",sans-serif;
+    font-family: 'Consolas','Source Code Pro',monospace,Helvetica,Tahoma,Arial,STXihei,"STHeiti Light","Microsoft YaHei",sans-serif;
     vertical-align: top;
     left: 0;
     width: 30px;
