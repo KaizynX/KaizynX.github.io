@@ -46,7 +46,7 @@ menus:
   大佬链: { path: /links/, fa: fa-link faa-shake }
   赞赏: { path: /donate/, fa: fa-heart faa-pulse }
   关于: { path: /, fa: fa-leaf faa-wrench , submenus: { 
-    不是我: {path: /about/, fa: fa-meetup}, 
+    我?: {path: /about/, fa: fa-meetup}, 
     主题: {path: https://github.com/honjun/hexo-theme-sakura, fa: iconfont icon-sakura },
     # Lab: {path: /lab/, fa: fa-cogs },
   } }
