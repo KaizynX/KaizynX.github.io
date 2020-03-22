@@ -44,6 +44,8 @@ $ https://cdn.jsdelivr.net/gh/Fofade/cnblogsThemes/live2dw/assets/z16.model.json
 
 这篇也不错的 [博客链接](https://blog.csdn.net/u011759205/article/details/104839472)
 
+作者的 [bilibili](https://www.bilibili.com/video/av43856893)
+
 ## 切换背景
 
 第一次尝试上面博客提供的切换背景方法失败
@@ -186,6 +188,52 @@ highlight:
 *2020-03-21*
 
 修改文件 `\themes\Sakura\source\js\botui.js`
+
+## 图片放大
+
+*2020-03-21*
+
+在 `.md` 插入图片时使用如下代码
+
+```
+<img src="" data-action="zoom">
+```
+
+效果演示
+
+<img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/Sakura_setting/sakura.png" data-action="zoom">
+
+## 内容折叠
+
+*2020-03-22*
+
+[参考博客](https://www.faker.top/2020/02/14/Hexo/h6-折叠文字/)
+
+找这个教程也是把我气的，一搜索全是 next 的教程
+
+<details>
+  <summary>HTML语法测试</summary>
+
+代码渲染失败
+
+```cpp
+int main() {
+    return 0;
+}
+```
+
+</details>
+
+{% spoiler "插件效果测试" %}
+[插件](https://github.com/fletchto99/hexo-sliding-spoiler)
+
+代码能渲染
+```cpp
+int main() {
+    return 0;
+}
+```
+{% endspoiler %}
 
 ## 最后
 

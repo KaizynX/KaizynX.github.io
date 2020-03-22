@@ -1495,6 +1495,36 @@ inline void GetExtend(char *s, char *ss, int *_ext, int *_nex)
     }
 }
 ```
+## 最长公共前后缀
+[hdu2594](http://acm.hdu.edu.cn/showproblem.php?pid=2594)
+### Hash
+```cpp
+string max_pre_suf(const string &s1, const string &s2)
+{
+    static const int M1 = 805306457, M2 = 1000173169, P = 31;
+    static pii pre[N], suf[N], pwp[N];
+    int l1 = s1.size(), l2 = s2.size();
+    pre[0] = {0, 0};
+    for (int i = 1; i <= l1; ++i) {
+        pre[i] = {static_cast<int>((1ll*pre[i-1].first*P+s1[i-1]-'a')%M1),
+                  static_cast<int>((1ll*pre[i-1].second*P+s1[i-1]-'a')%M2)};
+    }
+    pwp[0] = {1, 1};
+    for (int i = 1; i <= l2; ++i) {
+        pwp[i] = {static_cast<int>(1ll*pwp[i-1].first*P%M1),
+                  static_cast<int>(1ll*pwp[i-1].second*P%M2)};
+    }
+    suf[l2+1] = {0, 0}; 
+    for (int i = l2; i; --i) {
+        suf[i] = {static_cast<int>((1ll*(s2[i-1]-'a')*pwp[l2-i].first+suf[i+1].first)%M1),
+                  static_cast<int>((1ll*(s2[i-1]-'a')*pwp[l2-i].second+suf[i+1].second)%M2)};
+    }
+    for (int i = min(l1, l2); i; --i)
+        if (pre[i] == suf[l2-i+1]) return s1.substr(0, i);
+    return "";
+}
+```
+---
 ## BM算法
 ## Sunday算法
 ## [字符串哈希](https://www.luogu.org/problemnew/show/P3370)
@@ -1831,8 +1861,11 @@ struct ShuPou
 };
 ```
 ---
-## [网络流](https://www.luogu.org/problemnew/show/P3376)
-### EK
+## 网络流
+[网络流24题](https://loj.ac/problems/tag/30)
+### [最大流](https://www.luogu.org/problemnew/show/P3376)
+#### EK
+$O(nm^2)$
 ```cpp
 template <typename T>
 struct EK
@@ -1852,7 +1885,7 @@ struct EK
             while (u != s) {
                 id = pre[u];
                 e[id].w -= incf[t];
-                e[id^1].w -= incf[t];
+                e[id^1].w += incf[t];
                 u = e[id^1].v;
             }
             res += incf[t];
@@ -1891,7 +1924,9 @@ struct EK
     }
 };
 ```
-### Dinic
+#### Dinic
+普通情况下 $O(n^2m)$
+二分图中 $O(\sqrt{n}m)$
 ```cpp
 template <typename T>
 struct Dinic
@@ -1957,7 +1992,8 @@ struct Dinic
     }
 };
 ```
-### [ISAP](https://www.luogu.com.cn/blog/ONE-PIECE/jiu-ji-di-zui-tai-liu-suan-fa-isap-yu-hlpp)
+#### [ISAP](https://www.luogu.com.cn/blog/ONE-PIECE/jiu-ji-di-zui-tai-liu-suan-fa-isap-yu-hlpp)
+渐进时间复杂度和dinic相同，但是非二分图的情况下isap更具优势
 ```cpp
 template <typename T>
 struct ISAP
@@ -2028,6 +2064,234 @@ struct ISAP
     }
 };
 ```
+vector存边版本
+```cpp
+template <typename T>
+struct ISAP
+{
+    struct EDGE
+    {
+        int v, nex;
+        T w;
+        EDGE(const int &_v, const int &_nex, const T &_w) : v(_v), nex(_nex), w(_w) {}
+    };
+    vector<EDGE> e;
+    int n, s, t;
+    T maxflow;
+    int fir[N], gap[N], dep[N];
+    T work(const int &_s, const int &_t) {
+        s = _s; t = _t;
+        maxflow = 0;
+        bfs();
+        while (dep[s] < n) dfs(s, INF);
+        return maxflow;
+    }
+    void init(const int &_n) {
+        n = _n;
+        e.clear();
+        e.reserve(N<<2);
+        memset(fir, -1, sizeof(int)*(n+3));
+    }
+    void add_edge(const int &u, const int &v, const T &w) {
+        e.emplace_back(v, fir[u], w); fir[u] = e.size()-1;
+        e.emplace_back(u, fir[v], 0); fir[v] = e.size()-1;
+    }
+    void bfs() {
+        queue<int> q;
+        memset(dep, -1, sizeof(int)*(n+3));
+        memset(gap, 0, sizeof(int)*(n+3));
+        dep[t] = 0;
+        gap[0] = 1;
+        q.push(t);
+        while (q.size()) {
+            int u = q.front();
+            q.pop();
+            for (int i = fir[u], v; i != -1; i = e[i].nex) {
+                v = e[i].v;
+                if (dep[v] != -1) continue;
+                q.push(v);
+                dep[v] = dep[u]+1;
+                ++gap[dep[v]];
+            }
+        }
+    }
+    T dfs(const int &u, const T &flow) {
+        if (u == t) {
+            maxflow += flow;
+            return flow;
+        }
+        T used = 0;
+        for (int i = fir[u], v; i != -1; i = e[i].nex) {
+            v = e[i].v;
+            if (!e[i].w || dep[v]+1 != dep[u]) continue;
+            T minf = dfs(v, min(e[i].w, flow-used));
+            if (minf) {
+                e[i].w -= minf;
+                e[i^1].w += minf;
+                used += minf;
+            }
+            if (used == flow) return used;
+        }
+        if (--gap[dep[u]] == 0) dep[s] = n+1;
+        ++gap[++dep[u]];
+        return used;
+    }
+};
+ISAP<int> isap;
+```
+#### HLPP
+### 最小割
+最小割等价最大流
+### 费用流
+最大流 dfs 改成最短路 
+#### MCMF
+大常数?
+```cpp
+template <typename T>
+struct MCMF
+{
+    struct Edge
+    {
+        int v, nex;
+        T w, c; // edge wight and cost
+        Edge(const int &_v, const int &_nex, const T &_w, const T &_c) \
+        : v(_v), nex(_nex), w(_w), c(_c) {}
+    };
+    vector<Edge> e;
+    int n, s, t;
+    int fir[N], vis[N], pre[N];
+    T incf[N], dis[N];
+    void init(const int &_n) {
+        n = _n;
+        e.clear();
+        e.reserve(N<<4);
+        memset(fir, -1, sizeof(int)*(n+3));
+    }
+    void add_edge(const int &u, const int &v, const T &w, const T &c) {
+        e.emplace_back(v, fir[u], w, c); fir[u] = e.size()-1;
+        e.emplace_back(u, fir[v], 0, -c); fir[v] = e.size()-1;
+    }
+    pair<T, T> work(const int &_s, const int &_t) {
+        s = _s; t = _t;
+        T maxflow = 0, mincost = 0;
+        while (spfa()) {
+            for (int u = t, id; u != s; u = e[id^1].v) {
+                id = pre[u];
+                e[id].w -= incf[t];
+                e[id^1].w += incf[t];
+                mincost += incf[t]*e[id].c;
+            }
+            maxflow += incf[t];
+        }
+        return {maxflow, mincost};
+    }
+    bool spfa() {
+        queue<int> q;
+        memset(dis, 0x3f, sizeof(T)*(n+3));
+        memset(vis, 0, sizeof(int)*(n+3));
+        q.push(s);
+        dis[s] = 0;
+        incf[s] = INF;
+        incf[t] = 0;
+        while (q.size()) {
+            int u = q.front();
+            q.pop();
+            vis[u] = 0;
+            for (int i = fir[u], v; i != -1; i = e[i].nex) {
+                v = e[i].v;
+                if (!e[i].w || dis[v] <= dis[u]+e[i].c) continue;
+                dis[v] = dis[u]+e[i].c;
+                incf[v] = min(incf[u], e[i].w);
+                pre[v] = i;
+                if (vis[v]) continue;
+                q.push(v);
+                vis[v] = 1;
+            }
+        }
+        return incf[t];
+    }
+};
+```
+#### 类Dinic
+```cpp
+template <typename T>
+struct Dinic
+{
+    struct Edge
+    {
+        int v, nex;
+        T w, c; // edge wight and cost
+        Edge(const int &_v, const int &_nex, const T &_w, const T &_c) \
+        : v(_v), nex(_nex), w(_w), c(_c) {}
+    };
+    vector<Edge> e;
+    int n, s, t;
+    int fir[N], vis[N];
+    T maxflow, mincost;
+    T dis[N];
+    void init(const int &_n) {
+        n = _n;
+        e.clear();
+        e.reserve(N<<4);
+        maxflow = mincost = 0;
+        memset(vis, 0, sizeof(int)*(n+3));
+        memset(fir, -1, sizeof(int)*(n+3));
+    }
+    void add_edge(const int &u, const int &v, const T &w, const T &c) {
+        e.emplace_back(v, fir[u], w, c); fir[u] = e.size()-1;
+        e.emplace_back(u, fir[v], 0, -c); fir[v] = e.size()-1;
+    }
+    pair<T, T> work(const int &_s, const int &_t) {
+        s = _s; t = _t;
+        T flow;
+        while (spfa())
+            while ((flow = dfs(s, INF)))
+                maxflow += flow;
+        return {maxflow, mincost};
+    }
+    bool spfa() {
+        queue<int> q;
+        memset(dis, 0x3f, sizeof(int)*(n+3));
+        q.push(s);
+        dis[s] = 0;
+        vis[s] = 1;
+        while (q.size()) {
+            int u = q.front();
+            q.pop();
+            vis[u] = 0;
+            for (int i = fir[u], v; i != -1; i = e[i].nex) {
+                v = e[i].v;
+                if (!e[i].w || dis[v] <= dis[u]+e[i].c) continue;
+                dis[v] = dis[u]+e[i].c;
+                if (vis[v]) continue;
+                q.push(v);
+                vis[v] = 1;
+            }
+        }
+        return dis[t] != INF;
+    }
+    T dfs(const int &u, const T &flow) {
+        if (!flow || u == t) return flow;
+        T res = 0 , now;
+        vis[u] = 1;
+        for (int i = fir[u], v; i != -1 && res < flow; i = e[i].nex) {
+            v = e[i].v;
+            if (vis[v] || !e[i].w || dis[v] != dis[u]+e[i].c) continue;
+            now = dfs(v, min(flow-res, e[i].w));
+            if (!now) continue;
+            mincost += now*e[i].c;
+            e[i].w -= now;
+            e[i^1].w += now;
+            res += now;
+        }
+        vis[u] = 0;
+        return res;
+    }
+};
+```
+#### Dijkstra
+Primal-Dual 原始对偶算法
+### 上下界网络流
 ---
 ## 最短路
 [弱化](https://www.luogu.org/problemnew/show/P3371)
@@ -2776,6 +3040,10 @@ inline long long EXCRT(long long a[], long long m[])
 }
 
 ```
+---
+## 排列组合
+### [奇偶性](https://blog.csdn.net/baodream/article/details/77822072)
+C(n,k) 当 `n&k == k` 为奇数反之偶数
 ---
 ## 欧拉函数
 ```cpp
