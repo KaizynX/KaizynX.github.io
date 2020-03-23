@@ -16,7 +16,22 @@
         <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
         <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
       </div>
-      <p style="color: #666666;">&copy 2018</p>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span><script>
+        var now = new Date();
+        function createtime() {
+          var grt= new Date("08/24/2018 00:00:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+          document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+          document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+        setInterval("createtime()",250);</script>
+
     </div>
     <div class="footer-device">
     <p style="font-family: 'Ubuntu', sans-serif;">
@@ -24,6 +39,49 @@
         </span>
       </p>
     </div>
+    <div id="binft"></div>
+      <script>
+        var binft = function (r) {
+          function t() {
+            return b[Math.floor(Math.random() * b.length)]
+          }
+          function e() {
+            return String.fromCharCode(94 * Math.random() + 33)
+          }
+          function n(r) {
+            for (var n = document.createDocumentFragment(), i = 0; r > i; i++) {
+              var l = document.createElement("span");
+              l.textContent = e(), l.style.color = t(), n.appendChild(l)
+            }
+            return n
+          }
+          function i() {
+            var t = o[c.skillI];
+            c.step ? c.step-- : (c.step = g, c.prefixP < l.length ? (c.prefixP >= 0 && (c.text += l[c.prefixP]), c.prefixP++) : "forward" === c.direction ? c.skillP < t.length ? (c.text += t[c.skillP], c.skillP++) : c.delay ? c.delay-- : (c.direction = "backward", c.delay = a) : c.skillP > 0 ? (c.text = c.text.slice(0, -1), c.skillP--) : (c.skillI = (c.skillI + 1) % o.length, c.direction = "forward")), r.textContent = c.text, r.appendChild(n(c.prefixP < l.length ? Math.min(s, s + c.prefixP) : Math.min(s, t.length - c.skillP))), setTimeout(i, d)
+          }
+          var l = "",
+          o = ["滚动字幕1","滚动字幕233"].map(function (r) {
+          return r + ""
+          }),
+          a = 2,
+          g = 1,
+          s = 5,
+          d = 75,
+          b = ["rgb(110,64,170)", "rgb(150,61,179)", "rgb(191,60,175)", "rgb(228,65,157)", "rgb(254,75,131)", "rgb(255,94,99)", "rgb(255,120,71)", "rgb(251,150,51)", "rgb(226,183,47)", "rgb(198,214,60)", "rgb(175,240,91)", "rgb(127,246,88)", "rgb(82,246,103)", "rgb(48,239,130)", "rgb(29,223,163)", "rgb(26,199,194)", "rgb(35,171,216)", "rgb(54,140,225)", "rgb(76,110,219)", "rgb(96,84,200)"],
+          c = {
+            text: "",
+            prefixP: -s,
+            skillI: 0,
+            skillP: 0,
+            direction: "forward",
+            delay: a,
+            step: g
+          };
+          i()
+          };
+          binft(document.getElementById('binft'));
+      </script>
+
   </div><!-- .site-info -->
   
 
@@ -43,12 +101,12 @@
 <script src="/js/botui.js"></script>
 <!--浏览器搞笑标题-->
 <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script>
-<center>
-  <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/footer/skirt.webp">
-</center>
 <!-- 不蒜子 网页计数器 -->
 <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<center>
+  <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/footer/skirt.webp">
+</center>
 <script type="text/javascript">
 /* <![CDATA[ */
 if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {

@@ -32,10 +32,8 @@ menus:
     # 随想: {path: /categories/随想/, fa: fa-commenting-o },
     # 转载: {path: /categories/转载/, fa: fa-book }
   # } }
-  目录: { path: /categories, fa: fa-list-ul faa-vertical, submenus: { 
-    技术: {path: /categories/技术/, fa: fa-code } 
-  } }
-  标签: { path: /tags, fa: fa-tags }
+  目录: { path: /categories, fa: fa-list-ul faa-vertical }
+  标签: { path: /tags, fa: fa-tags faa-bounce }
   # 清单: { path: javascript:;, fa: fa-list-ul faa-vertical, submenus: { 
     # 书单: {path: /tags/悦读/, fa: fa-th-list faa-bounce }, 
     # 番组: {path: /bangumi/, fa: fa-film faa-vertical }, 
@@ -51,7 +49,7 @@ menus:
     # Lab: {path: /lab/, fa: fa-cogs },
   } }
   # 客户端: { path: /client/, fa: fa-android faa-vertical }
-  RSS: { path: /atom.xml, fa: fa-rss faa-pulse }
+  # RSS: { path: /atom.xml, fa: fa-rss faa-pulse }
 
 
 # Home page sort type: -1: newer first，1: older first.
