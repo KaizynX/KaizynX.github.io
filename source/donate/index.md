@@ -1,6 +1,7 @@
 ---
 layout: donate
 title: donate
+author: Kaizyn
 date: 2018-12-20 23:13:05
 keywords: 谢谢饲主了喵~
 description: 

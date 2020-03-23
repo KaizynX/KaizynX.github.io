@@ -1,3 +1,22 @@
+<style type="text/css">
+  #contentss {
+  position: relative;
+  width: auto;
+  height: auto;
+  max-height: 1200px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  text-align: center;
+  border: 0;
+  border-radius: 10px;
+  color: rgba(0, 0, 0, .87);
+  background: #fff 50%;
+  background-size: cover;
+  box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07);
+  margin:0 auto;
+  }
+</style>
+
 <div class="blank" style="padding-top: 75px;">
 </div>
 <div id="content" class="site-content">
@@ -14,6 +33,9 @@
       <article class="art">
         <div class="art-main">
           <div class="art-content">
+            <div id="contentss">
+              <%- partial('_widget/post-calendar') %>
+            </div>
             <div id="archives">
               <p style="text-align:right;">
                 [<span id="al_expand_collapse" style="cursor: s-resize;">

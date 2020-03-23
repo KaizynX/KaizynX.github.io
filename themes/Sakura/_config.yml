@@ -9,7 +9,7 @@ avatar: /img/custom/avatar.gif
 # 站点url
 url: https://kaizynx.github.io/
 # 站点介绍(个人签名)
-description: A Rubbish's Blog
+description: 一只菜鸡的博客
 # 站点cdn
 cdn: https://cdn.jsdelivr.net/gh/KaizynX/cdn
 pjax: 1
@@ -17,29 +17,17 @@ pjax: 1
 mathjax: 1
 
 # 站点首页的公告信息
-notice: 博客完善中..
+notice: 2020-03-23 博客基本完善
 # 懒加载的加载中图片
 lazyloadImg: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif
 
 # 图标来自：https://fontawesome.com/icons
 menus:
-  首页: { path: /, fa: fa-fort-awesome faa-shake }
-  归档: { path: /archives, fa: fa-archive faa-shake}
-  # 归档: { path: /archives, fa: fa-archive faa-shake, submenus: { 
-    # 技术: {path: /categories/技术/, fa: fa-code }, 
-    # 生活: {path: /categories/生活/, fa: fa-file-text-o }, 
-    # 资源: {path: /categories/资源/, fa: fa-cloud-download }, 
-    # 随想: {path: /categories/随想/, fa: fa-commenting-o },
-    # 转载: {path: /categories/转载/, fa: fa-book }
-  # } }
-  目录: { path: /categories, fa: fa-list-ul faa-vertical }
-  标签: { path: /tags, fa: fa-tags faa-bounce }
-  # 清单: { path: javascript:;, fa: fa-list-ul faa-vertical, submenus: { 
-    # 书单: {path: /tags/悦读/, fa: fa-th-list faa-bounce }, 
-    # 番组: {path: /bangumi/, fa: fa-film faa-vertical }, 
-    # 歌单: {path: /music/, fa: fa-headphones },
-    # 图集: {path: /tags/图集/, fa: fa-photo }
-  # } }
+  首页: { path: /, fa: fa-fort-awesome fa-headphones }
+  归档: { path: /archives, fa: fa-archive faa-shake, submenus: { 
+    分类: { path: /categories, fa: fa-list-ul faa-vertical },
+    标签: { path: /tags, fa: fa-tags faa-bounce }
+  } }
   留言板: { path: /comment/, fa: fa-pencil-square-o faa-tada }
   大佬链: { path: /links/, fa: fa-link faa-shake }
   赞赏: { path: /donate/, fa: fa-heart faa-pulse }
@@ -79,7 +67,7 @@ startdash:
 
 
 # your site build time or founded date
-siteBuildingTime: 9/24/2018
+siteBuildingTime: 8/24/2018
 
 #社交按钮social  url, img PC端配置
 social:

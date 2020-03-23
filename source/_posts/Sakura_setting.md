@@ -42,9 +42,11 @@ $ https://cdn.jsdelivr.net/gh/Fofade/cnblogsThemes/live2dw/assets/z16.model.json
 
 主要参考 [博客链接](https://yremp.live/hexo-sakura/)
 
-这篇也不错的 [博客链接](https://blog.csdn.net/u011759205/article/details/104839472)
+这篇超好用 [博客链接](https://blog.csdn.net/u011759205/article/details/104839472)
 
 作者的 [bilibili](https://www.bilibili.com/video/av43856893)
+
+某个使用该主题的大佬，很喜欢他的博客[博客链接](https://cndrew.cn/)
 
 ## 切换背景
 
@@ -125,7 +127,7 @@ $ https://cdn.jsdelivr.net/gh/Fofade/cnblogsThemes/live2dw/assets/z16.model.json
 
 在一堆 `<script type="",url="">` 之间(其实我不清楚插哪不可以反正这里可以)插入 
 
-```
+```html
 <center>
   <img src="">
 </center>
@@ -234,6 +236,34 @@ int main() {
 }
 ```
 {% endspoiler %}
+
+## 仿Github文章日历
+
+*2020-03-23*
+
+[博客链接](https://cndrew.cn/2020/03/03/calender/)
+
+**另注** 博客末尾中给出的style并不完美(长度宽度设置)，这里提供此博客版本
+```html
+<style type="text/css">
+  #contentss {
+  position: relative;
+  width: 80%;
+  height: auto;
+  max-height: 1200px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  text-align: center;
+  border: 0;
+  border-radius: 10px;
+  color: rgba(0, 0, 0, .87);
+  background: #fff 50%;
+  background-size: cover;
+  box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07);
+  margin:0 auto;
+  }
+</style>
+```
 
 ## 最后
 
