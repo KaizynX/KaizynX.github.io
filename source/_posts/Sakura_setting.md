@@ -58,7 +58,7 @@ $ https://cdn.jsdelivr.net/gh/Fofade/cnblogsThemes/live2dw/assets/z16.model.json
 
 在 `</footer>` 前添加如下代码
 
-```
+```html
   <!--壁纸切换-->
   <div class="skin-menu no-select" id="mainskin"  style="position: fixed">
     <div class="theme-controls row-container">
@@ -95,7 +95,7 @@ $ https://cdn.jsdelivr.net/gh/Fofade/cnblogsThemes/live2dw/assets/z16.model.json
 
 修改文件  `\themes\Sakura\layout\_partial\footer.ejs`
 
-```
+```html
 	<!--浏览器搞笑标题-->
 	<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script>
 	<!-- 🌸飘落 -->
@@ -264,6 +264,91 @@ int main() {
   }
 </style>
 ```
+
+## 随机图片
+
+*2020-03-24*
+
+[网址1](https://random.52ecy.cn/)
+
+[网址2](https://api.ixiaowai.cn/)
+
+mark,测试无法作为 post 的 photos
+
+修改`\themes\Sakura\layout\_widget\common-article.ejs`
+
+```html
+<% if (post.photos && post.photos.length){ %>
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(<%= post.photos[0] %>);" src="<%- theme.lazyloadImg%>" data-src="<%= post.photos[0] %>">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      <%- post.title %></h1>
+      <p class="entry-census">
+        <span>
+          <a href="<%- post.authorLink%>">
+            <img src="<%- post.avatar%>">
+          </a>
+        </span>
+        <span>
+          <a href="<%- post.authorLink%>"><%- post.author %></a>
+        </span>
+        <span class="bull">
+        ·</span>
+        <%= date(post.date, 'YYYY-M-D') %><span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+<% } %>
+```
+
+修改为
+
+```html
+<!-- 有配图默认渲染第一张 -->
+  <% if (post.photos && post.photos.length){ %>
+  <div class="pattern-attachment-img lazyload" style="background-image: url(<%= post.photos[0] %>);" src="<%- theme.lazyloadImg%>" data-src="<%= post.photos[0] %>">
+  </div>
+  <% } else { %>
+  <div class="pattern-attachment-img lazyload" style="background-image: url(https://random.52ecy.cn/randbg.php);" src="<%- theme.lazyloadImg%>" data-src="https://random.52ecy.cn/randbg.php">
+  </div>
+  <% } %>
+  <header class="pattern-header single-header">
+    <h1 class="entry-title">
+    <%- post.title %></h1>
+    <p class="entry-census">
+        <span>
+          <a href="<%- post.authorLink || 'https://kaizynx.github.io/' %>">
+            <img src="<%- post.avatar || 'https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg' %>">
+          </a>
+        </span>
+        <span>
+          <a href="<%- post.authorLink || 'https://kaizynx.github.io/' %>"><%- post.author || 'Kaizyn' %></a>
+        </span>
+        <span class="bull">
+        ·</span>
+        <%= date(post.date, 'YYYY-M-D') %><span class="bull">
+        ·</span>
+    <span id="busuanzi_value_page_pv"></span>次阅读</p>
+  </header>
+</div>
+```
+
+修改 `\themes\Sakura\layout\_widget\index-items.ejs`
+
+大概第六行
+```html
+      <img class="lazyload" onerror="imgError(this,3)" src="<%- theme.lazyloadImg%>" data-src="<%= post.photos[0] || 'https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/image-404.png' %>">
+```
+
+```html
+      <img class="lazyload" onerror="imgError(this,3)" src="<%- theme.lazyloadImg%>" data-src="<%= post.photos[0] || 'https://random.52ecy.cn/randbg.php' %>">
+```
+
+但是这么改糟糕的就是可能很多图是一样的,暂时没找到解决方法呢。。不过也总比404强了吧
 
 ## 最后
 

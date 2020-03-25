@@ -870,7 +870,7 @@ struct SegmentTree
     T tr[N<<2], lazy[N<<2], init_val = cmp(0, 1) ? INF : -INF;
     SegmentTree(){}
     T mv(const T &x, const T &y) { return cmp(x, y) ? x : y;}
-    void build(const int &_n) { n = _n; _build(1, n); }
+    void build(const int &_n, const T &k = 0) { n = _n; _build(1, n, k); }
     template <typename TT>
     void build(const TT a[], const int &_n) { n = _n; _build(a, 1, n); }
     void modify(const int &x, const T &k) { _modify(x, k, 1, n); }
@@ -880,15 +880,6 @@ struct SegmentTree
     T query(const int &l, const int &r) { return _query(l, r, 1, n); }
 private :
     void push_up(const int &i) { tr[i] = mv(tr[i<<1], tr[i<<1|1]); }
-    /*
-    void push_down(const int &i) {
-        tr[i<<1] = mv(tr[i<<1], lazy[i]);
-        tr[i<<1|1] = mv(tr[i<<1|1], lazy[i]);
-        lazy[i<<1] = mv(lazy[i<<1], lazy[i]);
-        lazy[i<<1|1] = mv(lazy[i<<1|1], lazy[i]);
-        lazy[i] = init_val;
-    }
-    */
     void push_down(const int &i) {
         if (!lazy[i]) return;
         tr[i<<1] += lazy[i];
@@ -897,9 +888,9 @@ private :
         lazy[i<<1|1] += lazy[i];
         lazy[i] = 0;
     }
-    void _build(const int &l, const int &r, const int &i = 1) {
+    void _build(const int &l, const int &r, const T &k = 0, const int &i = 1) {
         lazy[i] = 0;
-        if (l == r) { tr[i] = 0; return; }
+        if (l == r) { tr[i] = k; return; }
         int mid = (l+r)>>1;
         _build(l, mid, i<<1);
         _build(mid+1, r, i<<1|1);
@@ -947,7 +938,6 @@ private :
         return res;
     }
 };
-
 ```
 ## ZKW线段树
 `warning:区间最值尚为验证`
@@ -1038,7 +1028,9 @@ struct zkwSegmentTree
 ## 树状数组
 ### 一维
 [单点修改区间查询](https://www.luogu.org/problemnew/show/P3374)
+
 [区间修改单点查询](https://www.luogu.org/problemnew/show/P3368)
+
 ```cpp
 template <typename T>
 struct BinaryIndexedTree
@@ -1053,6 +1045,18 @@ struct BinaryIndexedTree
     T query(const int &x) { T res = 0; for (int i = x ; i; i -= i&-i) res += tr[i]; return res; }
     T query(const int &x, const int &y) { return query(y)-query(x-1); }
 };
+```
+
+[O(n)初始化](http://codeforces.com/blog/entry/63064)
+```cpp
+template <typename TT>
+void init(const int &_n, const TT a[]) {
+    n = _n; clear();
+    for (int i = 1; i <= n; ++i) {
+        tr[i] += a[i];
+        if (i+(i&-i) <= n) tr[i+(i&-i)] += tr[i];
+    }
+}
 ```
 ### 二维
 #### 单点修改区间查询
@@ -3200,7 +3204,7 @@ f[i][j] = max{  f[i-1][j],
 ## 区间DP
 ## [树形DP](https://www.luogu.org/problemnew/show/P1352)
 ## 状压DP
-### 枚举子集
+### [枚举子集](https://cp-algorithms.com/algebra/all-submasks.html)
 ```cpp
 for (int i = s; i; i = (i-1)&s) {}
 ```
