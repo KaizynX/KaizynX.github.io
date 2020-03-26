@@ -892,8 +892,8 @@ private :
         lazy[i] = 0;
         if (l == r) { tr[i] = k; return; }
         int mid = (l+r)>>1;
-        _build(l, mid, i<<1);
-        _build(mid+1, r, i<<1|1);
+        _build(l, mid, k, i<<1);
+        _build(mid+1, r, k, i<<1|1);
         push_up(i);
     }
     template <typename TT>
@@ -935,6 +935,84 @@ private :
         T res = init_val;
         if (l <= mid) res = mv(res, _query(l, r, trl, mid, i<<1));
         if (r >  mid) res = mv(res, _query(l, r, mid+1, trr, i<<1|1));
+        return res;
+    }
+};
+```
+### 区间更新最值
+```cpp
+template <typename T, typename U = greater<T>>
+struct SegmentTree
+{
+    SegmentTree(){}
+    void build(const int &_n, const T &k = 0) { n = _n; _build(1, n, k); }
+    template <typename TT>
+    void buiil(const int _n, const TT a[]) { n = _n; _build(1, n, a); }
+    void modify(const int &x, const T &k) { _modify(x, k); }
+    void modify(const int &l, const int &r, const T &k) { _modify(l, r, k); }
+    void add(const int &x, const T &k) { _add(x, k); }
+    T query(const int &x) { return _query(x, x); }
+    T query(const int &l, const int &r) { return _query(l, r); }
+private:
+    struct TreeNode
+    {
+        int l, r;
+        T v, lazy;
+    } tr[N<<2];
+    int n;
+    T init_val = cmp(0, 1) ? INF : -INF;
+    U cmp = U();
+    T mv(const T &x, const T &y) { return cmp(x, y) ? x : y;}
+    void update(const int &i, const T &k) { tr[i].v = mv(tr[i].v, k); tr[i].lazy = mv(tr[i].lazy, k); }
+    void push_up(const int &i) { tr[i].v = mv(tr[i<<1].v, tr[i<<1|1].v); }
+    void push_down(const int &i) {
+        if (tr[i].lazy == init_val) return;
+        update(i<<1, tr[i].lazy);
+        update(i<<1|1, tr[i].lazy);
+        tr[i].lazy = init_val;
+    }
+    void _build(const int &l, const int &r, const T &k = 0, const int &i = 1) {
+        tr[i].lazy = init_val;
+        tr[i].l = l; tr[i].r = r;
+        if (l == r) { tr[i].v = k; return; }
+        int mid = (l+r)>>1;
+        _build(l, mid, k, i<<1);
+        _build(mid+1, r, k, i<<1|1);
+        push_up(i);
+    }
+    template <typename TT>
+    void _build(const int &l, const int &r, const TT a[], const int &i = 1) {
+        tr[i].lazy = init_val;
+        tr[i].l = l; tr[i].r = r;
+        if (l == r) { tr[i].v = a[l]; return; }
+        int mid = (l+r)>>1;
+        _build(l, mid, a, i<<1);
+        _build(mid+1, r, a, i<<1|1);
+        push_up(i);
+    }
+    void _modify(const int &l, const int &r, const T &k, const int &i = 1) {
+        if (tr[i].l  >= l && tr[i].r <= r) { update(i, k); return; }
+        push_down(i);
+        int mid = (tr[i].l+tr[i].r)>>1;
+        if (l <= mid) _modify(l, r, k, i<<1);
+        if (r >  mid) _modify(l, r, k, i<<1|1);
+        push_up(i);
+    }
+    void _add(const int &x, const T &k, const int &i = 1) {
+        if (tr[i].l == x && tr[i].r == x) { tr[i].v += k; return; }
+        push_down(i);
+        int mid = (tr[i].l+tr[i].r)>>1;
+        if (x <= mid) _add(x, k, i<<1);
+        else _add(x, k, i<<1|1);
+        push_up(i);
+    }
+    T _query(const int &l, const int &r, const int &i = 1) {
+        if (tr[i].l  >= l && tr[i].r <= r) return tr[i].v;
+        push_down(i);
+        int mid = (tr[i].l+tr[i].r)>>1;
+        T res = init_val;
+        if (l <= mid) res = mv(res, _query(l, r, i<<1));
+        if (r >  mid) res = mv(res, _query(l, r, i<<1|1));
         return res;
     }
 };
@@ -1941,7 +2019,7 @@ struct Dinic
         T w;
     } e[M<<1];
     int tot, n;
-    int fir[N], vis[N], dep[N];
+    int fir[N], dep[N];
     T work(const int &s, const int &t) {
         T maxflow = 0, flow;
         while (bfs(s, t))
@@ -2141,7 +2219,6 @@ struct ISAP
         return used;
     }
 };
-ISAP<int> isap;
 ```
 #### HLPP
 ### 最小割
