@@ -62,8 +62,9 @@ links:
     #   img: http://q2.qlogo.cn/headimg_dl?dst_uin=&spec=100
     #   name: 
     #   desc: 老师%%%%
-- group: 蒟蒻
+  - group: 蒟蒻
     desc: "踩踩踩"
+    items:
     - url: https://kaizynx.github.io/
       img: http://q2.qlogo.cn/headimg_dl?dst_uin=2291443901&spec=100
       name: Kaizyn
