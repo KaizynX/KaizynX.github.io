@@ -273,7 +273,11 @@ int main() {
 
 [网址2](https://api.ixiaowai.cn/)
 
-mark,测试无法作为 post 的 photos
+经测试应该可以直接作为 post 的 photos
+
+不过鉴于我的博客是由之前的博客换主题而来的，之前的文章都没有封面
+
+一个一个写岂不是太麻烦了？一劳永逸不香吗
 
 修改`\themes\Sakura\layout\_widget\common-article.ejs`
 

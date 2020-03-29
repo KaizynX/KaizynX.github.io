@@ -14,13 +14,16 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/template/cover.jpg
 ---
 
 # 前言
+{% spoiler "代码" %}
 ```cpp
 while (true) ++++++ ++++++ ++++++ RP;
 ```
+{% endspoiler %}
 <!--more-->
 ---
 # 杂项
 ## 快读快写
+{% spoiler "代码" %}
 ```cpp
 template <typename T> inline void read(T &x)
 {
@@ -38,10 +41,14 @@ template <typename T> void write(T x)
     putchar(x%10+'0');
 }
 ```
+{% endspoiler %}
+{% spoiler "代码" %}
 ```cpp
 ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 ```
+{% endspoiler %}
 [巨佬模板](https://atcoder.jp/contests/hitachi2020/submissions/10676875)
+{% spoiler "代码" %}
 ```cpp
 struct Scanner {
     FILE* fp = nullptr;
@@ -179,8 +186,10 @@ struct Printer {
 Scanner sc = Scanner(stdin);
 Printer pr = Printer(stdout);
 ```
+{% endspoiler %}
 ---
 ## 正则表达式
+{% spoiler "代码" %}
 ```cpp
 char str[];
 scanf("%3s", str); // 读取长度为n的字符串
@@ -189,7 +198,9 @@ scanf("%[a-z0-9]", str); // 同上,读取小写字母和数字
 scanf("%*[a-z]%s", str); // 过滤掉小写字母读取
 scanf("%[^a-z]", str); // 读取小写字符外字符,^表示非 
 ```
+{% endspoiler %}
 ## 随机数
+{% spoiler "代码" %}
 ```cpp
 #include <random>
 // 范围 unsigned int
@@ -197,21 +208,27 @@ mt19937 rnd(time(NULL));
 mt19937 rnd(chrono::high_resolution_clock::now().time_since_epoch().count());
 cout << rnd() << endl;
 ```
+{% endspoiler %}
+{% spoiler "代码" %}
 ```cpp
 std::random_device rd;  //获取随机数种子
 std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 std::uniform_int_distribution<> dis(0, 9);
 std::cout << dis(gen) << endl;
 ```
+{% endspoiler %}
 ---
 ## 计算log2
+{% spoiler "代码" %}
 ```cpp
 // lg2[i] = lg2(i) +1
 for(int i = 1; i <= n; ++i) lg2[i] = lg2[i>>1]+1;
 // lg2[i] = (int)log2(i)
 for(int i = 1; i <= n; ++i) lg2[i] = lg2[i>>1]+1;
 ```
+{% endspoiler %}
 ## 快速开根号|牛顿迭代法
+{% spoiler "代码" %}
 ```cpp
 double sqrt(const double &a)
 {
@@ -223,9 +240,11 @@ double sqrt(const double &a)
     return x;
 }
 ```
+{% endspoiler %}
 ---
 # 计算几何
 ## 向量 坐标 直线 圆 (结构体)
+{% spoiler "代码" %}
 ```cpp
 struct Point
 {
@@ -352,8 +371,10 @@ inline Circular get_cir(const Point &p1, const Point &p2, const Point &p3)
     return res;
 }
 ```
+{% endspoiler %}
 ---
 ## [二维凸包](https://www.luogu.com.cn/problem/P2742)
+{% spoiler "代码" %}
 ```cpp
 int n;
 int stk[N], used[N], tp;
@@ -381,8 +402,10 @@ inline void Andrew()
     }
 }
 ```
+{% endspoiler %}
 ---
 ## [平面最近点对](https://www.luogu.com.cn/problem/P1429)
+{% spoiler "代码" %}
 ```cpp
 Point a[N];
 int n, ansa, ansb;
@@ -428,8 +451,10 @@ inline void mindist_pair()
     rec(1, n);
 }
 ```
+{% endspoiler %}
 ---
 ## [最小圆覆盖|随即增量法](https://www.luogu.com.cn/problem/P1742)
+{% spoiler "代码" %}
 ```cpp
 inline Circular RIA()
 {
@@ -450,9 +475,11 @@ inline Circular RIA()
     return cir;
 }
 ```
+{% endspoiler %}
 ---
 # 数据结构
 ## [堆](https://www.luogu.org/problemnew/show/P3378)
+{% spoiler "代码" %}
 ```cpp
 struct Heap
 {
@@ -486,7 +513,9 @@ struct Heap
     }
 };
 ```
+{% endspoiler %}
 ## 字典树
+{% spoiler "代码" %}
 ```cpp
 struct TireTree
 {
@@ -535,9 +564,11 @@ struct TireTree
     int count(const string &s) { return count(s.c_str()); }
 };
 ```
+{% endspoiler %}
 ## 二叉查找树
 ## [平衡树](https://www.luogu.org/problemnew/show/P3369)
 ### [Splay](https://www.luogu.org/blog/user19027/solution-p3369)
+{% spoiler "代码" %}
 ```cpp
 struct Splay
 {
@@ -632,7 +663,9 @@ struct Splay
     #undef root
 };
 ```
+{% endspoiler %}
 区间反转
+{% spoiler "代码" %}
 ```cpp
 struct Splay
 {
@@ -714,8 +747,10 @@ struct Splay
     }
 } tree;
 ```
+{% endspoiler %}
 ## [线段树](https://www.luogu.org/problemnew/show/P3372)
 ### 区间加减区间和
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct SegmentTree
@@ -793,7 +828,9 @@ private :
     }
 };
 ```
+{% endspoiler %}
 ### 区间修改区间和
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct SegmentTree
@@ -860,7 +897,9 @@ private :
     }
 };
 ```
+{% endspoiler %}
 ### 区间加减区间最值
+{% spoiler "代码" %}
 ```cpp
 template <typename T, typename U = greater<T>>
 struct SegmentTree
@@ -939,7 +978,9 @@ private :
     }
 };
 ```
+{% endspoiler %}
 ### 区间更新最值
+{% spoiler "代码" %}
 ```cpp
 template <typename T, typename U = greater<T>>
 struct SegmentTree
@@ -1017,8 +1058,10 @@ private:
     }
 };
 ```
+{% endspoiler %}
 ## ZKW线段树
 `warning:区间最值尚为验证`
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct zkwSegmentTree
@@ -1102,6 +1145,7 @@ struct zkwSegmentTree
     }
 };
 ```
+{% endspoiler %}
 ---
 ## 树状数组
 ### 一维
@@ -1109,6 +1153,7 @@ struct zkwSegmentTree
 
 [区间修改单点查询](https://www.luogu.org/problemnew/show/P3368)
 
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct BinaryIndexedTree
@@ -1124,8 +1169,10 @@ struct BinaryIndexedTree
     T query(const int &x, const int &y) { return query(y)-query(x-1); }
 };
 ```
+{% endspoiler %}
 
 [O(n)初始化](http://codeforces.com/blog/entry/63064)
+{% spoiler "代码" %}
 ```cpp
 template <typename TT>
 void init(const int &_n, const TT a[]) {
@@ -1136,8 +1183,10 @@ void init(const int &_n, const TT a[]) {
     }
 }
 ```
+{% endspoiler %}
 ### 二维
 #### 单点修改区间查询
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct BIT_2D
@@ -1174,7 +1223,9 @@ struct BIT_2D
     }
 };
 ```
+{% endspoiler %}
 ## [可持久化线段树(主席树)](https://www.luogu.com.cn/problem/P3834)
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct PersistenceSegmentTree
@@ -1228,8 +1279,10 @@ private:
     }
 };
 ```
+{% endspoiler %}
 ## [分块](http://hzwer.com/8053.html)
 [例题](https://loj.ac/problems/search?keyword=%E5%88%86%E5%9D%97)
+{% spoiler "代码" %}
 ```cpp
 struct FenKuai
 {
@@ -1270,6 +1323,8 @@ struct FenKuai
     }
 } B;
 ```
+{% endspoiler %}
+{% spoiler "代码" %}
 ```cpp
 struct FenKuai
 {
@@ -1316,6 +1371,8 @@ struct FenKuai
     }
 } B;
 ```
+{% endspoiler %}
+{% spoiler "代码" %}
 ```cpp
 struct FenKuai
 {
@@ -1369,8 +1426,10 @@ struct FenKuai
     }
 } B;
 ```
+{% endspoiler %}
 ## [ST表](https://www.luogu.org/problemnew/show/P3865)
 一维
+{% spoiler "代码" %}
 ```cpp
 template <typename T, typename U = std::greater<T>>
 struct ST
@@ -1399,7 +1458,9 @@ struct ST
 };
 ST<int, greater<int>> st;
 ```
+{% endspoiler %}
 二维
+{% spoiler "代码" %}
 ```cpp
 template <typename T, typename U = std::greater<T>>
 struct ST
@@ -1432,8 +1493,10 @@ struct ST
     }
 };
 ```
+{% endspoiler %}
 ---
 ## [并查集](https://www.luogu.org/problemnew/show/P3367)
+{% spoiler "代码" %}
 ```cpp
 struct DSU
 {
@@ -1448,7 +1511,9 @@ struct DSU
     }
 } dsu;
 ```
+{% endspoiler %}
 加上按秩合并
+{% spoiler "代码" %}
 ```cpp
 struct DSU
 {
@@ -1465,10 +1530,12 @@ struct DSU
     }
 } dsu;
 ```
+{% endspoiler %}
 ---
 # 字符串
 ## [回文字符串|manacher算法](https://www.luogu.org/problemnew/show/P3805)
 从 0 开始，第 i 位对应 p[i*2+2]
+{% spoiler "代码" %}
 ```cpp
 inline int manacher(const char *str, char *buf, int *p)
 {
@@ -1489,13 +1556,17 @@ inline int manacher(const char *str, char *buf, int *p)
     return ans;
 }
 ```
+{% endspoiler %}
 ### 判断s[l, r]是否为回文
+{% spoiler "代码" %}
 ```cpp
 p[l+r+2]-1 >= r-l+1
 ```
+{% endspoiler %}
 ---
 ## [KMP](https://www.luogu.org/problemnew/show/P3375)
 `.c_str() 未知异常 Segment Fault`
+{% spoiler "代码" %}
 ```cpp
 inline void get_next(const string &s, int nex[]) { get_next(s.c_str(), nex); }
 inline void get_next(const char *s, int nex[])
@@ -1520,6 +1591,8 @@ inline void kmp(const char *s1, const char *s2, int nex[])
     }
 }
 ```
+{% endspoiler %}
+{% spoiler "代码" %}
 ```cpp
 inline void get_next(const string &s, int nex[])
 {
@@ -1542,7 +1615,9 @@ inline void kmp(const string &s1, const string &s2, int nex[])
     }
 }
 ```
+{% endspoiler %}
 ## [扩展KMP|Z函数](https://subetter.com/algorithm/extended-kmp-algorithm.html)
+{% spoiler "代码" %}
 ```cpp
 inline void GetNext(char *s, int *_nex)
 {
@@ -1577,9 +1652,11 @@ inline void GetExtend(char *s, char *ss, int *_ext, int *_nex)
     }
 }
 ```
+{% endspoiler %}
 ## 最长公共前后缀
 [hdu2594](http://acm.hdu.edu.cn/showproblem.php?pid=2594)
 ### Hash
+{% spoiler "代码" %}
 ```cpp
 string max_pre_suf(const string &s1, const string &s2)
 {
@@ -1606,10 +1683,12 @@ string max_pre_suf(const string &s1, const string &s2)
     return "";
 }
 ```
+{% endspoiler %}
 ---
 ## BM算法
 ## Sunday算法
 ## [字符串哈希](https://www.luogu.org/problemnew/show/P3370)
+{% spoiler "代码" %}
 ```cpp
 inline unsigned long long _hash(const string &s)
 {
@@ -1619,10 +1698,12 @@ inline unsigned long long _hash(const string &s)
     return res;
 }
 ```
+{% endspoiler %}
 ---
 # 图论|树论
 ## [DFS树](https://codeforces.com/blog/entry/68138)
 ## [树的重心](https://www.luogu.org/problemnew/show/P2986)
+{% spoiler "代码" %}
 ```cpp
 void treedp(int cur, int fa)
 {
@@ -1637,8 +1718,10 @@ void treedp(int cur, int fa)
     maxs[cur] = max(maxs[cur], sum-s[cur]);
 }
 ```
+{% endspoiler %}
 ## 最大团
 最大独立集数=补图的最大团
+{% spoiler "代码" %}
 ```cpp
 struct MaxClique
 {
@@ -1672,8 +1755,10 @@ struct MaxClique
     }
 } MC;
 ```
+{% endspoiler %}
 ---
 ## 稳定婚姻匹配
+{% spoiler "代码" %}
 ```cpp
 template <typename T = int> struct Stable_Marriage
 {
@@ -1714,9 +1799,11 @@ template <typename T = int> struct Stable_Marriage
     }
 };
 ```
+{% endspoiler %}
 ---
 ## [最小生成树](https://www.luogu.org/problemnew/show/P3366)
 **[Prim](https://www.luogu.org/problemnew/show/P1265)**
+{% spoiler "代码" %}
 ```cpp
 inline void prim()
 {
@@ -1735,12 +1822,14 @@ inline void prim()
     }
 }
 ```
+{% endspoiler %}
 **Kruskal** (略)
 
 ---
 ## 二分图
 ### [二分图匹配](https://www.luogu.org/problemnew/show/P3386)
 **匈牙利算法**
+{% spoiler "代码" %}
 ```cpp
 bool check(int u)
 {
@@ -1766,6 +1855,7 @@ inline int solve()
     return res;
 }
 ```
+{% endspoiler %}
 ### 二分图最小顶点覆盖
 定义：假如选了一个点就相当于覆盖了以它为端点的所有边。最小顶点覆盖就是选择最少的点来覆盖所有的边。
 
@@ -1778,6 +1868,7 @@ inline int solve()
 
 ---
 ## [LCA](https://www.luogu.org/problemnew/show/P3379)
+{% spoiler "代码" %}
 ```cpp
 struct LCA
 {
@@ -1805,7 +1896,9 @@ struct LCA
     }
 };
 ```
+{% endspoiler %}
 [带权LCA](https://www.luogu.com.cn/problem/P1967)
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct LCA
@@ -1853,9 +1946,11 @@ struct LCA
     }
 };
 ```
+{% endspoiler %}
 ## 最小环 
 ---
 ## [树上差分](https://www.luogu.com.cn/problem/P3128)
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct Tree
@@ -1878,7 +1973,9 @@ struct Tree
     }
 };
 ```
+{% endspoiler %}
 ## [树链剖分](https://www.luogu.com.cn/problem/P3384)
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct ShuPou
@@ -1942,12 +2039,14 @@ struct ShuPou
     }
 };
 ```
+{% endspoiler %}
 ---
 ## 网络流
 [网络流24题](https://loj.ac/problems/tag/30)
 ### [最大流](https://www.luogu.org/problemnew/show/P3376)
 #### EK
 $O(nm^2)$
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct EK
@@ -2006,9 +2105,11 @@ struct EK
     }
 };
 ```
+{% endspoiler %}
 #### Dinic
 普通情况下 $O(n^2m)$
 二分图中 $O(\sqrt{n}m)$
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct Dinic
@@ -2074,8 +2175,10 @@ struct Dinic
     }
 };
 ```
+{% endspoiler %}
 #### [ISAP](https://www.luogu.com.cn/blog/ONE-PIECE/jiu-ji-di-zui-tai-liu-suan-fa-isap-yu-hlpp)
 渐进时间复杂度和dinic相同，但是非二分图的情况下isap更具优势
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct ISAP
@@ -2146,7 +2249,9 @@ struct ISAP
     }
 };
 ```
+{% endspoiler %}
 vector存边版本
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct ISAP
@@ -2220,6 +2325,7 @@ struct ISAP
     }
 };
 ```
+{% endspoiler %}
 #### HLPP
 ### 最小割
 最小割等价最大流
@@ -2227,6 +2333,7 @@ struct ISAP
 最大流 dfs 改成最短路 
 #### MCMF
 大常数?
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct MCMF
@@ -2293,7 +2400,9 @@ struct MCMF
     }
 };
 ```
+{% endspoiler %}
 #### 类Dinic
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct Dinic
@@ -2370,6 +2479,7 @@ struct Dinic
     }
 };
 ```
+{% endspoiler %}
 #### Dijkstra
 Primal-Dual 原始对偶算法
 ### 上下界网络流
@@ -2381,6 +2491,7 @@ Primal-Dual 原始对偶算法
 略
 ### Dijiskra
 邻接表+堆优化
+{% spoiler "代码" %}
 ```cpp
 inline void Dijiska()
 {
@@ -2404,7 +2515,9 @@ inline void Dijiska()
     }
 }
 ```
+{% endspoiler %}
 ### SPFA
+{% spoiler "代码" %}
 ```cpp
 inline void SPFA()
 {
@@ -2426,8 +2539,10 @@ inline void SPFA()
     }
 }
 ```
+{% endspoiler %}
 ---
 ## [负环](https://www.luogu.org/problemnew/show/P3385)
+{% spoiler "代码" %}
 ```cpp
 // 返回true有负环,返回false没负环
 inline bool SPFA()
@@ -2459,8 +2574,10 @@ inline bool SPFA()
     return false;
 }
 ```
+{% endspoiler %}
 ---
 ## [割点](https://www.luogu.org/problemnew/show/P3388)
+{% spoiler "代码" %}
 ```cpp
 void tarjan(int cur, int fa)
 {
@@ -2480,8 +2597,10 @@ void tarjan(int cur, int fa)
     if(cur == fa && child >= 2) flag[cur] = 1;
 }
 ```
+{% endspoiler %}
 ---
 ## [缩点](https://www.luogu.org/problemnew/show/P3387)
+{% spoiler "代码" %}
 ```cpp
 void tarjan(int u)
 {
@@ -2514,16 +2633,120 @@ inline void suodian()
     for (int i = 1; i <= n; ++i) {
         for (int j : e[i]) {
             if (col[i] == col[j]) continue;
-            // if (mp.count({col[i], col[j]})) continue;
-            // mp.insert({{col[i], col[j]}, 1});
             e_col[col[i]].push_back(col[j]);
         }
     }
 }
 ```
+{% endspoiler %}
+## [2-SAT](https://www.luogu.com.cn/problem/P4782)
+### SCC Tarjan
+$O(n+m)$
+从0开始
+{% spoiler "代码" %}
+```cpp
+struct TWO_SAT
+{
+    int top, _dfn, _col;
+    int dfn[N<<1], low[N<<1], vis[N<<1], sta[N<<1], col[N<<1], res[N];
+    vector<int> e[N<<1];
+    void init(const int &n) {
+        top = 0;
+        memset(dfn, 0, sizeof(int)*n*2);
+        memset(low, 0, sizeof(int)*n*2);
+        memset(vis, 0, sizeof(int)*n*2);
+        for (int i = 0; i < n<<1; ++i) vector<int>().swap(e[i]);
+    }
+    // if u then v
+    void add_edge(const int &u, const int &v) {
+        e[u].emplace_back(v);
+    }
+    void add_edge(const int &u, const int &uv, const int &v, const int &vv) {
+        e[u<<1^uv].emplace_back(v<<1^vv);
+    }
+    // pt i ==> i<<1 && i<<1|1 ==> 0 && 1
+    inline bool work(const int &n) {
+        for (int i = 0; i <= n<<1; ++i)
+            if (!dfn[i]) tarjan(i);
+        for (int i = 0; i < n; ++i) {
+            if (col[i<<1] == col[i<<1|1]) return false;
+            res[i] = col[i<<1] > col[i<<1|1];
+        }
+        return true;
+    }
+    void tarjan(const int &u) {
+        dfn[u] = low[u] = ++_dfn;
+        vis[u] = 1;
+        sta[++top] = u;
+        for (int &v : e[u]) {
+            if (!dfn[v]) {
+                tarjan(v);
+                low[u] = min(low[u], low[v]);
+            } else if (vis[v]) {
+                low[u] = min(low[u], low[v]);
+            }
+        }
+        if (dfn[u] == low[u]) {
+            ++_col;
+            do {
+                col[sta[top]] = _col;
+                vis[sta[top]] = 0;
+            } while (sta[top--] != u);
+        }
+    }
+};
+```
+{% endspoiler %}
+### DFS
+$O(nm)$
+所求结果字典序最小
+{% spoiler "代码" %}
+```cpp
+struct TWO_SAT
+{
+    int n, cnt;
+    int res[N], mem[N<<1], mark[N<<1];
+    vector<int> e[N<<1];
+    void init(const int &_n) {
+        n = _n;
+        memset(mark, 0, sizeof(int)*n*2);
+        for (int i = 0; i < n<<1; ++i) vector<int>().swap(e[i]);
+    }
+    // if u then v
+    void add_edge(const int &u, const int &v) {
+        e[u].emplace_back(v);
+    }
+    // pt i ==> i<<1 && i<<1|1 ==> 0 && 1
+    void add_edge(const int &u, const int &uv, const int &v, const int &vv) {
+        e[u<<1|uv].emplace_back(v<<1|vv);
+    }
+    // tag 0 any 1 smallest
+    bool work() {
+        for (int i = 0; i < n; ++i) {
+            if (mark[i<<1] || mark[i<<1|1]) continue;
+            cnt = 0;
+            if (!dfs(i<<1)) {
+                while (cnt) mark[mem[cnt--]] = 0;
+                if (!dfs(i<<1|1)) return false;
+            }
+        }
+        for (int i = 0; i < n<<1; ++i) if (mark[i]) res[i>>1] = i&1;
+        return true;
+    }
+    bool dfs(const int &u) {
+        if (mark[u^1]) return false;
+        if (mark[u]) return true;
+        mark[mem[++cnt] = u] = 1;
+        for (int v : e[u]) if (!dfs(v)) return false;
+        return true;
+    }
+};
+```
+{% endspoiler %}
 ---
 # 数论
 ## 快排
+{% spoiler "代码" %}
 ```cpp
 void quick_sort(int l, int r)
 {
@@ -2541,10 +2764,12 @@ void quick_sort(int l, int r)
     quick_sort(i+1, r);
 }
 ```
+{% endspoiler %}
 ---
 ## 求第K大数
 [HDOJ 2665](http://acm.hdu.edu.cn/showproblem.php?pid=2665)
 [POJ 2104](http://poj.org/problem?id=2104)
+{% spoiler "代码" %}
 ```cpp
 int kth_element(int l, int r, int k)
 {
@@ -2564,12 +2789,16 @@ int kth_element(int l, int r, int k)
     else return kth_element(i+1, r, k);
 }
 ```
+{% endspoiler %}
 **STL** (排序,无返回值)
+{% spoiler "代码" %}
 ```cpp
 nth_element(a+1, a+k+1, a+n+1);
 ```
+{% endspoiler %}
 ---
 ## [求逆序对(归并排序)](https://www.luogu.org/problemnew/show/P1908)
+{% spoiler "代码" %}
 ```cpp
 void merge_sort(int l, int r)
 {
@@ -2590,19 +2819,21 @@ void merge_sort(int l, int r)
     memcpy(a+l, b+l, sizeof(int)*(r-l+1));
 }
 ```
+{% endspoiler %}
 ---
 ## 线性基
 求最大值[Luogu3812](https://www.luogu.com.cn/problem/P3812)
 
 求第k大数[HDOJ3949](http://acm.hdu.edu.cn/showproblem.php?pid=3949)
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
-struct XXJ
+struct LinearBase
 {
     int sz = sizeof(T)*8, zero;
     T tot;
     vector<T> b, rb, p;
-    XXJ(){ init(); }
+    LinearBase(){ init(); }
     void init() {
         tot = zero = 0;;
         vector<T>(sz, 0).swap(b);
@@ -2614,7 +2845,7 @@ struct XXJ
         init();
         for (int i = 1; i <= n; ++i) insert(a[i]);
     }
-    void merge(const XXJ xj) {
+    void merge(const LinearBase xj) {
         for (int i : xj.b) if (i) insert(i);
     }
     void insert(T x) {
@@ -2667,10 +2898,56 @@ struct XXJ
     }
 };
 ```
+{% endspoiler %}
+[前缀和线性基](http://acm.hdu.edu.cn/showproblem.php?pid=6579)
+vector跑贼鸡儿慢
+{% spoiler "代码" %}
+```cpp
+template <class T>
+struct PreSumLB
+{
+    int tot, sz = sizeof(T)*8;
+    vector<T> b[N];
+    vector<int> p[N];
+    PreSumLB() { init(); }
+    void init() {
+        tot = 0;
+        vector<T>(sz, 0).swap(b[0]);
+        vector<int>(sz, 0).swap(p[0]);
+    }
+    void append(T val) {
+        int pos = ++tot;
+        vector<T> &bb = b[tot];
+        vector<int> &pp = p[tot];
+        pp = p[tot-1];
+        bb = b[tot-1];
+        for (int i = sz-1; i >= 0; --i) if ((val>>i)&1) {
+            if (bb[i]) {
+                if (pos > pp[i]) swap(pos, pp[i]), swap(val, bb[i]);
+                val ^= bb[i];
+            } else {
+                bb[i] = val;
+                pp[i] = pos;
+                return;
+            }
+        }
+    }
+    T query(const int &l, const int &r) {
+        T res = 0;
+        vector<T> &bb = b[r];
+        vector<int> &pp = p[r];
+        for (int i = sz-1; i >= 0; --i)
+            if (pp[i] >= l) res = max(res, res^bb[i]);
+        return res;
+    }
+};
+```
+{% endspoiler %}
 ---
 ## 矩阵
 ### [矩阵快速幂](https://www.luogu.org/problemnew/show/P3390)
 ### [矩阵求逆](https://www.luogu.com.cn/problem/P4783)
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct Martix {
@@ -2748,7 +3025,9 @@ struct Martix {
     }
 };
 ```
+{% endspoiler %}
 ## [高斯消元](https://www.luogu.com.cn/problem/P3389)
+{% spoiler "代码" %}
 ```cpp
 struct GaussElimination
 {
@@ -2777,26 +3056,28 @@ struct GaussElimination
     }
 };
 ```
+{% endspoiler %}
 ### [异或方程组](http://www.cppblog.com/MatoNo1/archive/2012/05/20/175404.html)
 [luogu 2962](https://www.luogu.com.cn/problem/P2962)
+
+a[i][j] 第i个是否对j有影响
+
+a[i][n+1] 第i个最后被翻转与否
+{% spoiler "代码" %}
 ```cpp
 // -1 : no solution, 0 : multi , 1 : one
 template <typename T>
 int XorGauss(T a[N], const int &n)
 {
-    int flag = 1;
     for (int i = 1, j, k; i <= n; ++i) {
         for (k = i; !a[k][i] && k <= n; ++k) {}
-        if (k > n) {
-            if (a[i][n+1]) return -1;
-            flag = 0; continue;
-        }
-        swap(a[k], a[i]);
+        if (k <= n) swap(a[k], a[i]);
         for (j = 1; j <= n; ++j) if (i != j && a[j][i])
             for (k = i; k <= n+1; ++k) a[j][k] ^= a[i][k];
             // a[j] ^= a[i]; // bitset<N> a[N]
     }
-    return flag;
+    for (int i = 1; i <= n; ++i) if (!a[i][i]) return -a[i][n+1];
+    return 1;
 }
 // dfs(n, 0)
 void dfs(const int &u, const int &num)
@@ -2817,8 +3098,10 @@ void dfs(const int &u, const int &num)
     }
 }
 ```
+{% endspoiler %}
 ---
 ## [拉格朗日插值](https://www.luogu.com.cn/problem/P4781)
+{% spoiler "代码" %}
 ```cpp
 template <typename T, typename H, typename P>
 long long Largrange(const T &k, const int &n, const H x[], const P y[])
@@ -2834,6 +3117,8 @@ long long Largrange(const T &k, const int &n, const H x[], const P y[])
     return res;
 }
 ```
+{% endspoiler %}
+{% spoiler "代码" %}
 ```cpp
 template <typename T, typename P> // x[i] = i -> y[i] = f(i)
 long long Largrange(const T &k, const int &n, const P y[])
@@ -2851,8 +3136,10 @@ long long Largrange(const T &k, const int &n, const P y[])
     return (res+MOD)%MOD;
 }
 ```
+{% endspoiler %}
 ---
 ## [快速幂](https://www.luogu.org/problemnew/show/P1226)
+{% spoiler "代码" %}
 ```cpp
 template <typename T, typename H>
 inline T qpow(const T &a, const H &p, const int &mo = MOD)
@@ -2863,8 +3150,10 @@ inline T qpow(const T &a, const H &p, const int &mo = MOD)
     return static_cast<T>(res);
 }
 ```
+{% endspoiler %}
 ---
 ## 快速乘
+{% spoiler "代码" %}
 ```cpp
 inline long long qmul(long long x, long long y, long long mo)
 {
@@ -2877,12 +3166,16 @@ inline long long qmul(long long x, long long y, long long mo)
     return res;
 }
 ```
+{% endspoiler %}
+{% spoiler "代码" %}
 ```cpp
 inline long long qmul(long long x, long long y, long long mo)
 {
     return (long long)((__int128)x*y%mo);
 }
 ```
+{% endspoiler %}
+{% spoiler "代码" %}
 ```cpp
 inline long long qmul(long long x, long long y, long long mo)
 {
@@ -2892,107 +3185,187 @@ inline long long qmul(long long x, long long y, long long mo)
     return ((ull)x*y-(ull)((ld)x/mo*y)*mo+mo)%mo;
 }
 ```
+{% endspoiler %}
 ---
 ## 复数
+{% spoiler "代码" %}
 ```cpp
-struct complex
+struct comp
 {
-    double real = 0.0, imag = 0.0;
-    complex () {}
-    complex (int _real, int _imag) : real(_real), imag(_imag) {}
-    complex (double _real, double _imag) : real(_real), imag(_imag) {}
-    complex operator + (const complex &b) {
-        return complex(this->real+b.real, this->imag+b.imag);
+    typedef double T; // maybe long double ?
+    T real, imag;
+    comp(){}
+    template <class U, class H>
+    comp (const U &_real = 0, const H &_imag = 0) : real(_real), imag(_imag) {}
+    friend comp operator + (const comp &c1, const comp &c2) { return comp(c1.real+c2.real, c1.imag+c2.imag); }
+    friend comp operator - (const comp &c1, const comp &c2) { return comp(c1.real-c2.real, c1.imag-c2.imag); }
+    friend comp operator * (const comp &c1, const comp &c2) { return comp(c1.real*c2.real-c1.imag*c2.imag, c1.real*c2.imag+c1.imag*c2.real); }
+    comp& operator += (const comp &c) { return *this = *this+c; }
+    comp& operator -= (const comp &c) { return *this = *this-c; }
+    comp& operator *= (const comp &c) { return *this = *this*c; }
+    friend istream& operator >> (istream &is, comp &c) { return is >> c.real >> c.imag; }
+    friend ostream& operator << (ostream &os, comp &c) { return os << c.real << setiosflags(ios::showpos) << c.imag << "i";}
+    comp conjugate() { return comp(real, -imag); }
+    friend comp conjugate(const comp &c) { return comp(c.real, -c.imag); }
+};
+```
+{% endspoiler %}
+---
+## [快速傅里叶变换|FFT](https://www.luogu.com.cn/problem/P3803)
+{% spoiler "代码" %}
+```cpp
+// array [0, n)
+struct FFT
+{
+    int len, bit;
+    int rev[N];
+    // #define comp complex<long double>
+    void fft(comp a[], int flag = 1) {
+        for (int i = 0; i < len; ++i)
+            if (i < rev[i]) swap(a[i], a[rev[i]]);
+        for (int base = 1; base < len; base <<= 1) {
+            comp w, wn = {cos(PI/base), flag*sin(PI/base)};
+            for (int i = 0; i < len; i += base*2) {
+                w = { 1.0, 0.0 };
+                for (int j = 0; j < base; ++j) {
+                    comp x = a[i+j], y = w*a[i+j+base];
+                    a[i+j] = x+y;
+                    a[i+j+base] = x-y;
+                    w *= wn;
+                }
+            }
+        }
     }
-    complex operator - (const complex &b) {
-        return complex(this->real-b.real, this->imag-b.imag);
-    }
-    complex operator * (const complex &b) {
-        return complex(this->real*b.real-this->imag*b.imag, this->real*b.imag+this->imag*b.real);
-    }
-    complex operator *= (const complex &b) {
-        return *this = *this*b;
+    void work(comp f[], const int &n, comp g[], const int &m) {
+        len = 1; bit = 0;
+        while (len < n+m) len <<= 1, ++bit;
+        // multi-testcase
+        for (int i = n; i < len; ++i) f[i] = 0;
+        for (int i = m; i < len; ++i) g[i] = 0;
+        for (int i = 0; i < len; ++i)
+            rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
+        fft(f, 1); fft(g, 1);
+        for (int i = 0; i <= len; ++i) f[i] *= g[i];
+        fft(f, -1);
+        for (int i = 0; i < n+m; ++i) f[i].real /= len;
     }
 };
 ```
+{% endspoiler %}
 ---
-## [FFT](https://www.luogu.com.cn/problem/P3803)
+## 快速数论变换|NTT
+{% spoiler "代码" %}
 ```cpp
-void FFT(complex a[], int flag)
+// array [0, n)
+struct NTT
 {
-    for (int i = 0; i < len; ++i)
-        if (i < rev[i]) swap(a[i], a[rev[i]]);
-
-    for (int base = 1; base < len; base <<= 1) {
-        complex w, wn = { cos(PI/base), flag*sin(PI/base) };
-        for (int i = 0; i < len; i += base*2) {
-            w = { 1.0, 0.0 };
-            for (int j = 0; j < base; ++j) {
-                complex x = a[i+j], y = w*a[i+j+base];
-                a[i+j] = x+y;
-                a[i+j+base] = x-y;
-                w *= wn;
+    const int G = 3;
+    int len, bit;
+    int rev[N];
+    template <class T>
+    void ntt(T a[], int flag = 1)
+    {
+        for (int i = 0; i < len; ++i)
+            if (i < rev[i]) swap(a[i], a[rev[i]]);
+        for (int base = 1; base < len; base <<= 1) {
+            long long wn = qpow(G, (MOD-1)/(base*2)), w;
+            if (flag == -1) wn = qpow(wn, MOD-2);
+            for (int i = 0; i < len; i += base*2) {
+                w = 1;
+                for (int j = 0; j < base; ++j) {
+                    long long x = a[i+j], y = w*a[i+j+base]%MOD;
+                    a[i+j] = (x+y)%MOD;
+                    a[i+j+base] = (x-y+MOD)%MOD;
+                    w = w*wn%MOD;
+                }
             }
         }
     }
-}
-int main()
-{
-    // read f[n] g[m]
-    while (len <= n+m) len <<= 1, ++bit;
-    for (int i = 0; i < len; ++i)
-        rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
+    template <class T>
+    void work(T f[], const int &n, T g[], const int &m) {
+        len = 1; bit = 0;
+        while (len < n+m) len <<= 1, ++bit;
+        // multi-testcase
+        for (int i = n; i < len; ++i) f[i] = 0;
+        for (int i = m; i < len; ++i) g[i] = 0;
+        for (int i = 0; i < len; ++i)
+            rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
+        ntt(f, 1); ntt(g, 1);
+        for (int i = 0; i <= len; ++i) f[i] = f[i]*g[i]%MOD;
+        ntt(f, -1);
+        long long inv = qpow(len, MOD-2);
+        for (int i = 0; i < n+m; ++i) f[i] = f[i]*inv%MOD;
+    }
+};
 
-    FFT(f, 1); FFT(g, 1);
-    for (int i = 0; i <= len; ++i) f[i] *= g[i];
-    FFT(f, -1);
-    for (int i = 0; i <= n+m; ++i)
-        printf("%d%c", static_cast<int>(f[i].real/len+0.5), " \n"[i==n+m]);
-}
 ```
----
-## NTT
+{% endspoiler %}
+## [任意模数NTT|MTT](https://www.luogu.com.cn/problem/P4245)
+{% spoiler "代码" %}
 ```cpp
-void NTT(long long a[], int flag)
+struct MTT
 {
-    for (int i = 0; i < len; ++i)
-        if (i < rev[i]) swap(a[i], a[rev[i]]);
-
-    for (int base = 1; base < len; base <<= 1) {
-        long long wn = qpow(G, (MOD-1)/(base*2)), w;
-        if (flag == -1) wn = qpow(wn, MOD-2);
-        for (int i = 0; i < len; i += base*2) {
-            w = 1;
-            for (int j = 0; j < base; ++j) {
-                long long x = a[i+j], y = w*a[i+j+base]%MOD;
-                a[i+j] = (x+y)%MOD;
-                a[i+j+base] = (x-y+MOD)%MOD;
-                w = w*wn%MOD;
+    static const int SIZE = 262144+5;
+    int Mod = 1e9 + 7;
+    comp w[SIZE];
+    int bitrev[SIZE];
+    void fft(comp *a, const int &n) {
+        for (int i = 0; i < n; ++i) if (i < bitrev[i]) swap(a[i], a[bitrev[i]]);
+        for (int i = 2, lyc = n >> 1; i <= n; i <<= 1, lyc >>= 1)
+            for (int j = 0; j < n; j += i) {
+                comp *l = a + j, *r = a + j + (i >> 1), *p = w;
+                for (int k = 0; k < i>>1; ++k) {
+                    comp tmp = *r * *p;
+                    *r = *l - tmp, *l = *l + tmp;
+                    ++l, ++r, p += lyc;
+                }
             }
-        }
     }
-}
-int main()
-{
-    while (len <= n+m) len <<= 1, ++bit;
-    for (int i = 0; i < len; ++i)
-        rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
+    template <class T>
+    inline void work(T *x, const int &n, T *y, const int &m, T *z)
+    {
+        static int bit, L;
+        static comp a[SIZE], b[SIZE];
+        static comp dfta[SIZE], dftb[SIZE], dftc[SIZE], dftd[SIZE];
 
-    FFT(f, 1);
-    FFT(g, 1);
-    for (int i = 0; i <= len; ++i) {
-        f[i] *= g[i];
+        for (L = 1, bit = 0; L < n+m-1; ++bit, L <<= 1);
+        for (int i = 0; i < L; ++i) bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << (bit - 1));
+        for (int i = 0; i < L; ++i) w[i] = comp(cos(2 * PI * i / L), sin(2 * PI * i / L));
+
+        for (int i = 0; i < L; ++i) (x[i] += Mod) %= Mod, (y[i] += Mod) %= Mod;
+        for (int i = 0; i < L; ++i) a[i] = comp(x[i] & 32767, x[i] >> 15);
+        for (int i = 0; i < L; ++i) b[i] = comp(y[i] & 32767, y[i] >> 15);
+        fft(a, L), fft(b, L);
+        for (int i = 0; i < L; ++i) {
+            int j = (L - i) & (L - 1);
+            static comp da, db, dc, dd;
+            da = (a[i] + conjugate(a[j])) * comp(.5, 0);
+            db = (a[i] - conjugate(a[j])) * comp(0, -.5);
+            dc = (b[i] + conjugate(b[j])) * comp(.5, 0);
+            dd = (b[i] - conjugate(b[j])) * comp(0, -.5);
+            dfta[j] = da * dc;
+            dftb[j] = da * dd;
+            dftc[j] = db * dc;
+            dftd[j] = db * dd;
+        }
+        for (int i = 0; i < L; ++i) a[i] = dfta[i] + dftb[i] * comp(0, 1);
+        for (int i = 0; i < L; ++i) b[i] = dftc[i] + dftd[i] * comp(0, 1);
+        fft(a, L), fft(b, L);
+        for (int i = 0; i < L; ++i) {
+            int da = (long long)(a[i].real / L + 0.5) % Mod;
+            int db = (long long)(a[i].imag / L + 0.5) % Mod;
+            int dc = (long long)(b[i].real / L + 0.5) % Mod;
+            int dd = (long long)(b[i].imag / L + 0.5) % Mod;
+            z[i] = (da + ((long long)(db + dc) << 15) + ((long long)dd << 30)) % Mod;
+        }
+        for (int i = 0; i < n+m-1; ++i) (z[i] += Mod) %= Mod;
     }
-    FFT(f, -1);
-    long long inv = qpow(len, MOD-2);
-    for (int i = 0; i <= n+m; ++i) {
-        printf("%lld", f[i]*inv%MOD);
-        putchar((i == n+m ? '\n' : ' '));
-    }
-}
+};
 ```
+{% endspoiler %}
 ---
 ## [第二类斯特林数](https://www.luogu.com.cn/problem/P5395)
+{% spoiler "代码" %}
 ```cpp
 inline void stirling(const int &n)
 {
@@ -3003,6 +3376,8 @@ inline void stirling(const int &n)
             S[i][j] = S[i-1][j-1]+S[i-1][j]*j;
 }
 ```
+{% endspoiler %}
+{% spoiler "代码" %}
 ```cpp
 void stirling(const int &n)
 {
@@ -3026,28 +3401,36 @@ void stirling(const int &n)
         printf("%lld%c", f[i]*invv%MOD, " \n"[i==n]);
 }
 ```
+{% endspoiler %}
 ---
 ## 约瑟夫环
 ### [O(n)](https://blog.csdn.net/weixin_42659809/article/details/82596676)
+{% spoiler "代码" %}
 ```cpp
 int solve(int n, int v) { return n == 1 ? 0 : (solve(n-1, v)+v)%n; }
 // res = solve(num, step)+1
 ```
+{% endspoiler %}
 ---
 ## 最大公因数 gcd
+{% spoiler "代码" %}
 ```cpp
 __gcd(a, b); // <algorithm>
 int gcd(int a, int b) { return b ? gcd(b, a%b) : a; }
 inline int gcd(int a, int b) { while (b) a %= b, swap(a, b); return a; }
 ```
+{% endspoiler %}
 ## 最小公倍数 lcm
 $LCM(\frac{a}{b},\frac{c}{d})=\frac{LCM(a, c)}{GCD(b,d)}$
 
 $LCM(\frac{a_1}{b_1},\frac{a_2}{b_2},...)=\frac{LCM(a1, a2,...)}{GCD(b1, b2,...)}$
+{% spoiler "代码" %}
 ```cpp
 inline int lcm(int a, int b) { return a/gcd(a, b)*b; }
 ```
+{% endspoiler %}
 ## 扩展欧几里得([同余方程](https://www.luogu.org/problemnew/show/P1082))
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 T exgcd(const T a, const T b, T &x, T &y)
@@ -3058,9 +3441,11 @@ T exgcd(const T a, const T b, T &x, T &y)
     return d;
 }
 ```
+{% endspoiler %}
 ---
 ## [乘法逆元](https://www.luogu.org/problemnew/show/P3811)
 ### 拓展欧几里得
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 inline T mul_inverse(const T &a, const T &mo = MOD)
@@ -3070,7 +3455,9 @@ inline T mul_inverse(const T &a, const T &mo = MOD)
     return (x%mo+mo)%mo;
 }
 ```
+{% endspoiler %}
 ### 费马小定理
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 inline T mul_inverse(const T &a, const int &mo = MOD)
@@ -3078,7 +3465,9 @@ inline T mul_inverse(const T &a, const int &mo = MOD)
     return qpow(a, mo-2);
 }
 ```
+{% endspoiler %}
 ### 线性递推
+{% spoiler "代码" %}
 ```cpp
 inline void mul_inverse(int *inv, int mo)
 {
@@ -3087,9 +3476,11 @@ inline void mul_inverse(int *inv, int mo)
         inv[i] = mo-mo/i*inv[mo%i]%mo;
 }
 ```
+{% endspoiler %}
 ---
 ## [中国剩余定理](https://blog.csdn.net/niiick/article/details/80229217)
 ### [中国剩余定理CRT(m互质)](https://www.luogu.org/problem/P3868)
+{% spoiler "代码" %}
 ```cpp
 inline long long CRT(int a[], int m[])
 {
@@ -3101,7 +3492,9 @@ inline long long CRT(int a[], int m[])
     return (res+M)%M;
 }
 ```
+{% endspoiler %}
 ### [扩展中国剩余定理EXCRT(m不互质)](https://www.luogu.org/problem/P4777)
+{% spoiler "代码" %}
 ```cpp
 inline long long EXCRT(long long a[], long long m[])
 {
@@ -3121,12 +3514,14 @@ inline long long EXCRT(long long a[], long long m[])
 }
 
 ```
+{% endspoiler %}
 ---
 ## 排列组合
 ### [奇偶性](https://blog.csdn.net/baodream/article/details/77822072)
 C(n,k) 当 `n&k == k` 为奇数反之偶数
 ---
 ## 欧拉函数
+{% spoiler "代码" %}
 ```cpp
 inline long long phi(long long x) {
     long long res = x;
@@ -3139,7 +3534,9 @@ inline long long phi(long long x) {
     return res;
 }
 ```
+{% endspoiler %}
 ### 筛法
+{% spoiler "代码" %}
 ```cpp
 struct Euler
 {
@@ -3167,8 +3564,10 @@ struct Euler
     }
 } E;
 ```
+{% endspoiler %}
 ---
 ## [线性筛](https://www.luogu.org/problemnew/show/P3383)
+{% spoiler "代码" %}
 ```cpp
 struct Euler
 {
@@ -3190,9 +3589,11 @@ struct Euler
     }
 } E;
 ```
+{% endspoiler %}
 ---
 ## 判断素数(质数)
  某较优方法
+{% spoiler "代码" %}
 ```cpp
 inline bool is_prime(long long x)
 {
@@ -3204,7 +3605,9 @@ inline bool is_prime(long long x)
     return true;
 }
 ```
+{% endspoiler %}
 ### Miller-Rabin 素性测试
+{% spoiler "代码" %}
 ```cpp
 inline bool MillerRabin(int x)
 {
@@ -3222,8 +3625,10 @@ inline bool MillerRabin(int x)
     return true;
 }
 ```
+{% endspoiler %}
 ---
 ## [分解质因数](https://www.luogu.org/problemnew/show/P1075)
+{% spoiler "代码" %}
 ```cpp
 // x = pi^ki...
 for(int i = 2; i*i <= x; ++i)
@@ -3233,9 +3638,11 @@ for(int i = 2; i*i <= x; ++i)
     }
 if(x > 1) p[++tot] = x, k[tot] = 1;
 ```
+{% endspoiler %}
 ---
 ## BSGS
 **[luogu 4884](https://www.luogu.org/problemnew/show/P4884)**
+{% spoiler "代码" %}
 ```cpp
 // map<long long, int> mmp;
 inline long long BSGS(long long a, long long x, long long m) // a^n = x
@@ -3257,12 +3664,14 @@ inline long long BSGS(long long a, long long x, long long m) // a^n = x
     return -1;
 }
 ```
+{% endspoiler %}
 ---
 # 动态规划 DP
 (我**全**都不会)
 ## 记忆化搜索
 ## 线性DP
 ### [最长上升子序列LIS](http://codevs.cn/problem/1576/)
+{% spoiler "代码" %}
 ```cpp
 for(int i = 1; i <= n; ++i)
 {
@@ -3271,21 +3680,27 @@ for(int i = 1; i <= n; ++i)
         if(a[i] > a[j]) f[i] = max(f[i],f[j]+1);
 }
 ```
+{% endspoiler %}
 ### 最长公共子序列LCS
+{% spoiler "代码" %}
 ```cpp
 f[i][j] = max{  f[i-1][j],
                 f[i][j-1],
                 f[i-1][j-1]+1 (if A[i] == B[j])}
 ```
+{% endspoiler %}
 ### 数字三角形
 ## 区间DP
 ## [树形DP](https://www.luogu.org/problemnew/show/P1352)
 ## 状压DP
 ### [枚举子集](https://cp-algorithms.com/algebra/all-submasks.html)
+{% spoiler "代码" %}
 ```cpp
 for (int i = s; i; i = (i-1)&s) {}
 ```
+{% endspoiler %}
 ### 枚举n个元素大小为k的二进制子集
+{% spoiler "代码" %}
 ```cpp
 int s=(1<<k)-1;
 while(s<(1<<n)){
@@ -3294,6 +3709,7 @@ while(s<(1<<n)){
     s=((s&~y)/x>>1)|y; //这里有一个位反~
 }
 ```
+{% endspoiler %}
 
 ## 队列优化
 ## 斜率优化
@@ -3305,6 +3721,7 @@ while(s<(1<<n)){
 ### [分组背包](https://www.luogu.org/problemnew/show/P1757)
 ### [多重背包](https://www.luogu.org/problemnew/show/P1776)
 **二进制拆分**
+{% spoiler "代码" %}
 ```cpp
 for(int i = 1, cnt, vi, wi, m; i <= n; ++i)
 {
@@ -3324,7 +3741,9 @@ for(int i = 0; i < w.size(); ++i)
     for(int j = W; j >= w[i]; --j)
         b[j] = max(b[j], b[j-w[i]]+v[i]);
 ```
+{% endspoiler %}
 **单调队列**
+{% spoiler "代码" %}
 ```cpp
 for(int i = 1; i <= n; ++i)
 {
@@ -3352,11 +3771,13 @@ int ans = 0;
 for(int i = 1; i <= W; ++i)
     ans = max(ans, f[i]);
 ```
+{% endspoiler %}
 ---
 ## [SOS DP](https://codeforces.com/blog/entry/45223)
 ---
 # STL
 ## 数据结构
+{% spoiler "代码" %}
 ```cpp
 // const N
 // typename T
@@ -3369,7 +3790,9 @@ set<T>
 bitset<N>
 map<T, T>
 ```
+{% endspoiler %}
 ## 函数
+{% spoiler "代码" %}
 ```cpp
 // vector<T> a;
 sort(a.begin(), a.end(), cmp);
@@ -3386,7 +3809,9 @@ s.find(target_string, start_pos); // 找不到返回s.npos
 s.substr(start_pos, len);
 s.replace(start_pos, len, target_string);
 ```
+{% endspoiler %}
 ## unordered_map 重载
+{% spoiler "代码" %}
 ```cpp
 struct Node
 {
@@ -3418,15 +3843,62 @@ struct KeyHasher
 };
 unordered_map<Node, int, KeyHasher> mmp;
 ```
+{% endspoiler %}
 ## 定义函数
+{% spoiler "代码" %}
 ```cpp
 function<void(int&, int)> f = [&](int &x, int y) -> void {
     x += y;
 };
 ```
+{% endspoiler %}
+---
+# 分数
+`warning:未完全验证`
+{% spoiler "代码" %}
+```cpp
+template <class T>
+struct Fraction
+{
+    T a, b;
+    void normalize() {
+        if (a == 0) return (void)(b = 1);
+        T g = __gcd(a, b);
+        a /= g; b /= g;
+    }
+    Fraction(const T &_a = 0, const T &_b = 1) : a(_a), b(_b) { this->normalize(); }
+    friend bool operator < (const Fraction &f1, const Fraction &f2) { return f1.a*f2.b < f2.a*f1.b; }
+    friend bool operator > (const Fraction &f1, const Fraction &f2) { return f1.a*f2.b > f2.a*f1.b; }
+    friend bool operator == (const Fraction &f1, const Fraction &f2) { return f1.a*f2.b == f2.a*f1.b; }
+    friend bool operator != (const Fraction &f1, const Fraction &f2) { return f1.a*f2.b != f2.a*f1.b; }
+    friend bool operator <= (const Fraction &f1, const Fraction &f2) { return f1 < f2 || f1 == f2; }
+    friend bool operator >= (const Fraction &f1, const Fraction &f2) { return f1 > f2 || f1 == f2; }
+    friend Fraction operator + (const Fraction &f1, const Fraction &f2) { return Fraction(f1.a*f2.b+f2.a*f1.b, f1.b*f2.b); }
+    friend Fraction operator - (const Fraction &f1, const Fraction &f2) { return Fraction(f1.a*f2.b-f2.a*f1.b, f1.b*f2.b); }
+    friend Fraction operator * (const Fraction &f1, const Fraction &f2) { return Fraction(f1.a*f2.a, f1.b*f2.b); }
+    friend Fraction operator / (const Fraction &f1, const Fraction &f2) { return Fraction(f1.a*f2.b, f1.b*f2.a); }
+    Fraction& operator += (const Fraction &f) { return *this = *this+f; }
+    Fraction& operator -= (const Fraction &f) { return *this = *this-f; }
+    Fraction& operator *= (const Fraction &f) { return *this = *this*f; }
+    Fraction& operator /= (const Fraction &f) { return *this = *this/f; }
+    friend istream& operator >> (istream &is, Fraction &f) {
+        is >> f.a >> f.b;
+        f.normalize();
+        return is;
+    }
+    friend ostream& operator << (ostream &os, Fraction &f) {
+        if (f.a == 0) return os << 0;
+        if (f.b == 1) return os << f.a;
+        return os << f.a << "/" << f.b;
+    }
+};
+using fraction = Fraction<long long>;
+```
+{% endspoiler %}
 ---
 # 模数
 ## 弟弟操作
+{% spoiler "代码" %}
 ```cpp
 template <int _MOD> struct Mint
 {
@@ -3471,7 +3943,9 @@ template <int _MOD> struct Mint
 };
 using mint = Mint<MOD>;
 ```
+{% endspoiler %}
 ## tourist的模板(用不来)
+{% spoiler "代码" %}
 ```cpp
 template <typename T>
 class Modular {
@@ -3628,6 +4102,7 @@ using Mint = Modular<VarMod>;
 constexpr int md = 998244353;
 using Mint = Modular<std::integral_constant<decay<decltype(md)>::type, md>>;
 ```
+{% endspoiler %}
 ---
 # 高精度
 ## vector版本
@@ -3639,6 +4114,7 @@ using Mint = Modular<std::integral_constant<decay<decltype(md)>::type, md>>;
 此版本 压位+数组,支持cin,cout,string,long long转换,比较运算符,四则运算(包括高精度乘/除低精度,取模),支持带符号的减法运算,支持幂运算,开根运算
 
 可以通过开根外所有习题
+{% spoiler "代码" %}
 ```cpp
 struct BigInteger
 {
@@ -3841,4 +4317,5 @@ struct BigInteger
     }
 };
 ```
+{% endspoiler %}
 ---
