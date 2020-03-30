@@ -3018,10 +3018,11 @@ struct Martix {
         }
         return (res+MOD)%MOD;
     }
-    void print() {
-        for (int i = 1; i <= n; ++i)
-            for (int j = 1; j <= m; ++j)
-                cout << a[i][j] << " \n"[j==m];
+    friend ostream& operator << (ostream &os, Martix<T> &mx) {
+        for (int i = 1; i <= mx.n; ++i)
+            for (int j = 1; j <= mx.m; ++j)
+                os << mx[i][j] << " \n"[j==mx.m];
+        return os;
     }
 };
 ```
