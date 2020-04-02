@@ -13,7 +13,7 @@ tags:
   - 数位DP
   - 矩阵快速幂
 description: 两道 KMP+数位DP 题
-photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/kmp_and_dp/cover.jpg 
+photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/kmp_and_dp/pic.jpg 
 ---
 # 例一
 
@@ -78,7 +78,7 @@ f[i+1][0] & f[i+1][1] & \cdots & f[i+1][m]
 $$
 
 **气哭,渲染错误,上图**
-<img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/kmp_and_dp/matrix.jpg " data-action="zoom">
+<img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/kmp_and_dp/matrix.png " data-action="zoom">
 
 $F_0\times G^n=F_n$
 
@@ -182,6 +182,8 @@ signed main()
 # 例二
 
 [leetcode P3193 [HNOI2008]GT考试](https://leetcode-cn.com/problems/find-all-good-strings/)
+
+# 思路
 
 这题与上题不同的地方主要就是有上限下限限制
 
