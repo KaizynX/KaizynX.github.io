@@ -43,6 +43,49 @@ $=\sum\limits_{i=0}^{n-k}a[i]\times b[i+k] = f[k]$
 
 [参考博客](https://www.cnblogs.com/Yumesenya/p/7470832.html)
 
+{% spoiler "代码" %}
+```cpp
+int n, m, a;
+int c[N];
+long long f[N], g[N], powa[N];
+long long fac[N], inv[N];
+
+inline void solve()
+{
+    for (int i = 0 ; i <= n; ++i) cin >> c[i];
+    cin >> m;
+    a = 0;
+    for (int i = 1, x; i <= m; ++i) {
+        cin >> x;
+        a = (a-x+MOD)%MOD;
+    }
+    powa[0] = 1;
+    for (int i = 1; i <= n; ++i) powa[i] = (powa[i-1]*a%MOD+MOD)%MOD;
+    for (int i = 0; i <= n; ++i) {
+        f[i] = c[n-i]*fac[n-i]%MOD;
+        g[i] = powa[i]*inv[i];
+    }
+    NTT::work(f, n+1, g, n+1);
+    for (int i = 0; i <= n; ++i)
+        cout << NTT::f[n-i]*inv[i]%MOD << " ";
+    cout << endl;
+}
+
+signed main()
+{
+    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    fac[0] = inv[0] = 1;
+    for (int i = 1; i < N; ++i) {
+        fac[i] = fac[i-1]*i%MOD;
+        inv[i] = qpow(fac[i], MOD-2);
+    }
+    while (cin >> n) solve();
+    return 0;
+}
+```
+
+{% endspoiler %}
+
 ## 循环卷积
 
 咕咕咕
