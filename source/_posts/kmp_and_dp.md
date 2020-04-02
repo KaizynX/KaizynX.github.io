@@ -77,6 +77,9 @@ f[i+1][0] & f[i+1][1] & \cdots & f[i+1][m]
 \end{bmatrix}
 $$
 
+**气哭,渲染错误,上图**
+<img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/kmp_and_dp/matrix.jpg " data-action="zoom">
+
 $F_0\times G^n=F_n$
 
 初始状态 $f[0][0]=1$
