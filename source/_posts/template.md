@@ -3320,10 +3320,10 @@ namespace NTT
 ## [任意模数NTT|MTT](https://www.luogu.com.cn/problem/P4245)
 {% spoiler "代码" %}
 ```cpp
-struct MTT
+namespace MTT
 {
-    static const int SIZE = 262144+5;
-    int Mod = 1e9 + 7;
+    static const int SIZE = (1<<18)+7;
+    int Mod = MOD;
     comp w[SIZE];
     int bitrev[SIZE];
     void fft(comp *a, const int &n) {
@@ -3349,9 +3349,10 @@ struct MTT
         for (int i = 0; i < L; ++i) bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << (bit - 1));
         for (int i = 0; i < L; ++i) w[i] = comp(cos(2 * PI * i / L), sin(2 * PI * i / L));
 
-        for (int i = 0; i < L; ++i) (x[i] += Mod) %= Mod, (y[i] += Mod) %= Mod;
-        for (int i = 0; i < L; ++i) a[i] = comp(x[i] & 32767, x[i] >> 15);
-        for (int i = 0; i < L; ++i) b[i] = comp(y[i] & 32767, y[i] >> 15);
+        for (int i = 0; i < n; ++i) (x[i] += Mod) %= Mod, a[i] = comp(x[i] & 32767, x[i] >> 15);
+        for (int i = n; i < L; ++i) a[i] = 0;
+        for (int i = 0; i < m; ++i) (y[i] += Mod) %= Mod, b[i] = comp(y[i] & 32767, y[i] >> 15);
+        for (int i = m; i < L; ++i) b[i] = 0;
         fft(a, L), fft(b, L);
         for (int i = 0; i < L; ++i) {
             int j = (L - i) & (L - 1);
@@ -3377,7 +3378,7 @@ struct MTT
         }
         for (int i = 0; i < n+m-1; ++i) (z[i] += Mod) %= Mod;
     }
-};
+}
 ```
 {% endspoiler %}
 ## [分治FFT](https://www.luogu.com.cn/problem/P4721)
@@ -3505,11 +3506,12 @@ inline T mul_inverse(const T &a, const int &mo = MOD)
 ### 线性递推
 {% spoiler "代码" %}
 ```cpp
-inline void mul_inverse(int *inv, int mo)
+template <typename T>
+inline void mul_inverse(T *inv, int mod = MOD)
 {
     inv[0] = 0; inv[1] = 1;
     for(int i = 2; i <= n; ++i)
-        inv[i] = mo-mo/i*inv[mo%i]%mo;
+        inv[i] = 1ll*(mod-mod/i)*inv[mod%i]%mod;
 }
 ```
 {% endspoiler %}
