@@ -47,6 +47,29 @@ std::this_thread::get_id() // 自己线程id
 ```
 # 线程间共享数据
 
+## 使用互斥量保护共享数据
+
+### C++中使用互斥量
+C++标准库为互斥量提供了一个RAII语法的模板类std::lock_guard，在构造时就能提供已锁的互斥量，并在析构的时候进行解锁，从而保证了一个已锁互斥量能被正确解锁。
+```cpp
+std::list<int> some_list;    // 1
+std::mutex some_mutex;    // 2
+
+void add_to_list(int new_value)
+{
+  std::lock_guard<std::mutex> guard(some_mutex);    // 3
+  some_list.push_back(new_value);
+}
+
+bool list_contains(int value_to_find)
+{
+  std::lock_guard<std::mutex> guard(some_mutex);    // 4
+  return std::find(some_list.begin(),some_list.end(),value_to_find) != some_list.end();
+}
+```
+菜鸡理解:`some_mutex` 作为一个标记，当执行3,4时，标记置为 lock，则无法访问，函数结束后自行 unlock
+
+
 一意咕行
 
 # 参考资料

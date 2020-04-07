@@ -1,3 +1,4 @@
+
 ---
 title: ACM模板
 author: Kaizyn
@@ -11,6 +12,7 @@ top: true
 keywords: ACM模板
 description:  某菜鸡收集的板子
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/template/cover.jpg
+
 ---
 
 # 前言
@@ -18,8 +20,10 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/template/cover.jpg
 ```cpp
 while (true) ++++++ ++++++ ++++++ RP;
 ```
+
 {% endspoiler %}
 <!--more-->
+
 ---
 # 杂项
 ## 快读快写
@@ -41,11 +45,13 @@ template <typename T> void write(T x)
     putchar(x%10+'0');
 }
 ```
+
 {% endspoiler %}
 {% spoiler "代码" %}
 ```cpp
 ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 ```
+
 {% endspoiler %}
 [巨佬模板](https://atcoder.jp/contests/hitachi2020/submissions/10676875)
 {% spoiler "代码" %}
@@ -186,7 +192,9 @@ struct Printer {
 Scanner sc = Scanner(stdin);
 Printer pr = Printer(stdout);
 ```
+
 {% endspoiler %}
+
 ---
 ## 正则表达式
 {% spoiler "代码" %}
@@ -198,6 +206,7 @@ scanf("%[a-z0-9]", str); // 同上,读取小写字母和数字
 scanf("%*[a-z]%s", str); // 过滤掉小写字母读取
 scanf("%[^a-z]", str); // 读取小写字符外字符,^表示非 
 ```
+
 {% endspoiler %}
 ## 随机数
 {% spoiler "代码" %}
@@ -208,6 +217,7 @@ mt19937 rnd(time(NULL));
 mt19937 rnd(chrono::high_resolution_clock::now().time_since_epoch().count());
 cout << rnd() << endl;
 ```
+
 {% endspoiler %}
 {% spoiler "代码" %}
 ```cpp
@@ -216,7 +226,9 @@ std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 std::uniform_int_distribution<> dis(0, 9);
 std::cout << dis(gen) << endl;
 ```
+
 {% endspoiler %}
+
 ---
 ## 计算log2
 {% spoiler "代码" %}
@@ -226,6 +238,7 @@ for(int i = 1; i <= n; ++i) lg2[i] = lg2[i>>1]+1;
 // lg2[i] = (int)log2(i)
 for(int i = 1; i <= n; ++i) lg2[i] = lg2[i>>1]+1;
 ```
+
 {% endspoiler %}
 ## 快速开根号|牛顿迭代法
 {% spoiler "代码" %}
@@ -240,7 +253,9 @@ double sqrt(const double &a)
     return x;
 }
 ```
+
 {% endspoiler %}
+
 ---
 # 计算几何
 ## 向量 坐标 直线 圆 (结构体)
@@ -371,7 +386,9 @@ inline Circular get_cir(const Point &p1, const Point &p2, const Point &p3)
     return res;
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [二维凸包](https://www.luogu.com.cn/problem/P2742)
 {% spoiler "代码" %}
@@ -402,7 +419,9 @@ inline void Andrew()
     }
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [平面最近点对](https://www.luogu.com.cn/problem/P1429)
 {% spoiler "代码" %}
@@ -451,7 +470,9 @@ inline void mindist_pair()
     rec(1, n);
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [最小圆覆盖|随即增量法](https://www.luogu.com.cn/problem/P1742)
 {% spoiler "代码" %}
@@ -475,7 +496,9 @@ inline Circular RIA()
     return cir;
 }
 ```
+
 {% endspoiler %}
+
 ---
 # 数据结构
 ## [堆](https://www.luogu.org/problemnew/show/P3378)
@@ -513,6 +536,7 @@ struct Heap
     }
 };
 ```
+
 {% endspoiler %}
 ## 字典树
 {% spoiler "代码" %}
@@ -564,6 +588,7 @@ struct TireTree
     int count(const string &s) { return count(s.c_str()); }
 };
 ```
+
 {% endspoiler %}
 ## 二叉查找树
 ## [平衡树](https://www.luogu.org/problemnew/show/P3369)
@@ -663,6 +688,7 @@ struct Splay
     #undef root
 };
 ```
+
 {% endspoiler %}
 区间反转
 {% spoiler "代码" %}
@@ -747,6 +773,7 @@ struct Splay
     }
 } tree;
 ```
+
 {% endspoiler %}
 ## [线段树](https://www.luogu.org/problemnew/show/P3372)
 ### 区间加减区间和
@@ -828,6 +855,7 @@ private :
     }
 };
 ```
+
 {% endspoiler %}
 ### 区间修改区间和
 {% spoiler "代码" %}
@@ -897,6 +925,7 @@ private :
     }
 };
 ```
+
 {% endspoiler %}
 ### 区间加减区间最值
 {% spoiler "代码" %}
@@ -978,6 +1007,7 @@ private :
     }
 };
 ```
+
 {% endspoiler %}
 ### 区间更新最值
 {% spoiler "代码" %}
@@ -1058,6 +1088,7 @@ private:
     }
 };
 ```
+
 {% endspoiler %}
 ## ZKW线段树
 `warning:区间最值尚为验证`
@@ -1145,7 +1176,9 @@ struct zkwSegmentTree
     }
 };
 ```
+
 {% endspoiler %}
+
 ---
 ## 树状数组
 ### 一维
@@ -1169,6 +1202,7 @@ struct BinaryIndexedTree
     T query(const int &x, const int &y) { return query(y)-query(x-1); }
 };
 ```
+
 {% endspoiler %}
 
 [O(n)初始化](http://codeforces.com/blog/entry/63064)
@@ -1183,6 +1217,7 @@ void init(const int &_n, const TT a[]) {
     }
 }
 ```
+
 {% endspoiler %}
 ### 二维
 #### 单点修改区间查询
@@ -1223,6 +1258,7 @@ struct BIT_2D
     }
 };
 ```
+
 {% endspoiler %}
 ## [可持久化线段树(主席树)](https://www.luogu.com.cn/problem/P3834)
 {% spoiler "代码" %}
@@ -1279,6 +1315,7 @@ private:
     }
 };
 ```
+
 {% endspoiler %}
 ## [分块](http://hzwer.com/8053.html)
 [例题](https://loj.ac/problems/search?keyword=%E5%88%86%E5%9D%97)
@@ -1323,6 +1360,7 @@ struct FenKuai
     }
 } B;
 ```
+
 {% endspoiler %}
 {% spoiler "代码" %}
 ```cpp
@@ -1371,6 +1409,7 @@ struct FenKuai
     }
 } B;
 ```
+
 {% endspoiler %}
 {% spoiler "代码" %}
 ```cpp
@@ -1426,6 +1465,7 @@ struct FenKuai
     }
 } B;
 ```
+
 {% endspoiler %}
 ## [ST表](https://www.luogu.org/problemnew/show/P3865)
 一维
@@ -1458,6 +1498,7 @@ struct ST
 };
 ST<int, greater<int>> st;
 ```
+
 {% endspoiler %}
 二维
 {% spoiler "代码" %}
@@ -1493,7 +1534,9 @@ struct ST
     }
 };
 ```
+
 {% endspoiler %}
+
 ---
 ## [并查集](https://www.luogu.org/problemnew/show/P3367)
 {% spoiler "代码" %}
@@ -1511,6 +1554,7 @@ struct DSU
     }
 } dsu;
 ```
+
 {% endspoiler %}
 加上按秩合并
 {% spoiler "代码" %}
@@ -1530,7 +1574,9 @@ struct DSU
     }
 } dsu;
 ```
+
 {% endspoiler %}
+
 ---
 # 字符串
 ## [回文字符串|manacher算法](https://www.luogu.org/problemnew/show/P3805)
@@ -1556,13 +1602,16 @@ inline int manacher(const char *str, char *buf, int *p)
     return ans;
 }
 ```
+
 {% endspoiler %}
 ### 判断s[l, r]是否为回文
 {% spoiler "代码" %}
 ```cpp
 p[l+r+2]-1 >= r-l+1
 ```
+
 {% endspoiler %}
+
 ---
 ## [KMP](https://www.luogu.org/problemnew/show/P3375)
 `.c_str() 未知异常 Segment Fault`
@@ -1591,6 +1640,7 @@ inline void kmp(const char *s1, const char *s2, int nex[])
     }
 }
 ```
+
 {% endspoiler %}
 {% spoiler "代码" %}
 ```cpp
@@ -1615,6 +1665,7 @@ inline void kmp(const string &s1, const string &s2, int nex[])
     }
 }
 ```
+
 {% endspoiler %}
 ## [扩展KMP|Z函数](https://subetter.com/algorithm/extended-kmp-algorithm.html)
 {% spoiler "代码" %}
@@ -1652,6 +1703,7 @@ inline void GetExtend(char *s, char *ss, int *_ext, int *_nex)
     }
 }
 ```
+
 {% endspoiler %}
 ## 最长公共前后缀
 [hdu2594](http://acm.hdu.edu.cn/showproblem.php?pid=2594)
@@ -1683,7 +1735,9 @@ string max_pre_suf(const string &s1, const string &s2)
     return "";
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## BM算法
 ## Sunday算法
@@ -1698,7 +1752,9 @@ inline unsigned long long _hash(const string &s)
     return res;
 }
 ```
+
 {% endspoiler %}
+
 ---
 # 图论|树论
 ## [DFS树](https://codeforces.com/blog/entry/68138)
@@ -1718,6 +1774,7 @@ void treedp(int cur, int fa)
     maxs[cur] = max(maxs[cur], sum-s[cur]);
 }
 ```
+
 {% endspoiler %}
 ## 最大团
 最大独立集数=补图的最大团
@@ -1755,7 +1812,9 @@ struct MaxClique
     }
 } MC;
 ```
+
 {% endspoiler %}
+
 ---
 ## 稳定婚姻匹配
 {% spoiler "代码" %}
@@ -1799,7 +1858,9 @@ template <typename T = int> struct Stable_Marriage
     }
 };
 ```
+
 {% endspoiler %}
+
 ---
 ## [最小生成树](https://www.luogu.org/problemnew/show/P3366)
 **[Prim](https://www.luogu.org/problemnew/show/P1265)**
@@ -1822,8 +1883,10 @@ inline void prim()
     }
 }
 ```
+
 {% endspoiler %}
 **Kruskal** (略)
+
 
 ---
 ## 二分图
@@ -1855,6 +1918,7 @@ inline int solve()
     return res;
 }
 ```
+
 {% endspoiler %}
 ### 二分图最小顶点覆盖
 定义：假如选了一个点就相当于覆盖了以它为端点的所有边。最小顶点覆盖就是选择最少的点来覆盖所有的边。
@@ -1865,6 +1929,7 @@ inline int solve()
 定义：选出一些顶点使得这些顶点两两不相邻，则这些点构成的集合称为独立集。找出一个包含顶点数最多的独立集称为最大独立集。
 
 定理：最大独立集 = 所有顶点数 - 最小顶点覆盖 = 所有顶点数 -   最大匹配
+
 
 ---
 ## [LCA](https://www.luogu.org/problemnew/show/P3379)
@@ -1896,6 +1961,7 @@ struct LCA
     }
 };
 ```
+
 {% endspoiler %}
 [带权LCA](https://www.luogu.com.cn/problem/P1967)
 {% spoiler "代码" %}
@@ -1946,8 +2012,10 @@ struct LCA
     }
 };
 ```
+
 {% endspoiler %}
 ## 最小环 
+
 ---
 ## [树上差分](https://www.luogu.com.cn/problem/P3128)
 {% spoiler "代码" %}
@@ -1973,6 +2041,7 @@ struct Tree
     }
 };
 ```
+
 {% endspoiler %}
 ## [树链剖分](https://www.luogu.com.cn/problem/P3384)
 {% spoiler "代码" %}
@@ -2039,7 +2108,9 @@ struct ShuPou
     }
 };
 ```
+
 {% endspoiler %}
+
 ---
 ## 网络流
 [网络流24题](https://loj.ac/problems/tag/30)
@@ -2105,6 +2176,7 @@ struct EK
     }
 };
 ```
+
 {% endspoiler %}
 #### Dinic
 普通情况下 $O(n^2m)$
@@ -2175,6 +2247,7 @@ struct Dinic
     }
 };
 ```
+
 {% endspoiler %}
 #### [ISAP](https://www.luogu.com.cn/blog/ONE-PIECE/jiu-ji-di-zui-tai-liu-suan-fa-isap-yu-hlpp)
 渐进时间复杂度和dinic相同，但是非二分图的情况下isap更具优势
@@ -2249,6 +2322,7 @@ struct ISAP
     }
 };
 ```
+
 {% endspoiler %}
 vector存边版本
 {% spoiler "代码" %}
@@ -2325,6 +2399,7 @@ struct ISAP
     }
 };
 ```
+
 {% endspoiler %}
 #### HLPP
 ### 最小割
@@ -2400,6 +2475,7 @@ struct MCMF
     }
 };
 ```
+
 {% endspoiler %}
 #### 类Dinic
 {% spoiler "代码" %}
@@ -2479,10 +2555,12 @@ struct Dinic
     }
 };
 ```
+
 {% endspoiler %}
 #### Dijkstra
 Primal-Dual 原始对偶算法
 ### 上下界网络流
+
 ---
 ## 最短路
 [弱化](https://www.luogu.org/problemnew/show/P3371)
@@ -2515,6 +2593,7 @@ inline void Dijiska()
     }
 }
 ```
+
 {% endspoiler %}
 ### SPFA
 {% spoiler "代码" %}
@@ -2539,7 +2618,9 @@ inline void SPFA()
     }
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [负环](https://www.luogu.org/problemnew/show/P3385)
 {% spoiler "代码" %}
@@ -2574,7 +2655,9 @@ inline bool SPFA()
     return false;
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [割点](https://www.luogu.org/problemnew/show/P3388)
 {% spoiler "代码" %}
@@ -2597,7 +2680,9 @@ void tarjan(int cur, int fa)
     if(cur == fa && child >= 2) flag[cur] = 1;
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [缩点](https://www.luogu.org/problemnew/show/P3387)
 {% spoiler "代码" %}
@@ -2638,6 +2723,7 @@ inline void suodian()
     }
 }
 ```
+
 {% endspoiler %}
 ## [2-SAT](https://www.luogu.com.cn/problem/P4782)
 ### SCC Tarjan
@@ -2696,6 +2782,7 @@ struct TWO_SAT
     }
 };
 ```
+
 {% endspoiler %}
 ### DFS
 $O(nm)$
@@ -2742,7 +2829,9 @@ struct TWO_SAT
     }
 };
 ```
+
 {% endspoiler %}
+
 ---
 # 数论
 ## 快排
@@ -2764,7 +2853,9 @@ void quick_sort(int l, int r)
     quick_sort(i+1, r);
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## 求第K大数
 [HDOJ 2665](http://acm.hdu.edu.cn/showproblem.php?pid=2665)
@@ -2789,13 +2880,16 @@ int kth_element(int l, int r, int k)
     else return kth_element(i+1, r, k);
 }
 ```
+
 {% endspoiler %}
 **STL** (排序,无返回值)
 {% spoiler "代码" %}
 ```cpp
 nth_element(a+1, a+k+1, a+n+1);
 ```
+
 {% endspoiler %}
+
 ---
 ## [求逆序对(归并排序)](https://www.luogu.org/problemnew/show/P1908)
 {% spoiler "代码" %}
@@ -2819,7 +2913,9 @@ void merge_sort(int l, int r)
     memcpy(a+l, b+l, sizeof(int)*(r-l+1));
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## 线性基
 求最大值[Luogu3812](https://www.luogu.com.cn/problem/P3812)
@@ -2898,6 +2994,7 @@ struct LinearBase
     }
 };
 ```
+
 {% endspoiler %}
 [前缀和线性基](http://acm.hdu.edu.cn/showproblem.php?pid=6579)
 vector跑贼鸡儿慢
@@ -2942,7 +3039,9 @@ struct PreSumLB
     }
 };
 ```
+
 {% endspoiler %}
+
 ---
 ## 矩阵
 ### [矩阵快速幂](https://www.luogu.org/problemnew/show/P3390)
@@ -3026,6 +3125,7 @@ struct Martix {
     }
 };
 ```
+
 {% endspoiler %}
 ## [高斯消元](https://www.luogu.com.cn/problem/P3389)
 {% spoiler "代码" %}
@@ -3057,6 +3157,7 @@ struct GaussElimination
     }
 };
 ```
+
 {% endspoiler %}
 ### [异或方程组](http://www.cppblog.com/MatoNo1/archive/2012/05/20/175404.html)
 [luogu 2962](https://www.luogu.com.cn/problem/P2962)
@@ -3099,7 +3200,9 @@ void dfs(const int &u, const int &num)
     }
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [拉格朗日插值](https://www.luogu.com.cn/problem/P4781)
 {% spoiler "代码" %}
@@ -3118,6 +3221,7 @@ long long Largrange(const T &k, const int &n, const H x[], const P y[])
     return res;
 }
 ```
+
 {% endspoiler %}
 {% spoiler "代码" %}
 ```cpp
@@ -3137,7 +3241,9 @@ long long Largrange(const T &k, const int &n, const P y[])
     return (res+MOD)%MOD;
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [快速幂](https://www.luogu.org/problemnew/show/P1226)
 {% spoiler "代码" %}
@@ -3151,7 +3257,9 @@ inline T qpow(const T &a, const H &p, const int &mo = MOD)
     return static_cast<T>(res);
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## 快速乘
 {% spoiler "代码" %}
@@ -3167,6 +3275,7 @@ inline long long qmul(long long x, long long y, long long mo)
     return res;
 }
 ```
+
 {% endspoiler %}
 {% spoiler "代码" %}
 ```cpp
@@ -3175,6 +3284,7 @@ inline long long qmul(long long x, long long y, long long mo)
     return (long long)((__int128)x*y%mo);
 }
 ```
+
 {% endspoiler %}
 {% spoiler "代码" %}
 ```cpp
@@ -3186,7 +3296,9 @@ inline long long qmul(long long x, long long y, long long mo)
     return ((ull)x*y-(ull)((ld)x/mo*y)*mo+mo)%mo;
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## 复数
 {% spoiler "代码" %}
@@ -3208,7 +3320,9 @@ struct comp
     friend comp conjugate(const comp &c) { return comp(c.real, -c.imag); }
 };
 ```
+
 {% endspoiler %}
+
 ---
 ## [快速傅里叶变换|FFT](https://www.luogu.com.cn/problem/P3803)
 {% spoiler "代码" %}
@@ -3267,7 +3381,9 @@ namespace FFT
     */
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## 快速数论变换|NTT
 {% spoiler "代码" %}
@@ -3316,6 +3432,7 @@ namespace NTT
     }
 }
 ```
+
 {% endspoiler %}
 ## [任意模数NTT|MTT](https://www.luogu.com.cn/problem/P4245)
 {% spoiler "代码" %}
@@ -3326,6 +3443,7 @@ namespace MTT
     int Mod = MOD;
     comp w[SIZE];
     int bitrev[SIZE];
+    long long f[SIZE];
     void fft(comp *a, const int &n) {
         for (int i = 0; i < n; ++i) if (i < bitrev[i]) swap(a[i], a[bitrev[i]]);
         for (int i = 2, lyc = n >> 1; i <= n; i <<= 1, lyc >>= 1)
@@ -3339,11 +3457,11 @@ namespace MTT
             }
     }
     template <class T>
-    inline void work(T *x, const int &n, T *y, const int &m, T *z)
+    inline void work(T *x, const int &n, T *y, const int &m)
     {
         static int bit, L;
         static comp a[SIZE], b[SIZE];
-        static comp dfta[SIZE], dftb[SIZE], dftc[SIZE], dftd[SIZE];
+        static comp dfta[SIZE], dftb[SIZE];
 
         for (L = 1, bit = 0; L < n+m-1; ++bit, L <<= 1);
         for (int i = 0; i < L; ++i) bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << (bit - 1));
@@ -3361,31 +3479,31 @@ namespace MTT
             db = (a[i] - conjugate(a[j])) * comp(0, -.5);
             dc = (b[i] + conjugate(b[j])) * comp(.5, 0);
             dd = (b[i] - conjugate(b[j])) * comp(0, -.5);
-            dfta[j] = da * dc;
-            dftb[j] = da * dd;
-            dftc[j] = db * dc;
-            dftd[j] = db * dd;
+            dfta[j] = da*dc + da*dd*comp(0, 1);
+            dftb[j] = db*dc + db*dd*comp(0, 1);
         }
-        for (int i = 0; i < L; ++i) a[i] = dfta[i] + dftb[i] * comp(0, 1);
-        for (int i = 0; i < L; ++i) b[i] = dftc[i] + dftd[i] * comp(0, 1);
+        for (int i = 0; i < L; ++i) a[i] = dfta[i];
+        for (int i = 0; i < L; ++i) b[i] = dftb[i];
         fft(a, L), fft(b, L);
         for (int i = 0; i < L; ++i) {
             int da = (long long)(a[i].real / L + 0.5) % Mod;
             int db = (long long)(a[i].imag / L + 0.5) % Mod;
             int dc = (long long)(b[i].real / L + 0.5) % Mod;
             int dd = (long long)(b[i].imag / L + 0.5) % Mod;
-            z[i] = (da + ((long long)(db + dc) << 15) + ((long long)dd << 30)) % Mod;
+            f[i] = (da + ((long long)(db + dc) << 15) + ((long long)dd << 30)) % Mod;
         }
-        for (int i = 0; i < n+m-1; ++i) (z[i] += Mod) %= Mod;
+        for (int i = 0; i < n+m-1; ++i) (f[i] += Mod) %= Mod;
     }
 }
+
 ```
+
 {% endspoiler %}
 ## [分治FFT](https://www.luogu.com.cn/problem/P4721)
 {% spoiler "代码" %}
 ```cpp
 // give g[1, n) ask f[0, n)
-// f[i] = sigma f[i-1]*g[j] (1 <= j <= i)
+// f[i] = sigma f[i-j]*g[j] (1 <= j <= i)
 template <class T>
 void cdq_fft(T f[], T g[], const int &l, const int &r) // [l, r)
 {
@@ -3399,7 +3517,9 @@ void cdq_fft(T f[], T g[], const int &l, const int &r) // [l, r)
 }
 // f[0] = 1; cdq_fft(f, g, 0, n);
 ```
+
 {% endspoiler %}
+
 ---
 ## [第二类斯特林数](https://www.luogu.com.cn/problem/P5395)
 {% spoiler "代码" %}
@@ -3413,6 +3533,7 @@ inline void stirling(const int &n)
             S[i][j] = S[i-1][j-1]+S[i-1][j]*j;
 }
 ```
+
 {% endspoiler %}
 {% spoiler "代码" %}
 ```cpp
@@ -3438,7 +3559,9 @@ void stirling(const int &n)
         printf("%lld%c", f[i]*invv%MOD, " \n"[i==n]);
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## 约瑟夫环
 ### [O(n)](https://blog.csdn.net/weixin_42659809/article/details/82596676)
@@ -3447,7 +3570,9 @@ void stirling(const int &n)
 int solve(int n, int v) { return n == 1 ? 0 : (solve(n-1, v)+v)%n; }
 // res = solve(num, step)+1
 ```
+
 {% endspoiler %}
+
 ---
 ## 最大公因数 gcd
 {% spoiler "代码" %}
@@ -3456,6 +3581,7 @@ __gcd(a, b); // <algorithm>
 int gcd(int a, int b) { return b ? gcd(b, a%b) : a; }
 inline int gcd(int a, int b) { while (b) a %= b, swap(a, b); return a; }
 ```
+
 {% endspoiler %}
 ## 最小公倍数 lcm
 $LCM(\frac{a}{b},\frac{c}{d})=\frac{LCM(a, c)}{GCD(b,d)}$
@@ -3465,6 +3591,7 @@ $LCM(\frac{a_1}{b_1},\frac{a_2}{b_2},...)=\frac{LCM(a1, a2,...)}{GCD(b1, b2,...)
 ```cpp
 inline int lcm(int a, int b) { return a/gcd(a, b)*b; }
 ```
+
 {% endspoiler %}
 ## 扩展欧几里得([同余方程](https://www.luogu.org/problemnew/show/P1082))
 {% spoiler "代码" %}
@@ -3478,7 +3605,9 @@ T exgcd(const T a, const T b, T &x, T &y)
     return d;
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [乘法逆元](https://www.luogu.org/problemnew/show/P3811)
 ### 拓展欧几里得
@@ -3492,6 +3621,7 @@ inline T mul_inverse(const T &a, const T &mo = MOD)
     return (x%mo+mo)%mo;
 }
 ```
+
 {% endspoiler %}
 ### 费马小定理
 {% spoiler "代码" %}
@@ -3502,6 +3632,7 @@ inline T mul_inverse(const T &a, const int &mo = MOD)
     return qpow(a, mo-2);
 }
 ```
+
 {% endspoiler %}
 ### 线性递推
 {% spoiler "代码" %}
@@ -3509,12 +3640,14 @@ inline T mul_inverse(const T &a, const int &mo = MOD)
 template <typename T>
 inline void mul_inverse(T *inv, int mod = MOD)
 {
-    inv[0] = 0; inv[1] = 1;
+    inv[0] = inv[1] = 1;
     for(int i = 2; i <= n; ++i)
         inv[i] = 1ll*(mod-mod/i)*inv[mod%i]%mod;
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [中国剩余定理](https://blog.csdn.net/niiick/article/details/80229217)
 ### [中国剩余定理CRT(m互质)](https://www.luogu.org/problem/P3868)
@@ -3530,6 +3663,7 @@ inline long long CRT(int a[], int m[])
     return (res+M)%M;
 }
 ```
+
 {% endspoiler %}
 ### [扩展中国剩余定理EXCRT(m不互质)](https://www.luogu.org/problem/P4777)
 {% spoiler "代码" %}
@@ -3552,11 +3686,14 @@ inline long long EXCRT(long long a[], long long m[])
 }
 
 ```
+
 {% endspoiler %}
+
 ---
 ## 排列组合
 ### [奇偶性](https://blog.csdn.net/baodream/article/details/77822072)
 C(n,k) 当 `n&k == k` 为奇数反之偶数
+
 ---
 ## 欧拉函数
 {% spoiler "代码" %}
@@ -3572,6 +3709,7 @@ inline long long phi(long long x) {
     return res;
 }
 ```
+
 {% endspoiler %}
 ### 筛法
 {% spoiler "代码" %}
@@ -3602,7 +3740,9 @@ struct Euler
     }
 } E;
 ```
+
 {% endspoiler %}
+
 ---
 ## [线性筛](https://www.luogu.org/problemnew/show/P3383)
 {% spoiler "代码" %}
@@ -3627,7 +3767,9 @@ struct Euler
     }
 } E;
 ```
+
 {% endspoiler %}
+
 ---
 ## 判断素数(质数)
  某较优方法
@@ -3643,6 +3785,7 @@ inline bool is_prime(long long x)
     return true;
 }
 ```
+
 {% endspoiler %}
 ### Miller-Rabin 素性测试
 {% spoiler "代码" %}
@@ -3663,7 +3806,9 @@ inline bool MillerRabin(int x)
     return true;
 }
 ```
+
 {% endspoiler %}
+
 ---
 ## [分解质因数](https://www.luogu.org/problemnew/show/P1075)
 {% spoiler "代码" %}
@@ -3676,7 +3821,9 @@ for(int i = 2; i*i <= x; ++i)
     }
 if(x > 1) p[++tot] = x, k[tot] = 1;
 ```
+
 {% endspoiler %}
+
 ---
 ## BSGS
 **[luogu 4884](https://www.luogu.org/problemnew/show/P4884)**
@@ -3702,7 +3849,9 @@ inline long long BSGS(long long a, long long x, long long m) // a^n = x
     return -1;
 }
 ```
+
 {% endspoiler %}
+
 ---
 # 动态规划 DP
 (我**全**都不会)
@@ -3718,6 +3867,7 @@ for(int i = 1; i <= n; ++i)
         if(a[i] > a[j]) f[i] = max(f[i],f[j]+1);
 }
 ```
+
 {% endspoiler %}
 ### 最长公共子序列LCS
 {% spoiler "代码" %}
@@ -3726,6 +3876,7 @@ f[i][j] = max{  f[i-1][j],
                 f[i][j-1],
                 f[i-1][j-1]+1 (if A[i] == B[j])}
 ```
+
 {% endspoiler %}
 ### 数字三角形
 ## 区间DP
@@ -3736,6 +3887,7 @@ f[i][j] = max{  f[i-1][j],
 ```cpp
 for (int i = s; i; i = (i-1)&s) {}
 ```
+
 {% endspoiler %}
 ### 枚举n个元素大小为k的二进制子集
 {% spoiler "代码" %}
@@ -3747,6 +3899,7 @@ while(s<(1<<n)){
     s=((s&~y)/x>>1)|y; //这里有一个位反~
 }
 ```
+
 {% endspoiler %}
 
 ## 队列优化
@@ -3779,6 +3932,7 @@ for(int i = 0; i < w.size(); ++i)
     for(int j = W; j >= w[i]; --j)
         b[j] = max(b[j], b[j-w[i]]+v[i]);
 ```
+
 {% endspoiler %}
 **单调队列**
 {% spoiler "代码" %}
@@ -3809,9 +3963,12 @@ int ans = 0;
 for(int i = 1; i <= W; ++i)
     ans = max(ans, f[i]);
 ```
+
 {% endspoiler %}
+
 ---
 ## [SOS DP](https://codeforces.com/blog/entry/45223)
+
 ---
 # STL
 ## 数据结构
@@ -3828,6 +3985,7 @@ set<T>
 bitset<N>
 map<T, T>
 ```
+
 {% endspoiler %}
 ## 函数
 {% spoiler "代码" %}
@@ -3847,6 +4005,7 @@ s.find(target_string, start_pos); // 找不到返回s.npos
 s.substr(start_pos, len);
 s.replace(start_pos, len, target_string);
 ```
+
 {% endspoiler %}
 ## unordered_map 重载
 {% spoiler "代码" %}
@@ -3881,6 +4040,7 @@ struct KeyHasher
 };
 unordered_map<Node, int, KeyHasher> mmp;
 ```
+
 {% endspoiler %}
 ## 定义函数
 {% spoiler "代码" %}
@@ -3889,7 +4049,9 @@ function<void(int&, int)> f = [&](int &x, int y) -> void {
     x += y;
 };
 ```
+
 {% endspoiler %}
+
 ---
 # 分数
 `warning:未完全验证`
@@ -3932,7 +4094,9 @@ struct Fraction
 };
 using fraction = Fraction<long long>;
 ```
+
 {% endspoiler %}
+
 ---
 # 模数
 ## 弟弟操作
@@ -3981,6 +4145,7 @@ template <int _MOD> struct Mint
 };
 using mint = Mint<MOD>;
 ```
+
 {% endspoiler %}
 ## tourist的模板(用不来)
 {% spoiler "代码" %}
@@ -4140,7 +4305,9 @@ using Mint = Modular<VarMod>;
 constexpr int md = 998244353;
 using Mint = Modular<std::integral_constant<decay<decltype(md)>::type, md>>;
 ```
+
 {% endspoiler %}
+
 ---
 # 高精度
 ## vector版本
@@ -4355,5 +4522,7 @@ struct BigInteger
     }
 };
 ```
+
 {% endspoiler %}
+
 ---

@@ -15,6 +15,8 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/convolution/cover.jpg
 ---
 # 卷积初步
 
+傻逼起见,数组为 $f[0, n]$
+
 ## 一般线性卷积
 
 $f[k]=\sum\limits_{i=0}^{k}a[i]\times b[k-i]$
@@ -80,6 +82,72 @@ signed main()
         inv[i] = qpow(fac[i], MOD-2);
     }
     while (cin >> n) solve();
+    return 0;
+}
+```
+
+{% endspoiler %}
+
+## 三般线性卷积
+
+$f[k]=\sum\limits_{i=0}^{n}a[i]\times b[k-i]$ 其中 $b[i]=i^2,-n \leq i \leq n$
+
+因为 $k-i$ 可能为负, 令 $b'[i] = b[i-n] = (i-n)^2,0 \leq i \leq 2n$
+
+$f'[n+k]=\sum\limits_{i=0}^{n}a[i]\times b'[n+k-i]$
+
+$=\sum\limits_{i=0}^{n}a[i]\times b[k-i] = f[k]$
+
+[hdoj4656 Evaluation](http://acm.hdu.edu.cn/showproblem.php?pid=4656)
+
+[参考博客](https://www.cnblogs.com/candy99/p/6754278.html)
+
+{% spoiler "代码" %}
+```cpp
+int n, b, c, d;
+int a[N];
+long long f[N], g[N<<1], p[N], fac[N], inv[N], c2[N];
+
+void init()
+{
+    fac[0] = fac[1] = inv[0] = inv[1] = 1;
+    for (int i = 2; i < N; ++i) {
+        fac[i] = fac[i-1]*i%MOD;
+        inv[i] = (MOD-MOD/i)*inv[MOD%i]%MOD;
+    }
+    for (int i = 2; i < N; ++i) (inv[i] *= inv[i-1]) %= MOD;
+}
+
+inline void solve()
+{
+    long long pw = 1;
+    for (int i = 0; i < n; ++i, (pw *= d) %= MOD) {
+        f[i] = a[n-1-i]*fac[n-1-i]%MOD;
+        g[i] = pw*inv[i]%MOD;
+    }
+    MTT::work(f, n, g, n);
+    for (int i = 0; i < n; ++i) p[i] = MTT::f[n-1-i];
+
+    pw = 1;
+    for (int i = 0; i < n; ++i, (pw *= b) %= MOD) {
+        c2[i] = qpow(c, 1ll*i*i%(MOD-1));
+        f[i] = pw*c2[i]%MOD*p[i]%MOD*inv[i]%MOD;
+        g[i+(n-1)] = g[-i+(n-1)] = qpow(c2[i], MOD-2);
+    }
+    // for (int i = -n+1; i < n; ++i) g[i+(n-1)] = qpow(qpow(c, 1ll*i*i), MOD-2);
+    MTT::work(f, n, g, n*2-1);
+    for (int i = 0; i < n; ++i)
+        cout << MTT::f[n-1+i]*c2[i]%MOD << endl;
+}
+
+signed main()
+{
+    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    init();
+    while (cin >> n >> b >> c >> d) {
+        for (int i = 0; i < n; ++i) cin >> a[i];
+        solve();
+    }
     return 0;
 }
 ```
