@@ -807,8 +807,8 @@ private :
         lazy[i] = 0;
         if (l == r) { tr[i] = k; return; }
         int mid = (l+r)>>1;
-        _build(l, mid, i<<1);
-        _build(mid+1, r, i<<1|1);
+        _build(l, mid, k, i<<1);
+        _build(mid+1, r, k, i<<1|1);
         push_up(i);
     }
     template <typename TT>
@@ -2190,30 +2190,35 @@ struct Dinic
     {
         int v, nex;
         T w;
-    } e[M<<1];
-    int tot, n;
-    int fir[N], dep[N];
-    T work(const int &s, const int &t) {
+        EDGE(const int &_v, const int &_nex, const T &_w) : v(_v), nex(_nex), w(_w) {}
+    };
+    vector<EDGE> e;
+    int n, s, t;
+    int fir[N], dep[N], cur[N];
+    Dinic() { e.reserve(N<<2); }
+    T work(const int &_s, const int &_t) {
+        s = _s; t = _t;
         T maxflow = 0, flow;
-        while (bfs(s, t))
-            while ((flow = dfs(s, t, INF)))
+        while (bfs())
+            while ((flow = dfs(s, INF)))
                 maxflow += flow;
         return maxflow;
     }
-    void init(const int &sz) {
-        n = sz;
-        tot = 0;
+    void init(const int &_n) {
+        n = _n;
+        e.clear();
         memset(fir, -1, sizeof(int)*(n+3));
     }
     void add_edge(const int &u, const int &v, const T &w) {
-        e[tot] = {v, fir[u], w}; fir[u] = tot++;
-        e[tot] = {u, fir[v], 0}; fir[v] = tot++;
+        e.emplace_back(v, fir[u], w); fir[u] = e.size()-1;
+        e.emplace_back(u, fir[v], 0); fir[v] = e.size()-1;
     }
-    bool bfs(const int &s, const int &t) {
+    bool bfs() {
         queue<int> q;
         memset(dep, 0, sizeof(int)*(n+3));
         q.push(s);
         dep[s] = 1;
+        for (int i = 0; i <= n; ++i) cur[i] = fir[i];
         while (q.size()) {
             int u = q.front();
             q.pop();
@@ -2227,13 +2232,13 @@ struct Dinic
         }
         return false;
     }
-    T dfs(const int &u, const int &t, const T &flow) {
+    T dfs(const int &u, const T &flow) {
         if (!flow || u == t) return flow;
         T rest = flow, now;
-        for (int i = fir[u], v; i != -1; i = e[i].nex) {
+        for (int &i = cur[u], v; i != -1; i = e[i].nex) {
             v = e[i].v;
             if (dep[v] != dep[u]+1 || !e[i].w) continue;
-            now = dfs(v, t, min(rest, e[i].w));
+            now = dfs(v, min(rest, e[i].w));
             if (!now) {
                 dep[v] = 0;
             } else {

@@ -9,7 +9,7 @@ categories:
   - ACM
 tags:
   - 网络流
-description: 究鄙人此生所学口胡网络流一算法
+description: 网络流学习笔记
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/network_flows/cover.gif
 ---
 # 序
@@ -279,11 +279,122 @@ signed main()
 ```
 {%endspoiler%}
 
+### [codeforces 546E. Soldier and Traveling](https://codeforces.com/contest/546/problem/E)
+#### 题意
+给一张图，每个点有一些人，每个人只能最多移动 1 步
+
+问能否使每个点的人数达到给定值
+#### 思路
+简单题,每个点拆成移动前和移动后
+#### 代码
+{% spoiler "代码" %}
+```cpp
+int n, m;
+int res[N][N];
+ISAP<int> isap;
+
+signed main()
+{
+    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    cin >> n >> m;
+    // turn pt i to i*2-1, i*2
+    int s = 2*n+1, t = 2*n+2,
+        suma = 0, sumb = 0;
+    isap.init(t);
+    for (int i = 1, a; i <= n; ++i) {
+        cin >> a;
+        suma += a;
+        isap.add_edge(s, i*2-1, a);
+        isap.add_edge(i*2-1, i*2, INF);
+    }
+    for (int i = 1, b; i <= n; ++i) {
+        cin >> b;
+        sumb += b;
+        isap.add_edge(i*2, t, b);
+    }
+    for (int i = 1, u, v; i <= m; ++i) {
+        cin >> u >> v;
+        isap.add_edge(u*2-1, v*2, INF);
+        isap.add_edge(v*2-1, u*2, INF);
+    }
+    if (suma != sumb || isap.work(s, t) != sumb) return cout << "NO\n", 0;
+    for (int u = 1; u <= n; ++u) {
+        for (int i = isap.fir[u*2], v; i != -1; i = isap.e[i].nex) {
+            v = (isap.e[i].v+1)/2;
+            res[v][u] = isap.e[i].w;
+        }
+    }
+    cout << "YES\n";
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= n; ++j) {
+            cout << res[i][j] << " \n"[j==n];
+        }
+    }
+    return 0;
+}
+```
+
+{%endspoiler%}
+
 ### 另见于 [有向无环图最小不相交路径覆盖](#有向无环图最小不相交路径覆盖)
+
+## 虚点
+其实没什么好讲的
+### [luoguP1361 小M的作物](https://www.luogu.com.cn/problem/P1361)
+#### 思路
+考虑最小割
+
+每个点向 S, T 连边，设 S 是种在 A, B 是种在 B, 通过最小割拆成两个图即为所求
+
+对于每个组合，建立一个虚点往 A 连边权为额外收益的边，再往组合里的每个点连 INF 边
+
+这样如果某个作物要种在 B (割掉与 A 连边),此时因为该点还通过组合与 A 有连边
+
+所以如果不种在 A 此时组合的边必定被割掉
+
+#### 代码
+{% spoiler "代码" %}
+```cpp
+int n, m;
+int a[N], b[N];
+ISAP<int> isap;
+
+signed main()
+{
+    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    cin >> n;
+    for (int i = 1; i <= n; ++i) cin >> a[i];
+    for (int i = 1; i <= n; ++i) cin >> b[i];
+    cin >> m;
+    // plant [1, n] combination n+i*2-1, n+i*2
+    isap.init(n+m*2+2);
+    int s = n+m*2+1, t = n+m*2+2, sum = 0;
+    for (int i = 1, k, c1, c2; i <= m; ++i) {
+        cin >> k >> c1 >> c2;
+        isap.add_edge(s, n+i*2-1, c1);
+        isap.add_edge(n+i*2, t, c2);
+        sum += c1+c2;
+        for (int j = 1, x; j <= k; ++j) {
+            cin >> x;
+            isap.add_edge(n+i*2-1, x, INF);
+            isap.add_edge(x, n+i*2, INF);
+        }
+    }
+    for (int i = 1; i <= n; ++i) {
+        sum += a[i]+b[i];
+        isap.add_edge(s, i, a[i]);
+        isap.add_edge(i, t, b[i]);
+    }
+    cout << sum-isap.work(s, t) << endl;
+    return 0;
+}
+```
+
+{%endspoiler%}
 
 ## 最小点权覆盖和最大点权独立集
 原二分图中的边(u,v)替换为容量为INF的有向边(u,v)，设立源点s和汇点t，将s和x集合中的点相连，容量为该点的权值；将y中的点同t相连，容量为该点的权值。求最小割
-### [hdoj1565	方格取数(1)](http://acm.hdu.edu.cn/showproblem.php?pid=1565)
+### [hdoj1565 方格取数(1)](http://acm.hdu.edu.cn/showproblem.php?pid=1565)
 #### 题意
 给你一个n*n的格子的棋盘，每个格子里面有一个非负数。从中取出若干个数，使得任意的两个数所在的格子没有公共边，就是说所取的数所在的2个格子不能相邻，并且取出的数的和最大。
 #### 建图
@@ -344,6 +455,61 @@ signed main()
 }
 ```
 {%endspoiler%}
+
+### [hdoj3657 Game](http://acm.hdu.edu.cn/showproblem.php?pid=3657)
+#### 题意
+与上题类似，不同的是
+1. 相邻的可以选，但要付出一定代价
+2. 有些点必选
+#### 建图
+同上
+1. 相邻两点的边权由 INF 改为代价，要么割掉其中一个，要么割掉两点连边表示两个都选
+2. 这个点到源点(汇点)的边权改为 INF ,以防被割掉
+#### 代码
+{% spoiler "代码" %}
+```cpp
+int n, m, k;
+int a[N][N], c[N][N];
+Dinic<int> dinic;
+
+inline int mp(const int &x, const int &y) { return (x-1)*m+y; }
+
+inline void solve()
+{
+    int sum = 0;
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) {
+            cin >> a[i][j];
+            sum += a[i][j];
+            c[i][j] = a[i][j];
+        }
+    }
+    for (int i = 1, x, y; i <= k; ++i) {
+        cin >> x >> y;
+        c[x][y] = INF;
+    }
+    int s = n*m+1, t = n*m+2;
+    dinic.init(n*m+2);
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) {
+            if ((i+j)&1) {
+                dinic.add_edge(s, mp(i, j), c[i][j]);
+                for (int k = 0, x, y; k < 4; ++k) {
+                    x = i+dir[k];
+                    y = j+dir[k+1];
+                    if (x < 1 || y < 1 || x > n || y > m) continue;
+                    dinic.add_edge(mp(i, j), mp(x, y), 2*(a[i][j]&a[x][y]));
+                }
+            } else {
+                dinic.add_edge(mp(i, j), t, c[i][j]);
+            }
+        }
+    }
+    cout << sum-dinic.work(s, t) << endl;
+}
+```cpp
+
+{% endspoiler %}
 
 ## 最大权闭合图
 
