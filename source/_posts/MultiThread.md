@@ -71,6 +71,42 @@ bool list_contains(int value_to_find)
 
 
 一意咕行
+# pthread
+thread 是 C++11 对 pthread 的封装
+```cpp
+#include <pthread.h>
+const int THREAS_COUNT = 8;
+struct Info {
+  int start, end;
+};
+void* f(void *_arg) {
+  Info arg = *(Info*)_arg;
+  // do something
+}
+int main() {
+  int part = n / THREAD_COUNT;
+  pthread_attr_t attr;
+  void *status;
+  pthread_attr_init(&attr);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+  Info info[THREAD_COUNT];
+  pthread_t threads[THREAD_COUNT];
+  for (re int i = 0; i < THREAD_COUNT; ++i) {
+    info[i].start = i * part, info[i].end = i * part + part;
+  }
+  info[THREAD_COUNT-1].end = n;
+  for (re int i = 0; i < THREAD_COUNT; ++i) {
+    int rc = pthread_create(&threads[i], NULL, f, (void*)&(info[i]));
+    if (rc) cerr << "Wrong!" << endl;
+  }
+  pthread_attr_destroy(&attr);
+  for (re int i = 0; i < THREAD_COUNT; ++i) {
+    int rc = pthread_join(threads[i], &status);
+    if (rc) cerr << "Wrong!" << endl;
+  }
+}
+```
 
 # 参考资料
 [《C++ Concurrency in Action - SECOND EDITION》](https://github.com/xiaoweiChen/CPP-Concurrency-In-Action-2ed-2019)
+[linux下把进程/线程绑定到特定cpu核上运行](https://blog.csdn.net/guotianqing/article/details/80958281)

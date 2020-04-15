@@ -9,7 +9,7 @@ categories:
   - ACM
 tags:
   - 网络流
-description: 网络流学习笔记
+description: 网络流|费用流学习笔记
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/network_flows/cover.gif
 ---
 # 序
@@ -336,6 +336,36 @@ signed main()
 
 {%endspoiler%}
 
+### [luoguP2153 [SDOI2009]晨跑](https://www.luogu.com.cn/problem/P2153)
+#### 思路
+费用流板子题,限制:路口只能走一次
+#### 代码
+{% spoiler "代码" %}
+```cpp
+int n, m;
+ZKW_SPFA<int> zkw;
+
+signed main()
+{
+    // pt i ==> i*2-1, i*2
+    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    cin >> n >> m;
+    zkw.init(n*2);
+    for (int i = 2; i < n; ++i) zkw.add_edge(i*2-1, i*2, 1, 0);
+    for (int i = 1, u, v, w; i <= m; ++i) {
+        cin >> u >> v >> w;
+        zkw.add_edge(u*2, v*2-1, 1, w);
+    }
+    pair<int, int> res = zkw.work(2, n*2-1);
+    cout << res.first << " " << res.second << endl;
+    return 0;
+}
+```
+
+{%endspoiler%}
+
+### [luoguP1251 餐巾计划问题](https://www.luogu.com.cn/problem/P1251)
+
 ### 另见于 [有向无环图最小不相交路径覆盖](#有向无环图最小不相交路径覆盖)
 
 ## 虚点
@@ -459,12 +489,18 @@ signed main()
 ### [hdoj3657 Game](http://acm.hdu.edu.cn/showproblem.php?pid=3657)
 #### 题意
 与上题类似，不同的是
+
 1. 相邻的可以选，但要付出一定代价
 2. 有些点必选
+
+
 #### 建图
 同上
+
 1. 相邻两点的边权由 INF 改为代价，要么割掉其中一个，要么割掉两点连边表示两个都选
 2. 这个点到源点(汇点)的边权改为 INF ,以防被割掉
+
+
 #### 代码
 {% spoiler "代码" %}
 ```cpp
@@ -648,6 +684,8 @@ inline void solve()
 
 # 一些资料
 
-[codeforces](https://codeforces.com/problemset?tags=flows)
+[luogu网络流24题](https://www.luogu.com.cn/problem/list?tag=332)
 
 [胡伯涛《最小割模型在信息学竞赛中的应用》](https://github.com/enkerewpo/OI-Public-Library/blob/master/IOI%E4%B8%AD%E5%9B%BD%E5%9B%BD%E5%AE%B6%E5%80%99%E9%80%89%E9%98%9F%E8%AE%BA%E6%96%871999-2019/2007/day2/7.%E8%83%A1%E4%BC%AF%E6%B6%9B%E3%80%8A%E6%9C%80%E5%B0%8F%E5%89%B2%E6%A8%A1%E5%9E%8B%E5%9C%A8%E4%BF%A1%E6%81%AF%E5%AD%A6%E7%AB%9E%E8%B5%9B%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E3%80%8B.pdf)
+
+[codeforces网络流标签](https://codeforces.com/problemset?tags=flows)
