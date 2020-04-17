@@ -51,7 +51,7 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/network_flows/cover.gi
 
 从右边每个点向 t 连权为 1 的边 (保证右边每个最多被匹配一次)
 
-### [loj6000	「网络流 24 题」搭配飞行员](https://loj.ac/problem/6000)
+### [loj6000「网络流 24 题」搭配飞行员](https://loj.ac/problem/6000)
 #### 代码
 {% spoiler "代码" %}
 ```cpp
@@ -365,8 +365,85 @@ signed main()
 {%endspoiler%}
 
 ### [luoguP1251 餐巾计划问题](https://www.luogu.com.cn/problem/P1251)
+#### 思路
+把每天拆成早上(可用毛巾)晚上(待洗毛巾) // 详情见洛谷题解
+#### 代码
+{% spoiler "代码" %}
+```cpp
+int r[N];
+ZKW_SPFA<long long> zkw;
+
+signed main()
+{
+    // day i ==> i to wash | evening, i+n can use | morning
+    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    int n, p, t1, m1, t2, m2;
+    cin >> n;
+    for (int i = 1; i <= n; ++i) cin >> r[i];
+    cin >> p >> t1 >> m1 >> t2 >> m2;
+    int s = 0, t = n*2+1;
+    zkw.init(t);
+    for (int i = 1; i <= n; ++i) {
+        zkw.add_edge(s, i, r[i], 0);
+        zkw.add_edge(i+n, t, r[i], 0);
+        if (i+1 <= n) zkw.add_edge(i, i+1, INF, 0); // do not wash
+        if (i+t1 <= n) zkw.add_edge(i, i+n+t1, INF, m1); // fast
+        if (i+t2 <= n) zkw.add_edge(i, i+n+t2, INF, m2); // slow
+        zkw.add_edge(s, i+n, INF, p); // buy new
+    }
+    cout << zkw.work(s, t).second << endl;
+    return 0;
+}
+```
+
+{%endspoiler%}
 
 ### 另见于 [有向无环图最小不相交路径覆盖](#有向无环图最小不相交路径覆盖)
+
+## 拆边
+
+动态费用
+
+如果对于某条边，其费用是关于流量的一个函数，并且这个函数的斜率是单调增加的，我们就可以拆边，第x条费用设为𝑓(𝑥)−𝑓(𝑥−1)
+
+### [hdoj3667 Transportation](http://acm.hdu.edu.cn/showproblem.php?pid=3667)
+#### 题意
+N个城市，M条边，你要从1号点运送k个货物到N号点。每条边(u,v,a,c)表示u->v有一条边容量为c，从这条边运送x个物品花费为 ，问最小花费为多少？
+
+N <= 100, M <= 5000, c <= 5
+#### 思路
+对于每一条边，原本的容量为c，我们可以把它拆成c条边
+
+这c条边的容量都为1，花费为1a,3a,5a,7a...(c<=5)
+
+由于费用流会优先流花费较小的边，因此假设最终的流中我们的流量经过了前k小的边，花费就是1a+3a+..+2(k-1)a=ak^2，与题意相符
+#### 代码
+{% spoiler "代码" %}
+```cpp
+int n, m, k;
+ZKW_SPFA<int> zkw;
+
+signed main()
+{
+    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    while (cin >> n >> m >> k) {
+        int s = 0, t = n;
+        zkw.init(n);
+        zkw.add_edge(s, 1, k, 0);
+        for (int i = 1, u, v, a, c; i <= m; ++i) {
+            cin >> u >> v >> a >> c;
+            for (int j = 1; j <= c; ++j) {
+                zkw.add_edge(u, v, 1, (2*j-1)*a);
+            }
+        }
+        pair<int, int> res = zkw.work(s, t);
+        cout << (res.first == k ? res.second : -1) << endl;
+    }
+    return 0;
+}
+```
+
+{%endspoiler%}
 
 ## 虚点
 其实没什么好讲的
@@ -624,7 +701,7 @@ inline void solve()
 ### 证明
 一开始每个点都是独立的为一条路径，总共有n条不相交路径。我们每次在二分图里找一条匹配边就相当于把两条路径合成了一条路径，也就相当于路径数减少了1。所以找到了几条匹配边，路径数就减少了多少。所以有最小路径覆盖=原图的结点数-新图的最大匹配数。
 
-### [loj6002	「网络流 24 题」最小路径覆盖](https://loj.ac/problem/6002)
+### [loj6002「网络流 24 题」最小路径覆盖](https://loj.ac/problem/6002)
 
 #### 分析
 二分图匹配求方案
@@ -669,9 +746,10 @@ inline void solve()
     cout << res << endl;
 }
 ```
+
 {% endspoiler %}
 
-### [loj6003	「网络流 24 题」魔术球](https://loj.ac/problem/6003)
+### [loj6003「网络流 24 题」魔术球](https://loj.ac/problem/6003)
 
 ## 有向无环图最小可相交路径覆盖
 
@@ -680,12 +758,102 @@ inline void solve()
 
 最小可相交路径覆盖：每一条路径经过的顶点可以相同。
 
+## 切糕模型
+
+### [codeforces434 D. Nanami's Power Plant](https://codeforces.com/problemset/problem/434/D)
+详情见文末郑学长pdf,有图有真相(逃
+#### 题意
+给N个二次方程f(x)=ax^2+bx+c,每个方程的x取值范围为[l, r],并给出M个限制条件(u, v, d),表示要求满足xu <= xv+d,问你所有函数值之和的最大值
+#### 思路
+<img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/network_flows/cf434D.png" data-action="zoom">
+
+最小割,建图略了.(注:大致思路如此，我的代码略有不同)
+
+如果割了f1(l1+2),我们发现如果割f2(l2)的话S,T还是联通,所以(贪心)没必要割,只能割后面的，因此做到了限制条件
+
+但周知最小割是最小值,那么求最大值就把边权改为负,如果是负数求出来最大流量可能是0(逃)所以边权再加上一个很大的值使之为正，最后减去即可
+#### 代码
+{% spoiler "代码" %}
+```cpp
+const int LIM = 1e6;
+
+struct F {
+    int a, b, c, l, r;
+    int calc(const int &x) const {
+        return LIM-(a*x*x+b*x+c);
+    }
+};
+
+int n, m;
+int sum[55];
+F f[55];
+ISAP<long long> isap;
+
+inline int id(const int &i, const int &j) { return sum[i-1]+j-f[i].l; }
+
+signed main()
+{
+    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    cin >> n >> m;
+    for (int i = 1; i <= n; ++i) {
+        cin >> f[i].a >> f[i].b >> f[i].c;
+    }
+    for (int i = 1; i <= n; ++i) {
+        cin >> f[i].l >> f[i].r;
+        sum[i] = sum[i-1]+(f[i].r-f[i].l+2);
+    }
+    int s = sum[n], t = sum[n]+1;
+    isap.init(t+1); // start from 0
+    for(int i = 1; i <= n; ++i) {
+        isap.add_edge(s, id(i, f[i].l), INF);
+        for (int j = f[i].l; j <= f[i].r; ++j) {
+            isap.add_edge(id(i, j), id(i, j+1), f[i].calc(j));
+        }
+        isap.add_edge(id(i, f[i].r+1), t, INF);
+    }
+    // xu <= xv+d
+    for (int i = 1, u, v, d; i <= m; ++i) {
+        cin >> u >> v >> d;
+        for (int j = f[u].l; j <= f[u].r; ++j) {
+            if (j-d >= f[v].l && j-d <= f[v].r+1) {
+                isap.add_edge(id(u, j), id(v, j-d), INF);
+            }
+        }
+    }
+    cout << (LIM*n-isap.work(s, t)) << endl;
+    return 0;
+}
+```
+
+{% endspoiler %}
+
+## 二分
+
+最大流：新加进一条边不会使最大流变小；
+
+费用流：费用流中费用是单调的；
+
+## 优化建图
+### [POJ1149 PIGS](http://poj.org/problem?id=1149)
+#### 题意
+有N个顾客，M个猪圈，每个猪圈有若干头猪，在开始的时候猪圈都是关闭的，每个顾客有一些猪圈的钥匙，每个顾客可以买最多hi头猪；
+
+顾客依次来买猪，当一个顾客打开一些猪圈并且买完猪之后，你可以调整这些开着门的猪圈中猪的数量，然后再关门，等下一个顾客；求最多能卖多少头猪；
+
+n <= 100, m <= 1000
+#### 思路
+见文末郑学长pdf
+
 ## 未完待续
 
 # 一些资料
 
+[郑学长的讲座](https://github.com/KaizynX/cdn/tree/master/file/network_flows) 收获很多
+
 [luogu网络流24题](https://www.luogu.com.cn/problem/list?tag=332)
 
 [胡伯涛《最小割模型在信息学竞赛中的应用》](https://github.com/enkerewpo/OI-Public-Library/blob/master/IOI%E4%B8%AD%E5%9B%BD%E5%9B%BD%E5%AE%B6%E5%80%99%E9%80%89%E9%98%9F%E8%AE%BA%E6%96%871999-2019/2007/day2/7.%E8%83%A1%E4%BC%AF%E6%B6%9B%E3%80%8A%E6%9C%80%E5%B0%8F%E5%89%B2%E6%A8%A1%E5%9E%8B%E5%9C%A8%E4%BF%A1%E6%81%AF%E5%AD%A6%E7%AB%9E%E8%B5%9B%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E3%80%8B.pdf)
+
+[LibreOJ网络流24题(不全)](https://loj.ac/problems/tag/30)
 
 [codeforces网络流标签](https://codeforces.com/problemset?tags=flows)
