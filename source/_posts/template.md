@@ -2771,6 +2771,94 @@ void tarjan(int cur, int fa)
 {% endspoiler %}
 
 ---
+## [SCC强连通分量|Tarjan](https://www.luogu.com.cn/problem/P2863)
+### 递归版本
+{% spoiler "代码" %}
+```cpp
+int _dfn, _col, _top;
+int dfn[N], low[N], vis[N], col[N], sta[N];
+
+void tarjan(const int &u) {
+    dfn[u] = low[u] = ++_dfn;
+    vis[u] = 1;
+    sta[++_top] = u;
+    for (int v : e[u]) {
+        if (!dfn[v]) {
+            tarjan(v);
+            low[u] = min(low[u], low[v]);
+        } else if (vis[v]) {
+            low[u] = min(low[u], low[v]);
+        }
+    }
+    if (dfn[u] == low[u]) {
+        ++_col;
+        do {
+            col[sta[_top]] = _col;
+            vis[sta[_top]] = 0;
+        } while (sta[_top--] != u);
+    }
+}
+```
+
+{% endspoiler %}
+
+### 非递归版本
+{% spoiler "代码" %}
+```cpp
+int _dfn, _col, _top;
+int dfn[N], low[N], ins[N], col[N], sta[N];
+
+struct Stack_Node {
+    int u;
+    int edge_info;
+    int state;
+} tarjan_stack[N];
+
+void tarjan(const int &u) {
+    static int stack_top;
+    stack_top = 0;
+    tarjan_stack[++stack_top] = {u, 0, 0};
+    while (stack_top) {
+        bool flag = false;
+        int &u = tarjan_stack[stack_top].u;
+        auto &i = tarjan_stack[stack_top].edge_info;
+        switch (tarjan_stack[stack_top].state) {
+        case 0 :
+        tarjan_stack[stack_top].state = 1;
+        flag = false;
+            dfn[u] = low[u] = ++_dfn;
+            ins[u] = 1;
+            sta[++_top] = u;
+            for (; i < (int)e[u].size(); ++i) {
+#define v e[u][i]
+                if (!dfn[v]) {
+                    tarjan_stack[++stack_top] = {v, 0, 0};
+        flag = true;
+                    break;
+        case 1 :
+        flag = false;
+                    low[u] = min(low[u], low[v]);
+                } else if (ins[v]) {
+                    low[u] = min(low[u], low[v]);
+                }
+#undef v
+            }
+        if (flag) break;
+            if (dfn[u] == low[u]) {
+                ++_col;
+                do {
+                    col[sta[_top]] = _col;
+                    ins[sta[_top]] = 0;
+                } while (sta[_top--] != u);
+            }
+        --stack_top;
+        }
+    }
+}
+```
+
+{% endspoiler %}
+
 ## [缩点](https://www.luogu.org/problemnew/show/P3387)
 {% spoiler "代码" %}
 ```cpp
