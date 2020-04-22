@@ -69,10 +69,14 @@ bool list_contains(int value_to_find)
 ```
 菜鸡理解:`some_mutex` 作为一个标记，当执行3,4时，标记置为 lock，则无法访问，函数结束后自行 unlock
 
+# 一意咕行
 
-一意咕行
 # pthread
+
 thread 是 C++11 对 pthread 的封装
+
+原生 windows 不支持 pthread ,需要捣鼓一番
+
 ```cpp
 #include <pthread.h>
 const int THREAS_COUNT = 8;
@@ -109,4 +113,5 @@ int main() {
 
 # 参考资料
 [《C++ Concurrency in Action - SECOND EDITION》](https://github.com/xiaoweiChen/CPP-Concurrency-In-Action-2ed-2019)
+
 [linux下把进程/线程绑定到特定cpu核上运行](https://blog.csdn.net/guotianqing/article/details/80958281)
