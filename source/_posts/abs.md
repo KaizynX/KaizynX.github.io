@@ -17,8 +17,8 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/abs/cover.jpg
 记 $\vert a\vert \Leftrightarrow abs(a)$
 
 $\vert a \vert =\begin{cases}
-a, a \geq 0 \\
--a, a \leq 0 \\
+a, a \geq 0 \\\\
+-a, a \leq 0 \\\\
 \end{cases}$
 
 $\vert a-b \vert = \max(a,b)-\min(a,b)$
@@ -121,9 +121,9 @@ public:
 
 $
 \begin{aligned}  
-dif&=-\vert a_{l}-a_{l-1}\vert-\vert a_{r}-a_{r+1}\vert+\vert a_{l-1}-a_{r}\vert+\vert a_{l}-a_{r+1}\vert \\
-dif&=-\vert a_{i}-a_{i-1}\vert-\vert a_{j}-a_{j+1}\vert+\vert a_{i-1}-a_{j}\vert+\vert a_{i}-a_{j+1}\vert \\
-&=a_{i-1}-\vert a_{i}-a_{i-1}\vert+\vert a_{i}-a_{j+1}\vert-a_{j}-\vert a_{j}-a_{j+1}\vert \\
+dif&=-\vert a_{l}-a_{l-1}\vert-\vert a_{r}-a_{r+1}\vert+\vert a_{l-1}-a_{r}\vert+\vert a_{l}-a_{r+1}\vert \\\\
+dif&=-\vert a_{i}-a_{i-1}\vert-\vert a_{j}-a_{j+1}\vert+\vert a_{i-1}-a_{j}\vert+\vert a_{i}-a_{j+1}\vert \\\\
+&=a_{i-1}-\vert a_{i}-a_{i-1}\vert+\vert a_{i}-a_{j+1}\vert-a_{j}-\vert a_{j}-a_{j+1}\vert \\\\
 \end{aligned}
 $
 
@@ -133,7 +133,7 @@ $
 
     $
 \begin{aligned} 
-dif&=a_{i-1}+a_{i}-\vert a_{i}-a_{i-1}\vert-(a_{j}+a_{j+1}+\vert a_{j}-a_{j+1}\vert) \\
+dif&=a_{i-1}+a_{i}-\vert a_{i}-a_{i-1}\vert-(a_{j}+a_{j+1}+\vert a_{j}-a_{j+1}\vert) \\\\
 &=2\times\big( \min(a_{i-1},a_{i})-max(a_{j}, a_{j+1}) \big )
 \end{aligned}
 $

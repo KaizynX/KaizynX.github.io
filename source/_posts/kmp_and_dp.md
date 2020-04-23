@@ -13,7 +13,7 @@ tags:
   - 数位DP
   - 矩阵快速幂
 description: 两道 KMP+数位DP 题
-photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/kmp_and_dp/pic.jpg 
+photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/kmp_and_dp/cover.jpg 
 ---
 # 例一
 
@@ -66,9 +66,9 @@ f[i][0] & f[i][1] & \cdots & f[i][m]
 \end{bmatrix}
 \times
 \begin{bmatrix}  
-g[0][0] & g[0][1] & \cdots & g[0][m] \\
-g[1][0] & g[1][1] & \cdots & g[1][m] \\
-\vdots & \vdots & \ddots & \vdots \\
+g[0][0] & g[0][1] & \cdots & g[0][m] \\\\
+g[1][0] & g[1][1] & \cdots & g[1][m] \\\\
+\vdots & \vdots & \ddots & \vdots \\\\
 g[m][0] & g[m][1] & \cdots & g[m][m]
 \end{bmatrix}
 =
@@ -76,9 +76,6 @@ g[m][0] & g[m][1] & \cdots & g[m][m]
 f[i+1][0] & f[i+1][1] & \cdots & f[i+1][m]
 \end{bmatrix}
 $$
-
-**气哭,渲染错误,上图**
-<img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/kmp_and_dp/matrix.png " data-action="zoom">
 
 $F_0\times G^n=F_n$
 
