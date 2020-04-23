@@ -23,7 +23,7 @@ a, a \geq 0 \\\\
 
 $\vert a-b \vert = \max(a,b)-\min(a,b)$
 
-$\vert a-b \vert = \max\{a-b,b-a\}$
+$\vert a-b \vert = \max\\{a-b,b-a\\}$
 
 $\max(a,b)=\frac{a+b+\vert a-b \vert}{2}$
 
@@ -60,7 +60,7 @@ $\because \vert a-b \vert = \max(a-b,b-a)$
 
 $\therefore$ 拆开绝对值后 $a_{l-1},a_{r}$ 异号, $a_{l},a_{r+1}$ 异号
 
-记 $f_1, f_2 \in \{1,-1\}$ 
+记 $f_1, f_2 \in \\{1,-1\\}$ 
 
 $dif=f_1a_{l-1}+f_2a_{l}-\vert a_{l}-a_{l-1}\vert-(f_1a_{r}+f_2a_{r+1}+\vert a_{r}-a_{r+1}\vert)$
 

@@ -27,4 +27,6 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/hexo_mathjax/cover.jpg
 
 **使用四个反斜杠** `\\\\`
 
+同理一个反斜杠不行的地方用两个反斜杠
+
 [参考资料](https://www.zhihu.com/question/37542455/answer/120814953)
