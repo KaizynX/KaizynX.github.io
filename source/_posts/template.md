@@ -256,6 +256,58 @@ double sqrt(const double &a)
 
 {% endspoiler %}
 
+## i/k == j 的 k 的个数
+{% spoiler "代码" %}
+```cpp
+for (int i = 1; i <= n; ++i) {
+  for (int j = 1, l, r; j <= n; ++j) {
+    l = max(1, i/(j+1));
+    while (l-1 >= 1 && i/(l-1) == j) --l;
+    while (i/l > j) ++l;
+    r = i/j;
+    while (r+1 <= i && i/(r+1) == j) ++r;
+    while (i/r < j) --r;
+    if (r-l+1 != i/j-i/(j+1)) {
+        cout << i << " " << j << endl;
+    }
+  }
+}
+```
+
+{% endspoiler %}
+
+## [三分法](https://blog.csdn.net/inf_force/article/details/44891121)
+{% spoiler "代码" %}
+```cpp
+// not so well
+while (l < r) {
+  int midl = (l+r)>>1, midr = (midl+r)>>1;
+  if (f(midl) > f(midr)) {
+    l = midr;
+  } else {
+    r = midl;
+  }
+}
+```
+```cpp
+while(r-l>5){
+	int ml=(l+l+r)/3;
+	int mr=(l+r+r)/3;
+	if(f(ml)<f(mr))r=mr;
+	else l=ml;
+}
+for (int i = l; i <= r; ++i) res = min(res, f(i));
+```
+```cpp
+while (r-l > 3) {
+    int mid = (l+r)>>1;
+    if (f(mid) < f(mid+1)) r = mid+1;
+    else l = mid;
+}
+```
+
+{% endspoiler %}
+
 ---
 # 计算几何
 ## 向量 坐标 直线 圆 (结构体)
@@ -1019,7 +1071,7 @@ struct SegmentTree
     void build(const int &_n, const T &k = 0) { n = _n; _build(1, n, k); }
     template <typename TT>
     void buiil(const int _n, const TT a[]) { n = _n; _build(1, n, a); }
-    void modify(const int &x, const T &k) { _modify(x, k); }
+    void modify(const int &x, const T &k) { _modify(x, x, k); }
     void modify(const int &l, const int &r, const T &k) { _modify(l, r, k); }
     void add(const int &x, const T &k) { _add(x, k); }
     T query(const int &x) { return _query(x, x); }
@@ -1467,8 +1519,8 @@ struct FenKuai
 ```
 
 {% endspoiler %}
-## [ST表](https://www.luogu.org/problemnew/show/P3865)
-一维
+## ST表
+### [一维](https://www.luogu.org/problemnew/show/P3865)
 {% spoiler "代码" %}
 ```cpp
 template <typename T, typename U = std::greater<T>>
@@ -1478,7 +1530,7 @@ struct ST
     static const T INF = 1e9;
     int lg2[N];
     U cmp = U();
-    T rmq[N][NN]; // rmq[i][j] ==> [i-2^j+1, i]
+    T rmq[N][NN];
     ST() {
         fill(rmq[0], rmq[0]+N*NN, cmp(-INF, +INF) ? INF : -INF);
         for (int i = 2; i < N; ++i) lg2[i] = lg2[i>>1]+1;
@@ -1486,18 +1538,7 @@ struct ST
     T& operator [] (const int &i) { return rmq[i][0]; }
     void init(const T &val = 0) { fill(rmq[0], rmq[0]+N*NN, val); }
     T mv(const T &x, const T &y) { return cmp(x, y) ? x : y; }
-    void build(T a[], const int &n) {
-        for (int i = 1; i <= n; ++i) {
-            rmq[i][0] = a[i];
-            for (int j = 1; j <= lg2[i]; ++j)
-                rmq[i][j] =  mv(rmq[i][j-1], rmq[i-(1<<(j-1))][j-1]);
-        }
-    }
-    T query(const int &l, const int &r) {
-        int k = lg2[r-l+1];
-        return mv(rmq[r][k], rmq[l+(1<<k)-1][k]);
-    }
-    /* rmq[i][j] ==> [i, i+2^j-1]
+    // rmq[i][j] ==> [i, i+2^j-1]
     void build(T a[], const int &n) {
         for (int i = n; i; --i) {
             rmq[i][0] = a[i];
@@ -1506,15 +1547,30 @@ struct ST
         }
     }
     T query(const int &l, const int &r) {
+        if (l > r) return query(r, l);
         int k = lg2[r-l+1];
         return mv(rmq[l][k], rmq[r-(1<<k)+1][k]);
     }
-    */
 };
+    /* rmq[i][j] ==> [i-2^j+1, i]
+    void build(T a[], const int &n) {
+        for (int i = 1; i <= n; ++i) {
+            rmq[i][0] = a[i];
+            for (int j = 1; j <= lg2[i]; ++j)
+                rmq[i][j] =  mv(rmq[i][j-1], rmq[i-(1<<(j-1))][j-1]);
+        }
+    }
+    T query(const int &l, const int &r) {
+        if (l > r) return query(r, l);
+        int k = lg2[r-l+1];
+        return mv(rmq[r][k], rmq[l+(1<<k)-1][k]);
+    }
+    */
 ```
 
 {% endspoiler %}
-二维
+
+### 二维
 {% spoiler "代码" %}
 ```cpp
 template <typename T, typename U = std::greater<T>>
@@ -1545,6 +1601,50 @@ struct ST
         int k = log_2[r2-r1+1], l = log_2[c2-c1+1];
         return mv(mv(rmq[r1][c1][k][l], rmq[r2-(1<<k)+1][c2-(1<<l)+1][k][l]),
                   mv(rmq[r2-(1<<k)+1][c1][k][l], rmq[r1][c2-(1<<l)+1][k][l]));
+    }
+};
+```
+
+{% endspoiler %}
+
+### [反向ST](http://acm.hdu.edu.cn/showproblem.php?pid=6356)
+{% spoiler "代码" %}
+```cpp
+template <typename T, typename U = std::greater<T>>
+struct rST
+{
+    static const int NN = (int)log2(N)+3;
+    static const T INF = 1e9;
+    int n;
+    int lg2[N];
+    U cmp = U();
+    T rmq[N][NN]; // rmq[i][j] ==> [i, i+2^j-1]
+    rST() { for (int i = 2; i < N; ++i) lg2[i] = lg2[i>>1]+1; }
+    T& operator [] (const int &i) { return rmq[i][0]; }
+    T mv(const T &x, const T &y) { return cmp(x, y) ? x : y; }
+    void init(const int &_n, const T &val = 0) { 
+        n = _n;
+        for (int i = 1; i <= n; ++i) fill(rmq[i], rmq[i]+NN, val);
+    }
+    void update(const int &l, const int &r, const T &k) {
+        if (l > r) return void(update(r, l, k));
+        int b = lg2[r-l+1];
+        rmq[l][b] = mv(rmq[l][b], k);
+        rmq[r-(1<<b)+1][b] = mv(rmq[r-(1<<b)+1][b], k);
+    }
+    void build() {
+        for (int i = lg2[n]; i >= 0; --i) {
+            for (int l = 1, r; l <= n; ++l) {
+                r = l+(1<<i);
+                if (r <= n) rmq[r][i] = mv(rmq[r][i], rmq[l][i+1]);
+                rmq[l][i] = mv(rmq[l][i], rmq[l][i+1]);
+            }
+        }
+    }
+    T query(const int &l, const int &r) {
+        if (l > r) return query(r, l);
+        int b = lg2[r-l+1];
+        return mv(rmq[l][b], rmq[r-(1<<b)+1][b]);
     }
 };
 ```
@@ -1778,13 +1878,14 @@ int sa[N], rk[N<<1], height[N];
 template <typename T> // s start from 1
 inline void SA(const T *s, const int &n) {
     static int oldrk[N<<1];
+    memset(rk+n+1, 0, sizeof(int)*n);
     for (int i = 1; i <= n; ++i) rk[i] = s[i];
     for (int w = 1; w <= n; w <<= 1) {
         iota(sa+1, sa+n+1, 1);
         sort(sa+1, sa+n+1, [&](const int &x, const int &y) {
           return rk[x] == rk[y] ? rk[x+w] < rk[y+w] : rk[x] < rk[y];
         });
-        memcpy(oldrk+1, rk+1, sizeof(int)*n);
+        memcpy(oldrk+1, rk+1, sizeof(int)*2*n);
         for (int p = 0, i = 1; i <= n; ++i) {
             if (oldrk[sa[i]] == oldrk[sa[i-1]] &&
                 oldrk[sa[i]+w] == oldrk[sa[i-1]+w]) {
@@ -1825,7 +1926,7 @@ inline void SA(const T *s, const int &n) {
         for (int i = 1; i <= n; ++i) ++cnt[px[i] = rk[id[i]]];
         for (int i = 1; i <= m; ++i) cnt[i] += cnt[i - 1];
         for (int i = n; i; --i) sa[cnt[px[i]]--] = id[i];
-        memcpy(oldrk + 1, rk + 1, sizeof(int) * n);
+        memcpy(oldrk + 1, rk + 1, sizeof(int) * 2 * n);
         for (p = 0, i = 1; i <= n; ++i) rk[sa[i]] = cmp(sa[i], sa[i - 1], w) ? p : ++p;
     }
     for (int i = 1, k = 0; i <= n; ++i) {
@@ -1839,7 +1940,7 @@ inline void SA(const T *s, const int &n) {
 
 {% endspoiler %}
 
-## [$O(n)$](https://loj.ac/submission/653573)
+### [$O(n)$](https://loj.ac/submission/653573)
 {% spoiler "代码" %}
 ```cpp
 namespace SuffixArray {
@@ -1918,6 +2019,7 @@ inline void init(T s, const int len, const int sigma = 128) {
     sais(s, sa, len + 1, t, rk, ht, sigma);
     getHeight(s, len);
     for (int i = 1; i <= len; ++i) ++sa[i];
+    for (int i = len; i; --i) rk[i] = rk[i-1];
 }
 
 }  // namespace SuffixArray
