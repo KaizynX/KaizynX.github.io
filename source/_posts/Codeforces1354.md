@@ -1,5 +1,5 @@
 ---
-title: Educational Codeforces Round 87 (Rated for Div. 2) 题解(ABCDE)
+title: Educational Codeforces Round 87 (Rated for Div. 2)
 author: Kaizyn
 avatar: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg
 authorLink: https://kaizynx.github.io/
@@ -8,7 +8,7 @@ mathjax: true
 categories:
   - Codeforces
 tags:
-description: CF1354题解
+description: CF1354题解(ABCDE)
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/Codeforces1354/cover.jpg 
 ---
 # 写在前头
@@ -76,7 +76,7 @@ signed main() {
 
 设 $p[i]$ 是数字 $i$ 出现的最右边位置
 
-则此时的左边界为 $min({p[1], p[2], p[3]})$
+则此时的左边界 $l=min({p[1], p[2], p[3]})$
 
 emmm 不多说了
 
@@ -158,6 +158,8 @@ $h = \frac{0.5}{\tan\frac{\theta}{2}}$
 正方形边长 $\frac{2\times h}{\sqrt{2}}$
 
 $\beta = 45°$
+
+$l = \frac{0.5}{\sin\frac{\theta}{2}}$
 
 显然 $h$ 的长度和 $l$ 有关
 
@@ -356,21 +358,23 @@ signed main() {
 
 于是问题转化为对图**奇偶染色**(黑白染色)
 
-我们先黑白染色,然后有两种情况 白的赋 2 或者黑的赋 2, 要满足点数为 $n2$
+我们先黑白染色,然后有两种情况 白的赋 2 或者黑的赋 2, 要满足赋 2 的点数为 $n2$
 
-(为什么考虑 2 ? 因为 2 特殊啊, 当然 1,3 看成一个整体也可以
+(为什么考虑 2 ? 因为 2 特殊啊, 当然把 1,3 看成一个整体也可以
 
 但是又有一个严重的问题,这个图不一定连通,每个子图都要考虑是黑还是白赋 2
 
 我们用背包来解决这个问题
 
-设 $dp[i][j]$ 是给前 $i$ 个子图黑白色赋值 2,内否恰好有 $j$ 个点被赋值 2
+设 $dp[i][j]$ 是给前 $i$ 个子图黑或白赋 2,是否恰好有 $j$ 个点被赋值 2
 
 然后我们可以 $O(n^2)$ 转移出来,也可以根据 $dp$ 数组倒推回去得到具体方案
 
 (这什么操作啊,我叫不出具体名词)
 
 总之这题大致思路到此应该清晰了,但是细节还是很多很繁琐,详情见代码(溜
+
+另,不满足的情况就是: 无法黑白染色 或 无法恰好有 $n2$ 个点赋 2
 
 {% spoiler "代码" %}
 ```cpp
