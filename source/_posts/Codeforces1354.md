@@ -8,7 +8,7 @@ mathjax: true
 categories:
   - Codeforces
 tags:
-description: CF1354题解(ABCDE)
+description: CF1354题解(ABCDEF)
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/Codeforces1354/cover.jpg 
 ---
 # 写在前头
@@ -491,6 +491,141 @@ signed main() {
   ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
   int T = 1;
   // cin >> T;
+  for (int t = 1; t <= T; ++t) {
+    solve();
+  }
+  return 0;
+}
+```
+
+{% endspoiler %}
+
+# F - Summoning Minions
+
+首先要观察思考手玩得出:
+
+假设我们选好了前 $k-1$ 个
+
+因为 $b \geq 0$ 所以对于剩下的全都选一下再删掉(最后一个不删)
+
+为了使结果最优
+
+前 $k-1$ 个要按 $b$ 的升序选
+
+最后留下的(没有删掉的)应该是除掉前 $k-1$ 剩下的当中 $a$ 最大的
+
+想到这里,那么我们要枚举前 $k-1$ 个分别是多少吗?
+
+不,枚举最后一个是哪个就好了
+
+然后我们用动态规划
+
+设 $dp[i][j]$ 是在前 $i$ 个中选了 $j$ 的价值
+
+我们还需要定义一个所谓的**"价值"**来衡量一个选法的优秀与否
+
+不妨考虑最后的值 (这里的 $(a_i,b_i)$ 表示第 $i$ 个被选的属性)
+
+$=\sum\limits_{i=1}^{k}{a_i+(i-1)\cdot b_i}+\sum\limits_{没选的}{k\cdot b}$ 
+
+$=\sum\limits_{全部}{k\cdot b}+\sum\limits_{i=1}^{k}{a_i-(k-j)\cdot b_i}$
+
+因此我们可以把 $\sum\limits_{i=1}^{k}{a_i-(k-j)\cdot b_i}$ 作为衡量函数(即当作$dp$转移的时候的值)
+
+同 E 题,我们可以倒推出到底选了哪几个,那么方案就出来了
+
+时间复杂度 $O(T\cdot n^3)$
+
+详情同见代码(溜
+
+{% spoiler "代码" %}
+```cpp
+#include <bits/stdc++.h>
+
+// #define DEBUG
+
+using namespace std;
+
+const double eps = 1e-7;
+const double PI = acos(-1);
+typedef pair<int, int> pii;
+const int MOD = 998244353;
+const int INF = 0x3f3f3f3f;
+const int N = 80;
+
+struct Node {
+  int a, b, id;
+  friend bool operator <(const Node &lhs, const Node &rhs) {
+    return lhs.b < rhs.b;
+  }
+  friend istream& operator >>(istream &is, Node &nd) {
+    return is >> nd.a >> nd.b;
+  }
+};
+
+int n, k;
+Node c[N], d[N];
+int dp[N][N], val[N], vis[N];
+vector<int> seq;
+// dp[i][j] choose j's [1, i]
+// val[i] the val choose i as last
+
+inline int work() {
+  memcpy(d+1, c+1, sizeof(Node)*n);
+  sort(d+1, d+n);
+  fill(dp[0], dp[0]+n*N, -INF);
+  dp[0][0] = 0;
+  for (int i = 1; i < n; ++i) {
+    memcpy(dp[i], dp[i-1], sizeof(int)*k);
+    for (int j = 1; j < k; ++j) {
+      dp[i][j] = max(dp[i][j], dp[i-1][j-1]+d[i].a-d[i].b*(k-j));
+    }
+  }
+  return dp[n-1][k-1]+d[n].a;
+}
+
+inline void solve() {
+  cin >> n >> k;
+  for (int i = 1; i <= n; ++i) cin >> c[i], c[i].id = i;
+
+  int last = 1;
+  for (int i = 1; i <= n; ++i) {
+    // choose c[i] as last
+    swap(c[i], c[n]);
+    val[i] = work();
+    if (val[i] > val[last]) last = i;
+    swap(c[i], c[n]);
+  }
+
+  swap(c[last], c[n]);
+  work();
+  vector<int>().swap(seq);
+  memset(vis+1, 0, sizeof(int)*n);
+  vis[d[n].id] = 1;
+  for (int i = n-1, j = k-1; i && j; --i) {
+    if (dp[i][j] == dp[i-1][j-1]+d[i].a-d[i].b*(k-j)) {
+      vis[d[i].id] = 1;
+      seq.emplace_back(d[i].id);
+      --j;
+    }
+  }
+  reverse(seq.begin(), seq.end());
+  cout << 2*n-k << endl;
+  for (auto &i : seq) cout << i << " ";
+  for (int i = 1; i <= n; ++i) if (!vis[i]) {
+    cout << i << " " << -i << " ";
+  }
+  cout << d[n].id << endl;
+#ifdef DEBUG
+  for (int i = 1; i <= n; ++i) val[last] += c[i].b*(k-1);
+  cout << "val = " << val[last] << endl;
+#endif
+}
+
+signed main() {
+  ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+  int T = 1;
+  cin >> T;
   for (int t = 1; t <= T; ++t) {
     solve();
   }
