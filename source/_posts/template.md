@@ -1,10 +1,10 @@
-
 ---
 title: ACM模板
 author: Kaizyn
 avatar: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg
 authorLink: https://kaizynx.github.io/
 date: 2018-11-05 07:00:00
+mathjax: true
 categories:
   - ACM
 tags:
@@ -12,7 +12,6 @@ top: true
 keywords: ACM模板
 description:  某菜鸡收集的板子
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/template/cover.jpg
-
 ---
 
 # 前言
@@ -279,14 +278,10 @@ for (int i = 1; i <= n; ++i) {
 ## [三分法](https://blog.csdn.net/inf_force/article/details/44891121)
 {% spoiler "代码" %}
 ```cpp
-// not so well
 while (l < r) {
-  int midl = (l+r)>>1, midr = (midl+r)>>1;
-  if (f(midl) > f(midr)) {
-    l = midr;
-  } else {
-    r = midl;
-  }
+  int mid = (l+r)>>1;
+  if (f(mid) < f(mid+1)) r = mid;
+  else l = mid+1;
 }
 ```
 ```cpp
@@ -590,58 +585,7 @@ struct Heap
 ```
 
 {% endspoiler %}
-## 字典树
-{% spoiler "代码" %}
-```cpp
-struct TireTree
-{
-    static const int NN = 5e5+7;
-    static const int SZ = 26;
-    char beg;
-    int nex[NN][SZ], num[NN], cnt;
-    bool exist[NN];
-    TireTree(char _beg = 'a') : beg(_beg) { clear(); }
-    void clear() {
-        memset(nex, 0, sizeof nex);
-        memset(num, 0, sizeof num);
-        memset(exist, 0, sizeof exist);
-        cnt = 0;
-    }
-    void insert(const char *s) {
-        int len = strlen(s), p = 0;
-        for (int i = 0, c; i < len; ++i) {
-            c = s[i]-beg;
-            if (!nex[p][c]) nex[p][c] = ++cnt;
-            p = nex[p][c];
-            ++num[p];
-        }
-        exist[p] = true;
-    }
-    bool find(const char *s) {
-        int len = strlen(s), p = 0;
-        for (int i = 0, c; i < len; ++i) {
-            c = s[i]-beg;
-            if (!nex[p][c]) return false;
-            p = nex[p][c];
-        }
-        return exist[p];
-    }
-    int count(const char *s) {
-        int len = strlen(s), p = 0;
-        for (int i = 0, c; i < len; ++i) {
-            c = s[i]-beg;
-            if (!nex[p][c]) return 0;
-            p = nex[p][c];
-        }
-        return num[p];
-    }
-    void insert(const string &s) { insert(s.c_str()); }
-    bool find(const string &s) { return find(s.c_str()); }
-    int count(const string &s) { return count(s.c_str()); }
-};
-```
 
-{% endspoiler %}
 ## 二叉查找树
 ## [平衡树](https://www.luogu.org/problemnew/show/P3369)
 ### [Splay](https://www.luogu.org/blog/user19027/solution-p3369)
@@ -2023,6 +1967,182 @@ inline void init(T s, const int len, const int sigma = 128) {
 }
 
 }  // namespace SuffixArray
+```
+
+{% endspoiler %}
+
+## 字典树
+{% spoiler "代码" %}
+```cpp
+struct TireTree
+{
+    static const int NN = 5e5+7;
+    static const int SZ = 26;
+    char beg;
+    int nex[NN][SZ], num[NN], cnt;
+    bool exist[NN];
+    TireTree(char _beg = 'a') : beg(_beg) { clear(); }
+    void clear() {
+        memset(nex, 0, sizeof nex);
+        memset(num, 0, sizeof num);
+        memset(exist, 0, sizeof exist);
+        cnt = 0;
+    }
+    void insert(const char *s) {
+        int len = strlen(s), p = 0;
+        for (int i = 0, c; i < len; ++i) {
+            c = s[i]-beg;
+            if (!nex[p][c]) nex[p][c] = ++cnt;
+            p = nex[p][c];
+            ++num[p];
+        }
+        exist[p] = true;
+    }
+    bool find(const char *s) {
+        int len = strlen(s), p = 0;
+        for (int i = 0, c; i < len; ++i) {
+            c = s[i]-beg;
+            if (!nex[p][c]) return false;
+            p = nex[p][c];
+        }
+        return exist[p];
+    }
+    int count(const char *s) {
+        int len = strlen(s), p = 0;
+        for (int i = 0, c; i < len; ++i) {
+            c = s[i]-beg;
+            if (!nex[p][c]) return 0;
+            p = nex[p][c];
+        }
+        return num[p];
+    }
+    void insert(const string &s) { insert(s.c_str()); }
+    bool find(const string &s) { return find(s.c_str()); }
+    int count(const string &s) { return count(s.c_str()); }
+};
+```
+
+{% endspoiler %}
+
+## AC自动机
+[Luogu P3808](https://www.luogu.com.cn/problem/P3808)
+如需构造可重建AC自动机,每次构造建一个nex数组的拷贝
+{% spoiler "代码" %}
+```cpp
+struct Aho_Corasick_Automaton {
+  static const int NN = 5e6+7;
+  static const int SZ = 26;
+  char beg;
+  int nex[NN][SZ], num[NN], fail[NN], cnt;
+  Aho_Corasick_Automaton(const char &_beg = 'a') : beg(_beg) {}
+  void clear() {
+    memset(nex, 0, sizeof(nex[0])*(cnt+1));
+    memset(num, 0, sizeof(int)*(cnt+1));
+    memset(fail, 0, sizeof(int)*(cnt+1));
+    cnt = 0;
+  }
+  void insert(const char *s) {
+    int len = strlen(s), p = 0;
+    for (int i = 0, c; i < len; ++i) {
+      c = s[i]-beg;
+      if (!nex[p][c]) nex[p][c] = ++cnt;
+      p = nex[p][c];
+    }
+    ++num[p];
+  }
+  void build() {
+    static queue<int> q;
+    for (int i = 0; i < SZ; ++i) if (nex[0][i]) q.push(nex[0][i]);
+    while (q.size()) {
+      int u = q.front();
+      q.pop();
+      for (int i = 0; i < SZ; ++i) {
+        if (nex[u][i]) {
+          fail[nex[u][i]] = nex[fail[u]][i];
+          q.push(nex[u][i]);
+        } else {
+          nex[u][i] = nex[fail[u]][i];
+        }
+      }
+    }
+  }
+  int query(const char *s) {
+    int len = strlen(s), p = 0, res = 0;
+    for (int i = 0; i < len; ++i) {
+      p = nex[p][s[i]-beg];
+      for (int t = p; t && ~num[t]; t = fail[t]) {
+        res += num[t];
+        num[t] = -1;
+      }
+    }
+    return res;
+  }
+};
+```
+
+{% endspoiler %}
+
+[Luogu P5357](https://www.luogu.com.cn/problem/P5357)
+{% spoiler "代码" %}
+```cpp
+struct Aho_Corasick_Automaton {
+  static const int NN = 2e5+7;
+  static const int SZ = 26;
+  char beg;
+  int cnt;
+  int nex[NN][SZ], fail[NN], vis[NN];
+  Aho_Corasick_Automaton(const char &_beg = 'a') : beg(_beg) {}
+  void clear() {
+    memset(nex, 0, sizeof(nex[0])*(cnt+1));
+    memset(fail, 0, sizeof(int)*(cnt+1));
+    memset(vis, 0, sizeof(int)*(cnt+1));
+    cnt = 0;
+  }
+  int insert(const char *s) {
+    int len = strlen(s), p = 0;
+    for (int i = 0, c; i < len; ++i) {
+      c = s[i]-beg;
+      if (!nex[p][c]) nex[p][c] = ++cnt;
+      p = nex[p][c];
+    }
+    return p;
+  }
+  void build() {
+    static queue<int> q;
+    for (int i = 0; i < SZ; ++i) if (nex[0][i]) q.push(nex[0][i]);
+    while (q.size()) {
+      int u = q.front();
+      q.pop();
+      for (int i = 0; i < SZ; ++i) {
+        if (nex[u][i]) {
+          fail[nex[u][i]] = nex[fail[u]][i];
+          q.push(nex[u][i]);
+        } else {
+          nex[u][i] = nex[fail[u]][i];
+        }
+      }
+    }
+  }
+  void query(char *s) {
+    static int deg[NN];
+    static queue<int> q;
+
+    int len = strlen(s);
+    for (int i = 0, p = 0; i < len; ++i) {
+      p = nex[p][s[i]-beg];
+      ++vis[p];
+      // for (int t = p; t; t = fail[t]) ++vis[t];
+    }
+    for (int i = 1; i <= cnt; ++i) ++deg[fail[i]];
+    for (int i = 1; i <= cnt; ++i) if (!deg[i]) q.push(i);
+    while (q.size()) {
+      int u = q.front();
+      q.pop();
+      vis[fail[u]] += vis[u];
+      if (--deg[fail[u]] == 0) q.push(fail[u]);
+    }
+  }
+} ac;
 ```
 
 {% endspoiler %}
@@ -4631,7 +4751,7 @@ class Modular {
   Modular operator++(int) { Modular result(*this); *this += 1; return result; }
   Modular operator--(int) { Modular result(*this); *this -= 1; return result; }
   Modular operator-() const { return Modular(-value); }
- 
+
   template <typename U = T>
   typename enable_if<is_same<typename Modular<U>::Type, int>::value, Modular>::type& operator*=(const Modular& rhs) {
 #ifdef _WIN32

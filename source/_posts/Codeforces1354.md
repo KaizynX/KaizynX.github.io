@@ -518,9 +518,9 @@ signed main() {
 
 不,枚举最后一个是哪个就好了
 
-然后我们用动态规划
+然后我们用动态规划找前 $k-1$ 个的选法
 
-设 $dp[i][j]$ 是在前 $i$ 个中选了 $j$ 的价值
+设 $dp[i][j]$ 是在前 $i$ 个中选了 $j$ 个的最大“价值”
 
 我们还需要定义一个所谓的**"价值"**来衡量一个选法的优秀与否
 
@@ -528,9 +528,9 @@ signed main() {
 
 $=\sum\limits_{i=1}^{k}{a_i+(i-1)\cdot b_i}+\sum\limits_{没选的}{k\cdot b}$ 
 
-$=\sum\limits_{全部}{k\cdot b}+\sum\limits_{i=1}^{k}{a_i-(k-j)\cdot b_i}$
+$=\sum\limits_{全部}{k\cdot b}+\sum\limits_{i=1}^{k}{a_i-(k-i)\cdot b_i}$
 
-因此我们可以把 $\sum\limits_{i=1}^{k}{a_i-(k-j)\cdot b_i}$ 作为衡量函数(即当作$dp$转移的时候的值)
+因此我们可以把 $\sum\limits_{i=1}^{k}{a_i-(k-i)\cdot b_i}$ 作为衡量函数(即当作$dp$转移的时候的值)
 
 同 E 题,我们可以倒推出到底选了哪几个,那么方案就出来了
 
