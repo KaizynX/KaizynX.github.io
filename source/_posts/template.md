@@ -2450,7 +2450,7 @@ struct ShuPou
         memset(son, 0, sizeof son);
         d[0] = num[0] = dfn = 0;
         dfs1(e, rt);
-        dfs2(e, rt, rt);
+        dfs2(e, rt);
         for (int i = 1; i <= n; ++i)
             init_val[i] = a[rk[i]];
         ST.build(init_val, n);
@@ -2468,17 +2468,17 @@ struct ShuPou
         }
     }
     template <typename EDGE>
-    void dfs2(const EDGE e[], const int &u = 1, const int &t = 1) {
-        tp[u] = t;
+    void dfs2(const EDGE e[], const int &u = 1) {
+        tp[u] = son[f[u]] == u ? tp[f[u]] : u;
         id[u] = ++dfn;
         rk[dfn] = u;
         if (!son[u]) return;
-        dfs2(e, son[u], t);
+        dfs2(e, son[u]);
         for (auto v : e[u]) if (v != son[u] && v != f[u])
-            dfs2(e, v, v);
+            dfs2(e, v);
     }
     void add_sons(const int &x, const T &k) { ST.add(id[x], id[x]+num[x]-1, k); }
-    void add(int x, int y, const T &k) {
+    void add(int x, int y, const T &k, const int &tag = 0) {
         while (tp[x] != tp[y]) {
             if (d[tp[x]] < d[tp[y]]) swap(x, y);
             ST.add(id[tp[x]], id[x], k);
@@ -2486,8 +2486,10 @@ struct ShuPou
         }
         if (d[x] > d[y]) swap(x, y);
         ST.add(id[x], id[y], k);
+        if (tag) ST.add(id[x], -k); // edge
     }
     T query_sons(const int &x) { return ST.query(id[x], id[x]+num[x]-1); }
+    T query(const int &x) { return ST.query(id[x]); }
     T query(int x, int y) {
         T res = 0;
         while (tp[x] != tp[y]) {
