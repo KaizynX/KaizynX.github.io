@@ -273,6 +273,7 @@ for (int i = 1; i <= n; ++i) {
 {% endspoiler %}
 
 ## [三分法](https://blog.csdn.net/inf_force/article/details/44891121)
+示例为凹函数
 {% spoiler "代码" %}
 ```cpp
 while (l < r) {
@@ -291,10 +292,10 @@ while(r-l>5){
 for (int i = l; i <= r; ++i) res = min(res, f(i));
 ```
 ```cpp
-while (r-l > 3) {
-    int mid = (l+r)>>1;
-    if (f(mid) < f(mid+1)) r = mid+1;
-    else l = mid;
+while (r-l > eps) {
+  double ml = l+(r-l)/3, mr = r-(r-l)/3;
+  if (f(ml) < f(mr)) r = mr;
+  else l = ml;
 }
 ```
 
@@ -363,6 +364,31 @@ struct Point {
   friend Point rotate_90_c(const Point &p) { return Point(p.y, -p.x, p.id); }
   Point rotate_90_c() { return Point(y, -x, id); }
   friend double atan(const Point &p) { return atan2(p.y, p.x); }
+};
+
+template <typename T = double>
+struct Vec { // 三维向量
+  T x, y, z;
+  Vec(const T &_x = 0, const T &_y = 0, const T &_z = 0) : x(_x), y(_y), z(_z) {}
+  double len() { return sqrt(1.0*x*x+1.0*y*y+1.0*z*z); }
+  friend Vec operator +(const Vec &v1, const Vec &v2) { return Vec(v1.x+v2.x, v1.y+v2.y, v1.z+v2.z); }
+  friend Vec operator -(const Vec &v1, const Vec &v2) { return Vec(v1.x-v2.x, v1.y-v2.y, v1.z-v2.z); }
+  friend Vec operator *(const T &k, const Vec &v) { return Vec(k*v.x, k*v.y, k*v.z); }
+  friend Vec operator *(const Vec &v, const T &k) { return k*v; }
+  friend Vec operator *(const Vec &v1, const Vec &v2) {
+    return Vec(
+        v1.y*v2.z-v1.z*v2.y,
+        v1.z*v2.x-v1.x*v2.z,
+        v1.x*v2.y-v1.y*v2.x
+    );
+  }
+  friend T dot(const Vec &v1, const Vec &v2) { return v1.x*v2.x+v1.y*v2.y+v1.z*v2.z; }
+  T dot(const Vec &v) { return dot(*this, v); }
+  Vec& operator +=(const Vec &v) { return *this = *this+v; }
+  Vec& operator -=(const Vec &v) { return *this = *this-v; }
+  Vec& operator *=(const T &k) { return *this = *this*k; }
+  Vec& operator *=(const Vec &v) { return *this = *this*v; }
+  friend istream& operator >>(istream &is, Vec &v) { return is >> v.x >> v.y >> v.z; }
 };
 
 inline bool polar_angle1(const Point &p1, const Point &p2) {
@@ -1543,7 +1569,7 @@ struct DSU {
   void init(int sz) { for (int i = 0; i <= sz; ++i) fa[i] = i; }
   int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
   int& operator [] (int i) { return fa[get(i)]; }
-  bool merge(int x, int y) {
+  bool merge(int x, int y) { // merge x to y
     int fx = get(x), fy = get(y);
     if (fx == fy) return false;
     fa[fx] = fy; return true;
@@ -2356,51 +2382,48 @@ struct Tree {
 template <typename T>
 struct ShuPou {
   int dfn;
-  int f[N], d[N], num[N], son[N], rk[N], id[N], tp[N];
+  int fa[N], d[N], num[N], son[N], id[N], tp[N];
   T init_val[N];
   SegmentTree<T> ST;
-  template <typename TT, typename EDGE>
-  void build(const EDGE e[], const TT a[], const int &n, const int &rt = 1) {
-    memset(son, 0, sizeof son);
-    d[0] = num[0] = dfn = 0;
+  template <typename Edge, typename TT>
+  void build(const Edge e[], const TT a[], const int &n, const int &rt = 1) {
+    fa[rt] = dfn = 0;
     dfs1(e, rt);
     dfs2(e, rt);
     for (int i = 1; i <= n; ++i)
-      init_val[i] = a[rk[i]];
+      init_val[id[i]] = a[i];
     ST.build(init_val, n);
   }
-  template <typename EDGE>
-  void dfs1(const EDGE e[], const int &u = 1, const int &fa = 0) {
-    f[u] = fa;
-    d[u] = d[fa]+1;
+  template <typename Edge>
+  void dfs1(const Edge e[], const int &u = 1) {
+    d[u] = d[fa[u]]+1;
     num[u] = 1;
-    for (auto v : e[u]) if (v != fa) {
-      dfs1(e, v, u);
+    son[u] = 0;
+    for (const int &v : e[u]) if (v != fa[u]) {
+      fa[v] = u;
+      dfs1(e, v);
       num[u] += num[v];
-      if (num[v] > num[son[u]])
-        son[u] = v;
+      if (num[v] > num[son[u]]) son[u] = v;
     }
   }
-  template <typename EDGE>
-  void dfs2(const EDGE e[], const int &u = 1) {
-    tp[u] = son[f[u]] == u ? tp[f[u]] : u;
+  template <typename Edge>
+  void dfs2(const Edge e[], const int &u = 1) {
+    tp[u] = son[fa[u]] == u ? tp[fa[u]] : u;
     id[u] = ++dfn;
-    rk[dfn] = u;
-    if (!son[u]) return;
-    dfs2(e, son[u]);
-    for (auto v : e[u]) if (v != son[u] && v != f[u])
+    if (son[u]) dfs2(e, son[u]);
+    for (const int &v : e[u]) if (v != son[u] && v != fa[u])
       dfs2(e, v);
   }
   void add_sons(const int &x, const T &k) { ST.add(id[x], id[x]+num[x]-1, k); }
-  void add(int x, int y, const T &k, const int &tag = 0) {
+  void add(int x, int y, const T &k, const int &is_edge = 0) {
     while (tp[x] != tp[y]) {
       if (d[tp[x]] < d[tp[y]]) swap(x, y);
       ST.add(id[tp[x]], id[x], k);
-      x = f[tp[x]];
+      x = fa[tp[x]];
     }
     if (d[x] > d[y]) swap(x, y);
     ST.add(id[x], id[y], k);
-    if (tag) ST.add(id[x], -k); // edge
+    if (is_edge) ST.add(id[x], -k);
   }
   T query_sons(const int &x) { return ST.query(id[x], id[x]+num[x]-1); }
   T query(const int &x) { return ST.query(id[x]); }
@@ -2409,7 +2432,7 @@ struct ShuPou {
     while (tp[x] != tp[y]) {
       if (d[tp[x]] < d[tp[y]]) swap(x, y);
       res += ST.query(id[tp[x]], id[x]);
-      x = f[tp[x]];
+      x = fa[tp[x]];
     }
     if (d[x] > d[y]) swap(x, y);
     return res+ST.query(id[x], id[y]);
@@ -4110,6 +4133,31 @@ inline long long EXCRT(long long a[], long long m[]) {
 
 ---
 ## 排列组合
+{% spoiler "代码" %}
+```cpp
+struct Combination {
+  int fac[N], inv[N];
+  void init(const int &n) {
+    fac[0] = inv[0] = fac[1] = inv[1] = 1;
+    for (int i = 2; i <= n; ++i) {
+      fac[i] = 1ll*fac[i-1]*i%MOD;
+      inv[i] = 1ll*(MOD-MOD/i)*inv[MOD%i]%MOD;
+    }
+    for (int i = 2; i <= n; ++i) {
+      inv[i] = 1ll*inv[i]*inv[i-1]%MOD;
+    }
+  }
+  int A(const int &p, const int &q) {
+    return p >= q ? 1ll*fac[p]*inv[p-q]%MOD : 0;
+  }
+  int C(const int &p, const int &q) {
+    return p >= q ? 1ll*fac[p]*inv[q]%MOD*inv[p-q]%MOD : 0;
+  }
+};
+```
+
+{% endspoiler %}
+
 ### [奇偶性](https://blog.csdn.net/baodream/article/details/77822072)
 C(n,k) 当 `n&k == k` 为奇数反之偶数
 
@@ -4265,6 +4313,14 @@ inline long long BSGS(long long a, long long x, long long m) {
 ```
 
 {% endspoiler %}
+
+## 错排
+
+$D_1 = 0$
+
+$D_2 = 1$
+
+$D_n = (n-1)(D_{n-1}+D_{n-2})$
 
 ---
 # 动态规划 DP
