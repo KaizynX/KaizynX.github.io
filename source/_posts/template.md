@@ -321,6 +321,7 @@ struct Point {
   friend Point operator - (const Point &p) {
     return Point(-p.x, -p.y, p.id);
   }
+  // a*b b在a的顺负逆正
   friend T operator * (const Point &p1, const Point &p2) {
     return p1.x*p2.y-p1.y*p2.x;
   }
@@ -853,6 +854,166 @@ private :
   }
 };
 ```
+动态开点
+```cpp
+template <typename T>
+struct SegmentTree { // 区间加减区间和
+  struct TreeNode {
+    int l, r;
+    TreeNode *ls, *rs;
+    T val, lazy;
+    TreeNode() { ls = rs = nullptr; }
+    TreeNode(const int &_l, const int &_r, const T &_val = 0)
+        : l(_l), r(_r), val(_val) {
+      ls = rs = nullptr;
+      lazy = 0;
+    }
+    int len() const { return r-l+1; }
+  };
+  TreeNode *root;
+  void clear(TreeNode *rt) {
+    if (!rt) return;
+    clear(rt->ls);
+    clear(rt->rs);
+    delete rt;
+  }
+  void build(const int &n) {
+    clear(root);
+    root = new TreeNode(1, n);
+  }
+  void push_up(TreeNode *rt) {
+    rt->val = (rt->ls ? rt->ls->val : 0)+(rt->rs ? rt->rs->val : 0);
+  }
+  void push_down(TreeNode *rt) {
+    if (!rt->lazy) return;
+    int mid = (rt->l+rt->r)>>1;
+    if (!rt->ls) rt->ls = new TreeNode(rt->l, mid);
+    if (!rt->rs) rt->rs = new TreeNode(mid+1, rt->r);
+    rt->ls->lazy += rt->lazy;
+    rt->ls->val += rt->lazy*rt->ls->len();
+    rt->rs->lazy += rt->lazy;
+    rt->rs->val += rt->lazy*rt->rs->len();
+    rt->lazy = 0;
+  }
+  void update(const int &x, const T &k) { update(x, k, root); }
+  void update(const int &x, const T &k, TreeNode *rt) {
+    if (rt->l == x && rt->r == x) return rt->val = k, void();
+    push_down(rt);
+    int mid = (rt->l+rt->r)>>1;
+    if (x <= mid) update(x, k, rt->ls ? rt->ls : rt->ls = new TreeNode(rt->l, mid));
+    else update(x, k, rt->rs ? rt->rs : rt->rs = new TreeNode(mid+1, rt->r));
+    push_up(rt);
+  }
+  void add(const int &x, const T &k) { add(x, x, k, root); }
+  void add(const int &l, const int &r, const T &k) { add(l, r, k, root); }
+  void add(const int &l, const int &r, const T &k, TreeNode *rt) {
+    if (rt->l >= l && rt->r <= r) {
+      rt->val += rt->len()*k;
+      rt->lazy += k;
+      return;
+    }
+    push_down(rt);
+    int mid = (rt->l+rt->r)>>1;
+    if (l <= mid) add(l, r, k, rt->ls ? rt->ls : rt->ls = new TreeNode(rt->l, mid));
+    if (r >  mid) add(l, r, k, rt->rs ? rt->rs : rt->rs = new TreeNode(mid+1, rt->r));
+    push_up(rt);
+  }
+  T query(const int &x) { return query(x, x, root); }
+  T query(const int &l, const int &r) { return query(l, r, root); }
+  T query(const int &l, const int &r, TreeNode *rt) {
+    if (rt->l >= l && rt->r <= r) return rt->val;
+    push_down(rt);
+    int mid = (rt->l+rt->r)>>1;
+    if (l <= mid && !rt->ls) rt->ls = new TreeNode(rt->l, mid);
+    if (r >  mid && !rt->rs) rt->rs = new TreeNode(mid+1, rt->r);
+    if (r <= mid) return query(l, r, rt->ls);
+    if (l >  mid) return query(l, r, rt->rs);
+    return query(l, r, rt->ls)+query(l, r, rt->rs);
+  }
+};
+```
+内存池
+```cpp
+template <typename T>
+struct SegmentTree { // 区间加减区间和
+  struct TreeNode {
+    int l, r;
+    TreeNode *ls, *rs;
+    T val, lazy;
+    int len() const { return r-l+1; }
+  } tr[N<<1];
+  queue<TreeNode*> memory_pool;
+  SegmentTree() { for (int i = 0; i < N<<2; ++i) memory_pool.push(tr+i); }
+  TreeNode* fuck(const int &l, const int &r, const T &val = 0) { // new
+    TreeNode *ptr = memory_pool.front();
+    memory_pool.pop();
+    ptr->l = l; ptr->r = r; ptr->val = val;
+    ptr->ls = ptr->rs = nullptr;
+    return ptr;
+  }
+  void shit(TreeNode *ptr) { memory_pool.push(ptr); } // delete
+  TreeNode *root;
+  void clear(TreeNode *rt) {
+    if (!rt) return;
+    clear(rt->ls);
+    clear(rt->rs);
+    shit(rt);
+  }
+  void build(const int &n) {
+    clear(root);
+    root = fuck(1, n);
+  }
+  void push_up(TreeNode *rt) {
+    rt->val = (rt->ls ? rt->ls->val : 0)+(rt->rs ? rt->rs->val : 0);
+  }
+  void push_down(TreeNode *rt) {
+    if (!rt->lazy) return;
+    int mid = (rt->l+rt->r)>>1;
+    if (!rt->ls) rt->ls = fuck(rt->l, mid);
+    if (!rt->rs) rt->rs = fuck(mid+1, rt->r);
+    rt->ls->lazy += rt->lazy;
+    rt->ls->val += rt->lazy*rt->ls->len();
+    rt->rs->lazy += rt->lazy;
+    rt->rs->val += rt->lazy*rt->rs->len();
+    rt->lazy = 0;
+  }
+  void update(const int &x, const T &k) { update(x, k, root); }
+  void update(const int &x, const T &k, TreeNode *rt) {
+    if (rt->l == x && rt->r == x) return rt->val = k, void();
+    push_down(rt);
+    int mid = (rt->l+rt->r)>>1;
+    if (x <= mid) update(x, k, rt->ls ? rt->ls : rt->ls = fuck(rt->l, mid));
+    else update(x, k, rt->rs ? rt->rs : rt->rs = fuck(mid+1, rt->r));
+    push_up(rt);
+  }
+  void add(const int &x, const T &k) { add(x, x, k, root); }
+  void add(const int &l, const int &r, const T &k) { add(l, r, k, root); }
+  void add(const int &l, const int &r, const T &k, TreeNode *rt) {
+    if (rt->l >= l && rt->r <= r) {
+      rt->val += rt->len()*k;
+      rt->lazy += k;
+      return;
+    }
+    push_down(rt);
+    int mid = (rt->l+rt->r)>>1;
+    if (l <= mid) add(l, r, k, rt->ls ? rt->ls : rt->ls = fuck(rt->l, mid));
+    if (r >  mid) add(l, r, k, rt->rs ? rt->rs : rt->rs = fuck(mid+1, rt->r));
+    push_up(rt);
+  }
+  T query(const int &x) { return query(x, x, root); }
+  T query(const int &l, const int &r) { return query(l, r, root); }
+  T query(const int &l, const int &r, TreeNode *rt) {
+    if (rt->l >= l && rt->r <= r) return rt->val;
+    push_down(rt);
+    int mid = (rt->l+rt->r)>>1;
+    if (l <= mid && !rt->ls) rt->ls = fuck(rt->l, mid);
+    if (r >  mid && !rt->rs) rt->rs = fuck(mid+1, rt->r);
+    if (r <= mid) return query(l, r, rt->ls);
+    if (l >  mid) return query(l, r, rt->rs);
+    return query(l, r, rt->ls)+query(l, r, rt->rs);
+  }
+};
+```
 
 {% endspoiler %}
 ### 区间修改区间和
@@ -970,10 +1131,7 @@ private :
     push_up(i);
   }
   void _modify(const int &x, const T &k, const int &trl, const int &trr, const int &i = 1) {
-    if (trl == x && trr == x) {
-      tr[i] = k;
-      return;
-    }
+    if (trl == x && trr == x) return tr[i] = k, void();
     push_down(i);
     int mid = (trl+trr)>>1;
     if (x <= mid) _modify(x, k, trl, mid, i<<1);
@@ -996,10 +1154,9 @@ private :
     if (trl >= l && trr <= r) return tr[i];
     push_down(i);
     int mid = (trl+trr)>>1;
-    T res = init_val;
-    if (l <= mid) res = mv(res, _query(l, r, trl, mid, i<<1));
-    if (r >  mid) res = mv(res, _query(l, r, mid+1, trr, i<<1|1));
-    return res;
+    if (r <=  mid) return _query(l, r, trl, mid, i<<1);
+    if (l >  mid) return _query(l, r, mid+1, trr, i<<1|1);
+    return mv(_query(l, r, trl, mid, i<<1), _query(l, r, mid+1, trr, i<<1|1));
   }
 };
 ```
@@ -1188,8 +1345,8 @@ struct BinaryIndexedTree {
   T tr[N];
   BinaryIndexedTree() { memset(tr, 0, sizeof tr); }
   void init(const int &_n) { n = _n; clear(); }
-  void clear() { for (int i = 1; i <= n; ++i) tr[i] = 0; }
-  void add(const int &x, const T &v) { for (int i = x ; i <= n; i += i&-i) tr[i] += v; }
+  void clear() { memset(tr+1, 0, sizeof(T)*n); }
+  void add(const int &x, const T &v) { for (int i = x; i <= n; i += i&-i) tr[i] += v; }
   void add(const int &x, const int &y, const T &v) { add(x, v); add(y+1, -v); }
   T query(const int &x) { T res = 0; for (int i = x ; i; i -= i&-i) res += tr[i]; return res; }
   T query(const int &x, const int &y) { return query(y)-query(x-1); }
@@ -1253,6 +1410,9 @@ struct BIT_2D {
 
 {% endspoiler %}
 ## [可持久化线段树(主席树)](https://www.luogu.com.cn/problem/P3834)
+
+自带离散
+
 {% spoiler "代码" %}
 ```cpp
 template <typename T>
@@ -1308,6 +1468,56 @@ private:
 ```
 
 {% endspoiler %}
+
+不带离散
+
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct PersistenceSegmentTree {
+  static const int NN = N*(log2(N)+5);
+  int rt[N], sum[NN], ls[NN], rs[NN], tot, n;
+  void build(const int &n) {
+    this->n = n;
+    tot = 0;
+    rt[0] = _build(1, n);
+  }
+  void update(const int &cur, const int &pre, const T &k) {
+    rt[cur] = _update(rt[pre], 1, n, k);
+  }
+  T query(const int &l, const int &r, const int &k) {
+    return _query(rt[l-1], rt[r], 1, n, k);
+  }
+private:
+  int _build(const int &l, const int &r) {
+    int cur = ++tot;
+    sum[cur] = 0;
+    if (l >= r) return cur;
+    int mid = (l+r)>>1;
+    ls[cur] = _build(l, mid);
+    rs[cur] = _build(mid+1, r);
+    return cur;
+  }
+  int _update(const int &pre, const int &l, const int &r, const int &k) {
+    int cur = ++tot;
+    ls[cur] = ls[pre]; rs[cur] = rs[pre]; sum[cur] = sum[pre]+1;
+    if (l >= r) return cur;
+    int mid = (l+r)>>1;
+    if (k <= mid) ls[cur] = _update(ls[pre], l, mid, k);
+    else rs[cur] = _update(rs[pre], mid+1, r, k);
+    return cur;
+  }
+  int _query(const int &u, const int &v, const int &l, const int &r, const int &k) {
+    if (l >= r) return l;
+    int num = sum[ls[v]]-sum[ls[u]], mid = (l+r)>>1;
+    if (num >= k) return _query(ls[u], ls[v], l, mid, k);
+    else return _query(rs[u], rs[v], mid+1, r, k-num);
+  }
+};
+```
+
+{% endspoiler %}
+
 ## [分块](http://hzwer.com/8053.html)
 [例题](https://loj.ac/problems/search?keyword=%E5%88%86%E5%9D%97)
 {% spoiler "代码" %}
@@ -2264,11 +2474,12 @@ inline int solve() {
 
 定义：选出一些顶点使得这些顶点两两不相邻，则这些点构成的集合称为独立集。找出一个包含顶点数最多的独立集称为最大独立集。
 
-定理：最大独立集 = 所有顶点数 - 最小顶点覆盖 = 所有顶点数 -   最大匹配
+定理：最大独立集 = 所有顶点数 - 最小顶点覆盖 = 所有顶点数 - 最大匹配
 
 
 ---
-## [LCA](https://www.luogu.org/problemnew/show/P3379)
+## [最近公共祖先|LCA](https://www.luogu.org/problemnew/show/P3379)
+### 倍增
 {% spoiler "代码" %}
 ```cpp
 struct LCA {
@@ -2298,7 +2509,52 @@ struct LCA {
 ```
 
 {% endspoiler %}
-[带权LCA](https://www.luogu.com.cn/problem/P1967)
+
+### 树剖
+{% spoiler "代码" %}
+```cpp
+struct HLD {
+  int dfn;
+  int fa[N], d[N], num[N], son[N], id[N], tp[N];
+  vector<int> *e;
+  template <typename E>
+  void build(E *_e, const int &rt = 1) {
+    e = _e;
+    fa[rt] = dfn = 0;
+    dfs1(rt);
+    dfs2(rt);
+  }
+  void dfs1(const int &u = 1) {
+    d[u] = d[fa[u]]+1;
+    num[u] = 1;
+    son[u] = 0;
+    for (const int &v : e[u]) if (v != fa[u]) {
+      fa[v] = u;
+      dfs1(v);
+      num[u] += num[v];
+      if (num[v] > num[son[u]]) son[u] = v;
+    }
+  }
+  void dfs2(const int &u = 1) {
+    tp[u] = son[fa[u]] == u ? tp[fa[u]] : u;
+    id[u] = ++dfn;
+    if (son[u]) dfs2(son[u]);
+    for (const int &v : e[u]) if (v != son[u] && v != fa[u])
+      dfs2(v);
+  }
+  int lca(int x, int y) {
+    while (tp[x] != tp[y]) {
+      if (d[tp[x]] < d[tp[y]]) swap(x, y);
+      x = fa[tp[x]];
+    }
+    return d[x] < d[y] ? x : y;
+  }
+};
+```
+
+{% endspoiler %}
+
+### [带权LCA](https://www.luogu.com.cn/problem/P1967)
 {% spoiler "代码" %}
 ```cpp
 template <typename T>
@@ -2380,7 +2636,7 @@ struct Tree {
 {% spoiler "代码" %}
 ```cpp
 template <typename T>
-struct ShuPou {
+struct HLD {
   int dfn;
   int fa[N], d[N], num[N], son[N], id[N], tp[N];
   T init_val[N];
@@ -2581,86 +2837,134 @@ struct Dinic {
 ```
 
 {% endspoiler %}
-#### [ISAP](https://www.luogu.com.cn/blog/ONE-PIECE/jiu-ji-di-zui-tai-liu-suan-fa-isap-yu-hlpp)
+#### ISAP
+
 渐进时间复杂度和dinic相同，但是非二分图的情况下isap更具优势
+**在某些情况(题目)中远慢于dinic**
+
+OI Wiki版本
+
 {% spoiler "代码" %}
 ```cpp
 template <typename T>
-struct ISAP {
-  struct EDGE {
-    int v, nex;
-    T w;
-  } e[M<<1];
-  int tot, n, s, t;
-  T maxflow;
-  int fir[N], gap[N], dep[N];
-  T work(const int &_s, const int &_t) {
-    s = _s; t = _t;
-    maxflow = 0;
-    bfs();
-    while (dep[s] < n) dfs(s, INF);
-    return maxflow;
+struct ISAP { // copy from oi-wiki
+  struct Edge {
+    int from, to;
+    T cap, flow;
+    Edge(int u, int v, T c, T f) : from(u), to(v), cap(c), flow(f) {}
+    friend bool operator<(const Edge& a, const Edge& b) {
+      return a.from < b.from || (a.from == b.from && a.to < b.to);
+    }
+  };
+  int n, m, s, t;
+  vector<Edge> edges;
+  vector<int> G[N];
+  bool vis[N];
+  int d[N], cur[N], p[N], num[N];
+
+  void add_edge(int from, int to, int cap) {
+    edges.push_back(Edge(from, to, cap, 0));
+    edges.push_back(Edge(to, from, 0, 0));
+    m = edges.size();
+    G[from].push_back(m - 2);
+    G[to].push_back(m - 1);
   }
-  void init(const int &sz) {
-    n = sz;
-    tot = 0;
-    memset(fir, -1, sizeof(int)*(n+3));
-  }
-  void add_edge(const int &u, const int &v, const T &w) {
-    e[tot] = {v, fir[u], w}; fir[u] = tot++;
-    e[tot] = {u, fir[v], 0}; fir[v] = tot++;
-  }
-  void bfs() {
-    queue<int> q;
-    memset(dep, -1, sizeof(int)*(n+3));
-    memset(gap, 0, sizeof(int)*(n+3));
-    dep[t] = 0;
-    gap[0] = 1;
-    q.push(t);
-    while (q.size()) {
-      int u = q.front();
-      q.pop();
-      for (int i = fir[u], v; i != -1; i = e[i].nex) {
-        v = e[i].v;
-        if (dep[v] != -1) continue;
-        q.push(v);
-        dep[v] = dep[u]+1;
-        ++gap[dep[v]];
+
+  bool BFS() {
+    memset(vis, 0, sizeof(bool)*(n+3));
+    queue<int> Q;
+    Q.push(t);
+    vis[t] = 1;
+    d[t] = 0;
+    while (!Q.empty()) {
+      int x = Q.front();
+      Q.pop();
+      for (int i = 0; i < (int)G[x].size(); i++) {
+        Edge& e = edges[G[x][i] ^ 1];
+        if (!vis[e.from] && e.cap > e.flow) {
+          vis[e.from] = 1;
+          d[e.from] = d[x] + 1;
+          Q.push(e.from);
+        }
       }
     }
+    return vis[s];
   }
-  T dfs(const int &u, const T &flow) {
-    if (u == t) {
-      maxflow += flow;
-      return flow;
+
+  void init(int n) {
+    this->n = n;
+    for (int i = 1; i <= n; i++) G[i].clear();
+    edges.clear();
+  }
+
+  T Augment() {
+    int x = t;
+    T flow = INF;
+    while (x != s) {
+      Edge& e = edges[p[x]];
+      flow = min(flow, e.cap - e.flow);
+      x = edges[p[x]].from;
     }
-    T used = 0;
-    for (int i = fir[u], v; i != -1; i = e[i].nex) {
-      v = e[i].v;
-      if (!e[i].w || dep[v]+1 != dep[u]) continue;
-      T minf = dfs(v, min(e[i].w, flow-used));
-      if (minf) {
-        e[i].w -= minf;
-        e[i^1].w += minf;
-        used += minf;
+    x = t;
+    while (x != s) {
+      edges[p[x]].flow += flow;
+      edges[p[x]^1].flow -= flow;
+      x = edges[p[x]].from;
+    }
+    return flow;
+  }
+
+  T work(int s, int t) {
+    this->s = s;
+    this->t = t;
+    T flow = 0;
+    BFS();
+    memset(num+1, 0, sizeof(int)*n);
+    for (int i = 1; i <= n; i++) num[d[i]]++;
+    int x = s;
+    memset(cur+1, 0, sizeof(int)*n);
+    while (d[s] < n) {
+      if (x == t) {
+        flow += Augment();
+        x = s;
       }
-      if (used == flow) return used;
+      int ok = 0;
+      for (int i = cur[x]; i < (int)G[x].size(); i++) {
+        Edge& e = edges[G[x][i]];
+        if (e.cap > e.flow && d[x] == d[e.to]+1) {
+          ok = 1;
+          p[e.to] = G[x][i];
+          cur[x] = i;
+          x = e.to;
+          break;
+        }
+      }
+      if (!ok) {
+        int m = n-1;
+        for (int i = 0; i < (int)G[x].size(); i++) {
+          Edge& e = edges[G[x][i]];
+          if (e.cap > e.flow) m = min(m, d[e.to]);
+        }
+        if (--num[d[x]] == 0) break;
+        num[d[x] = m+1]++;
+        cur[x] = 0;
+        if (x != s) x = edges[p[x]].from;
+      }
     }
-    if (--gap[dep[u]] == 0) dep[s] = n+1;
-    ++gap[++dep[u]];
-    return used;
+    return flow;
   }
 };
 ```
 
 {% endspoiler %}
-vector存边版本
+
+[Luogu版本](https://www.luogu.com.cn/blog/ONE-PIECE/jiu-ji-di-zui-tai-liu-suan-fa-isap-yu-hlpp)
+
 {% spoiler "代码" %}
 ```cpp
 template <typename T>
 struct ISAP {
-  struct EDGE
-  {
+  struct EDGE {
     int v, nex;
     T w;
     EDGE(const int &_v, const int &_nex, const T &_w) : v(_v), nex(_nex), w(_w) {}
@@ -2681,6 +2985,19 @@ struct ISAP {
     e.clear();
     e.reserve(N<<2);
     memset(fir, -1, sizeof(int)*(n+3));
+  }
+  void clear() {
+    for (int i = 0; i < (int)e.size(); i += 2) {
+      e[i].w += e[i^1].w;
+      e[i^1].w = 0;
+    }
+  }
+  void modify_edge(const int &u, const int &v, const T &w) {
+    for (int i = fir[u]; ~i; i = e[i].nex) if (e[i].v == v) {
+      e[i].w = w;
+      e[i^1].w = 0;
+      break;
+    }
   }
   void add_edge(const int &u, const int &v, const T &w) {
     e.emplace_back(v, fir[u], w); fir[u] = e.size()-1;
@@ -2706,10 +3023,7 @@ struct ISAP {
     }
   }
   T dfs(const int &u, const T &flow) {
-    if (u == t) {
-      maxflow += flow;
-      return flow;
-    }
+    if (u == t) return maxflow += flow, flow;
     T used = 0;
     for (int i = fir[u], v; i != -1; i = e[i].nex) {
       v = e[i].v;
@@ -2972,11 +3286,11 @@ struct ZKW_SPFA {
 [标准](https://www.luogu.org/problemnew/show/P4779)
 ### Floyd
 略
-### Dijiskra
+### Dijkstra
 邻接表+堆优化
 {% spoiler "代码" %}
 ```cpp
-inline void Dijiska() {
+inline void Dijkstra() {
   priority_queue<pair<int,int>,vector<pair<int,int> >,greater<pair<int,int> > >q;
   memset(dis, 0x7f, sizeof dis);
   dis[S] = 0;
@@ -3305,6 +3619,108 @@ struct TWO_SAT {
 ```
 
 {% endspoiler %}
+
+## [虚树](https://www.luogu.com.cn/problem/CF613D)
+
+{% spoiler "代码" %}
+```cpp
+vector<int> ve[N];
+void virtual_tree_clear(const int &u = 1) {
+  for (const int &v : ve[u]) virtual_tree_clear(v);
+  ve[u].clear();
+}
+
+// return the root of virtual tree
+int virtual_tree_build(int vset[], const int &k) {
+  static int stk[N], top;
+  // id ==> dfn rank, d ==> depth
+  int *id = hld.id, *d = hld.d;
+  sort(vset+1, vset+k+1, [&](const int &x, const int &y) {
+    return id[x] < id[y];
+  });
+  top = 0;
+  int x, z;
+  for (int i = 1; i <= k; ++i) {
+    if (top && (z = hld.lca(vset[i], stk[top])) != stk[top]) {
+      x = stk[top--];
+      while (top && d[stk[top]] > d[z]) {
+        ve[stk[top]].emplace_back(x);
+        x = stk[top--];
+      }
+      ve[z].emplace_back(x);
+      if (!top || stk[top] != z) stk[++top] = z;
+    }
+    stk[++top] = vset[i];
+  }
+  x = stk[top--];
+  while (top) {
+    ve[stk[top]].emplace_back(x);
+    x = stk[top--];
+  }
+  // if (x != 1) ve[1].emplace_back(x); // force root at 1
+  return x;
+}
+```
+
+{% endspoiler %}
+
+## 线段树优化建图
+
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct SegmentTreeGarph {
+  struct TreeNode {
+    int l, r;
+    int ls, rs;
+  } tr[N<<2];
+  vector<pair<int, T>> *e;
+  int tot, root[2];
+  // op [down, 0] [up, 1]
+  template <typename E>
+  void build(const int &n, E *_e) {
+    tot = n;
+    e = _e;
+    for (int i = 1; i <= n; ++i) tr[i].l = tr[i].r = i;
+    build(1, n, root[0], 0);
+    build(1, n, root[1], 1);
+  }
+  void build(const int &l, const int &r, int &i, const int &op) {
+    if (l == r) return i = l, void();
+    i = ++tot;
+    tr[i].l = l; tr[i].r = r;
+    int mid = (l+r)>>1;
+    build(l, mid, tr[i].ls, op);
+    build(mid+1, r, tr[i].rs, op);
+    e[op ? tr[i].ls : i].emplace_back(op ? i : tr[i].ls, 0);
+    e[op ? tr[i].rs : i].emplace_back(op ? i : tr[i].rs, 0);
+  }
+  void insert(const int &o, const int &l, const int &r, const T &w,
+      const int &op) {
+    insert(o, l, r, w, op, root[op]);
+  }
+  void insert(const int &o, const int &l, const int &r, const T &w,
+      const int &op, const int &i) {
+    if (tr[i].l >= l && tr[i].r <= r) {
+      e[op ? i : o].emplace_back(op ? o : i, w);
+      return;
+    }
+    int mid = (tr[i].l+tr[i].r)>>1;
+    if (l <= mid) insert(o, l, r, w, op, tr[i].ls);
+    if (r >  mid) insert(o, l, r, w, op, tr[i].rs);
+  }
+};
+```
+
+{% endspoiler %}
+
+### [+最短路](https://www.luogu.com.cn/problem/CF786B) 
+### [+网络流](https://ac.nowcoder.com/acm/contest/5670/G)
+### [+2-SAT](http://acm.hdu.edu.cn/showproblem.php?pid=6824)
+
+## 矩阵树定理|Kirchhoff
+
+解决一张图的生成树个数计数问题(详情见oi-wiki)
 
 ---
 # 数论
