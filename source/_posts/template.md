@@ -193,6 +193,17 @@ Printer pr = Printer(stdout);
 {% endspoiler %}
 
 ---
+## 玄学优化
+
+吸氧,吸臭氧
+{% spoiler "代码" %}
+```cpp
+#pragma GCC optimize("Ofast,no-stack-protector")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,tune=native")
+```
+
+{% endspoiler %}
+
 ## 正则表达式
 {% spoiler "代码" %}
 ```cpp
@@ -214,14 +225,63 @@ mt19937 rnd(time(NULL));
 mt19937 rnd(chrono::high_resolution_clock::now().time_since_epoch().count());
 cout << rnd() << endl;
 ```
-
-{% endspoiler %}
-{% spoiler "代码" %}
 ```cpp
 std::random_device rd;  //获取随机数种子
 std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 std::uniform_int_distribution<> dis(0, 9);
 std::cout << dis(gen) << endl;
+```
+```cpp
+inline ull xorshift128(){
+  static U SX=335634763,SY=873658265,SZ=192849106,SW=746126501;
+  U t=SX^(SX<<11);
+  SX=SY;
+  SY=SZ;
+  SZ=SW;
+  return SW=SW^(SW>>19)^t^(t>>8);
+}
+inline ull myrand(){return (xorshift128()<<32)^xorshift128();}
+```
+
+{% endspoiler %}
+
+---
+
+## 哈希
+双哈希,好多哈希,[题目链接](https://codeforces.com/contest/1394/problem/B)
+{% spoiler "代码" %}
+```cpp
+struct HashNumber {
+  static const int HN = 2;
+  int a[HN], mod[HN] = {25165843, 50331653};
+  HashNumber() { memset(a, 0, sizeof a); }
+  template <typename U> HashNumber(const U &x) {
+    for (int i = 0; i < HN; ++i) a[i] = x%mod[i];
+  }
+  friend bool operator ==(const HashNumber &lhs, const HashNumber &rhs) {
+    for (int i = 0; i < HN; ++i) if (lhs.a[i] != rhs.a[i]) return false;
+    return true;
+  }
+  friend bool operator !=(const HashNumber &lhs, const HashNumber &rhs) {
+    return !(lhs == rhs);
+  }
+  HashNumber& operator +=(const HashNumber &hs) {
+    for (int i = 0; i < HN; ++i) (a[i] += hs.a[i]) %= mod[i];
+    return *this;
+  }
+  HashNumber& operator *=(const HashNumber &hs) {
+    for (int i = 0; i < HN; ++i) a[i] = (1ll*a[i]*hs.a[i])%mod[i];
+    return *this;
+  }
+  friend HashNumber operator +(const HashNumber &lhs, const HashNumber &rhs) {
+    HashNumber res = lhs;
+    return res += rhs;
+  }
+  friend HashNumber operator *(const HashNumber &lhs, const HashNumber &rhs) {
+    HashNumber res = lhs;
+    return res *= rhs;
+  }
+};
 ```
 
 {% endspoiler %}
@@ -230,6 +290,7 @@ std::cout << dis(gen) << endl;
 ## 计算log2
 {% spoiler "代码" %}
 ```cpp
+#define log(x) (31-__builtin_clz(x))
 // lg2[i] = lg2(i) +1
 for(int i = 1; i <= n; ++i) lg2[i] = lg2[i>>1]+1;
 // lg2[i] = (int)log2(i)
@@ -1409,6 +1470,120 @@ struct BIT_2D {
 ```
 
 {% endspoiler %}
+
+## 可持久化线段树(可持久化数组)
+
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct PersistantArray {
+  static const int NN = N*(log2(N)+3);
+  int rt[N], ls[NN], rs[NN], val[NN], tot, n;
+  void build(const int &n) {
+    this->n = n;
+    tot = 0;
+    rt[0] = build(1, n);
+  }
+  int build(const int &l, const int &r) {
+    int cur = ++tot; assert(tot < NN);
+    if (l == r) return val[cur] = a[l], cur;
+    int mid = (l+r)>>1;
+    ls[cur] = build(l, mid);
+    rs[cur] = build(mid+1, r);
+    return cur;
+  }
+  void update(const int &cur, const int &pre, const int &x, const T &k) {
+    rt[cur] = update(rt[pre], x, k, 1, n);
+  }
+  int update(const int &pre, const int &x, const T &k, const int &l, const int &r) {
+    int cur = ++tot; assert(tot < NN);
+    if (l == x && r == x) return val[cur] = k, cur;
+    ls[cur] = ls[pre]; rs[cur] = rs[pre];
+    int mid = (l+r)>>1;
+    if (x <= mid) ls[cur] = update(ls[pre], x, k, l, mid);
+    else rs[cur] = update(rs[pre], x, k, mid+1, r);
+    return cur;
+  }
+  T query(const int &cur, const int &x) {
+    return query(rt[cur], x, 1, n);
+  }
+  T query(const int &cur, const int &x, const int &l, const int &r) {
+    if (l == x && r == x) return val[cur];
+    int mid = (l+r)>>1;
+    if (x <= mid) return query(ls[cur], x, l, mid);
+    return query(rs[cur], x, mid+1, r);
+  }
+};
+```
+
+{% endspoiler %}
+
+## 可持久化并查集
+
+{% spoiler "代码" %}
+```cpp
+struct PersistantUnionSet {
+  static const int NN = N*(log2(N)+3);
+  int rt[N], ls[NN], rs[NN], fa[NN], dep[NN], n, tot;
+  void build(const int &n) {
+    this->n = n;
+    tot = 0;
+    rt[0] = build(1, n);
+  }
+  int build(const int &l, const int &r) {
+    int cur = ++tot; assert(tot < NN);
+    if (l == r) return fa[cur] = l, dep[cur] = 0, cur;
+    int mid = (l+r)>>1;
+    ls[cur] = build(l, mid);
+    rs[cur] = build(mid+1, r);
+    return cur;
+  }
+  bool query(const int &cur, const int &x, const int &y) {
+    return fa[getf(rt[cur], x)] == fa[getf(rt[cur], y)];
+  }
+  // return the id of fa[], dep[]
+  int query(const int &cur, const int &x, const int &l, const int &r) {
+    if (l == r) return cur;
+    int mid = (l+r)>>1;
+    if (x <= mid) return query(ls[cur], x, l, mid);
+    else return query(rs[cur], x, mid+1, r);
+  }
+  // return the id of fa[], dep[]
+  int getf(const int &cur, int x) {
+    int fi;
+    while (fa[(fi = query(cur, x, 1, n))] != x) x = fa[fi];
+    return fi;
+  }
+  void merge(const int &cur, const int &pre, const int &x, const int &y) {
+    rt[cur] = rt[pre];
+    int fx = getf(rt[cur], x), fy = getf(rt[cur], y);
+    if (fa[fx] == fa[fy]) return;
+    if (dep[fx] > dep[fy]) swap(fx, fy);
+    rt[cur] = update(rt[pre], fa[fx], fa[fy], 1, n);
+    if (dep[fx] == dep[fy]) add(rt[cur], fa[fy], 1, n);
+  }
+  // update fa, merge x to y
+  int update(const int &pre, const int &x, const int &y, const int &l, const int &r) {
+    int cur = ++tot; assert(tot < NN);
+    if (l == r) return fa[cur] = y, dep[cur] = dep[pre], cur;
+    ls[cur] = ls[pre]; rs[cur] = rs[pre];
+    int mid = (l+r)>>1;
+    if (x <= mid) ls[cur] = update(ls[pre], x, y, l, mid);
+    else rs[cur] = update(rs[pre], x, y, mid+1, r);
+    return cur;
+  }
+  // add dep
+  void add(const int &cur, const int &x, const int &l, const int &r) {
+    if (l == r) return ++dep[cur], void();
+    int mid = (l+r)>>1;
+    if (x <= mid) add(ls[cur], x, l, mid);
+    else add(rs[cur], x, mid+1, r);
+  }
+};
+```
+
+{% endspoiler %}
+
 ## [可持久化线段树(主席树)](https://www.luogu.com.cn/problem/P3834)
 
 自带离散
@@ -1416,7 +1591,7 @@ struct BIT_2D {
 {% spoiler "代码" %}
 ```cpp
 template <typename T>
-struct PersistenceSegmentTree {
+struct PersistantSegmentTree {
   static const int NN = N*(log2(N)+5);
   int rt[N], sum[NN], ls[NN], rs[NN], tot, sz;
   vector<T> des;
@@ -1474,7 +1649,7 @@ private:
 {% spoiler "代码" %}
 ```cpp
 template <typename T>
-struct PersistenceSegmentTree {
+struct PersistantSegmentTree {
   static const int NN = N*(log2(N)+5);
   int rt[N], sum[NN], ls[NN], rs[NN], tot, n;
   void build(const int &n) {
@@ -3518,18 +3693,17 @@ inline void suodian() {
 ## [2-SAT](https://www.luogu.com.cn/problem/P4782)
 ### SCC Tarjan
 $O(n+m)$
-从0开始
 {% spoiler "代码" %}
 ```cpp
-struct TWO_SAT {
-  int top, _dfn, _col;
-  int dfn[N<<1], low[N<<1], vis[N<<1], sta[N<<1], col[N<<1], res[N];
+struct TWO_SAT { // node stkrt from 0
+  int top, _dfn, _scc;
+  int dfn[N<<1], low[N<<1], stk[N<<1], scc[N<<1], res[N];
   vector<int> e[N<<1];
   void init(const int &n) {
     top = 0;
     memset(dfn, 0, sizeof(int)*n*2);
     memset(low, 0, sizeof(int)*n*2);
-    memset(vis, 0, sizeof(int)*n*2);
+    memset(scc, 0, sizeof(int)*n*2);
     for (int i = 0; i < n<<1; ++i) vector<int>().swap(e[i]);
   }
   // if u then v
@@ -3544,29 +3718,27 @@ struct TWO_SAT {
     for (int i = 0; i <= n<<1; ++i)
       if (!dfn[i]) tarjan(i);
     for (int i = 0; i < n; ++i) {
-      if (col[i<<1] == col[i<<1|1]) return false;
-      res[i] = col[i<<1] > col[i<<1|1];
+      if (scc[i<<1] == scc[i<<1|1]) return false;
+      res[i] = scc[i<<1] > scc[i<<1|1];
     }
     return true;
   }
   void tarjan(const int &u) {
     dfn[u] = low[u] = ++_dfn;
-    vis[u] = 1;
-    sta[++top] = u;
+    stk[++top] = u;
     for (int &v : e[u]) {
       if (!dfn[v]) {
         tarjan(v);
         low[u] = min(low[u], low[v]);
-      } else if (vis[v]) {
-        low[u] = min(low[u], low[v]);
+      } else if (!scc[v]) {
+        low[u] = min(low[u], dfn[v]);
       }
     }
     if (dfn[u] == low[u]) {
-      ++_col;
+      ++_scc;
       do {
-        col[sta[top]] = _col;
-        vis[sta[top]] = 0;
-      } while (sta[top--] != u);
+        scc[stk[top]] = _scc;
+      } while (stk[top--] != u);
     }
   }
 };
@@ -3673,7 +3845,7 @@ struct SegmentTreeGarph {
   struct TreeNode {
     int l, r;
     int ls, rs;
-  } tr[N<<2];
+  } tr[N*3];
   vector<pair<int, T>> *e;
   int tot, root[2];
   // op [down, 0] [up, 1]
@@ -3697,7 +3869,8 @@ struct SegmentTreeGarph {
   }
   void insert(const int &o, const int &l, const int &r, const T &w,
       const int &op) {
-    insert(o, l, r, w, op, root[op]);
+    if (l == r) e[op ? l : o].emplace_back(op ? o : l, w);
+    else insert(o, l, r, w, op, root[op]);
   }
   void insert(const int &o, const int &l, const int &r, const T &w,
       const int &op, const int &i) {
@@ -4386,6 +4559,178 @@ void cdq_fft(T f[], T g[], const int &l, const int &r) {
 
 {% endspoiler %}
 
+## 快速沃尔什变换|FWT
+
+[推导详解](https://www.luogu.com.cn/blog/command-block/wei-yun-suan-juan-ji-yu-ji-kuo-zhan)
+
+[公式参考](https://www.cnblogs.com/GavinZheng/p/11721127.html)
+
+[洛谷例题](https://www.luogu.com.cn/problem/P4717)
+
+复杂度 $O(n\log n) | O(n2^n)$
+
+$FWT(A\pm B)=FWT(A)\pm FWT(B)$
+
+$FWT(cA)=cFWT(A)$
+
+定义⊕为任意集合运算
+
+$FWT(A\bigoplus B)=FWT(A)\times FWT(B)$
+
+求 $C_i = \sum\limits_{i=j\bigoplus k}{a_j b_k}$
+
+### 或运算
+$FWT(A)[i] = \sum\limits_{j|i=i}{A[j]}$
+
+$FWT(A) = [FWT(A_0),FWT(A_0+A_1)]$
+
+$IFWT(A) = [IFWT(A_0),IFWT(A_1)-IFWT(A_0)]$
+
+
+### 与运算
+$FWT(A)[i] = \sum\limits_{i\&j=j}{A[i]}$
+
+$FWT(A) = [FWT(A_0+A_1),FWT(A_1)]$
+
+$IFWT(A) = [IFWT(A_0)-IFWT(A_1),IFWT(A_1)]$
+
+### 异或运算
+令 $d(x)$ 为 $x$ 在二进制下拥有的1的数量
+
+$FWT(A)[i] = \sum\limits_{d(j\&i)为偶数}{A[j]}-\sum\limits_{d(k\&i)为奇数}{A[k]}$
+
+$FWT(A) = [FWT(A_0+A_1),FWT(A_0-A_1)]$
+
+$IFWT(A) = [\frac{IFWT(A_1-A_0)}{2},\frac{IFWT(A_1+A_0)}{2}]$
+
+### code
+
+{% spoiler "代码" %}
+```cpp
+namespace FWT {
+#define forforfor for (int l = 2; l <= len; l <<= 1)\
+                  for (int i = 0, k = l>>1; i < len; i += l)\
+                  for (int j = 0; j < k; ++j)
+
+  const int SIZE = (1<<17)+3;
+  int len;
+  int f[SIZE], g[SIZE];
+  template <class T> void init(T a[], const int &n, T b[], const int &m) {
+    len = 1;
+    while (len < max(n, m)) len <<= 1;
+    for (int i = 0; i < n; ++i) f[i] = a[i];
+    for (int i = n; i < len; ++i) f[i] = 0;
+    for (int i = 0; i < m; ++i) g[i] = b[i];
+    for (int i = m; i < len; ++i) g[i] = 0;
+  }
+  template <class T> void fwt_or(T a[], const int x = 1) {
+    forforfor a[i+j+k] = (a[i+j+k]+1ll*a[i+j]*x)%MOD;
+  }
+  template <class T> void fwt_and(T a[], const int x = 1) {
+    forforfor a[i+j] = (a[i+j]+1ll*a[i+j+k]*x)%MOD;
+  }
+  template <class T> void fwt_xor(T a[], const int x = 1) {
+    forforfor {
+      (a[i+j] += a[i+j+k]) %= MOD;
+      a[i+j+k] = (a[i+j]-2*a[i+j+k]%MOD+MOD)%MOD;
+      a[i+j] = 1ll*a[i+j]*x%MOD; a[i+j+k] = 1ll*a[i+j+k]*x%MOD;
+    }
+  }
+  template <class T> void work_or(const T a[], const int &n, const T b[], const int &m) {
+    init(a, n, b, m); fwt_or(f); fwt_or(g);
+    for (int i = 0; i < len; ++i) f[i] = 1ll*f[i]*g[i]%MOD;
+    fwt_or(f, MOD-1); // fwt_or(x, -1)
+  }
+  template <class T> void work_and(const T a[], const int &n, const T b[], const int &m) {
+    init(a, n, b, m); fwt_and(f); fwt_and(g);
+    for (int i = 0; i < len; ++i) f[i] = 1ll*f[i]*g[i]%MOD;
+    fwt_and(f, MOD-1); // fwt_and(x, -1)
+  }
+  template <class T> void work_xor(const T a[], const int &n, const T b[], const int &m) {
+    init(a, n, b, m); fwt_xor(f); fwt_xor(g);
+    for (int i = 0; i < len; ++i) f[i] = 1ll*f[i]*g[i]%MOD;
+    fwt_xor(f, mul_inverse(2)); // fwt_xor(x, 1/2)
+  }
+#undef forforfor
+} // namespace FWT
+```
+
+{% endspoiler %}
+
+## 快速莫比乌斯变换|FMT
+
+据说 FWT 做的事情完全包含 FMT 且常数是一半(咕之
+
+## 快速子集变换(子集卷积)|FST
+
+$C_k = \sum\limits_{i\&j=0,i|j=k}{A_i B_j}$
+
+复杂度 $O(n\log^2 n) | O(n^22^n)$
+
+{% spoiler "代码" %}
+```cpp
+namespace FST {
+  const int W = 20;
+  const int N = 1<<W;
+  int len, bit;
+  int f[W+1][N], g[W+1][N], h[W+1][N], res[N];
+  template <class T> void fwt(T a[], const int x = 1) {
+    for (int l = 2; l <= len; l <<= 1)
+    for (int i = 0, k = l>>1; i < len; i += l)
+    for (int j = 0; j < k; ++j)
+      a[i+j+k] = (a[i+j+k]+1ll*a[i+j]*x)%MOD;
+  }
+  template <class T> void work(const T a[], const int &n, const T b[], const int &m) {
+    len = 1; bit = 0;
+    while (len < max(n, m)) len <<= 1, ++bit;
+    for (int i = 0; i <= bit; ++i)
+      for (int j = 0; j < len; ++j)
+        f[i][j] = g[i][j] = h[i][j] = 0;
+    for (int i = 0; i < n; ++i) f[__builtin_popcount(i)][i] = a[i];
+    for (int i = 0; i < m; ++i) g[__builtin_popcount(i)][i] = b[i];
+    for (int i = 0; i <= bit; ++i) {
+      fwt(f[i]); fwt(g[i]);
+      for (int j = 0; j <= i; ++j)
+        for (int k = 0; k < len; ++k)
+          h[i][k] = (h[i][k]+1ll*f[j][k]*g[i-j][k])%MOD;
+      fwt(h[i], MOD-1); // fwt(h[i], -1)
+    }
+    for (int i = 0; i < len; ++i) res[i] = h[__builtin_popcount(i)][i];
+  }
+} // namespace FST
+```
+
+{% endspoiler %}
+
+### 倍增子集卷积
+
+[hdu6851](http://acm.hdu.edu.cn/showproblem.php?pid=6851)
+
+设多项式 $A = \sum\limits_{i=0}^{2^n-1}{a_i x^i},B=\sum\limits_{i=0}^{2^n-1}{b_i x^i}$
+
+求 $C = A*B = \sum\limits_{i=0}^{2^n-1}{x^i \sum\limits_{d\subseteq i}{a_d b_{i-d}}}$
+
+按照每个状态的最高位进行分组，然后卷 $n$ 次
+
+复杂度 $O(\sum\limits_{i=1}^{n}{i^2 2^i}) = O(n^2 2^n)$
+
+{% spoiler "代码" %}
+```cpp
+template <typename T> void vip_fst(T a[], const int &n) { // return a
+  static int b[1<<B]; // warning: the type of b
+  int len = 1; while (len < n) len <<= 1;
+  memcpy(b, a, sizeof(T)*len);
+  memset(a, 0, sizeof(T)*len); a[0] = 1;
+  for (int i = 1; i < len; i <<= 1) {
+    FST::work(a, i, b+i, i);
+    for (int j = 0; j < i; ++j)
+      a[i+j] = FST::h[__builtin_popcount(j)][j];
+  }
+}
+```
+
+{% endspoiler %}
+
 ---
 ## [第二类斯特林数](https://www.luogu.com.cn/problem/P5395)
 {% spoiler "代码" %}
@@ -5022,8 +5367,23 @@ using mint = Mint<MOD>;
 
 {% endspoiler %}
 ## tourist的模板(用不来)
+[某出处](https://codeforces.com/contest/1383/submission/87883167)
+
+**注**: `#ifdef _WIN32`部分可能导致 CE
+
 {% spoiler "代码" %}
 ```cpp
+template <typename T>
+T inverse(T a, T m) {
+  T u = 0, v = 1;
+  while (a != 0) {
+    T t = m / a;
+    m -= t * a; swap(a, m);
+    u -= t * v; swap(u, v);
+  }
+  assert(m == 1);
+  return u;
+}
 template <typename T>
 class Modular {
  public:
