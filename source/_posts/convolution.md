@@ -158,6 +158,84 @@ signed main()
 
 咕咕咕
 
+# 二进制卷积
+
+## 简介
+
+### 快速沃尔什变换|FWT
+
+[推导详解](https://www.luogu.com.cn/blog/command-block/wei-yun-suan-juan-ji-yu-ji-kuo-zhan)
+
+[公式参考](https://www.cnblogs.com/GavinZheng/p/11721127.html)
+
+[洛谷例题](https://www.luogu.com.cn/problem/P4717)
+
+复杂度 $O(n\log n) | O(n2^n)$
+
+$FWT(A\pm B)=FWT(A)\pm FWT(B)$
+
+$FWT(cA)=cFWT(A)$
+
+定义⊕为任意集合运算
+
+$FWT(A\bigoplus B)=FWT(A)\times FWT(B)$
+
+求 $C_i = \sum\limits_{i=j\bigoplus k}{a_j b_k}$
+
+#### 或运算
+$FWT(A)[i] = \sum\limits_{j|i=i}{A[j]}$
+
+$FWT(A) = [FWT(A_0),FWT(A_0+A_1)]$
+
+$IFWT(A) = [IFWT(A_0),IFWT(A_1)-IFWT(A_0)]$
+
+
+#### 与运算
+$FWT(A)[i] = \sum\limits_{i\&j=j}{A[i]}$
+
+$FWT(A) = [FWT(A_0+A_1),FWT(A_1)]$
+
+$IFWT(A) = [IFWT(A_0)-IFWT(A_1),IFWT(A_1)]$
+
+#### 异或运算
+令 $d(x)$ 为 $x$ 在二进制下拥有的1的数量
+
+$FWT(A)[i] = \sum\limits_{d(j\&i)为偶数}{A[j]}-\sum\limits_{d(k\&i)为奇数}{A[k]}$
+
+$FWT(A) = [FWT(A_0+A_1),FWT(A_0-A_1)]$
+
+$IFWT(A) = [\frac{IFWT(A_1-A_0)}{2},\frac{IFWT(A_1+A_0)}{2}]$
+
+### 快速莫比乌斯变换|FMT
+
+据说 FWT 做的事情完全包含 FMT 且常数是一半(咕之
+
+### 快速子集变换(子集卷积)|FST
+
+$C_k = \sum\limits_{i\&j=0,i|j=k}{A_i B_j}$
+
+复杂度 $O(n\log^2 n) | O(n^22^n)$
+
+## 应用
+
+### 倍增子集卷积
+
+[hdu6851](http://acm.hdu.edu.cn/showproblem.php?pid=6851)
+
+设多项式 $A = \sum\limits_{i=0}^{2^n-1}{a_i x^i},B=\sum\limits_{i=0}^{2^n-1}{b_i x^i}$
+
+求 $C = A*B = \sum\limits_{i=0}^{2^n-1}{x^i \sum\limits_{d\subseteq i}{a_d b_{i-d}}}$
+
+按照每个状态的最高位进行分组，然后卷 $n$ 次
+
+复杂度 $O(\sum\limits_{i=1}^{n}{i^2 2^i}) = O(n^2 2^n)$
+
+### 杂糅好题
+
+[CF914G Sum the Fibonacci](https://kaizynx.github.io/2020/08/16/Codeforces914G/)
+
 # 参考资料
 
 [浅谈FFT--从DFT到*CZT,及一些技巧](https://www.luogu.com.cn/blog/105254/qian-tan-fft-zong-ft-dao-fft)
+
+[位运算卷积(FWT)与其扩展](https://www.luogu.com.cn/blog/command-block/wei-yun-suan-juan-ji-yu-ji-kuo-zhan)
