@@ -15,6 +15,8 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/convolution/cover.jpg
 ---
 # 卷积初步
 
+[本菜鸡的板子参考](https://kaizynx.github.io/2018/11/04/template/#%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2-FFT)
+
 傻逼起见,数组为 $f[0, n]$
 
 ## 一般线性卷积
@@ -160,6 +162,10 @@ signed main()
 
 # 二进制卷积
 
+[本菜鸡的板子参考](https://kaizynx.github.io/2018/11/04/template/#%E5%BF%AB%E9%80%9F%E6%B2%83%E5%B0%94%E4%BB%80%E5%8F%98%E6%8D%A2-FWT)
+
+数组一般为 $f[0, 2^n)$
+
 ## 简介
 
 ### 快速沃尔什变换|FWT
@@ -230,9 +236,29 @@ $C_k = \sum\limits_{i\&j=0,i|j=k}{A_i B_j}$
 
 复杂度 $O(\sum\limits_{i=1}^{n}{i^2 2^i}) = O(n^2 2^n)$
 
+以上为官方说辞?以下为个人理解
+
+给出 $A$ 求 $C$ 满足
+
+$C_k = \sum\limits^{所有能组成k的子集集合S}{\prod\limits_{i\in S}{A_i}}$
+
+不知道怎么表达就是 $\forall i \in S,j \in S, i \neq j \rightarrow i\&j =0$ 且集合内所有数按位或等于 $k$
+
+如果直接拿两个 $A$ 子集卷积会有很多重复
+
+可以先赋 $C=\{1,0,0,0\cdots\}$
+
+像背包一样,把 $A$ 按照最高位依次拿去更新,就不会重复
+
+就是把 $A$ 分成 $A_{0001},A_{001*},A_{01**},A_{1***}$ 这么些物品这个意思
+
 ### 杂糅好题
 
 [CF914G Sum the Fibonacci](https://kaizynx.github.io/2020/08/16/Codeforces914G/)
+
+差不多各种板子都用上了,还要加上一定的理解掌握
+
+详情我另写了篇[博客](https://kaizynx.github.io/2020/08/16/Codeforces914G/)
 
 # 参考资料
 

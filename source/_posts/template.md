@@ -4971,7 +4971,7 @@ struct Euler {
 {% endspoiler %}
 
 ---
-## [线性筛](https://www.luogu.org/problemnew/show/P3383)
+## 线性筛素数
 {% spoiler "代码" %}
 ```cpp
 struct Euler {
@@ -5028,6 +5028,19 @@ inline bool MillerRabin(int x) {
     if (j >= b) return false;
   }
   return true;
+}
+```
+
+{% endspoiler %}
+
+## [线性筛GCD](https://www.luogu.com.cn/problem/P2568)
+{% spoiler "代码" %}
+```cpp
+inline void gcd_init(const int &n) {
+  for (int i = 1; i <= n; ++i)
+  for (int j = 1; j <= n; ++j) if (!g[i][j])
+  for (int k = 1; k <= n/i; ++k)
+    g[k*i][k*j] = k;
 }
 ```
 
