@@ -4926,9 +4926,9 @@ C(n,k) 当 `n&k == k` 为奇数反之偶数
 ## 欧拉函数
 {% spoiler "代码" %}
 ```cpp
-inline long long phi(long long x) {
-  long long res = x;
-  for (long long i = 2; i*i <= x; ++i) {
+template <typename T> inline T phi(T x) {
+  T res = x;
+  for (T i = 2; i*i <= x; ++i) {
     if (x%i) continue;
     res = res/i*(i-1);
     while (x%i == 0) x /= i;
@@ -5063,7 +5063,11 @@ if(x > 1) p[++tot] = x, k[tot] = 1;
 
 ---
 ## BSGS
-**[luogu 4884](https://www.luogu.org/problemnew/show/P4884)**
+
+[luogu 4884](https://www.luogu.org/problemnew/show/P4884)
+
+求解关于 $t$ 的方程 $a^t \equiv x(mod m),\gcd(a, m) = 1$
+
 {% spoiler "代码" %}
 ```cpp
 // map<long long, int> mmp; // a^n = x
@@ -5073,11 +5077,9 @@ inline long long BSGS(long long a, long long x, long long m) {
     mmp[mul(x, qpow(a, i))] = i;
   a = qpow(a, t);
   long long now, ans; // now = (a^t)^i
-  for(int i = 0; i <= t; ++i)
-  {
+  for(int i = 0; i <= t; ++i) {
     now = qpow(a, i);
-    if(mmp.count(now))
-    {
+    if(mmp.count(now)) {
       ans = t*i-mmp[now];
       if(ans > 0) return ans;
     }
@@ -5085,6 +5087,11 @@ inline long long BSGS(long long a, long long x, long long m) {
   return -1;
 }
 ```
+
+## 拓展BSGS
+
+$\gcd(a, m) \neq 1$
+
 
 {% endspoiler %}
 
@@ -5095,6 +5102,39 @@ $D_1 = 0$
 $D_2 = 1$
 
 $D_n = (n-1)(D_{n-1}+D_{n-2})$
+
+## 原根
+
+[参考博客](https://blog.csdn.net/zhouyuheng2003/article/details/80163139#comments)
+
+复杂度 $O(\sqrt{m}+g\times\log^2m)$
+
+{% spoiler "代码" %}
+```cpp
+inline int getG(const int &m) {
+  static int q[100000+7];
+  int _phi = phi(m), x = _phi, tot = 0;
+  for (int i = 2; i*i <= _phi; ++i) {
+    if (x%i) continue;
+    q[++tot] = _phi/i;
+    while (x%i == 0) x /= i;
+  }
+  if (x > 1) x = q[++tot] = _phi/x;
+  for (int g = 2, flag; ; ++g) {
+    flag = 1;
+    if (qpow(g, _phi, m) != 1) continue;
+    for (int i = 1; i <= tot; ++i) {
+      if (qpow(g, q[i], m) == 1) {
+        flag = 0;
+        break;
+      }
+    }
+    if (flag) return g;
+  }
+}
+```
+
+{% endspoiler %}
 
 ---
 # 动态规划 DP
