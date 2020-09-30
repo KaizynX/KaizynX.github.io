@@ -1867,6 +1867,8 @@ struct ST {
 {% endspoiler %}
 
 ### 二维
+$O(nm\log n \log m)$
+
 {% spoiler "代码" %}
 ```cpp
 template <typename T, typename U = std::greater<T>>
@@ -1983,6 +1985,29 @@ struct DSU {
 
 {% endspoiler %}
 
+---
+## 单调队列
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct MonotonousQueue {
+  unsigned head;
+  vector<T> q;
+  MonotonousQueue() { clear(); }
+  T& operator [](const int &i) { return q[head+i];}
+  void clear() { head = 0; q.clear(); }
+  size_t size() { return q.size()-head; }
+  bool empty() { return head == q.size(); }
+  T front() { return q[head]; }
+  T back() { return q.back(); }
+  void push_front(const T &x) {/*unsupported*/}
+  void push_back(const T &x) { q.push_back(x); }
+  void pop_front() { ++head; }
+  void pop_back() { q.pop_back(); }
+};
+```
+
+{% endspoiler %}
 ---
 # 字符串
 ## [回文字符串|manacher算法](https://www.luogu.org/problemnew/show/P3805)
@@ -4260,6 +4285,7 @@ void dfs(const int &u, const int &num) {
 ```cpp
 template <typename T, typename H, typename P>
 long long Largrange(const T &k, const int &n, const H x[], const P y[]) {
+  k %= MOD;
   long long res = 0, s1 = 1, s2 = 1;
   for (int i = 1; i <= n; ++i, s1 = s2 = 1) {
     for (int j = 1; j <= n; ++j) if (i != j) {
@@ -4280,6 +4306,7 @@ long long Largrange(const T &k, const int &n, const P y[]) {
   if (k <= n) return y[k];
   static long long pre[N], suf[N];
   long long res = 0;
+  k %= MOD;
   pre[0] = suf[n+1] = 1;
   for (int i = 1; i <= n; ++i) pre[i] = pre[i-1]*(k-i)%MOD;
   for (int i = n; i >= 1; --i) suf[i] = suf[i+1]*(k-i)%MOD;
@@ -4597,7 +4624,7 @@ $IFWT(A) = [IFWT(A_0)-IFWT(A_1),IFWT(A_1)]$
 ### 异或运算
 令 $d(x)$ 为 $x$ 在二进制下拥有的1的数量
 
-$FWT(A)[i] = \sum\limits_{d(j\&i)为偶数}{A[j]}-\sum\limits_{d(k\&i)为奇数}{A[k]}$
+$FWT(A)[i] = \sum\limits_{j}(-1)^{d(i\&j)}A[j]$
 
 $FWT(A) = [FWT(A_0+A_1),FWT(A_0-A_1)]$
 
@@ -4966,6 +4993,24 @@ struct Euler {
     }
   }
 } E;
+```
+
+{% endspoiler %}
+
+## 莫比乌斯函数
+
+{% spoiler "代码" %}
+```cpp
+template <typename T> inline T miu(T x) {
+  int t = 0;
+  for (T i = 2, k; i*i <= x; ++i) {
+    if (x%i) continue;
+    for (k = 0, ++t; x %i == 0; x /= i, ++k) {}
+    if (k >= 2) return 0;
+  }
+  if (x > 1) ++t;
+  return t&1 ? -1 : 1;
+}
 ```
 
 {% endspoiler %}
