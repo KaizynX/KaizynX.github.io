@@ -1391,6 +1391,26 @@ struct zkwSegmentTree {
 
 {% endspoiler %}
 
+## 李超线段树
+
+李超线段树是一种用于维护平面直角坐标系内线段关系的数据结构。它常被用来处理这样一种形式的问题：给定一个平面直角坐标系，支持动态插入一条线段，询问从某一个位置 (x,+∞) 向下看能看到的最高的一条线段（也就是给一条竖线，问这条竖线与所有线段的最高的交点。
+
+## 吉老师线段树|吉司机线段树
+
+区间最值操作 & 区间历史最值
+
+栗子:给出一个数列, 每次操作让某个区间中对给定值取 min 询问某个区间的和
+
+## 树套树
+
+在第一维线段树的每个结点建立第二维线段树
+
+## K-D Tree | KDT
+
+高效处理 k 维空间信息
+
+## Link Cut Tree | LCT
+
 ---
 ## 树状数组
 ### 一维
@@ -1816,6 +1836,182 @@ struct FenKuai {
 ```
 
 {% endspoiler %}
+## 莫队
+$O(1)修改$ 一般取 $block = \frac{n}{\sqrt{m}}, O(n\sqrt{m})$
+
+移动前两步先扩大区间 $l--,r++$ 后两步缩小区间 $l++,r--$
+
+### 奇偶性排序
+{% spoiler "代码" %}
+```cpp
+template <typename T> bool cmp(const T &q1, const T &q2) {
+  return q1.l/block != q2.l/block ? q1.l < q2.l :
+      (q1.l/block)&1 ? q1.r < q2.r : q1.r > q2.r;
+}
+```
+
+{% endspoiler %}
+
+### 带修改莫队
+
+以 $n^{\frac{2}{3}}$ 为一块，分成了 $n^{\frac{1}{3}}$ 块，第一关键字是左端点所在块，第二关键字是右端点所在块，第三关键字是时间. 复杂度 $O(n^{\frac{5}{3}})$
+
+{% spoiler "代码" %}
+```cpp
+template <typename T> bool cmp(const T &q1, const T &q2) {
+  return q1.l/block != q2.l/block ? q1.l < q2.l :
+      q1.r/block != q2.r/block ? q1.r < q2.r : q1.t < q2.t;
+}
+```
+
+{% endspoiler %}
+
+### 值域分块
+
+维护块的前缀和以及块内部前缀和, $O(\sqrt{n})$ 修改, $O(1)$ 求区间和
+
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct PreSum {
+  int n, block;
+  T s[N], t[(int)sqrt(N)+3];
+  void init(int n) {
+    this->n = n;
+    block = sqrt(n);
+  }
+  void add(int x, T k) {
+    for (int i = x; i/block == x/block && i <= n; ++i) s[i] += k;
+    for (int i = x/block+1; i <= n/block; ++i) t[i] += k;
+  }
+  T query(int x) {
+    return t[x/block]+s[x];
+  }
+};
+
+template <typename T>
+struct SufSum {
+  int n, block;
+  T s[N], t[(int)sqrt(N)+3];
+  void init(int n) {
+    this->n = n;
+    block = sqrt(n);
+  }
+  void add(int x, T k) {
+    for (int i = x; i/block == x/block && i >= 1; --i) s[i] += k;
+    for (int i = x/block-1; i >= 0; --i) t[i] += k;
+  }
+  T query(int x) {
+    return t[x/block]+s[x];
+  }
+};
+```
+
+{% endspoiler %}
+
+### 二次离线莫队
+大概是一种需要维护信息具有可减性的莫队。只要具可减性，就可以容斥，就可以二次离线。所谓『二次离线』，大概是指由于普通莫队无法快速计算贡献，所以第一次离线把询问离线下来，第二次离线把莫队的转移过程离线下来。
+
+由于信息具有可减性(比如常见的「点对数」)，记 $(a,b)(c,d)$ 表示区间 $[a,b]$ 内的点和区间 $[c,d]$ 内的点对彼此产生的贡献(区间内部不算)。
+
+$[l,r]\to[l+t,r],\sum\limits_{i=l}^{l+t−1}(i,i)(i+1,r)=\sum\limits_{i=l}^{l+t−1}(i,i)(1,r)−(i,i)(1,i)$
+
+$[l,r]\to[l-t,r],\sum\limits_{i=l-t}^{l-1}(i,i)(i+1,r)=\sum\limits_{i=l-t}^{l-1}(i,i)(1,r)−(i,i)(1,i)$
+
+$[l,r]\to[l,r+t],\sum\limits_{i=r+1}^{r+t}(i,i)(l,i-1)=\sum\limits_{i=r+1}^{r+t}(1,i-1)(i,i)-(1,l-1)(i,i)$
+
+$[l,r]\to[l,r-t],\sum\limits_{i=r-t+1}^{r}(i,i)(l,i-1)=\sum\limits_{i=r-t+1}^{r}(1,i-1)(i,i)-(1,l-1)(i,i)$
+
+
+对于 $(1,i-1)(i,i)$ 没什么好说,暴力处理前缀和
+
+对于 $(1,l-1)(i,i)$ 由于莫队的复杂度,至多有 $n\sqrt{m}$ 个不同询问,把每个询问 打标记到左端点(比如 $[l,r]\to [l,r-t]$ 就打到 $l-1$ 上), 最后扫一遍全部 $i \in [1,n]$ ,处理出询问值, 因为此时 $i$ 枚举 $O(n)$ 次,可以用『值域分块』技巧。这样最终复杂度 $O(n\sqrt n+n\sqrt{n})$
+
+[求区间逆序对](https://www.luogu.com.cn/problem/P5047)
+
+{% spoiler "代码" %}
+```cpp
+struct Query {
+  int id, l, r;
+  Query() {}
+  Query(int i, int _l, int _r) : id(i), l(_l), r(_r) {}
+};
+
+int n, m, block;
+int a[N];
+long long res[N], sumil[N], sumir[N], ans[N];
+Query q[N];
+SufSum<int> suml;
+PreSum<int> sumr;
+vector<Query> ql[N], qr[N];
+
+inline void calc_sumi() {
+  static BinaryIndexedTree<int> tree;
+  tree.init(n);
+  for (int i = 1; i <= n; ++i) {
+    sumil[i] = sumil[i-1]+i-1-tree.query(a[i]);
+    tree.add(a[i], 1);
+  }
+  tree.clear();
+  for (int i = n; i; --i) {
+    sumir[i] = sumir[i+1]+tree.query(a[i]-1);
+    tree.add(a[i], 1);
+  }
+}
+
+signed main() {
+  read(n); read(m);
+  for (int i = 1; i <= n; ++i) read(a[i]);
+  discrete();
+  block = n/sqrt(m);
+  for (int i = 1; i <= m; ++i) {
+    q[i].id = i;
+    read(q[i].l);
+    read(q[i].r);
+  }
+  sort(q+1, q+m+1, cmp);
+  calc_sumi();
+  q[0] = Query(0, 1, 0);
+  for (int i = 1, ul, vl, ur, vr; i <= m; ++i) {
+    ul = q[i-1].l; ur = q[i-1].r;
+    vl = q[i].l; vr = q[i].r;
+    res[i] = sumil[vr]-sumil[ur]+sumir[vl]-sumir[ul];
+    if (vl < ul) qr[vr+1].emplace_back(-i, vl, ul-1);
+    if (vl > ul) qr[vr+1].emplace_back(+i, ul, vl-1);
+    if (vr < ur) ql[ul-1].emplace_back(+i, vr+1, ur);
+    if (vr > ur) ql[ul-1].emplace_back(-i, ur+1, vr);
+  }
+  suml.init(n+1);
+  for (int i = 1; i <= n; ++i) {
+    suml.add(a[i], 1);
+    for (auto &qq : ql[i]) {
+      for (int j = qq.l; j <= qq.r; ++j) {
+        if (qq.id > 0) res[qq.id] += suml.query(a[j]+1);
+        else res[-qq.id] -= suml.query(a[j]+1);
+      }
+    }
+  }
+  sumr.init(n);
+  for (int i = n; i; --i) {
+    sumr.add(a[i], 1);
+    for (auto &qq : qr[i]) {
+      for (int j = qq.l; j <= qq.r; ++j) {
+        if (qq.id > 0) res[qq.id] += sumr.query(a[j]-1);
+        else res[-qq.id] -= sumr.query(a[j]-1);
+      }
+    }
+  }
+  for (int i = 1; i <= m; ++i) {
+    res[i] += res[i-1];
+    ans[q[i].id] = res[i];
+  }
+  for (int i = 1; i <= m; ++i) write(ans[i]), putchar('\n');
+  return 0;
+}
+```
+
+{% endspoiler %}
+
 ## ST表
 ### [一维](https://www.luogu.org/problemnew/show/P3865)
 {% spoiler "代码" %}
@@ -1965,7 +2161,7 @@ struct DSU {
 ```
 
 {% endspoiler %}
-加上按秩合并
+加上数量
 {% spoiler "代码" %}
 ```cpp
 struct DSU {
@@ -2166,12 +2362,30 @@ string max_pre_suf(const string &s1, const string &s2) {
 ## [字符串哈希](https://www.luogu.org/problemnew/show/P3370)
 {% spoiler "代码" %}
 ```cpp
-inline unsigned long long _hash(const string &s) {
-  unsigned long long res = 0;
-  for(int i = 0; i < s.length(); ++i)
-    res = (res*Base+s[i])%Mod+Prime;
-  return res;
-}
+struct StringHash {
+  static const int M1 = 1e9+7;
+  static const int M2 = 998244353;
+  static const int P1 = 31;
+  static const int P2 = 29;
+  int ha1[N], ha2[N], pw1[N], pw2[N];
+  StringHash() {
+    pw1[0] = pw2[0] = 1;
+    for (int i = 1; i < N; ++i) {
+      pw1[i] = 1ll*pw1[i-1]*P1%M1;
+      pw2[i] = 1ll*pw2[i-1]*P2%M2;
+    }
+  }
+  void init(char *s, int len) {
+    for (int i = 0; i < len; ++i) {
+      ha1[i+1] = (1ll*ha1[i]*P1+s[i]-'a'+1)%M1;
+      ha2[i+1] = (1ll*ha2[i]*P2+s[i]-'a'+1)%M2;
+    }
+  }
+  pair<int, int> get(int l, int r) {
+    return {(ha1[r]-1ll*ha1[l-1]*pw1[r-l+1]%M1+M1)%M1,
+            (ha2[r]-1ll*ha2[l-1]*pw2[r-l+1]%M2+M2)%M2};
+  }
+};
 ```
 
 {% endspoiler %}
@@ -2612,7 +2826,7 @@ template <typename T = int> struct Stable_Marriage {
 
 ---
 ## [最小生成树](https://www.luogu.org/problemnew/show/P3366)
-**[Prim](https://www.luogu.org/problemnew/show/P1265)**
+[Prim](https://www.luogu.org/problemnew/show/P1265)
 {% spoiler "代码" %}
 ```cpp
 inline void prim() {
@@ -2633,13 +2847,13 @@ inline void prim() {
 ```
 
 {% endspoiler %}
-**Kruskal** (略)
+Kruskal (略)
 
 
 ---
 ## 二分图
 ### [二分图匹配](https://www.luogu.org/problemnew/show/P3386)
-**匈牙利算法**
+匈牙利算法
 {% spoiler "代码" %}
 ```cpp
 bool check(int u) {
@@ -3040,7 +3254,7 @@ struct Dinic {
 #### ISAP
 
 渐进时间复杂度和dinic相同，但是非二分图的情况下isap更具优势
-**在某些情况(题目)中远慢于dinic**
+在某些情况(题目)中远慢于dinic
 
 OI Wiki版本
 
@@ -3966,7 +4180,7 @@ int kth_element(int l, int r, int k) {
 ```
 
 {% endspoiler %}
-**STL** (排序,无返回值)
+STL (排序,无返回值)
 {% spoiler "代码" %}
 ```cpp
 nth_element(a+1, a+k+1, a+n+1);
@@ -4600,7 +4814,7 @@ $FWT(A\pm B)=FWT(A)\pm FWT(B)$
 
 $FWT(cA)=cFWT(A)$
 
-定义⊕为任意集合运算
+定义 $\bigoplus$ 为任意集合运算
 
 $FWT(A\bigoplus B)=FWT(A)\times FWT(B)$
 
@@ -4834,7 +5048,7 @@ inline int lcm(int a, int b) { return a/gcd(a, b)*b; }
 ```cpp
 template <typename T>
 T exgcd(const T a, const T b, T &x, T &y) {
-  if (!b) { x = 1; y = 0; return a; }
+  if (!b) return x = 1, y = 0, a;
   T d = exgcd(b, a%b, y, x);
   y -= a/b*x;
   return d;
@@ -5133,12 +5347,11 @@ inline long long BSGS(long long a, long long x, long long m) {
 }
 ```
 
+{% endspoiler %}
+
 ## 拓展BSGS
 
 $\gcd(a, m) \neq 1$
-
-
-{% endspoiler %}
 
 ## 错排
 
@@ -5183,7 +5396,7 @@ inline int getG(const int &m) {
 
 ---
 # 动态规划 DP
-(我**全**都不会)
+(我全都不会)
 ## 记忆化搜索
 ## 线性DP
 ### [最长上升子序列LIS](http://codevs.cn/problem/1576/)
@@ -5201,8 +5414,8 @@ for(int i = 1; i <= n; ++i) {
 {% spoiler "代码" %}
 ```cpp
 f[i][j] = max{  f[i-1][j],
-        f[i][j-1],
-        f[i-1][j-1]+1 (if A[i] == B[j])}
+                f[i][j-1],
+                f[i-1][j-1]+1 (if A[i] == B[j])}
 ```
 
 {% endspoiler %}
@@ -5230,16 +5443,13 @@ while(s<(1<<n)){
 
 {% endspoiler %}
 
-## 队列优化
-## 斜率优化
-
 ## 背包问题
 ### 01背包
 ### 完全背包
 ### 混合背包
 ### [分组背包](https://www.luogu.org/problemnew/show/P1757)
 ### [多重背包](https://www.luogu.org/problemnew/show/P1776)
-**二进制拆分**
+二进制拆分
 {% spoiler "代码" %}
 ```cpp
 for(int i = 1, cnt, vi, wi, m; i <= n; ++i) {
@@ -5260,7 +5470,7 @@ for(int i = 0; i < w.size(); ++i)
 ```
 
 {% endspoiler %}
-**单调队列**
+单调队列
 {% spoiler "代码" %}
 ```cpp
 for(int i = 1; i <= n; ++i) {
@@ -5290,45 +5500,255 @@ for(int i = 1; i <= W; ++i)
 
 ---
 ## [SOS DP](https://codeforces.com/blog/entry/45223)
+## 斜率优化
+
+若dp方程为 $dp[i]=a[i] \cdot b[j]+c[i]+d[j]$ 时,由于存在$a[i] \cdot b[j]$ 这个既有 $i$ 又有 $j$ 的项,就需要使用斜率优化
+
+### [「HNOI2008」玩具装箱 TOY](https://www.luogu.com.cn/problem/P3195)
+
+$dp[i]=min(dp[j]+(sum[i]+i−sum[j]−j−L−1)^2)(j<i)$
+
+令$a[i]=sum[i]+i,b[i]=sum[i]+i+L+1$
+
+$dp[i]=dp[j]+(a[i]-b[j])^2$
+
+$dp[i]=dp[j]+a[i]^2-2 \cdot a[i] \cdot b[j]+b[j]^2$
+
+$2 \cdot a[i] \cdot b[j]+dp[i]-a[i]^2=dp[j]+b[j]^2$
+
+将 $b[j]$ 看作 $x,dp[j]+b[j]^2$ 看作 $y$，这个式子就可以看作一条斜率为 $2 \cdot a[i]$ 的直线
+
+而对于每个 $i$ 来说, $a[i]$ 都是确定的, 类似线性规划
+
+$dp[i]$ 的含义转化为：当上述直线过点 $P(b[j],dp[j]+b[j]^2)$ 时，直线在 $y$ 轴的截距加上 $a[i]^2$ (一个定值) 而题目即为找这个截距的最小值
+
+## 四边形不等式
+
+### 2D1D
+
+$f_{l,r}=\min\limits_{k=l}^{r-1}{\{f_{l,k}+f_{k+1,r}\}+w(l,r)} \ \ (1\leq l \leq r \leq n)$
+
+当 $w(l,r)$ 满足特定性质
+
+- 区间包含单调性 ：如果对于任意 $l\leq l' \leq r' \leq r$ ，均有 $w(l',r')\leq w(l,r)$ 成立，则称函数 $w$ 对于区间包含关系具有单调性。
+  
+- 四边形不等式 ：如果对于任意 $l_1 \leq l_2 \leq r_1 \leq r_2$ ，均有 $w(l_1,r_1)+w(l_2,r_2) \leq w(l_1,r_2)+w(l_2,r_1)$ 成立，则称函数 $w$ 满足四边形不等式（简记为“交叉小于包含”）。若等号永远成立，则称函数 $w$ 满足 四边形恒等式 。
+
+> 引理 1 ：若满足关于区间包含的单调性的函数 $w(l,r)$ 满足四边形不等式，则状态 $f_{l,r}$ 也满足四边形不等式。
+
+> 定理 1 ：若状态 $f$ 满足四边形不等式，记 $m_{l,r}=\min\{k:f_{l,r}=g_{k,l,r}\}$ 表示最优决策点，则有 $m_{l,r-1} \leq m_{l,r} \leq m_{l+1,r}$
+
+### 1D1D
+
+$f_r = \min\limits_{l=1}^{r-1}{\{f_l+w(l,r)\}}\ \ (1\leq r \leq n)$
+
+> 定理 2 ：若函数 $w(l,r)$ 满足四边形不等式，记 $h_{l,r}=f_l+w(l,r)$ 表示从 $l$ 转移过来的状态 $r$ , $k_r=\min\{l|f_r=h_{l,r}\}$ 表示最优决策点，则有 $\forall r_1 \leq r_2 : k_{r1} \leq k_{r2}$
+
+{% spoiler "代码" %}
+```cpp
+void DP(int l, int r, int k_l, int k_r) {
+  int mid = (l + r) / 2, k = k_l;
+  // 求状态f[mid]的最优决策点
+  for (int i = k_l; i <= min(k_r, mid - 1); ++i)
+    if (w(i, mid) < w(k, mid)) i = k;
+  f[mid] = w(k, mid);
+  // 根据决策单调性得出左右两部分的决策区间，递归处理
+  if (l < mid) DP(l, mid - 1, k_l, k);
+  if (r > mid) DP(mid + 1, r, k, k_r);
+}
+```
+
+{% endspoiler %}
+
+### 满足四边形不等式的函数类
+
+- 性质 1 ：若函数 $w_1(l,r),w_2(l,r)$ 均满足四边形不等式（或区间包含单调性），则对于任意 $c_1,c_2\geq 0$ ，函数 $c_1w_1+c_2w_2$ 也满足四边形不等式（或区间包含单调性）。
+
+- 性质 2 ：若存在函数 $f(x),g(x)$ 使得 $w(l,r) = f(r)-g(l)$ ，则函数 $w$ 满足四边形恒等式。当函数 $f,g$ 单调增加时，函数 $w$ 还满足区间包含单调性。
+
+- 性质 3 ：设 $h(x)$ 是一个单调增加的凸函数，若函数 $w(l,r)$ 满足四边形不等式并且对区间包含关系具有单调性，则复合函数 $h(w(l,r))$ 也满足四边形不等式和区间包含单调性。
+
+- 性质 4 ：设 $h(x)$ 是一个凸函数，若函数 $w(l,r)$ 满足四边形恒等式并且对区间包含关系具有单调性，则复合函数 $h(w(l,r))$ 也满足四边形不等式。
+
+首先需要澄清一点，凸函数（Convex Function）的定义在国内教材中有分歧，此处的凸函数指的是（可微的）下凸函数，即一阶导数单调增加的函数。
+
+## [插头DP|轮廓线DP](https://www.cnblogs.com/y2823774827y/p/10140757.html)
+### 一个闭合回路
+{% spoiler "代码" %}
+```cpp
+const int P = 299987;
+const int M = 1<<21;
+const int N = 15;
+
+int n, m;
+int a[N][N];
+long long dp[2][M];
+int head[2][P], nex[2][M], tot[2], ver[2][M];
+// long long dp[2][P];
+// int head[2][P], nex[2][P], tot[2], ver[2][P];
+
+inline void clear(const int &u) {
+  for (int i = 1; i <= tot[u]; ++i) {
+    dp[u][i] = 0; //
+    nex[u][i] = 0; //
+    head[u][ver[u][i]%P] = 0;
+  }
+  tot[u] = 0;
+}
+
+template <typename T, typename U>
+inline void insert(const int &u, const T &x, const U &v) {
+  int p = x%P;
+  for (int i = head[u][p]; i; i = nex[u][i]) {
+    if (ver[u][i] == x) return dp[u][i] += v, void();
+  }
+  ++tot[u]; assert(tot[u] < M);
+  ver[u][tot[u]] = x;
+  nex[u][tot[u]] = head[u][p];
+  head[u][p] = tot[u];
+  dp[u][tot[u]] = v;
+}
+
+template <typename T>
+inline int get_val(const int &u, const T &x) {
+  int p = x%P;
+  for (int i = head[u][p]; i; i = nex[u][i]) {
+    if (ver[u][i] == x) return dp[u][i];
+  }
+  return 0;
+}
+
+inline long long solve() {
+  int u = 0, base = (1<<m*2+2)-1;
+  long long res = 0;
+  clear(u);
+  insert(u, 0, 1);
+  for (int i = 1; i <= n; ++i) {
+    for (int j = 1; j <= m; ++j) {
+      clear(u ^= 1);
+      for (int k = 1; k <= tot[u^1]; ++k) {
+        int state = ver[u^1][k];
+        long long val = dp[u^1][k];
+        if (j == 1) state = (state<<2)&base;
+        // b1 right b2 down
+        // 0 no 1 left 2 right
+        int b1 = (state>>j*2-2)%4, b2 = (state>>j*2)%4;
+        if (!a[i][j]) {
+          if (!b1 && !b2) insert(u, state, val);
+        } else if (!b1 && !b2) {
+          if (a[i+1][j] && a[i][j+1]) insert(u, state+(1<<j*2-2)+(2<<j*2), val);
+        } else if (!b1 && b2) {
+          if (a[i][j+1]) insert(u, state, val);
+          if (a[i+1][j]) insert(u, state+(b2<<j*2-2)-(b2<<j*2), val);
+        } else if (b1 && !b2) {
+          if (a[i+1][j]) insert(u, state, val);
+          if (a[i][j+1]) insert(u, state-(b1<<j*2-2)+(b1<<j*2), val);
+        } else if (b1 == 1 && b2 == 1) { // find 2 turn to 1
+          for (int k = j+1, t = 1; k <= m; ++k) {
+            if ((state>>k*2)%4 == 1) ++t;
+            if ((state>>k*2)%4 == 2) --t;
+            if (!t) { insert(u, state-(1<<j*2-2)-(1<<j*2)-(1<<k*2), val); break; }
+          }
+        } else if (b1 == 2 && b2 == 2) { // find 1 turn to 2
+          for (int k = j-2, t = 1; k >= 0; --k) {
+            if ((state>>k*2)%4 == 1) --t;
+            if ((state>>k*2)%4 == 2) ++t;
+            if (!t) { insert(u, state-(2<<j*2-2)-(2<<j*2)+(1<<k*2), val); break; }
+          }
+        } else if (b1 == 2 && b2 == 1) {
+          insert(u, state-(2<<j*2-2)-(1<<j*2), val);
+        } else if (i == ex && j == ey) { // b1 == 1, b2 == 2
+          res += val;
+        }
+      }
+    }
+  }
+  return res;
+}
+```
+
+{% endspoiler %}
+
+### 多个闭合回路
+{% spoiler "代码" %}
+```cpp
+        else if (b1 == 1 && b2 == 2) {
+          if (i == ex && j == ey) res += val;
+          else dp[u][bit-(1<<j*2-2)-(1<<j*2+1)] += val;
+        }
+```
+
+{% endspoiler %}
+
+### 联通块
+
+{% spoiler "代码" %}
+```cpp
+int n, u, res = -INF;
+int a[N][N];
+unordered_map<int, int> dp[2];
+
+inline void decode(const int &state, int *const s) {
+  for (int i = 1; i <= n; ++i) s[i] = (state>>i*3-3)%8;
+}
+
+inline void insert(const int *const s, const int &val) {
+  static int vis[N];
+  int state = 0, cnt = 0;
+  memset(vis, 0, sizeof vis);
+  for (int i = 1; i <= n; ++i) {
+    if (s[i] && !vis[s[i]]) vis[s[i]] = ++cnt;
+    state |= (vis[s[i]]<<i*3-3);
+  }
+  if (dp[u].count(state)) dp[u][state] = max(dp[u][state], val);
+  else dp[u].insert({state, val});
+  if (cnt == 1) res = max(res, val);
+}
+
+inline void solve() {
+  static int s[N];
+  dp[u = 0].clear();
+  dp[u][0] = 0;
+  for (int i = 1; i <= n; ++i) {
+    for (int j = 1; j <= n; ++j) {
+      dp[u ^= 1].clear();
+      for (const auto &p : dp[u^1]) {
+        decode(p.first, s);
+        int b1 = s[j-1], b2 = s[j];
+        // not choose
+        s[j] = 0;
+        int cnt = 0;
+        for (int k = 1; k <= n; ++k) cnt += s[k] == b2;
+        if (!b2 || cnt) insert(s, p.second);
+        s[j] = b2;
+        // choose
+        if (!b1 && !b2) {
+          s[j] = 7;
+        } else {
+          if (b1 > b2) swap(b1, b2); // in case b2 == 0
+          s[j] = b2;
+          if (b1) for (int k = 1; k <= n; ++k) if (s[k] == b1) s[k] = b2;
+        }
+        insert(s, p.second+a[i][j]);
+      }
+    }
+  }
+  cout << res << endl;
+}
+```
+
+{% endspoiler %}
+
+### L型
+
+L 型地板：拐弯且仅拐弯一次。
+
+发现没有，一个存在的插头只有两种状态：拐弯过和没拐弯过，因此我们这样定义插头：
+
+0表没有插头，1表没拐过的插头，2表已经拐过的插头。b1代表当前点的右插头,b2代表当前点的下插头
 
 ---
 # STL
-## 数据结构
-{% spoiler "代码" %}
-```cpp
-// const N
-// typename T
-vector<T>
-stack<T>
-deque<T>
-queue<T>
-priority_queue<T>
-set<T>
-bitset<N>
-map<T, T>
-```
-
-{% endspoiler %}
-## 函数
-{% spoiler "代码" %}
-```cpp
-// vector<T> a;
-sort(a.begin(), a.end(), cmp);
-reverse(a.begin(), a.end());
-unique(a.begin(), a.end());
-next_permutation(a.begin(), a.end());
-lower_bound(a.begin(), a.end(), val); // >=
-upper_bound(a.begin(), a.end(), val); // >
-fill(a.begin(), a.end(), val);
-memset(a, 0, sizeof a);
-memcpy(a, b, sizeof b); // b --> a
-// string s
-s.find(target_string, start_pos); // 找不到返回s.npos
-s.substr(start_pos, len);
-s.replace(start_pos, len, target_string);
-```
-
-{% endspoiler %}
 ## unordered_map 重载
 {% spoiler "代码" %}
 ```cpp
@@ -5467,7 +5887,7 @@ using mint = Mint<MOD>;
 ## tourist的模板(用不来)
 [某出处](https://codeforces.com/contest/1383/submission/87883167)
 
-**注**: `#ifdef _WIN32`部分可能导致 CE
+注: `#ifdef _WIN32`部分可能导致 CE
 
 {% spoiler "代码" %}
 ```cpp
@@ -5642,6 +6062,7 @@ using Mint = Modular<std::integral_constant<decay<decltype(md)>::type, md>>;
 
 ---
 # 高精度
+食用前请必须注意位数是否足够!
 ## vector版本
 [压位+vector+符号 版本](https://github.com/KaizynX/Oier/blob/master/BigInteger/BigInteger.cpp)
 ## int[]版本
