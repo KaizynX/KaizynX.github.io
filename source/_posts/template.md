@@ -1837,7 +1837,7 @@ struct FenKuai {
 
 {% endspoiler %}
 ## 莫队
-$O(1)修改$ 一般取 $block = \frac{n}{\sqrt{m}}, O(n\sqrt{m})$
+$O(1)修改$ 一般取 $block = \frac{n}{\sqrt{m} }, O(n\sqrt{m})$
 
 移动前两步先扩大区间 $l--,r++$ 后两步缩小区间 $l++,r--$
 
@@ -1854,7 +1854,7 @@ template <typename T> bool cmp(const T &q1, const T &q2) {
 
 ### 带修改莫队
 
-以 $n^{\frac{2}{3}}$ 为一块，分成了 $n^{\frac{1}{3}}$ 块，第一关键字是左端点所在块，第二关键字是右端点所在块，第三关键字是时间. 复杂度 $O(n^{\frac{5}{3}})$
+以 $n^{\frac{2}{3} }$ 为一块，分成了 $n^{\frac{1}{3} }$ 块，第一关键字是左端点所在块，第二关键字是右端点所在块，第三关键字是时间. 复杂度 $O(n^{\frac{5}{3} })$
 
 {% spoiler "代码" %}
 ```cpp
@@ -2204,6 +2204,17 @@ struct MonotonousQueue {
 ```
 
 {% endspoiler %}
+
+## 斯坦纳树
+
+给定连通图 $G$ 中的 $n$ 个点与 $k$ 个关键点，连接 $k$ 个关键点，使得生成树的所有边的权值和最小。
+
+我们使用状态压缩动态规划来求解。用 $f(i,S)$ 表示以 $i$ 为根的一棵树，包含集合 $S$ 中所有点的最小边权值和。
+
+- 首先对连通的子集进行转移， $f(i,S)\leftarrow \min(f(i,S),f(i,T)+f(i,S-T))$ 。
+
+- 在当前的子集连通状态下进行边的松弛操作， $f(i,S)\leftarrow \min(f(i,S),f(j,S)+w(j,i))$ 。在下面的代码中用一个 `tree[tot]` 来记录两个相连节点 $i,j$ 的相关信息。
+
 ---
 # 字符串
 ## [回文字符串|manacher算法](https://www.luogu.org/problemnew/show/P3805)
@@ -4949,7 +4960,7 @@ namespace FST {
 
 设多项式 $A = \sum\limits_{i=0}^{2^n-1}{a_i x^i},B=\sum\limits_{i=0}^{2^n-1}{b_i x^i}$
 
-求 $C = A*B = \sum\limits_{i=0}^{2^n-1}{x^i \sum\limits_{d\subseteq i}{a_d b_{i-d}}}$
+求 $C = A*B = \sum\limits_{i=0}^{2^n-1}{x^i \sum\limits_{d\subseteq i}{a_d b_{i-d} }}$
 
 按照每个状态的最高位进行分组，然后卷 $n$ 次
 
@@ -5512,11 +5523,11 @@ $dp[i]=min(dp[j]+(sum[i]+i−sum[j]−j−L−1)^2)(j<i)$
 
 $dp[i]=dp[j]+(a[i]-b[j])^2$
 
-$dp[i]=dp[j]+a[i]^2-2 \cdot a[i] \cdot b[j]+b[j]^2$
+$dp [ i ] = dp [ j ] + a [ i ] ^ 2 - 2 a [ i ] b [ j ] + b [ j ] ^ 2$
 
-$2 \cdot a[i] \cdot b[j]+dp[i]-a[i]^2=dp[j]+b[j]^2$
+$2 a [ i ] b [ j ] + dp [ i ] - a [ i ] ^ 2 = dp [ j ] + b [ j ] ^ 2$
 
-将 $b[j]$ 看作 $x,dp[j]+b[j]^2$ 看作 $y$，这个式子就可以看作一条斜率为 $2 \cdot a[i]$ 的直线
+将 $b[j]$ 看作 $x,dp[j]+b[j]^2$ 看作 $y$，这个式子就可以看作一条斜率为 $2 a[i]$ 的直线
 
 而对于每个 $i$ 来说, $a[i]$ 都是确定的, 类似线性规划
 
@@ -5526,7 +5537,7 @@ $dp[i]$ 的含义转化为：当上述直线过点 $P(b[j],dp[j]+b[j]^2)$ 时，
 
 ### 2D1D
 
-$f_{l,r}=\min\limits_{k=l}^{r-1}{\{f_{l,k}+f_{k+1,r}\}+w(l,r)} \ \ (1\leq l \leq r \leq n)$
+$f_{l,r}=\min\limits_{k=l}^{r-1} \{f_{l,k}+f_{k+1,r}\}+w(l,r) \ \ (1\leq l \leq r \leq n)$
 
 当 $w(l,r)$ 满足特定性质
 
@@ -5540,7 +5551,7 @@ $f_{l,r}=\min\limits_{k=l}^{r-1}{\{f_{l,k}+f_{k+1,r}\}+w(l,r)} \ \ (1\leq l \leq
 
 ### 1D1D
 
-$f_r = \min\limits_{l=1}^{r-1}{\{f_l+w(l,r)\}}\ \ (1\leq r \leq n)$
+$f_r = \min\limits_{l=1}^{r-1} \{f_l+w(l,r)\} \ \ (1\leq r \leq n)$
 
 > 定理 2 ：若函数 $w(l,r)$ 满足四边形不等式，记 $h_{l,r}=f_l+w(l,r)$ 表示从 $l$ 转移过来的状态 $r$ , $k_r=\min\{l|f_r=h_{l,r}\}$ 表示最优决策点，则有 $\forall r_1 \leq r_2 : k_{r1} \leq k_{r2}$
 
