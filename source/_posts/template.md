@@ -482,11 +482,11 @@ struct Line {
     #undef SJ2
   }
   friend bool on_line(const Line &l, const Point &p) {
-    return abs((l.p1-l.p2)*(l.p1-p)) < err;
+    return abs((l.p1-l.p2)*(l.p1-p)) < eps;
   }
   friend Point cross_point(const Line &l1, const Line &l2) {
     Point v1 = l1.p2-l1.p1, v2 = l2.p2-l2.p1;
-    if (abs(v1*v2) < err) return Point(0, 0); // no cross_point
+    if (abs(v1*v2) < eps) return Point(0, 0); // no cross_point
     double t = (l2.p1-l1.p1)*v2/(v1*v2);
     return l1.p1+v1*t;
   }
@@ -1436,6 +1436,22 @@ struct BinaryIndexedTree {
 
 {% endspoiler %}
 
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct BinaryIndexedTree {
+  int n;
+  vector<T> tr;
+  void init(const int &_n) { tr = vector<T>(n+1, 0); }
+  void add(const int &x, const T &v) { for (int i = x; i <= n; i += i&-i) tr[i] += v; }
+  void add(const int &x, const int &y, const T &v) { add(x, v); add(y+1, -v); }
+  T query(const int &x) { T res = 0; for (int i = x ; i; i -= i&-i) res += tr[i]; return res; }
+  T query(const int &x, const int &y) { return query(y)-query(x-1); }
+};
+```
+
+{% endspoiler %}
+
 [O(n)初始化](http://codeforces.com/blog/entry/63064)
 {% spoiler "代码" %}
 ```cpp
@@ -2149,7 +2165,7 @@ struct rST {
 ```cpp
 struct DSU {
   int fa[N];
-  void init(int sz) { for (int i = 0; i <= sz; ++i) fa[i] = i; }
+  void init(int n) { iota(fa, fa+n+1, 0); }
   int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
   int& operator [] (int i) { return fa[get(i)]; }
   bool merge(int x, int y) { // merge x to y
@@ -2157,7 +2173,7 @@ struct DSU {
     if (fx == fy) return false;
     fa[fx] = fy; return true;
   }
-} dsu;
+};
 ```
 
 {% endspoiler %}
@@ -2166,7 +2182,7 @@ struct DSU {
 ```cpp
 struct DSU {
   int fa[N], num[N];
-  void init(int sz) { for (int i = 0; i <= sz; ++i) fa[i] = i, num[i] = 1; }
+  void init(int n) { for (int i = 0; i <= n; ++i) fa[i] = i, num[i] = 1; }
   int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
   int& operator [] (int i) { return fa[get(i)]; }
   bool merge(int x, int y) {
@@ -2204,17 +2220,6 @@ struct MonotonousQueue {
 ```
 
 {% endspoiler %}
-
-## 斯坦纳树
-
-给定连通图 $G$ 中的 $n$ 个点与 $k$ 个关键点，连接 $k$ 个关键点，使得生成树的所有边的权值和最小。
-
-我们使用状态压缩动态规划来求解。用 $f(i,S)$ 表示以 $i$ 为根的一棵树，包含集合 $S$ 中所有点的最小边权值和。
-
-- 首先对连通的子集进行转移， $f(i,S)\leftarrow \min(f(i,S),f(i,T)+f(i,S-T))$ 。
-
-- 在当前的子集连通状态下进行边的松弛操作， $f(i,S)\leftarrow \min(f(i,S),f(j,S)+w(j,i))$ 。在下面的代码中用一个 `tree[tot]` 来记录两个相连节点 $i,j$ 的相关信息。
-
 ---
 # 字符串
 ## [回文字符串|manacher算法](https://www.luogu.org/problemnew/show/P3805)
@@ -4145,6 +4150,101 @@ struct SegmentTreeGarph {
 
 解决一张图的生成树个数计数问题(详情见oi-wiki)
 
+## 斯坦纳树
+
+给定连通图 $G$ 中的 $n$ 个点 $m$ 条边与 $k$ 个关键点，连接 $k$ 个关键点，使得生成树的所有边的权值和最小。
+
+我们使用状态压缩动态规划来求解。用 $f(i,S)$ 表示以 $i$ 为根的一棵树，包含集合 $S$ 中所有点的最小边权值和。
+
+### 边权最小
+
+- 首先对连通的子集进行转移， $f(i,S)\leftarrow \min(f(i,S),f(i,T)+f(i,S-T))$ 。
+
+- 在当前的子集连通状态下进行边的松弛操作， $f(i,S)\leftarrow \min(f(i,S),f(j,S)+w(j,i))$ 
+
+复杂度 $O(n\times 3^k+m\log m\times 2^k)$
+
+{% spoiler "代码" %}
+```cpp
+int dp[N][1<<K];
+vector<pair<int, int>> e[N]; // e[u] = {w, v}
+priority_queue<pair<int, int>> q;
+
+void dijkstra(int s) {
+  while (q.size()) {
+    int ud = -q.top().first;
+    int u = q.top().second;
+    q.pop();
+    if (ud > dp[u][s]) continue;
+    for (int i = 0, v, w; i < (int)e[u].size(); ++i) {
+      w = e[u][i].first;
+      v = e[u][i].second;
+      if (dp[v][s] <= dp[u][s]+w) continue;
+      dp[v][s] = dp[u][s]+w;
+      q.push({-dp[v][s], v});
+    }
+  }
+}
+
+int steiner_tree(int *p) { // p[] is key point
+  memset(dp, 0x3f, sizeof dp);
+  for (int i = 0; i < k; ++i) dp[p[i]][1<<i] = 0;
+  for (int s = 1; s < 1<<k; ++s) {
+    for (int i = 1; i <= n; ++i) {
+      for (int t = s&(s-1); t; t = s&(t-1))
+        dp[i][s] = min(dp[i][s], dp[i][s^t]+dp[i][t]);
+      if (dp[i][s] != INF) q.push({-dp[i][s], i});
+    }
+    dijkstra(s);
+  }
+  return dp[p[0]][(1<<k)-1];
+}
+```
+
+{% endspoiler %}
+
+### 点权最小
+
+- $f(i,S)\leftarrow \min(f(i,S),f(i,T)+f(i,S-T)-a_i)$ 。由于此处合并时同一个点 $a_i$ ，会被加两次，所以减去。
+
+- $f(i,S)\leftarrow \min(f(i,S),f(j,S)+w(j,i))$ 。
+
+### 路径输出
+
+{% spoiler "代码" %}
+```cpp
+void dfs(int u, int s){
+    if(!pre[u][s].second) return;
+    // print
+    if(pre[u][s].first == u) dfs(u, s^pre[u][s].second);
+    dfs(pre[u][s].first, pre[u][s].second);
+}
+```
+
+{% endspoiler %}
+
+## [树上背包](https://blog.csdn.net/m0_37809890/article/details/102827056)
+
+时间复杂度 $O(n^2)$
+
+{% spoiler "代码" %}
+```cpp
+void dfs(int u) {
+  num[u] = 1;
+  for (int &v : e[u]) {
+    dfs(v);
+    for (int i = min(m, num[u]+num[v]); j; --j) {
+      for (int j = max(0, i-num[u]); j <= min(num[v], i); ++j) { // i-j >= num[u]
+        dp[u][i] = max(dp[u][i], dp[u][i-j]+dp[v][j]);
+      }
+    }
+    num[u] += num[v];
+  }
+}
+```
+
+{% endspoiler %}
+
 ---
 # 数论
 ## 快排
@@ -4480,7 +4580,8 @@ int XorGauss(T a[N], const int &n) {
       for (k = i; k <= n+1; ++k) a[j][k] ^= a[i][k];
       // a[j] ^= a[i]; // bitset<N> a[N]
   }
-  for (int i = 1; i <= n; ++i) if (!a[i][i]) return -a[i][n+1];
+  for (int i = 1; i <= n; ++i) if (!a[i][i] && a[i][n+1]) return -1;
+  for (int i = 1; i <= n; ++i) if (!a[i][i]) return 0;
   return 1;
 }
 // dfs(n, 0)
@@ -5405,6 +5506,50 @@ inline int getG(const int &m) {
 
 {% endspoiler %}
 
+## [大数阶乘](https://www.cnblogs.com/cax1165/p/6070902.html)
+
+分块打表
+
+{% spoiler "代码" %}
+```cpp
+namespace BigFac {
+#define lon long long
+lon a[110]={1,682498929,491101308,76479948,723816384,67347853,27368307,
+625544428,199888908,888050723,927880474,281863274,661224977,623534362,
+970055531,261384175,195888993,66404266,547665832,109838563,933245637,
+724691727,368925948,268838846,136026497,112390913,135498044,217544623,
+419363534,500780548,668123525,128487469,30977140,522049725,309058615,
+386027524,189239124,148528617,940567523,917084264,429277690,996164327,
+358655417,568392357,780072518,462639908,275105629,909210595,99199382,
+703397904,733333339,97830135,608823837,256141983,141827977,696628828,
+637939935,811575797,848924691,131772368,724464507,272814771,326159309,
+456152084,903466878,92255682,769795511,373745190,606241871,825871994,
+957939114,435887178,852304035,663307737,375297772,217598709,624148346,
+671734977,624500515,748510389,203191898,423951674,629786193,672850561,
+814362881,823845496,116667533,256473217,627655552,245795606,586445753,
+172114298,193781724,778983779,83868974,315103615,965785236,492741665,
+377329025,847549272,698611116};
+lon fac(lon n, lon p = MOD) {
+  if (n >= p) {
+    return 0;
+  } else if (p==1000000007) {
+    lon now=n/10000000;
+    lon ans=a[now];
+    for(lon i=now*10000000+1;i<=n;i++)
+      ans=ans*i%p;
+    return ans%p;
+  } else {
+    lon ans=1;
+    for(int i=1;i<=n;i++)
+      ans=ans*i%p;
+    return ans%p;
+  }
+}
+}
+```
+
+{% endspoiler %}
+
 ---
 # 动态规划 DP
 (我全都不会)
@@ -5441,7 +5586,7 @@ for (int i = s; i; i = (i-1)&s) {}
 ```
 
 {% endspoiler %}
-### 枚举n个元素大小为k的二进制子集
+### 枚举n个元素,大小为k的二进制子集
 {% spoiler "代码" %}
 ```cpp
 int s=(1<<k)-1;
