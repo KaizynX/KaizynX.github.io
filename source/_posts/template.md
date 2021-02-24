@@ -193,7 +193,7 @@ Printer pr = Printer(stdout);
 {% endspoiler %}
 
 ---
-## 玄学优化
+## 玄学优化|卡常
 
 吸氧,吸臭氧
 {% spoiler "代码" %}
@@ -357,6 +357,56 @@ while (r-l > eps) {
   double ml = l+(r-l)/3, mr = r-(r-l)/3;
   if (f(ml) < f(mr)) r = mr;
   else l = ml;
+}
+```
+
+{% endspoiler %}
+
+## [三维偏序|CDQ分治](https://www.luogu.com.cn/blog/ljc20020730/cdq-fen-zhi-xue-xi-bi-ji)
+{% spoiler "代码" %}
+```cpp
+void cdq(int l, int r) {
+  if (l >= r) return;
+  int mid = (l+r)>>1, i = l, j = mid+1;
+  cdq(l, mid); cdq(mid+1, r);
+  for (int k = l; k <= r; ++k) {
+    if (j > r || (i <= mid && a[i].y <= a[j].y)) {
+      tree.add(a[i].z, a[i].w);
+      b[k] = a[i++];
+    } else {
+      a[j].f += tree.query(a[j].z);
+      b[k] = a[j++];
+    }
+  }
+  for (int k = l; k <= mid; ++k) tree.add(a[k].z, -a[k].w);
+  for (int k = l; k <= r; ++k) a[k] = b[k];
+}
+```
+
+{% endspoiler %}
+
+### 四维偏序
+
+CDQ套CDQ
+
+第一维在第一层CDQ合并时标记左右区间
+
+合并后第二维有序,进入第二层CDQ
+
+此时按照正常CDQ合并第三维,用数据结构统计第四维
+
+只有标记左区间的加入数据结构,标记右边区间的更新答案
+
+{% spoiler "代码" %}
+```cpp
+void cdq(int l, int r) {
+  cdq(l, mid); cdq(mid+1, r);
+}
+
+void CDQ(int l, int r) {
+  CDQ(l, mid); CDQ(mid+1, r);
+  // ...
+  cdq(l, r);
 }
 ```
 
@@ -1395,11 +1445,503 @@ struct zkwSegmentTree {
 
 李超线段树是一种用于维护平面直角坐标系内线段关系的数据结构。它常被用来处理这样一种形式的问题：给定一个平面直角坐标系，支持动态插入一条线段，询问从某一个位置 (x,+∞) 向下看能看到的最高的一条线段（也就是给一条竖线，问这条竖线与所有线段的最高的交点。
 
-## 吉老师线段树|吉司机线段树
+## [吉老师线段树|吉司机线段树](https://www.luogu.com.cn/blog/Hakurei-Reimu/seg-beats)
 
-区间最值操作 & 区间历史最值
+### 区间最值操作
 
-栗子:给出一个数列, 每次操作让某个区间中对给定值取 min 询问某个区间的和
+1. 区间取min
+2. 询问区间min
+3. 询问区间和
+
+$O(m \log n)$
+
+{% spoiler "代码" %}
+```cpp
+struct Tree {
+  struct TreeNode {
+    int l, r, mx, se, cnt, tag;
+    ll sum;
+  } tr[N<<2];
+  void push_up(int i) {
+    tr[i].sum = tr[i<<1].sum+tr[i<<1|1].sum;
+    if (tr[i<<1].mx > tr[i<<1|1].mx) {
+      tr[i].mx = tr[i<<1].mx;
+      tr[i].cnt = tr[i<<1].cnt;
+      tr[i].se = max(tr[i<<1].se, tr[i<<1|1].mx);
+    } else if (tr[i<<1].mx < tr[i<<1|1].mx) {
+      tr[i].mx = tr[i<<1|1].mx;
+      tr[i].cnt = tr[i<<1|1].cnt;
+      tr[i].se = max(tr[i<<1|1].se, tr[i<<1].mx);
+    } else {
+      tr[i].mx = tr[i<<1].mx;
+      tr[i].cnt = tr[i<<1].cnt+tr[i<<1|1].cnt;
+      tr[i].se = max(tr[i<<1].se, tr[i<<1|1].se);
+    }
+  }
+  void push_tag(int i, int v) {
+    if (v >= tr[i].mx) return;
+    tr[i].sum -= 1ll*(tr[i].mx-v)*tr[i].cnt;
+    tr[i].mx = tr[i].tag = v;
+  }
+  void push_down(int i) {
+    if (tr[i].tag == -1) return;
+    push_tag(i<<1, tr[i].tag);
+    push_tag(i<<1|1, tr[i].tag);
+    tr[i].tag = -1;
+  }
+  void build(int l, int r, int i = 1) {
+    tr[i].l = l; tr[i].r = r; tr[i].tag = -1;
+    if (l == r) {
+      tr[i].sum = tr[i].mx = a[l];
+      tr[i].cnt = 1;
+      tr[i].se = -1;
+      return;
+    }
+    int mid = (l+r)>>1;
+    build(l, mid, i<<1);
+    build(mid+1, r, i<<1|1);
+    push_up(i);
+  }
+  void update_min(int l, int r, int v, int i = 1) {
+    if (v >= tr[i].mx) return;
+    if (l <= tr[i].l && r >= tr[i].r && v > tr[i].se) return push_tag(i, v);
+    push_down(i);
+    int mid = (tr[i].l+tr[i].r)>>1;
+    if (l <= mid) update_min(l, r, v, i<<1);
+    if (r >  mid) update_min(l, r, v, i<<1|1);
+    push_up(i);
+  }
+  int query_max(int l, int r, int i = 1) {
+    if (l <= tr[i].l && r >= tr[i].r) return tr[i].mx;
+    push_down(i);
+    int mid = (tr[i].l+tr[i].r)>>1;
+    if (r <= mid) return query_max(l, r, i<<1);
+    if (l >  mid) return query_max(l, r, i<<1|1);
+    return max(query_max(l, r, i<<1), query_max(l, r, i<<1|1));
+  }
+  ll query_sum(int l, int r, int i = 1) {
+    if (l <= tr[i].l && r >= tr[i].r) return tr[i].sum;
+    push_down(i);
+    int mid = (tr[i].l+tr[i].r)>>1;
+    if (r <= mid) return query_sum(l, r, i<<1);
+    if (l >  mid) return query_sum(l, r, i<<1|1);
+    return query_sum(l, r, i<<1)+query_sum(l, r, i<<1|1);
+  }
+};
+```
+
+{% endspoiler %}
+
+1. 给一个区间[L,R] 加上一个数x 
+2. 把一个区间[L,R] 里小于x 的数变成x 
+3. 把一个区间[L,R] 里大于x 的数变成x 
+4. 求区间[L,R] 的和
+5. 求区间[L,R] 的最大值
+6. 求区间[L,R] 的最小值
+
+$O(m\log^2 n)$
+
+{% spoiler "代码" %}
+```cpp
+struct SegmentTree {
+#define rt tr[i]
+#define ls tr[i<<1]
+#define rs tr[i<<1|1]
+  typedef int T;
+  struct TreeNode {
+    int l, r;
+    T mn1, mn2, mx1, mx2, cmn, cmx, tag1, tag2, tag3;
+    long long sum;
+  };
+  vector<T> a;
+  vector<TreeNode> tr;
+  void push_up(int i) {
+    rt.sum = ls.sum+rs.sum;
+    if (ls.mn1 == rs.mn1) {
+      rt.mn1 = ls.mn1;
+      rt.cmn = ls.cmn+rs.cmn;
+      rt.mn2 = min(ls.mn2, rs.mn2);
+    } else if (ls.mn1 < rs.mn1) {
+      rt.mn1 = ls.mn1;
+      rt.cmn = ls.cmn;
+      rt.mn2 = min(ls.mn2, rs.mn1);
+    } else if (ls.mn1 > rs.mn1) {
+      rt.mn1 = rs.mn1;
+      rt.cmn = rs.cmn;
+      rt.mn2 = min(ls.mn1, rs.mn2);
+    }
+    if (ls.mx1 == rs.mx1) {
+      rt.mx1 = ls.mx1;
+      rt.cmx = ls.cmx+rs.cmx;
+      rt.mx2 = max(ls.mx2, rs.mx2);
+    } else if (ls.mx1 > rs.mx1) {
+      rt.mx1 = ls.mx1;
+      rt.cmx = ls.cmx;
+      rt.mx2 = max(ls.mx2, rs.mx1);
+    } else if (ls.mx1 < rs.mx1) {
+      rt.mx1 = rs.mx1;
+      rt.cmx = rs.cmx;
+      rt.mx2 = max(ls.mx1, rs.mx2);
+    }
+  }
+  // 1 2 3 -> min, max, other
+  void push_tag(int i, T add1, T add2, T add3) {
+    if (rt.mn1 == rt.mx1) {
+      add1 == add3 ? add1 = add2 : add2 = add1; // 不应被其他值的标记作用
+      rt.sum += 1ll*rt.cmn*add1;
+    } else {
+      rt.sum += 1ll*rt.cmn*add1+1ll*rt.cmx*add2
+          +(rt.r-rt.l+1ll-rt.cmn-rt.cmx)*add3;
+    }
+    if (rt.mn2 == rt.mx1) rt.mn2 += add2;
+    else if (rt.mn2 != INF) rt.mn2 += add3;
+    if (rt.mx2 == rt.mn1) rt.mx2 += add1;
+    else if (rt.mx2 != -INF) rt.mx2 += add3;
+    rt.mn1 += add1; rt.mx1 += add2;
+    rt.tag1 += add1; rt.tag2 += add2; rt.tag3 += add3;
+  }
+  void push_down(int i) {
+    T mn = min(ls.mn1, rs.mn1);
+    T mx = max(ls.mx1, rs.mx1);
+    push_tag(i<<1  , ls.mn1 == mn ? rt.tag1 : rt.tag3, ls.mx1 == mx ? rt.tag2 : rt.tag3, rt.tag3);
+    push_tag(i<<1|1, rs.mn1 == mn ? rt.tag1 : rt.tag3, rs.mx1 == mx ? rt.tag2 : rt.tag3, rt.tag3);
+    rt.tag1 = rt.tag2 = rt.tag3 = 0;
+  }
+  template <typename TT> void build(int n, TT arr[]) {
+    a.resize(1);
+    a.insert(a.end(), arr+1, arr+n+1);
+    tr.resize(n*4+1);
+    build(1, n, 1);
+  }
+  void build(int n, T val = 0) {
+    a.resize(n+1, val);
+    tr.resize(n*4+1);
+    build(1, n, 1);
+  }
+  void build(int l, int r, int i) {
+    rt.l = l; rt.r = r;
+    rt.tag1 = rt.tag2 = rt.tag3 = 0;
+    if (l == r) {
+      rt.sum = rt.mn1 = rt.mx1 = a[l];
+      rt.mn2 = INF; rt.mx2 = -INF;
+      rt.cmn = rt.cmx = 1;
+      return;
+    }
+    int mid = (l+r)>>1;
+    build(l, mid, i<<1); build(mid+1, r, i<<1|1);
+    push_up(i);
+  }
+  void update_add(int l, int r, T v, int i = 1) {
+    if (rt.r < l || rt.l > r) return;
+    if (rt.l >= l && rt.r <= r)
+      return push_tag(i, v, v, v);
+    push_down(i);
+    update_add(l, r, v, i<<1); update_add(l, r, v, i<<1|1);
+    push_up(i);
+  }
+  void update_max(int l, int r, T v, int i = 1) {
+    if (rt.r < l || rt.l > r || rt.mn1 >= v) return;
+    if (rt.l >= l && rt.r <= r && rt.mn2 > v)
+      return push_tag(i, v-rt.mn1, 0, 0);
+    push_down(i);
+    update_max(l, r, v, i<<1); update_max(l, r, v, i<<1|1);
+    push_up(i);
+  }
+  void update_min(int l, int r, T v, int i = 1) {
+    if (rt.r < l || rt.l > r || rt.mx1 <= v) return;
+    if (rt.l >= l && rt.r <= r && rt.mx2 < v)
+      return push_tag(i, 0, v-rt.mx1, 0);
+    push_down(i);
+    update_min(l, r, v, i<<1); update_min(l, r, v, i<<1|1);
+    push_up(i);
+  }
+  long long query_sum(int l, int r, int i = 1) {
+    if (rt.r < l || rt.l > r) return 0;
+    if (rt.l >= l && rt.r <= r) return rt.sum;
+    push_down(i);
+    return query_sum(l, r, i<<1)+query_sum(l, r, i<<1|1);
+  }
+  T query_max(int l, int r, int i = 1) {
+    if (rt.r < l || rt.l > r) return -INF;
+    if (rt.l >= l && rt.r <= r) return rt.mx1;
+    push_down(i);
+    return max(query_max(l, r, i<<1), query_max(l, r, i<<1|1));
+  }
+  T query_min(int l, int r, int i = 1) {
+    if (rt.r < l || rt.l > r) return INF;
+    if (rt.l >= l && rt.r <= r) return rt.mn1;
+    push_down(i);
+    return min(query_min(l, r, i<<1), query_min(l, r, i<<1|1));
+  }
+#undef rt
+#undef ls
+#undef rs
+};
+```
+
+{% endspoiler %}
+
+### 区间历史最值
+
+### 区间加区间修改
+
+1. 区间加
+2. 区间修改
+3. 区间最大值
+4. 区间历史最大值
+
+$O(m\log n)$
+
+{% spoiler "代码" %}
+```cpp
+struct SegmentTree {
+#define rt tr[i]
+#define ls tr[i<<1]
+#define rs tr[i<<1|1]
+  typedef int T;
+  struct TreeNode {
+    int l, r;
+    bool tag;
+    T add, cov, mx, hadd, hcov, hmx;
+  } tr[N<<2];
+  void push_up(int i) {
+    rt.mx = max(ls.mx, rs.mx);
+    rt.hmx = max(ls.hmx, rs.hmx);
+  }
+  void plus(int i, T k, T hk) {
+    rt.hmx = max(rt.hmx, rt.mx+hk);
+    rt.mx += k;
+    rt.tag ? rt.hcov = max(rt.hcov, rt.cov+hk), rt.cov += k
+        : rt.hadd = max(rt.hadd, rt.add+hk), rt.add += k;
+  }
+  void cover(int i, T k, T hk) {
+    rt.hmx = max(rt.hmx, hk);
+    rt.mx = k;
+    rt.hcov = max(rt.hcov, hk);
+    rt.cov = k;
+    rt.tag = 1;
+  }
+  void push_down(int i) {
+    if (rt.add) {
+      plus(i<<1  , rt.add, rt.hadd);
+      plus(i<<1|1, rt.add, rt.hadd);
+      rt.add = rt.hadd = 0;
+    }
+    if (rt.tag) {
+      cover(i<<1  , rt.cov, rt.hcov);
+      cover(i<<1|1, rt.cov, rt.hcov);
+      rt.tag = 0; rt.hcov = -INF;
+    }
+  }
+  void build(int l, int r, int i = 1) {
+    rt.l = l; rt.r = r; rt.tag = false;
+    rt.add = rt.hadd = 0;
+    rt.hcov = -INF;
+    if (l == r) return rt.hmx = rt.mx = 0, void();
+    int mid = (l+r)>>1;
+    build(l, mid, i<<1); build(mid+1, r, i<<1|1);
+    push_up(i);
+  }
+  T query_max(int l, int r, int i = 1) {
+    if (rt.r < l || rt.l > r) return -INF;
+    if (l <= rt.l && rt.r <= r) return rt.mx;
+    push_down(i);
+    return max(query_max(l, r, i<<1), query_max(l, r, i<<1|1));
+  }
+  T query_hmax(int l, int r, int i = 1) {
+    if (rt.r < l || rt.l > r) return -INF;
+    if (l <= rt.l && rt.r <= r) return rt.hmx;
+    push_down(i);
+    return max(query_hmax(l, r, i<<1), query_hmax(l, r, i<<1|1));
+  }
+  void update_add(int l, int r, T v, int i = 1) {
+    if (rt.r < l || rt.l > r) return;
+    if (l <= rt.l && rt.r <= r) return plus(i, v, v);
+    push_down(i);
+    update_add(l, r, v, i<<1); update_add(l, r, v, i<<1|1);
+    push_up(i);
+  }
+  void update_cov(int l, int r, T v, int i = 1) {
+    if (rt.r < l || rt.l > r) return;
+    if (l <= rt.l && rt.r <= r) return cover(i, v, v);
+    push_down(i);
+    update_cov(l, r, v, i<<1); update_cov(l, r, v, i<<1|1);
+    push_up(i);
+  }
+#undef rt
+#undef ls
+#undef rs
+};
+```
+
+{% endspoiler %}
+
+### 区间最值操作与历史最值询问同向
+
+单点查询
+
+{% spoiler "代码" %}
+```cpp
+struct SegmentTree {
+#define rt tr[i]
+#define ls tr[i<<1]
+#define rs tr[i<<1|1]
+  typedef long long T;
+  struct Tag {
+    T add, mx;
+    Tag(T _add = 0, T _mx = -INF) : add(_add), mx(_mx) {}
+    Tag operator +(const Tag &t) const { // 合并tag
+      return Tag(max(-INF, add+t.add), max(mx+t.add, t.mx));
+    }
+    Tag operator *(const Tag &t) const { // 取max
+      return Tag(max(add, t.add), max(mx, t.mx));
+    }
+    Tag& operator +=(const Tag &t) { return *this = *this+t; }
+    Tag& operator *=(const Tag &t) { return *this = *this*t; }
+  };
+  struct TreeNode {
+    int l, r;
+    Tag his, cur;
+  } tr[N<<2];
+  void push_tag(int i, Tag hk, Tag k) {
+    rt.his *= rt.cur+hk;
+    rt.cur += k;
+  }
+  void push_down(int i) {
+    push_tag(i<<1  , rt.his, rt.cur);
+    push_tag(i<<1|1, rt.his, rt.cur);
+    rt.his = rt.cur = Tag();
+  }
+  void build(int l, int r, int i = 1) {
+    rt.l = l; rt.r = r; rt.his = rt.cur = Tag();
+    if (l == r) return rt.his = rt.cur = Tag(a[l]), void();
+    int mid = (l+r)>>1;
+    build(l, mid, i<<1); build(mid+1, r, i<<1|1);
+  }
+  // add(val, -INF) cov(-INF, val) max(0, val)
+  void update(int l, int r, T a, T x = -INF, int i = 1) {
+    if (rt.r < l || rt.l > r) return;
+    if (l <= rt.l && rt.r <= r) return push_tag(i, Tag(a, x), Tag(a, x));
+    push_down(i);
+    update(l, r, a, x, i<<1); update(l, r, a, x, i<<1|1);
+  }
+  T query_max(int x, int i = 1) {
+    if (rt.l == rt.r) return max(rt.cur.add, rt.cur.mx);
+    push_down(i);
+    int mid = (rt.l+rt.r)>>1;
+    if (x <= mid) return query_max(x, i<<1);
+    else return query_max(x, i<<1|1);
+  }
+  T query_hmax(int x, int i = 1) {
+    if (rt.l == rt.r) return max(rt.his.add, rt.his.mx);
+    push_down(i);
+    int mid = (rt.l+rt.r)>>1;
+    if (x <= mid) return query_hmax(x, i<<1);
+    else return query_hmax(x, i<<1|1);
+  }
+#undef rt
+#undef ls
+#undef rs
+};
+```
+
+{% endspoiler %}
+
+### 区间最值操作与历史最值询问反向
+
+1. 区间加
+2. 区间max
+3. 询问min
+4. 历史min
+
+{% spoiler "代码" %}
+```cpp
+struct SegmentTree {
+#define rt tr[i]
+#define ls tr[i<<1]
+#define rs tr[i<<1|1]
+  typedef int T;
+  struct TreeNode {
+    int l, r;
+    T mn, hmn, se, tag1, htag1, tag2, htag2;
+  } tr[N<<2];
+  void push_up(int i) {
+    rt.hmn = min(ls.hmn, rs.hmn);
+    if (ls.mn == rs.mn) {
+      rt.mn = ls.mn;
+      rt.se = min(ls.se, rs.se);
+    } else if (ls.mn < rs.mn) {
+      rt.mn = ls.mn;
+      rt.se = min(ls.se, rs.mn);
+    } else if (ls.mn > rs.mn) {
+      rt.mn = rs.mn;
+      rt.se = min(ls.mn, rs.se);
+    }
+  }
+  void push_tag(int i, T add1, T hadd1, T add2, T hadd2) {
+    rt.hmn = min(rt.hmn, rt.mn+hadd1);
+    rt.htag1 = min(rt.htag1, rt.tag1+hadd1);
+    rt.mn += add1; rt.tag1 += add1;
+    rt.htag2 = min(rt.htag2, rt.tag2+hadd2);
+    if (rt.se != INF) rt.se += add2;
+    rt.tag2 += add2;
+  }
+  void push_down(int i) {
+    T mn = min(ls.mn, rs.mn);
+    push_tag(i<<1  , ls.mn == mn ? rt.tag1 : rt.tag2,
+        ls.mn == mn ? rt.htag1 : rt.htag2, rt.tag2, rt.htag2);
+    push_tag(i<<1|1, rs.mn == mn ? rt.tag1 : rt.tag2,
+        rs.mn == mn ? rt.htag1 : rt.htag2, rt.tag2, rt.htag2);
+    rt.tag1 = rt.htag1 = rt.tag2 = rt.htag2 = 0;
+  }
+  void build(int l, int r, int i = 1) {
+    rt.l = l; rt.r = r;
+    rt.tag1 = rt.htag1 = rt.tag2 = rt.htag2 = 0;
+    if (l == r) {
+      rt.hmn = rt.mn = a[l];
+      rt.se = INF;
+      return;
+    }
+    int mid = (l+r)>>1;
+    build(l, mid, i<<1); build(mid+1, r, i<<1|1);
+    push_up(i);
+  }
+  void update_add(int l, int r, T v, int i = 1) {
+    if (rt.r < l || rt.l > r) return;
+    if (l <= rt.l && rt.r <= r) return push_tag(i, v, v, v, v);
+    push_down(i);
+    update_add(l, r, v, i<<1); update_add(l, r, v, i<<1|1);
+    push_up(i);
+  }
+  void update_max(int l, int r, T v, int i = 1) {
+    if (rt.r < l || rt.l > r || v <= rt.mn) return;
+    if (l <= rt.l && rt.r <= r && v < rt.se)
+      return push_tag(i, v-rt.mn, v-rt.mn, 0, 0);
+    push_down(i);
+    update_max(l, r, v, i<<1); update_max(l, r, v, i<<1|1);
+    push_up(i);
+  }
+  T query_min(int l, int r, int i = 1) {
+    if (rt.r < l || rt.l > r) return INF;
+    if (l <= rt.l && rt.r <= r) return rt.mn;
+    push_down(i);
+    return min(query_min(l, r, i<<1), query_min(l, r, i<<1|1));
+  }
+  T query_hmin(int l, int r, int i = 1) {
+    if (rt.r < l || rt.l > r) return INF;
+    if (l <= rt.l && rt.r <= r) return rt.hmn;
+    push_down(i);
+    return min(query_hmin(l, r, i<<1), query_hmin(l, r, i<<1|1));
+  }
+#undef rt
+#undef ls
+#undef rs
+};
+```
+
+{% endspoiler %}
+
+### 维护历史最值和
 
 ## 树套树
 
@@ -1423,26 +1965,8 @@ struct zkwSegmentTree {
 template <typename T>
 struct BinaryIndexedTree {
   int n;
-  T tr[N];
-  BinaryIndexedTree() { memset(tr, 0, sizeof tr); }
-  void init(const int &_n) { n = _n; clear(); }
-  void clear() { memset(tr+1, 0, sizeof(T)*n); }
-  void add(const int &x, const T &v) { for (int i = x; i <= n; i += i&-i) tr[i] += v; }
-  void add(const int &x, const int &y, const T &v) { add(x, v); add(y+1, -v); }
-  T query(const int &x) { T res = 0; for (int i = x ; i; i -= i&-i) res += tr[i]; return res; }
-  T query(const int &x, const int &y) { return query(y)-query(x-1); }
-};
-```
-
-{% endspoiler %}
-
-{% spoiler "代码" %}
-```cpp
-template <typename T>
-struct BinaryIndexedTree {
-  int n;
   vector<T> tr;
-  void init(const int &_n) { tr = vector<T>(n+1, 0); }
+  void init(const int &n) { this->n = n; tr = vector<T>(n+1, 0); }
   void add(const int &x, const T &v) { for (int i = x; i <= n; i += i&-i) tr[i] += v; }
   void add(const int &x, const int &y, const T &v) { add(x, v); add(y+1, -v); }
   T query(const int &x) { T res = 0; for (int i = x ; i; i -= i&-i) res += tr[i]; return res; }
@@ -1507,7 +2031,7 @@ struct BIT_2D {
 
 {% endspoiler %}
 
-## 可持久化线段树(可持久化数组)
+## 可持久化数组
 
 {% spoiler "代码" %}
 ```cpp
@@ -1723,6 +2247,58 @@ private:
     int num = sum[ls[v]]-sum[ls[u]], mid = (l+r)>>1;
     if (num >= k) return _query(ls[u], ls[v], l, mid, k);
     else return _query(rs[u], rs[v], mid+1, r, k-num);
+  }
+};
+```
+
+{% endspoiler %}
+
+[dingbacode 高地](https://www.dingbacode.com/contest/242/problem/1003)
+
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct PersistantSegmentTree {
+  static const int NN = N*(log2(N)+5);
+  int rt[N], ls[NN], rs[NN], tot, n;
+  T sum[NN];
+  void build(const int &n) {
+    this->n = n;
+    tot = 0;
+    rt[0] = _build(1, n);
+  }
+  void update(const int &cur, const int &pre, const int &k, const T &v) {
+    rt[cur] = _update(rt[pre], 1, n, k, v);
+  }
+  T query(const int &l, const int &r, const int &ql, const int &qr) {
+    return _query(rt[l-1], rt[r], 1, n, ql, qr);
+  }
+private:
+  int _build(const int &l, const int &r) {
+    int cur = ++tot;
+    sum[cur] = 0;
+    if (l >= r) return cur;
+    int mid = (l+r)>>1;
+    ls[cur] = _build(l, mid);
+    rs[cur] = _build(mid+1, r);
+    return cur;
+  }
+  int _update(const int &pre, const int &l, const int &r, const int &k, const T &v) {
+    int cur = ++tot;
+    ls[cur] = ls[pre]; rs[cur] = rs[pre]; sum[cur] = sum[pre]+v;
+    if (l >= r) return cur;
+    int mid = (l+r)>>1;
+    if (k <= mid) ls[cur] = _update(ls[pre], l, mid, k, v);
+    else rs[cur] = _update(rs[pre], mid+1, r, k, v);
+    return cur;
+  }
+  // [u, v] 段 [ql, qr] 区间和
+  T _query(const int &u, const int &v, const int &l, const int &r, const int &ql, const int &qr) {
+    if (l >= ql && r <= qr) return sum[v]-sum[u];
+    int mid = (l+r)>>1;
+    if (qr <= mid) return _query(ls[u], ls[v], l, mid, ql, qr);
+    if (ql >  mid) return _query(rs[u], rs[v], mid+1, r, ql, qr);
+    return _query(ls[u], ls[v], l, mid, ql, qr)+_query(rs[u], rs[v], mid+1, r, ql, qr);
   }
 };
 ```
@@ -2192,7 +2768,7 @@ struct DSU {
     else num[fy] += num[fx], fa[fx] = fy;
     return true;
   }
-} dsu;
+};
 ```
 
 {% endspoiler %}
@@ -2220,6 +2796,65 @@ struct MonotonousQueue {
 ```
 
 {% endspoiler %}
+
+## [左偏树|可并堆](https://www.luogu.com.cn/problem/P3377)
+
+1 x y：将第 x 个数和第 y 个数所在的小根堆合并（若第 x 或第 y 个数已经被删除或第 x 和第 y 个数在用一个堆内，则无视此操作）。
+
+2 x：输出第 x 个数所在的堆最小数，并将这个最小数删除（若有多个最小数，优先删除先输入的；若第 x 个数已经被删除，则输出 -1 并无视删除操作）。
+
+{% spoiler "代码" %}
+```cpp
+template <typename T> struct Tree { // 左偏树|可并堆
+#define ls tr[x].son[0]
+#define rs tr[x].son[1]
+  struct TreeNode {
+    T val;
+    int dis, rt, son[2];
+  };
+  vector<TreeNode> tr;
+  template <typename TT> void build(TT a[], int n) {
+    tr.resize(n+1);
+    tr[0].dis = -1;
+    for (int i = 1; i <= n; ++i) {
+      tr[i].val = a[i];
+      tr[i].rt = i;
+    }
+  }
+  int get(int x) {
+    return tr[x].rt == x ? x : tr[x].rt = get(tr[x].rt);
+  }
+  void merge(int x, int y) {
+    if (tr[x].val == -1 || tr[y].val == -1) return;
+    x = get(x); y = get(y);
+    if (x != y) tr[x].rt = tr[y].rt = _merge(x, y);
+  }
+  int _merge(int x, int y) {
+    if (!x || !y) return x+y;
+    if (tr[x].val > tr[y].val || (tr[x].val == tr[y].val && x > y)) swap(x, y);
+    rs = _merge(rs, y);
+    if(tr[ls].dis < tr[rs].dis) swap(ls, rs);
+    tr[ls].rt = tr[rs].rt = tr[x].rt = x;
+    tr[x].dis = tr[rs].dis+1;
+    return x;
+  }
+  T pop(int x) {
+    if (tr[x].val == -1) return -1;
+    x = get(x);
+    T res = tr[x].val;
+    tr[x].val = -1;
+    tr[ls].rt = ls;
+    tr[rs].rt = rs;
+    tr[x].rt = _merge(ls, rs);
+    return res;
+  }
+#undef ls
+#undef rs
+};
+```
+
+{% endspoiler %}
+
 ---
 # 字符串
 ## [回文字符串|manacher算法](https://www.luogu.org/problemnew/show/P3805)
@@ -3950,7 +4585,7 @@ inline void suodian() {
 $O(n+m)$
 {% spoiler "代码" %}
 ```cpp
-struct TWO_SAT { // node stkrt from 0
+struct TWO_SAT { // node start from 0
   int top, _dfn, _scc;
   int dfn[N<<1], low[N<<1], stk[N<<1], scc[N<<1], res[N];
   vector<int> e[N<<1];
@@ -5433,26 +6068,20 @@ if(x > 1) p[++tot] = x, k[tot] = 1;
 {% endspoiler %}
 
 ---
-## BSGS
-
-[luogu 4884](https://www.luogu.org/problemnew/show/P4884)
+## [BSGS](https://www.luogu.com.cn/problem/P3846)
 
 求解关于 $t$ 的方程 $a^t \equiv x(mod m),\gcd(a, m) = 1$
 
 {% spoiler "代码" %}
 ```cpp
-// map<long long, int> mmp; // a^n = x
-inline long long BSGS(long long a, long long x, long long m) {
-  long long t = (long long)ceil(sqrt(m)); // b = a^i
-  for(int i = 0; i < t; ++i)
-    mmp[mul(x, qpow(a, i))] = i;
-  a = qpow(a, t);
-  long long now, ans; // now = (a^t)^i
-  for(int i = 0; i <= t; ++i) {
-    now = qpow(a, i);
-    if(mmp.count(now)) {
-      ans = t*i-mmp[now];
-      if(ans > 0) return ans;
+inline long long BSGS(long long a, long long x, long long m) { // a^n = x
+  static map<long long, int> mmp; mmp.clear();
+  long long t = sqrt(m)+1, b = 1, c = 1, res;
+  for(int i = 0; i < t; ++i, b = b*a%m) mmp[x*b%m] = i;
+  for(int i = 0; i <= t; ++i, c = c*b%m) { // b = a^t
+    if(mmp.count(c)) {
+      res = t*i-mmp[c];
+      if(res > 0) return res;
     }
   }
   return -1;
@@ -5464,6 +6093,36 @@ inline long long BSGS(long long a, long long x, long long m) {
 ## 拓展BSGS
 
 $\gcd(a, m) \neq 1$
+
+{% spoiler "代码" %}
+```cpp
+namespace EXBSGS {
+
+inline ll BSGS(ll a, ll b, ll mod, ll qaq){
+  unordered_map<ll, int> H; H.clear();
+  ll Q, p = ceil(sqrt(mod)), x, y; 
+  exgcd(qaq, mod, x, y), b = (b * x % mod + mod) % mod, 
+  Q = qpow(a, p, mod), exgcd(Q, mod, x, y), Q = (x % mod + mod) % mod ;
+  for (ll i = 1, j = 0 ; j <= p ; ++ j, i = i * a % mod)  if (!H.count(i)) H[i] = j ;
+  for (ll i = b, j = 0 ; j <= p ; ++ j, i = i * Q % mod)  if (H[i]) return j * p + H[i];
+  return -1 ;
+}
+
+inline ll exBSGS(ll N, ll P, ll M){
+  ll qaq = 1, k = 0, qwq = 1; 
+  if (M == 1) return 0 ; 
+  while ((qwq = __gcd(N, P)) > 1) {
+    if (M%qwq) return -1 ;
+    ++k, M /= qwq, P /= qwq, qaq = qaq*(N/qwq)%P ;
+    if (qaq == M) return k ;
+  }
+  return (qwq = BSGS(N, M, P, qaq)) == -1 ? -1 : qwq+k ;
+}
+
+} using EXBSGS::exBSGS;
+```
+
+{% endspoiler %}
 
 ## 错排
 
@@ -5549,6 +6208,87 @@ lon fac(lon n, lon p = MOD) {
 ```
 
 {% endspoiler %}
+
+## [全排列和逆序对](https://www.cnblogs.com/saltless/archive/2011/06/01/2065619.html)
+
+### 根据排列求逆序数
+
+### 根据逆序数推排列数
+
+### 根据每个数的逆序数求出原排列
+
+### 根据逆序数求最小排列
+
+### 第k个字典序每个数的逆序对
+
+{% spoiler "代码" %}
+```cpp
+// n个数排列的第k个(字典序)的逆序对
+int f(int k) {
+  int res = 0;
+  for (int j = n; j; --j) {
+    res += k/fac[j];
+    k %= fac[j];
+  }
+  return res;
+}
+```
+
+{% endspoiler %}
+
+## [二次剩余](https://kewth.blog.luogu.org/solution-p5491)
+{% spoiler "代码" %}
+```cpp
+namespace Cipolla {
+
+int mod, _x0, _x1;
+long long I_mul_I; // 虚数单位的平方
+
+struct complex {
+  long long real, imag;
+  complex(long long real = 0, long long imag = 0): real(real), imag(imag) { }
+};
+inline bool operator == (complex x, complex y) {
+  return x.real == y.real and x.imag == y.imag;
+}
+inline complex operator * (complex x, complex y) {
+  return complex((x.real * y.real + I_mul_I * x.imag % mod * y.imag) % mod,
+      (x.imag * y.real + x.real * y.imag) % mod);
+}
+
+complex power(complex x, int k) {
+  complex res = 1;
+  while(k) {
+    if(k & 1) res = res * x;
+    x = x * x;
+    k >>= 1;
+  }
+  return res;
+}
+
+bool check_if_residue(int x) {
+  return power(x, (mod - 1) >> 1) == 1;
+}
+
+int solve(int n, int p, int &x0 = _x0, int &x1 = _x1) {
+  mod = p;
+  if (power(n, p>>1) == p-1) return x0 = -1; // 无解
+  if (power(n, p>>1) == 0) return x0 = x1 = 0;
+
+  long long a = rand() % mod;
+  while(!a or check_if_residue((a * a + mod - n) % mod))
+    a = rand() % mod;
+  I_mul_I = (a * a + mod - n) % mod;
+
+  x0 = int(power(complex(a, 1), (mod + 1) >> 1).real);
+  x1 = mod - x0;
+  return x0;
+}
+} // namespace Cipolla
+```
+
+{% endspoiler %}
+
 
 ---
 # 动态规划 DP
