@@ -5495,7 +5495,8 @@ namespace FFT {
     fft(f, -1);
     for (int i = 0; i < n+m; ++i) f[i].real /= len;
   }
-  /*
+}
+/*
   template <class T>
   void work(T a[], const int &n) {
     static comp f[SIZE];
@@ -5511,7 +5512,6 @@ namespace FFT {
     for (int i = 0; i < n+n; ++i) a[i] = static_cast<T>(f[i].real/len+.5);
   }
   */
-}
 ```
 
 {% endspoiler %}
@@ -5976,7 +5976,6 @@ inline long long EXCRT(long long a[], long long m[]) {
   }
   return res;
 }
-
 ```
 
 {% endspoiler %}
@@ -7072,7 +7071,7 @@ using Mint = Modular<std::integral_constant<decay<decltype(md)>::type, md>>;
 {% spoiler "代码" %}
 ```cpp
 struct BigInteger {
-  static const int SIZE = 1e4; // 位数SIZE*4
+  static const int SIZE = 1e6; // 位数SIZE*4
   static const int BASE = 1e4; // 压位
   static const int WIDTH = 4;
 
