@@ -62,8 +62,8 @@ bgclass:
 startdash: 
   - {url: https://github.com/honjun/hexo-theme-sakura, title: Sakura, desc: 本站 hexo 主题, img: /img/startdash/sakura.md.png}
   - {url: https://kaizynx.github.io/2018/11/04/template/, title: ACM模板, desc: 某菜鸡整理的板子, img: /img/startdash/acm.jpg}
-  - {url: https://api.dujin.org/bing/1920.php, title: 每日社图, desc: 好康的~, img: /img/startdash/rainbowcat.gif}
-  # - {url: https://api.ixiaowai.cn/api/api.php, title: 每日色图, desc: 好康的~, img: /img/startdash/rainbowcat.gif}
+  # - {url: https://api.dujin.org/bing/1920.php, title: 每日社图, desc: 好康的~, img: /img/startdash/rainbowcat.gif}
+  - {url: https://api.ixiaowai.cn/api/api.php, title: 每日社图, desc: 好康的~, img: /img/startdash/rainbowcat.gif}
 
 
 

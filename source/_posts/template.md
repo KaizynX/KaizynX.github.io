@@ -412,6 +412,8 @@ void CDQ(int l, int r) {
 
 {% endspoiler %}
 
+## 线段树分治
+
 ---
 # 计算几何
 ## 向量 坐标 直线 圆 (结构体)
@@ -2179,71 +2181,6 @@ struct PersistantArray {
 
 {% endspoiler %}
 
-## 可持久化并查集
-
-{% spoiler "代码" %}
-```cpp
-struct PersistantUnionSet {
-  static const int NN = N*(log2(N)+3);
-  int rt[N], ls[NN], rs[NN], fa[NN], dep[NN], n, tot;
-  void build(const int &n) {
-    this->n = n;
-    tot = 0;
-    rt[0] = build(1, n);
-  }
-  int build(const int &l, const int &r) {
-    int cur = ++tot; assert(tot < NN);
-    if (l == r) return fa[cur] = l, dep[cur] = 0, cur;
-    int mid = (l+r)>>1;
-    ls[cur] = build(l, mid);
-    rs[cur] = build(mid+1, r);
-    return cur;
-  }
-  bool query(const int &cur, const int &x, const int &y) {
-    return fa[getf(rt[cur], x)] == fa[getf(rt[cur], y)];
-  }
-  // return the id of fa[], dep[]
-  int query(const int &cur, const int &x, const int &l, const int &r) {
-    if (l == r) return cur;
-    int mid = (l+r)>>1;
-    if (x <= mid) return query(ls[cur], x, l, mid);
-    else return query(rs[cur], x, mid+1, r);
-  }
-  // return the id of fa[], dep[]
-  int getf(const int &cur, int x) {
-    int fi;
-    while (fa[(fi = query(cur, x, 1, n))] != x) x = fa[fi];
-    return fi;
-  }
-  void merge(const int &cur, const int &pre, const int &x, const int &y) {
-    rt[cur] = rt[pre];
-    int fx = getf(rt[cur], x), fy = getf(rt[cur], y);
-    if (fa[fx] == fa[fy]) return;
-    if (dep[fx] > dep[fy]) swap(fx, fy);
-    rt[cur] = update(rt[pre], fa[fx], fa[fy], 1, n);
-    if (dep[fx] == dep[fy]) add(rt[cur], fa[fy], 1, n);
-  }
-  // update fa, merge x to y
-  int update(const int &pre, const int &x, const int &y, const int &l, const int &r) {
-    int cur = ++tot; assert(tot < NN);
-    if (l == r) return fa[cur] = y, dep[cur] = dep[pre], cur;
-    ls[cur] = ls[pre]; rs[cur] = rs[pre];
-    int mid = (l+r)>>1;
-    if (x <= mid) ls[cur] = update(ls[pre], x, y, l, mid);
-    else rs[cur] = update(rs[pre], x, y, mid+1, r);
-    return cur;
-  }
-  // add dep
-  void add(const int &cur, const int &x, const int &l, const int &r) {
-    if (l == r) return ++dep[cur], void();
-    int mid = (l+r)>>1;
-    if (x <= mid) add(ls[cur], x, l, mid);
-    else add(rs[cur], x, mid+1, r);
-  }
-};
-```
-
-{% endspoiler %}
 
 ## [可持久化线段树(主席树)](https://www.luogu.com.cn/problem/P3834)
 
@@ -2837,37 +2774,276 @@ struct rST {
 {% endspoiler %}
 
 ---
-## [并查集](https://www.luogu.org/problemnew/show/P3367)
+## 并查集
+
+### 路径压缩
+
 {% spoiler "代码" %}
 ```cpp
 struct DSU {
-  int fa[N];
-  void init(int n) { iota(fa, fa+n+1, 0); }
+  vector<int> fa;
+  void init(int n) { fa = vector<int>(n+1); iota(fa.begin(), fa.end(), 0); }
   int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
   int& operator [] (int i) { return fa[get(i)]; }
   bool merge(int x, int y) { // merge x to y
-    int fx = get(x), fy = get(y);
-    if (fx == fy) return false;
-    fa[fx] = fy; return true;
+    x = get(x); y = get(y);
+    return x == y ? false : fa[x] = y, true;
   }
 };
 ```
 
 {% endspoiler %}
-加上数量
+
+### 按秩合并
+
+秩的意思就是树的高度，按秩合并过后并查集的结构为树形结构，最坏情况为 $O(m \log n)$
+
 {% spoiler "代码" %}
 ```cpp
 struct DSU {
-  int fa[N], num[N];
-  void init(int n) { for (int i = 0; i <= n; ++i) fa[i] = i, num[i] = 1; }
+  vector<int> fa, rk;
+  void init(int n) { fa = rk = vector<int>(n+1, 0); iota(fa.begin(), fa.end(), 0); }
+  int get(int s) { return s == fa[s] ? s : get(fa[s]); }
+  int operator [](int i) { return get(i); }
+  bool merge(int x, int y) {
+    x = get(x); y = get(y);
+    if (x == y) return false;
+    if (rk[x] < rk[y]) fa[x] = y;
+    else fa[y] = x, rk[x] += rk[x] == rk[y];
+    return true;
+  }
+};
+```
+
+{% endspoiler %}
+
+### 启发式合并
+
+### 带权并查集
+
+{% spoiler "代码" %}
+```cpp
+template <typename T = int> struct DSU {
+  vector<int> fa;
+  vector<T> w;
+  void init(int n, T v = 1) {
+    fa = vector<int>(n+1);
+    iota(fa.begin(), fa.end(), 0);
+    w = vector<T>(n+1, v);
+  }
+  void init(int n, T a[]) {
+    fa = vector<int>(n+1);
+    iota(fa.begin(), fa.end(), 0);
+    w = vector<T>(a, a+n+1);
+  }
   int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
   int& operator [] (int i) { return fa[get(i)]; }
-  bool merge(int x, int y) {
-    int fx = get(x), fy = get(y);
-    if (fx == fy) return false;
-    if (num[fx] >= num[fy]) num[fx] += num[fy], fa[fy] = fx;
-    else num[fy] += num[fx], fa[fx] = fy;
+  bool merge(int x, int y) { // merge x to y
+    x = get(x); y = get(y);
+    return x == y ? false : w[y] += w[x], fa[x] = y, true;
+  }
+};
+```
+
+{% endspoiler %}
+
+### 扩展域并查集
+
+例题:关押罪犯,食物链
+
+{% spoiler "代码" %}
+```cpp
+struct DSU {
+  int n;
+  vector<int> fa; // [1, n] partner, [n+1, 2n] enemy
+  void init(int n) {
+    this->n = n;
+    fa = vector<int>(2*n+1, 0);
+    iota(fa.begin(), fa.end(), 0);
+  }
+  int get(int s) { return s == fa[s] ? s : fa[s] = get(fa[s]); }
+  int& operator [] (int i) { return fa[get(i)]; }
+  void merge(int x, int y) { fa[get(x)] = get(y); }
+  bool update(int x, int y) {
+    if (get(x) == get(y)) return false;
+    merge(x+n, y);
+    merge(x, y+n);
     return true;
+  }
+};
+```
+
+{% endspoiler %}
+
+### 可撤销并查集
+
+用一个栈维护每次操作
+
+#### 按秩合并
+
+{% spoiler "代码" %}
+```cpp
+struct DSU {
+  vector<int> fa, rk;
+  stack<pair<int&, int>> stk;
+  void init(int n) {
+    stk = stack<pair<int&, int>>();
+    fa = rk = vector<int>(n+1, 0);
+    iota(fa.begin(), fa.end(), 0);
+  }
+  int get(int s) { while (s != fa[s]) s = fa[s]; return s; }
+  int& operator [](int i) { return fa[get(i)]; }
+  int merge(int x, int y) { // return the number push in stack
+    x = get(x); y = get(y);
+    if (x == y) return 0;
+    if (rk[x] > rk[y]) swap(x, y);
+    stk.push({fa[x], fa[x]});
+    fa[x] = y;
+    return rk[x] == rk[y] ? stk.push({rk[y], rk[y]++}), 2 : 1;
+  }
+  bool undo() {
+    if (stk.empty()) return false;
+    stk.top().first = stk.top().second;
+    stk.pop();
+    return true;
+  }
+};
+```
+
+{% endspoiler %}
+
+#### 启发式合并
+{% spoiler "代码" %}
+```cpp
+struct DSU {
+  vector<int> fa, sz;
+  stack<pair<int, int>> stk;
+  void init(int n) {
+    stk = stack<pair<int, int>>();
+    fa = sz = vector<int>(n+1, 1);
+    iota(fa.begin(), fa.end(), 0);
+  }
+  int get(int s) { while (s != fa[s]) s = fa[s]; return s; }
+  int& operator [](int i) { return fa[get(i)]; }
+  int merge(int x, int y) {
+    x = get(x); y = get(y);
+    if (x == y) return 0;
+    if (sz[x] > sz[y]) swap(x, y);
+    stk.push({x, y});
+    fa[x] = y;
+    sz[y] += sz[x];
+    return 1;
+  }
+  bool undo() {
+    if (stk.empty()) return false;
+    int x = stk.top().first, y = stk.top().y;
+    stk.pop();
+    fa[x] = x;
+    sz[y] -= sz[x];
+    return true;
+  }
+}
+```
+
+{% endspoiler %}
+
+#### 可撤销扩展域并查集
+
+{% spoiler "代码" %}
+```cpp
+struct DSU {
+  int n;
+  vector<int> fa, rk; // [1, n] partner, [n+1, 2n] enemy
+  stack<pair<int&, int>> stk;
+  void init(int n) {
+    this->n = n;
+    stk = stack<pair<int&, int>>();
+    fa = rk = vector<int>(2*n+1, 0);
+    iota(fa.begin(), fa.end(), 0);
+  }
+  int& operator [] (int i) { return fa[get(i)]; }
+  int get(int s) { while (s != fa[s]) s = fa[s]; return s; }
+  void undo() { stk.top().first = stk.top().second; stk.pop(); }
+  void merge(int x, int y) {
+    x = get(x); y = get(y);
+    if (x == y) return;
+    if (rk[x] > rk[y]) swap(x, y);
+    stk.push({fa[x], fa[x]});
+    stk.push({rk[y], rk[y]});
+    fa[x] = y;
+    rk[y] += rk[x] == rk[y];
+  }
+  bool update(int x, int y) {
+    if (get(x) == get(y)) return false;
+    merge(x+n, y);
+    merge(x, y+n);
+    return true;
+  }
+};
+```
+
+{% endspoiler %}
+
+### 可持久化并查集
+
+{% spoiler "代码" %}
+```cpp
+struct PersistantUnionSet {
+  static const int NN = N*(log2(N)+3);
+  int rt[N], ls[NN], rs[NN], fa[NN], dep[NN], n, tot;
+  void build(const int &n) {
+    this->n = n;
+    tot = 0;
+    rt[0] = build(1, n);
+  }
+  int build(const int &l, const int &r) {
+    int cur = ++tot; assert(tot < NN);
+    if (l == r) return fa[cur] = l, dep[cur] = 0, cur;
+    int mid = (l+r)>>1;
+    ls[cur] = build(l, mid);
+    rs[cur] = build(mid+1, r);
+    return cur;
+  }
+  bool query(const int &cur, const int &x, const int &y) {
+    return fa[getf(rt[cur], x)] == fa[getf(rt[cur], y)];
+  }
+  // return the id of fa[], dep[]
+  int query(const int &cur, const int &x, const int &l, const int &r) {
+    if (l == r) return cur;
+    int mid = (l+r)>>1;
+    if (x <= mid) return query(ls[cur], x, l, mid);
+    else return query(rs[cur], x, mid+1, r);
+  }
+  // return the id of fa[], dep[]
+  int getf(const int &cur, int x) {
+    int fi;
+    while (fa[(fi = query(cur, x, 1, n))] != x) x = fa[fi];
+    return fi;
+  }
+  void merge(const int &cur, const int &pre, const int &x, const int &y) {
+    rt[cur] = rt[pre];
+    int fx = getf(rt[cur], x), fy = getf(rt[cur], y);
+    if (fa[fx] == fa[fy]) return;
+    if (dep[fx] > dep[fy]) swap(fx, fy);
+    rt[cur] = update(rt[pre], fa[fx], fa[fy], 1, n);
+    if (dep[fx] == dep[fy]) add(rt[cur], fa[fy], 1, n);
+  }
+  // update fa, merge x to y
+  int update(const int &pre, const int &x, const int &y, const int &l, const int &r) {
+    int cur = ++tot; assert(tot < NN);
+    if (l == r) return fa[cur] = y, dep[cur] = dep[pre], cur;
+    ls[cur] = ls[pre]; rs[cur] = rs[pre];
+    int mid = (l+r)>>1;
+    if (x <= mid) ls[cur] = update(ls[pre], x, y, l, mid);
+    else rs[cur] = update(rs[pre], x, y, mid+1, r);
+    return cur;
+  }
+  // add dep
+  void add(const int &cur, const int &x, const int &l, const int &r) {
+    if (l == r) return ++dep[cur], void();
+    int mid = (l+r)>>1;
+    if (x <= mid) add(ls[cur], x, l, mid);
+    else add(rs[cur], x, mid+1, r);
   }
 };
 ```
@@ -6081,19 +6257,19 @@ template <typename T> inline T miu(T x) {
 {% spoiler "代码" %}
 ```cpp
 struct Euler {
-  int tot = 0;
-  int prime[N];
-  bool check[N];
-  bool& operator [] (const int i) { return check[i]; }
-  void init(int sz) {
-    tot = 0;
-    for (int i = 1; i <= sz; ++i) check[i] = true;
+  vector<int> prime;
+  vector<bool> check;
+  bool operator [](const int &i) { return check[i]; }
+  void init(int n) {
+    prime.clear();
+    check = vector<bool>(n+1, true);
     check[1] = false;
-    for (register int i = 2, j; i <= sz; ++i) {
-      if (check[i]) prime[++tot] = i;
-      for (j = 1; j <= tot && i*prime[j] <= sz; ++j) {
-        check[i*prime[j]] = false;
-        if (i%prime[j] == 0) break;
+    for (int i = 2; i <= n; ++i) {
+      if (check[i]) prime.emplace_back(i);
+      for (const int &j : prime) {
+        if (i*j > n) break;
+        check[i*j] = false;
+        if (i%j == 0) break;
       }
     }
   }
