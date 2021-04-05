@@ -717,25 +717,25 @@ struct Splay {
   typedef int T;
   struct node {
     T v = 0;
-    int ch[2] = { 0, 0 };
+    int ch[2] = {0, 0};
     int fa = 0, sum = 0, cnt = 0;
   } e[N];
   int n;
   void update(int x) { e[x].sum = e[e[x].ch[0]].sum+e[e[x].ch[1]].sum+e[x].cnt; }
-  int identify(int x) { return x == e[e[x].fa].ch[1]; }
-  void connect(int x,int f,int son) { e[x].fa = f; e[f].ch[son] = x; }
+  int identify(int x) { return x == e[e[x].fa].ch[1]; } // check left or right child
+  void connect(int x, int f, int son) { e[x].fa = f; e[f].ch[son] = x; }
   void rotate(int x) {
     int y = e[x].fa,
-      r = e[y].fa,
-      rson = identify(y),
-      yson = identify(x),
-      b = e[x].ch[yson^1];
+        r = e[y].fa,
+        rson = identify(y),
+        yson = identify(x),
+        b = e[x].ch[yson^1];
     connect(b, y, yson);
     connect(y, x, yson^1);
     connect(x, r, rson);
     update(y); update(x);
   }
-  void splay(int at,int to) {
+  void splay(int at, int to) {
     to = e[to].fa;
     int up;
     while((up = e[at].fa) != to) {
@@ -6233,6 +6233,14 @@ struct Euler {
 ```
 
 {% endspoiler %}
+
+### 欧拉定理
+
+a 与 m 互质时，$a^{\phi(m)}  \equiv 1 \mod m$ 
+
+### 扩展欧拉定理
+
+无需 a,m 互质 $b > \phi(m),a^b \equiv a^{(b \mod \phi(m))+\phi(m)} \mod m$
 
 ## 莫比乌斯函数
 
