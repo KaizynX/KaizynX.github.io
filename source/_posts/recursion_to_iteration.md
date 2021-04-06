@@ -33,7 +33,75 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/recursion_to_iteration
 
 下面就以 SCC|Tarjan 算法为例(其实我只会了这个)
 
-## 例题
+## 例题汉诺塔
+
+*20210406 update*
+
+在做程序设计课程实践作业时有一题是用非递归实现汉诺塔
+
+我当时就震惊了,递归改迭代这么高级的技术都能写吗
+
+我并不知正解,也许是栈之类,反正我改迭代了,其实这个比下面的例子简单
+
+自行看代码,懒得写解析了,可以直接看下面的例子
+
+```cpp
+void hanio(int n, int t1 = 1, int t2 = 2, int t3 = 3) {
+  if (n < 1) return;
+  hanio(n-1, t1, t3, t2);
+  cout << "from " << t1 << " to " << t3 << '\n';
+  hanio(n-1, t2, t1, t3);
+}
+```
+
+```cpp
+void hanio(int sz) {
+  stack<int> sn, st1, st2, st3, ss;
+  int n, t1, t2, t3, state;
+  function<void()> push = [&]() {
+    sn.push(n);
+    st1.push(t1);
+    st2.push(t2);
+    st3.push(t3);
+    ss.push(state);
+  };
+  function<void()> top = [&]() {
+    n = sn.top();
+    t1 = st1.top();
+    t2 = st2.top();
+    t3 = st3.top();
+    state = ss.top();
+  };
+  function<void()> pop = [&]() {
+    sn.pop();
+    st1.pop();
+    st2.pop();
+    st3.pop();
+    ss.pop();
+  };
+  n = sz; t1 = 1; t2 = 2; t3 = 3; state = 0;
+  push();
+  while (sn.size()) {
+    top();
+    pop();
+    switch (state) {
+    case 0:
+      if (n < 1) continue;
+      state = 1;
+      push();
+      n -= 1; swap(t2, t3); state = 0;
+      push();
+    continue;
+    case 1:
+      cout << "from " << t1 << " to " << t3 << '\n';
+      n -= 1; swap(t1, t2); state = 0;
+      push();
+    }
+  }
+}
+```
+
+## 例题Tarjan
 
 [[USACO06JAN]The Cow Prom S](https://www.luogu.com.cn/problem/P2863)
 
