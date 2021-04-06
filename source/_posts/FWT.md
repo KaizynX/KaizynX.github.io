@@ -31,7 +31,7 @@ $FWT(A)[i]=\sum\limits_{j=0}^{n-1}c(i,j)A_j$
 
 利用分治求解
 
-设位矩阵为 $c=\begin{bmatrix}c(0,0)&c(0,1)\\c(1,0)&c(1,1)\end{bmatrix}$ 
+设位矩阵为 $c=\begin{bmatrix}c(0,0)&c(0,1)\\\\c(1,0)&c(1,1)\end{bmatrix}$ 
 
 对于某位运算构造出满足条件的可逆矩阵即可(理论上如此233)
 
