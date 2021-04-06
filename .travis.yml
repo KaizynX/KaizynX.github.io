@@ -2,7 +2,8 @@ language: node_js
 sudo: required
 node_js: 
 #  - stable
-  - 14.16.0
+  - 12.16.1
+# - 14.16.0
 
 #cache:
 #  directories:
@@ -27,7 +28,7 @@ install:
   - npm install hexo-generator-index-pin-top --save
   # 内容折叠
   - npm install hexo-sliding-spoiler --save
-  # 隐藏文章
+  # 隐藏文章 https://github.com/printempw/hexo-hide-posts
   - npm install hexo-hide-posts --save
   # 上传图片到网页
   # - npm install hexo-asset-image --save
