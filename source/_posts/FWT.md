@@ -10,6 +10,7 @@ tags:
   - 位运算
   - 卷积
   - FWT
+mathjax: true
 description: 俗称FWT
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/FWT/cover.jpg
 ---

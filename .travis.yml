@@ -2,8 +2,8 @@ language: node_js
 sudo: required
 node_js: 
 #  - stable
-  - 12.16.1
-# - 14.16.0
+# - 12.16.1
+  - 12.22.0
 
 #cache:
 #  directories:

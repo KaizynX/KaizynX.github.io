@@ -68,4 +68,6 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/NonePage/cover.jpg
 
 懒得折腾,改回 *12.16.1* 版本
 
-这次崩溃验证了一个编程真理, 代码能运行就不要改了
+这次崩溃验证了一个编程真理, 代码能运行就不要动它了
+
+**补** 最终做了个小小更新到 *12.22.0 LTS*
