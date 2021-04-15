@@ -6983,8 +6983,9 @@ struct Fraction {
     if (a == 0) return (void)(b = 1);
     T g = __gcd(a, b);
     a /= g; b /= g;
+    if (b < 0) a = -a, b = -b;
   }
-  Fraction(const T &_a = 0, const T &_b = 1) : a(_a), b(_b) { this->normalize(); }
+  Fraction(const T &_a = 0, const T &_b = 1) : a(_a), b(_b) { normalize(); }
   friend bool operator < (const Fraction &f1, const Fraction &f2) { return f1.a*f2.b < f2.a*f1.b; }
   friend bool operator > (const Fraction &f1, const Fraction &f2) { return f1.a*f2.b > f2.a*f1.b; }
   friend bool operator == (const Fraction &f1, const Fraction &f2) { return f1.a*f2.b == f2.a*f1.b; }
@@ -7004,8 +7005,7 @@ struct Fraction {
     f.normalize();
     return is;
   }
-  friend ostream& operator << (ostream &os, Fraction &f) {
-    if (f.a == 0) return os << 0;
+  friend ostream& operator << (ostream &os, const Fraction &f) {
     if (f.b == 1) return os << f.a;
     return os << f.a << "/" << f.b;
   }

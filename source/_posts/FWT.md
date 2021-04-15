@@ -89,7 +89,7 @@ v_{old}[i+2^k]
 
 总的时间复杂度是 $O(2^n \cdot n)$
 
-另一种解题方法是只使用 $XOR$ and $AND/OR$ 的卷积,因为其他二进制函数既可以单独处理，也可以取反简化为这三个函数,也存在 $O(3^n)的解法但是不允许其通过此题$
+另一种解题方法是只使用 $XOR$ and $AND/OR$ 的卷积,因为其他二进制函数既可以单独处理，也可以取反简化为这三个函数,也存在 $O(3^n)$的解法但是不允许其通过此题
 
 # 参考资料
 [2020-2021 Winter Petrozavodsk Camp, Belarusian SU Contest (XXI Open Cup, Grand Prix of Belarus)](https://codeforces.com/gym/102956)
