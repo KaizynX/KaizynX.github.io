@@ -707,6 +707,36 @@ struct Heap {
 
 {% endspoiler %}
 
+### 可删堆
+copyright by axiomofchoice
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct Heap{
+  priority_queue<T> a,b;  // heap=a-b
+  void push(T x){a.push(x);}
+  void erase(T x){b.push(x);}
+  T top(){
+    while(!b.empty() && a.top()==b.top())
+      a.pop(),b.pop();
+    return a.size() ? a.top() : 0; // ???
+  }
+  void pop(){
+    while(!b.empty() && a.top()==b.top())
+      a.pop(),b.pop();
+    a.pop();
+  }
+  T top2(){ // 次大值
+    T t=top(); pop();
+    T ans=top(); push(t);
+    return ans;
+  }
+  size_t size(){return a.size()-b.size();}
+};
+```
+
+{% endspoiler %}
+
 ## 二叉查找树
 ## [平衡树](https://www.luogu.org/problemnew/show/P3369)
 ### [Splay](https://www.luogu.org/blog/user19027/solution-p3369)
@@ -1350,6 +1380,55 @@ private:
     if (l <= mid) res = mv(res, _query(l, r, i<<1));
     if (r >  mid) res = mv(res, _query(l, r, i<<1|1));
     return res;
+  }
+};
+```
+
+{% endspoiler %}
+### 区间最大连续子段和
+{% spoiler "代码" %}
+```cpp
+struct SegmentTree {
+  struct TreeNode {
+    long long s, ls, rs, ms;
+    void set(long long x) { s = ls = rs = ms = x; }
+    friend TreeNode operator +(const TreeNode &lc, const TreeNode &rc) {
+      return TreeNode {
+          lc.s+rc.s,
+          max(lc.ls, lc.s+rc.ls),
+          max(rc.rs, lc.rs+rc.s),
+          max({lc.ms, rc.ms, lc.rs+rc.ls})
+      };
+    }
+  } tr[N<<2];
+  int *a, n;
+  void build(int a[], int n) {
+    this->a = a;
+    this->n = n;
+    build(1, n, 1);
+  }
+  void build(int l, int r, int i) {
+    if (l == r) return tr[i].set(a[l]);
+    int mid = (l+r)>>1;
+    build(l, mid, i<<1);
+    build(mid+1, r, i<<1|1);
+    tr[i] = tr[i<<1]+tr[i<<1|1];
+  }
+  void update(int x, long long v) { update(x, v, 1, n, 1); }
+  void update(int x, long long v, int l, int r, int i) {
+    if (l == r) return tr[i].set(v);
+    int mid = (l+r)>>1;
+    if (x <= mid) update(x, v, l, mid, i<<1);
+    else update(x, v, mid+1, r, i<<1|1);
+    tr[i] = tr[i<<1]+tr[i<<1|1];
+  }
+  long long query(int L, int R) { return query(L, R, 1, n, 1).ms; }
+  TreeNode query(int L, int R, int l, int r, int i) {
+    if (l >= L && r <= R) return tr[i];
+    int mid = (l+r)>>1;
+    if (R <= mid) return query(L, R, l, mid, i<<1);
+    if (L >  mid) return query(L, R, mid+1, r, i<<1|1);
+    return query(L, R, l, mid, i<<1)+query(L, R, mid+1, r, i<<1|1);
   }
 };
 ```
@@ -2291,6 +2370,57 @@ private:
 
 {% endspoiler %}
 
+动态开点?oj可以跑本地莫名re
+{% spoiler "代码" %}
+```cpp
+template <class T>
+class PersistantSegmentTree {
+ public:
+  void init(int n) {
+    tot = 0;
+    this->n = n;
+    rt = vector<int>(1, 0);
+    tr = vector<TreeNode>(1, TreeNode{0, 0, 0});
+  }
+  void update(int cur, int pre, int k, T v = 1) {
+    rt.resize(cur+1); // assert rt.size()+1 <= cur
+    rt[cur] = update(rt[pre], 1, n, k, v);
+  }
+  int update(int pre, int l, int r, int k, T v) {
+    int cur = ++tot; // assert tot == tr.size()
+    tr.emplace_back(tr[pre]);
+    tr[cur].sum += v;
+    if (l == r) return cur;
+    int mid = (l+r)>>1;
+    if (k <= mid) tr[cur].lc = update(tr[pre].lc, l, mid, k, v);
+    else tr[cur].rc = update(tr[pre].rc, mid+1, r, k, v);
+    return cur;
+  }
+  T query(int l, int r, int ql, int qr) {
+    return query(rt[l-1], rt[r], 1, n, ql, qr);
+  }
+  // [u, v] 段 [ql, qr] 区间和
+  T query(int u, int v, int l, int r, int ql, int qr) {
+    if (!u && !v) return 0;
+    if (l >= ql && r <= qr) return tr[v].sum-tr[u].sum;
+    int mid = (l+r)>>1;
+    if (qr <= mid) return query(tr[u].lc, tr[v].lc, l, mid, ql, qr);
+    if (ql >  mid) return query(tr[u].rc, tr[v].rc, mid+1, r, ql, qr);
+    return query(tr[u].lc, tr[v].lc, l, mid, ql, qr)+query(tr[u].rc, tr[v].rc, mid+1, r, ql, qr);
+  }
+ private:
+  struct TreeNode {
+    int lc, rc;
+    T sum;
+  };
+  int tot, n;
+  vector<int> rt;
+  vector<TreeNode> tr;
+};
+```
+
+{% endspoiler %}
+
 [dingbacode 高地](https://www.dingbacode.com/contest/242/problem/1003)
 
 {% spoiler "代码" %}
@@ -2787,7 +2917,7 @@ struct DSU {
   int& operator [] (int i) { return fa[get(i)]; }
   bool merge(int x, int y) { // merge x to y
     x = get(x); y = get(y);
-    return x == y ? false : fa[x] = y, true;
+    return x == y ? false : (fa[x] = y, true);
   }
 };
 ```
@@ -2840,7 +2970,7 @@ template <typename T = int> struct DSU {
   int& operator [] (int i) { return fa[get(i)]; }
   bool merge(int x, int y) { // merge x to y
     x = get(x); y = get(y);
-    return x == y ? false : w[y] += w[x], fa[x] = y, true;
+    return x == y ? false : (w[y] += w[x], fa[x] = y, true);
   }
 };
 ```
@@ -3216,38 +3346,22 @@ inline void kmp(const string &s1, const string &s2, int nex[]) {
 ```
 
 {% endspoiler %}
-## [扩展KMP|Z函数](https://subetter.com/algorithm/extended-kmp-algorithm.html)
+## 扩展KMP|Z函数
 {% spoiler "代码" %}
 ```cpp
-inline void GetNext(char *s, int *_nex) {
-  int len = strlen(s);
-  int a = 0, p = 0;
-  _nex[0] = len;
-  for (int i = 1; i < len; ++i) {
-    if (i >= p || i+_nex[i-a] >= p) {
-      if (i > p) p = i;
-      while (p < len && s[p] == s[p-i]) ++p;
-      a = i;
-      _nex[i] = p-i;
+vector<int> z_function(string s) {
+  int n = (int)s.length();
+  vector<int> z(n);
+  for (int i = 1, l = 0, r = 0; i < n; ++i) {
+    if (i <= r && z[i - l] < r - i + 1) {
+      z[i] = z[i - l];
     } else {
-      _nex[i] = _nex[i-a];
+      z[i] = max(0, r - i + 1);
+      while (i + z[i] < n && s[z[i]] == s[i + z[i]]) ++z[i];
     }
+    if (i + z[i] - 1 > r) l = i, r = i + z[i] - 1;
   }
-}
-
-inline void GetExtend(char *s, char *ss, int *_ext, int *_nex) {
-  int lens = strlen(s), lenss = strlen(ss);
-  int a = 0, p = 0;
-  for (int i = 0; i < lens; ++i) {
-    if (i >= p || i+_nex[i-a] >= p) {
-      if (i > p) p = i;
-      while (p < lens && p-i < lenss && s[p] == ss[p-i]) ++p;
-      a = i;
-      _ext[i] = p-i;
-    } else {
-      _ext[i] = _nex[i-a];
-    }
-  }
+  return z;
 }
 ```
 
@@ -3320,6 +3434,23 @@ struct StringHash {
 
 ---
 ## [后缀数组|SA](https://loj.ac/problem/111)
+
+$sa[i]$ 表示将所有后缀排序后第 $i$ 小的后缀的编号
+
+$rk[i]$ 表示后缀 $i$ 的排名
+
+性质:$sa[rk[i]]=rk[sa[i]]=i$
+
+$lcp(i, j)$ 表示后缀 $i$ 和后缀 $j$ 的最长公共前缀(的长度)
+
+$height[i]=lcp(sa[i], sa[i-1])$
+
+引理 $height[rk[i]] \geq height[rk[i-1]]-1$
+
+$lcp(sa[i],sa[j])=\min\{height[i+1\cdots j]\}$
+
+不同子串数目:$\frac{n(n+1)}{2}-\sum\limits_{i=2}^{n}{height[i]}$
+
 ### $O(nlog^2n)$
 {% spoiler "代码" %}
 ```cpp
@@ -3369,8 +3500,7 @@ inline void SA(const T *s, const int &n) {
   for (int w = 1, p, i; w <= n; w <<= 1, m = p) {
     for (p = 0, i = n; i > n - w; --i) id[++p] = i;
     for (int i = 1; i <= n; ++i)
-      if (sa[i] > w)
-        id[++p] = sa[i] - w;
+      if (sa[i] > w) id[++p] = sa[i] - w;
     memset(cnt + 1, 0, sizeof(int) * m);
     for (int i = 1; i <= n; ++i) ++cnt[px[i] = rk[id[i]]];
     for (int i = 1; i <= m; ++i) cnt[i] += cnt[i - 1];
@@ -3475,6 +3605,135 @@ inline void init(T s, const int len, const int sigma = 128) {
 
 {% endspoiler %}
 
+## 后缀自动机|SAM
+
+### 检查字符串是否出现
+
+丢进去转移。这个算法还找到了模式串在文本串中出现的最大前缀长度。
+
+### 不同字串个数
+不同子串的个数等于自动机中以 $t_0$ 为起点的不同路径的条数-1(空串)。令 $d_{v}$ 为从状态 $v$ 开始的路径数量（包括长度为零的路径）
+
+$d_{v}=1+\sum\limits_{w:(v,w,c)\in DAWG}d_{w}$
+
+另一种方法是利用上述后缀自动机的树形结构。统计节点对应的子串数量
+
+$\sum\limits_{i \neq clone}{len(i)-len(link(i))}$
+
+### 所有不同子串的总长度
+
+$ans_{v}=\sum\limits_{w:(v,w,c)\in DAWG}d_{w}+ans_{w}$
+
+法二:每个节点对应的所有后缀长度是 $\frac{\operatorname{len}(i)\times (\operatorname{len}(i)+1)}{2}$，减去其 $\operatorname{link}$ 节点的对应值就是该节点的净贡献
+
+### 字典序第 k 大子串
+
+### 代码
+空间换时间
+{% spoiler "代码" %}
+```cpp
+struct SAM {
+  static const int A = 26;
+  static const char C = 'a';
+  struct State {
+    int len, link, nex[A];
+    State& operator =(const State &st) {
+      len = st.len;
+      link = st.link;
+      memcpy(nex, st.nex, sizeof(nex));
+      return *this;
+    }
+  } st[N<<1];
+  int sz, last;
+  void init() {
+    memset(st, 0, sizeof(State)*sz);
+    st[0].len = 0;
+    st[0].link = -1;
+    sz = 1;
+    last = 0;
+  }
+  void extend(char ch) {
+    int c = ch-C, cur = sz++;
+    st[cur].len = st[last].len+1;
+    int p = last;
+    while (~p && !st[p].nex[c]) {
+      st[p].nex[c] = cur;
+      p = st[p].link;
+    }
+    if (p == -1) {
+      st[cur].link = 0;
+    } else {
+      int q = st[p].nex[c];
+      if (st[p].len+1 == st[q].len) {
+        st[cur].link = q;
+      } else {
+        int clone = sz++;
+        st[clone] = st[q];
+        st[clone].len = st[p].len+1;
+        while (~p && st[p].nex[c] == q) {
+          st[p].nex[c] = clone;
+          p = st[p].link;
+        }
+        st[q].link = st[cur].link = clone;
+      }
+    }
+    last = cur;
+  }
+};
+```
+
+{% endspoiler %}
+时间换空间
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct SAM {
+  struct State {
+    int len, link;
+    map<T, int> nex;
+  } st[N<<1];
+  int sz, last;
+  void init() {
+    st[0].len = 0;
+    st[0].link = -1;
+    sz = 1;
+    last = 0;
+  }
+  void extend(T c) {
+    int cur = sz++;
+    st[cur].len = st[last].len+1;
+    int p = last;
+    while (~p && !st[p].nex.count(c)) {
+      st[p].nex[c] = cur;
+      p = st[p].link;
+    }
+    if (p == -1) {
+      st[cur].link = 0;
+    } else {
+      int q = st[p].nex[c];
+      if (st[p].len+1 == st[q].len) {
+        st[cur].link = q;
+      } else {
+        int clone = sz++;
+        st[clone].len = st[p].len+1;
+        st[clone].nex = st[q].nex;
+        st[clone].link = st[q].link;
+        while (~p && st[p].nex[c] == q) {
+          st[p].nex[c] = clone;
+          p = st[p].link;
+        }
+        st[q].link = st[cur].link = clone;
+      }
+    }
+    last = cur;
+  }
+};
+```
+
+{% endspoiler %}
+
+## 广义后缀自动机
+
 ## 字典树
 {% spoiler "代码" %}
 ```cpp
@@ -3528,6 +3787,10 @@ struct TireTree {
 {% endspoiler %}
 
 ## AC自动机
+AC 自动机是 以 Trie 的结构为基础，结合 KMP 的思想 建立的。
+
+将所有模式串构成一棵 Trie, 再对所有结点构造失配指针
+
 [Luogu P3808](https://www.luogu.com.cn/problem/P3808)
 如需构造可重建AC自动机,每次构造建一个nex数组的拷贝
 {% spoiler "代码" %}
@@ -3629,7 +3892,6 @@ struct Aho_Corasick_Automaton {
   void query(char *s) {
     static int deg[NN];
     static queue<int> q;
-
     int len = strlen(s);
     for (int i = 0, p = 0; i < len; ++i) {
       p = nex[p][s[i]-beg];
@@ -3646,6 +3908,67 @@ struct Aho_Corasick_Automaton {
     }
   }
 } ac;
+```
+
+{% endspoiler %}
+
+## 最小表示法
+
+$S[i\cdots n]+S[1\cdots i-1] = T$ 则称 $S$ 与 $T$ **循环同构**
+
+字符串 $S$ 的**最小表示**为与 $S$ 循环同构的所有字符串中字典序最小的字符串
+
+$O(n)$
+
+{% spoiler "代码" %}
+```cpp
+int min_cyclic_string(const string &s) {
+  int k = 0, i = 0, j = 1, n = s.size();
+  while (k < n && i < n && j < n) {
+    if (s[(i + k) % n] == s[(j + k) % n]) {
+      k++;
+    } else {
+      s[(i + k) % n] > s[(j + k) % n] ? i = i + k + 1 : j = j + k + 1;
+      if (i == j) i++;
+      k = 0;
+    }
+  }
+  return min(i, j);
+}
+```
+
+{% endspoiler %}
+
+## Lyndon分解
+
+Lyndon 串：对于字符串 $s$，如果 $s$ 的字典序严格小于 $s$ 的所有后缀的字典序，我们称 $s$ 是简单串，或者 Lyndon 串。
+
+Lyndon 分解：串 $s$ 的 Lyndon 分解记为 $s=w_1w_2\cdots w_k$，其中所有 $w_i$ 为简单串，并且他们的字典序按照非严格单减排序，即 $w_1\ge w_2\ge\cdots\ge w_k$。可以发现，这样的分解存在且唯一。
+
+Duval 可以在 $O(n)$ 的时间内求出一个串的 Lyndon 分解。
+
+{% spoiler "代码" %}
+```cpp
+// duval_algorithm
+vector<string> duval(string const& s) {
+  int n = s.size(), i = 0;
+  vector<string> factorization;
+  while (i < n) {
+    int j = i + 1, k = i;
+    while (j < n && s[k] <= s[j]) {
+      if (s[k] < s[j])
+        k = i;
+      else
+        k++;
+      j++;
+    }
+    while (i <= k) {
+      factorization.push_back(s.substr(i, j - k));
+      i += j - k;
+    }
+  }
+  return factorization;
+}
 ```
 
 {% endspoiler %}
@@ -3896,6 +4219,12 @@ struct HLD {
 
 {% endspoiler %}
 
+### 欧拉序
+
+dfs 时进入一个节点加入序列,回溯回来也加一次
+
+lca 转变为区间深度最小的点
+
 ### [带权LCA](https://www.luogu.com.cn/problem/P1967)
 {% spoiler "代码" %}
 ```cpp
@@ -3982,35 +4311,34 @@ struct HLD {
   int dfn;
   int fa[N], d[N], num[N], son[N], id[N], tp[N];
   T init_val[N];
-  SegmentTree<T> ST;
-  template <typename Edge, typename TT>
-  void build(const Edge e[], const TT a[], const int &n, const int &rt = 1) {
+  vector<int> *e;
+  SegmentTree ST;
+  void build(vector<int> *e, T *a, int n, int rt = 1) {
+    this->e = e;
     fa[rt] = dfn = 0;
-    dfs1(e, rt);
-    dfs2(e, rt);
+    dfs1(rt);
+    dfs2(rt);
     for (int i = 1; i <= n; ++i)
       init_val[id[i]] = a[i];
     ST.build(init_val, n);
   }
-  template <typename Edge>
-  void dfs1(const Edge e[], const int &u = 1) {
+  void dfs1(const int &u = 1) {
     d[u] = d[fa[u]]+1;
     num[u] = 1;
     son[u] = 0;
     for (const int &v : e[u]) if (v != fa[u]) {
       fa[v] = u;
-      dfs1(e, v);
+      dfs1(v);
       num[u] += num[v];
       if (num[v] > num[son[u]]) son[u] = v;
     }
   }
-  template <typename Edge>
-  void dfs2(const Edge e[], const int &u = 1) {
+  void dfs2(const int &u = 1) {
     tp[u] = son[fa[u]] == u ? tp[fa[u]] : u;
     id[u] = ++dfn;
-    if (son[u]) dfs2(e, son[u]);
+    if (son[u]) dfs2(son[u]);
     for (const int &v : e[u]) if (v != son[u] && v != fa[u])
-      dfs2(e, v);
+      dfs2(v);
   }
   void add_sons(const int &x, const T &k) { ST.add(id[x], id[x]+num[x]-1, k); }
   void add(int x, int y, const T &k, const int &is_edge = 0) {
@@ -4622,6 +4950,49 @@ struct ZKW_SPFA {
 {% endspoiler %}
 ### 上下界网络流
 
+### 全局最小割StoerWagner
+
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+T sw(int n, T dis[N][N]) {
+  int s, t;
+  T res = INF;
+  vector<int> dap(n+1, 0), ord(n+1, 0), vis;
+  vector<T> w;
+  function<T(int)> proc = [&](int x) {
+    vis = vector<int>(n+1, 0);
+    w = vector<T>(n+1, 0);
+    w[0] = -1;
+    for (int i = 1; i <= n-x+1; ++i) {
+      int mx = 0;
+      for (int j = 1; j <= n; ++j) {
+        if (!dap[j] && !vis[j] && w[j] > w[mx]) mx = j;
+      }
+      vis[mx] = 1;
+      ord[i] = mx;
+      for (int j = 1; j <= n; ++j) {
+        if (!dap[j] && ! vis[j]) w[j] += dis[mx][j];
+      }
+    }
+    s = ord[n-x];
+    t = ord[n-x+1];
+    return w[t];
+  };
+  for (int i = 1; i < n; ++i) {
+    res = min(res, proc(i));
+    dap[t] = 1;
+    for (int j = 1; j <= n; ++j) {
+      dis[s][j] += dis[t][j];
+      dis[j][s] += dis[j][t];
+    }
+  }
+  return res;
+}
+```
+
+{% endspoiler %}
+
 ---
 ## 最短路
 [弱化](https://www.luogu.org/problemnew/show/P3371)
@@ -5151,6 +5522,146 @@ void dfs(int u) {
       }
     }
     num[u] += num[v];
+  }
+}
+```
+
+{% endspoiler %}
+
+## 仙人掌
+
+两点之间最短路
+{% spoiler "代码" %}
+```cpp
+namespace Cactus {
+
+#define log(x) (31-__builtin_clz(x))
+typedef long long ll;
+typedef pair<int, ll> pil;
+const int NN = (int)log2(N)+3;
+int n, _dfn, cnt;
+int f[N<<1][NN], dep[N<<1], dfn[N], from[N];
+// od 为仙人掌上距离, dis 为圆方树上距离, cir 为环上边权和
+ll od[N], dis[N<<1], cir[N];
+vector<pil> *e, ce[N<<1];
+
+bool dfs(int u) {
+  dfn[u] = ++_dfn;
+  for (const pil &edge : e[u]) {
+    int v = edge.first;
+    if (v == f[u][0]) continue;
+    ll w = edge.second;
+    if (!dfn[v]) {
+      f[v][0] = u;
+      dep[v] = dep[u]+1;
+      od[v] = od[u]+w;
+      if (!dfs(v)) return false;
+      if (!from[v]) ce[u].emplace_back(v, w);
+    } else if (dfn[v] < dfn[u]) {
+      cir[++cnt] = od[u]-od[v]+w;
+      ce[v].emplace_back(n+cnt, 0);
+      for (int x = u; x != v; x = f[x][0]) {
+        if (from[x]) return false;
+        from[x] = cnt;
+        ll ww = od[x]-od[v];
+        ce[n+cnt].emplace_back(x, min(ww, cir[cnt]-ww));
+      }
+    }
+  }
+  return true;
+}
+// 带权倍增LCA
+void build_lca(int u) {
+  for (int i = 1; (1<<i) <= dep[u]; ++i)
+    f[u][i] = f[f[u][i-1]][i-1];
+  for (const pil &edge : ce[u]) {
+    int v = edge.first;
+    dep[v] = dep[u]+1;
+    dis[v] = dis[u]+edge.second;
+    f[v][0] = u;
+    build_lca(v);
+  }
+}
+
+bool build(int _n, vector<pil> *_e) {
+  n = _n; e = _e;
+  _dfn = cnt = 0;
+  if (!dfs(1)) return false;
+  dep[1] = 1;
+  build_lca(1);
+  return true;
+}
+
+ll query(int u, int v) {
+  if (dep[u] < dep[v]) swap(u, v);
+  int x = u, y = v;
+  while (dep[x] > dep[y]) x = f[x][log(dep[x]-dep[y])];
+  if (x == y) return dis[u]-dis[v];
+  for (int i = log(dep[x]); i >= 0; --i)
+    if(f[x][i] != f[y][i]) x = f[x][i], y = f[y][i];
+  if (f[x][0] <= n) return dis[u]+dis[v]-2*dis[f[x][0]];
+  ll d = abs(od[x]-od[y]);
+  return dis[u]-dis[x]+dis[v]-dis[y]+min(d, cir[f[x][0]-n]-d);
+}
+
+} /* namespace Cactus */
+```
+
+{% endspoiler %}
+
+### 仙人掌DP
+
+{% spoiler "代码" %}
+```cpp
+// from[i] 节点i与父亲的边所在环的编号
+// tp[i]环i深度最小的节点编号, bm[i]环i深度最大的节点编号
+int _dfn, cnt, fa[N], dfn[N], from[N], tp[N], bm[N];
+
+bool dfs(int u) {
+  dfn[u] = ++_dfn;
+  for (const int &v : e[u]) {
+    if (v == fa[u]) continue;
+    if (!dfn[v]) {
+      fa[v] = u;
+      dfs(v);
+      // dp
+    } else if (dfn[v] < dfn[u]) {
+      ++cnt;
+      tp[cnt] = v; bm[cnt] = u;
+      for (int x = u; x != v; x = fa[x]) {
+        if (from[x]) return false;
+        from[x] = cnt;
+      }
+    }
+  }
+}
+```
+
+{% endspoiler %}
+## 补图DFS
+{% spoiler "代码" %}
+```cpp
+void bfs(int S = 1) {
+  static set<int> st[2]; // 存储未访问的点
+  static queue<int> q;
+  memset(dis+1, -1, sizeof(int)*n);
+  dis[S] = 0;
+  q.push(S);
+  st[0].clear(); st[1].clear();
+  for (int i = 1; i <= n; ++i) if (i != S) st[0].insert(i);
+  while (q.size()) {
+    int u = q.front();
+    q.pop();
+    for (int v : e[u]) if (st[0].count(v)) {
+      st[0].erase(v);
+      st[1].insert(v);
+    }
+    for (auto v : st[0]) if (dis[v] == -1) {
+      dis[v] = dis[u]+1;
+      q.push(v);
+    }
+    swap(st[0], st[1]);
+    st[1].clear();
   }
 }
 ```
@@ -5853,7 +6364,7 @@ $IFWT(A) = [IFWT(A_0),IFWT(A_1)-IFWT(A_0)]$
 
 
 ### 与运算
-$FWT(A)[i] = \sum\limits_{i\&j=j}{A[i]}$
+$FWT(A)[i] = \sum\limits_{i\&j=j}{A[j]}$
 
 $FWT(A) = [FWT(A_0+A_1),FWT(A_1)]$
 
@@ -6730,7 +7241,7 @@ void DP(int l, int r, int k_l, int k_r) {
   int mid = (l + r) / 2, k = k_l;
   // 求状态f[mid]的最优决策点
   for (int i = k_l; i <= min(k_r, mid - 1); ++i)
-    if (w(i, mid) < w(k, mid)) i = k;
+    if (w(i, mid) < w(k, mid)) k = i;
   f[mid] = w(k, mid);
   // 根据决策单调性得出左右两部分的决策区间，递归处理
   if (l < mid) DP(l, mid - 1, k_l, k);
@@ -6926,6 +7437,22 @@ L 型地板：拐弯且仅拐弯一次。
 发现没有，一个存在的插头只有两种状态：拐弯过和没拐弯过，因此我们这样定义插头：
 
 0表没有插头，1表没拐过的插头，2表已经拐过的插头。b1代表当前点的右插头,b2代表当前点的下插头
+
+## DP套DP
+
+有 $dp_1, f[i]$ 为 $dp_1[n] = i$ 的方案数,求 $f$
+
+设 $dp_2[dp_1]$ 为 $dp_1$ 状态下的方案数
+
+## 动态DP
+
+将 dp 转换为线段树可以求解的区间问题,动态维护
+
+### 动态线性DP
+
+### 动态树形DP
+
+树链剖分,轻链暴力
 
 ---
 # STL
