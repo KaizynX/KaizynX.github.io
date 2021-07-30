@@ -2172,6 +2172,40 @@ void init(const int &_n, const TT a[]) {
 ```
 
 {% endspoiler %}
+区间修改区间查询
+{% spoiler "代码" %}
+```cpp
+struct BIT{
+	static const int SIZE=1e6+5;
+	ll bit1[SIZE],bit2[SIZE];
+	int limit;
+	void init(int n=SIZE-1){
+		limit=n;
+		for(int i=1;i<=n;i++)bit1[i]=bit2[i]=0;
+	}
+	BIT(){init();}
+	void add(ll *bit,int x,ll v){
+		while(x<=limit)bit[x]+=v,x+=x&-x;
+	}
+	ll query(ll *bit,int x){
+		ll res=0;
+		while(x)res+=bit[x],x-=x&-x;
+		return res;
+	}
+	void add(int l,int r,ll v){
+		add(bit1,l,v);
+		add(bit2,l,v*l);
+		add(bit1,r+1,-v);
+		add(bit2,r+1,-v*(r+1));
+	}
+	ll query(int l,int r){
+		return (r+1)*query(bit1,r)-query(bit2,r)-l*query(bit1,l-1)+query(bit2,l-1);
+	}
+}bit;
+```
+
+{% endspoiler %}
+
 ### 二维
 #### 单点修改区间查询
 {% spoiler "代码" %}
@@ -3607,26 +3641,11 @@ inline void init(T s, const int len, const int sigma = 128) {
 
 ## 后缀自动机|SAM
 
-### 检查字符串是否出现
+一个状态表示一个 $endpos$ 的等价类
 
-丢进去转移。这个算法还找到了模式串在文本串中出现的最大前缀长度。
+$len(v)$ 为该状态最长的字符串长度
 
-### 不同字串个数
-不同子串的个数等于自动机中以 $t_0$ 为起点的不同路径的条数-1(空串)。令 $d_{v}$ 为从状态 $v$ 开始的路径数量（包括长度为零的路径）
-
-$d_{v}=1+\sum\limits_{w:(v,w,c)\in DAWG}d_{w}$
-
-另一种方法是利用上述后缀自动机的树形结构。统计节点对应的子串数量
-
-$\sum\limits_{i \neq clone}{len(i)-len(link(i))}$
-
-### 所有不同子串的总长度
-
-$ans_{v}=\sum\limits_{w:(v,w,c)\in DAWG}d_{w}+ans_{w}$
-
-法二:每个节点对应的所有后缀长度是 $\frac{\operatorname{len}(i)\times (\operatorname{len}(i)+1)}{2}$，减去其 $\operatorname{link}$ 节点的对应值就是该节点的净贡献
-
-### 字典序第 k 大子串
+后缀链接 $link(v)$ 连接到对应于该状态最长字符串的最长后缀的另一个 $endpos$ 等价类的状态。
 
 ### 代码
 空间换时间
@@ -3732,7 +3751,152 @@ struct SAM {
 
 {% endspoiler %}
 
+### 检查字符串是否出现
+
+丢进去转移。这个算法还找到了模式串在文本串中出现的最大前缀长度。
+
+### 不同字串个数
+不同子串的个数等于自动机中以 $t_0$ 为起点的不同路径的条数-1(空串)。令 $d_{v}$ 为从状态 $v$ 开始的路径数量（包括长度为零的路径）
+
+$d_{v}=1+\sum\limits_{w:(v,w,c)\in DAWG}d_{w}$
+
+另一种方法是利用上述后缀自动机的树形结构。统计节点对应的子串数量 $\operatorname{len}(i)-\operatorname{len}(\operatorname{link}(i))$
+
+ps:若新增一个字符,其增量为$len(cur)-len(link(cur))$ 不包括 $clone$ 结点
+
+### 所有不同子串的总长度
+
+$ans_{v}=\sum\limits_{w:(v,w,c)\in DAWG}d_{w}+ans_{w}$
+
+法二:每个节点对应的所有后缀长度是 $\frac{\operatorname{len}(i)\times (\operatorname{len}(i)+1)}{2}$，减去其 $\operatorname{link}$ 节点的对应值就是该节点的净贡献
+
+### 字典序第 k 大子串
+
+不同位置的相同子串算作一个,每个非 clone 状态的数量记为1
+
+不同位置的相同子串算作多个,每个状态的数量为 parent 树上求子树和
+
+在 SAM 的 DAG 求和然后字典序搞搞
+
+### 两个字符串的最长公共子串
+
+{% spoiler "代码" %}
+```cpp
+  int lcs(const string &t) {
+    int v = 0, l = 0, mx = 0;
+    for (char c : t) {
+      while (v && !st[v].nex[c-C]) {
+        v = st[v].link;
+        l = st[v].len;
+      }
+      if (st[v].nex[c-C]) {
+        v = st[v].nex[c-C];
+        ++l;
+      }
+      mx = max(mx, l);
+    }
+    return mx;
+  }
+```
+
+{% endspoiler %}
+
+### 多个字符串间的最长公共子串
+
+记录 $f[i][j]$ 为第 $i$ 个字符串在 sam 上状态 $j$ 的匹配长度
+
+$ans = \max\limits_{j}{(\min\limits_{i}{f[i][j]})}$
+
+
 ## 广义后缀自动机
+
+广义后缀自动机 (General Suffix Automaton) 是将后缀自动机整合到字典树中来解决对于多个字符串的子串问题
+
+### 离线构造
+{% spoiler "代码" %}
+```cpp
+struct generalSAM {
+  static const int A = 26;
+  static const int M = N<<1;
+  static const char C = 'a';
+  int sz, len[M], link[M], nex[M][A];
+  void init() {
+    // memset(nex, 0, sizeof(int)*A*sz);
+    link[0] = -1; sz = 1;
+  }
+  int insertSAM(int last, int c) {
+    int cur = nex[last][c];
+    if (len[cur]) return cur;
+    len[cur] = len[last]+1;
+    int p = link[last];
+    for (; ~p && !nex[p][c]; p = link[p]) nex[p][c] = cur;
+    if (p == -1) return link[cur] = 0, cur;
+    int q = nex[p][c];
+    if (len[p]+1 == len[q]) return link[cur] = q, cur;
+    int clone = sz++;
+    for (int i = 0; i < A; ++i)
+      nex[clone][i] = len[nex[q][i]] ? nex[q][i] : 0;
+    len[clone] = len[p]+1;
+    for (; ~p && nex[p][c] == q; p = link[p]) nex[p][c] = clone;
+    link[clone] = link[q];
+    link[q] = link[cur] = clone;
+    return cur;
+  }
+  int insertTrie(int cur, int c) {
+    return nex[cur][c] ? nex[cur][c] : nex[cur][c] = sz++;
+  }
+  void insert(const string &s) {
+    int last = 0; for (char ch : s) last = insertTrie(last, ch-C);
+  }
+  void insert(const char *s, int n) {
+    for (int i = 0, last = 0; i < n; ++i) last = insertTrie(last, s[i]-C);
+  }
+  void build() {
+    queue<pair<int, int>> q;
+    for (int i = 0; i < A; ++i)
+      if (nex[0][i]) q.push({0, i});
+    while (!q.empty()) {
+      auto item = q.front(); q.pop();
+      int last = insertSAM(item.first, item.second);
+      for (int i = 0; i < A; ++i)
+        if (nex[last][i]) q.push({last, i});
+    }
+  }
+};
+```
+
+{% endspoiler %}
+### 在线构造
+
+### 多个字符串间的最长公共子串
+
+设有 $k$ 个字符串,每个结点建立长度为 $k$ 的标记,在 parent 树自底向上合并,若满足所有标记,则记录
+
+(对于本题而言，可以仅为标记数组，若需要求出此子串的个数，则需要改成计数数组)(可用二进制或bitset)
+
+### [根号暴力](https://blog.csdn.net/qq_42925924/article/details/112264228)
+
+在 parent 树上从字符串的每一个前缀的状态暴力往上跳(须标记vis)
+
+例如可用此法记录上述的标记数组
+
+证明:对于第 $i$ 个字符串,它最多会贡献 $\min{(n,\lvert s_i \rvert^2)}, n=\sum{\lvert s_i \rvert},O(n\sqrt{n})$
+
+{% spoiler "代码" %}
+```cpp
+  void jump(const string &s, int id) {
+    int x = 0;
+    for (char ch : s) {
+      x = nex[x][ch-C];
+      for (int y = x; y && vis[y] != id; y = link[y]) {
+        vis[y] = id;
+        ++k[y]; // 记录信息
+      }
+    }
+  }
+```
+
+{% endspoiler %}
 
 ## 字典树
 {% spoiler "代码" %}
@@ -5668,6 +5832,22 @@ void bfs(int S = 1) {
 
 {% endspoiler %}
 
+## [浅谈图模型上的随机游走问题](https://github.com/lzyrapx/Competitive-Programming-Docs/blob/master/%E5%9B%BD%E5%AE%B6%E9%9B%86%E8%AE%AD%E9%98%9F%E5%8E%86%E5%B9%B4%E8%AE%BA%E6%96%87%E9%9B%86/%E5%9B%BD%E5%AE%B6%E9%9B%86%E8%AE%AD%E9%98%9F2019%E8%AE%BA%E6%96%87%E9%9B%86.pdf)
+
+### 网格图
+
+$$f(i)=
+\begin{cases}
+p_1f(i-1,j)+p_2f(i,j-1)+p_3f(i+1,j)+p_4f(i,j+1)+1,i^2+j^2\leq R \\\\
+0,i^2+j^2<R
+\end{cases}$$
+
+#### 高斯消元 $O(R^6)$
+
+#### 直接消元法 $O(R^4)$
+
+#### 主元法 $O(R^3)$
+
 ---
 # 数论
 ## 快排
@@ -5884,8 +6064,8 @@ struct Martix {
   Martix(const int &_n, const int &_m) : n(_n), m(_m) { init(); }
   T* operator [] (const int &i) { return a[i]; }
   void init(const int &tag = 0) {
-    for (int i = 1; i <= n; ++i) memset(a[i], 0, sizeof(T)*(n+1));
-    for (int i = 1; i <= n; ++i) a[i][i] = tag;
+    for (int i = 1; i <= n; ++i) memset(a[i], 0, sizeof(T)*(m+1));
+    if (tag) for (int i = 1; i <= n; ++i) a[i][i] = tag;
   }
   friend Martix operator * (const Martix &m1, const Martix &m2) {
     Martix res(m1.n, m2.m);
@@ -5896,6 +6076,22 @@ struct Martix {
     return res;
   }
   Martix& operator *= (const Martix &mx) { return *this = *this*mx; }
+  Martix& operator + (const Martix &mx) const { Martix res(n, m); return res += mx; }
+  Martix& operator += (const Martix &mx) {
+    assert(n == mx.n && m == mx.m);
+    for (int i = 1; i <= n; ++i)
+      for (int j = 1; j <= m; ++j)
+        a[i][j] += mx.a[i][j];
+    return *this;
+  }
+  Martix& operator - (const Martix &mx) const { Martix res(n, m); return res -= mx; }
+  Martix& operator -= (const Martix &mx) {
+    assert(n == mx.n && m == mx.m);
+    for (int i = 1; i <= n; ++i)
+      for (int j = 1; j <= m; ++j)
+        a[i][j] -= mx.a[i][j];
+    return *this;
+  }
   template <typename TT>
   Martix pow(const TT &p) const {
     Martix res(n, m), a = *this;
@@ -5944,14 +6140,42 @@ struct Martix {
     }
     return (res+MOD)%MOD;
   }
-  friend ostream& operator << (ostream &os, Martix<T> &mx) {
+  friend ostream& operator << (ostream &os, const Martix<T> &mx) {
     for (int i = 1; i <= mx.n; ++i)
       for (int j = 1; j <= mx.m; ++j)
-        os << mx[i][j] << " \n"[j==mx.m];
+        os << mx.a[i][j] << " \n"[j==mx.m];
     return os;
   }
 };
 ```
+### 伍德伯里矩阵恒等式|Woodbury matrix identity
+
+解决矩阵修改求逆问题 [hdoj6994](https://acm.hdu.edu.cn/showproblem.php?pid=6994)
+
+$(A+UCV)^{-1}=A^{-1}-A^{-1}U(C^{-1}+VA^{-1}U)^{-1}VA^{-1}$
+
+$A\in \R^{n\times n},U\in \R^{n\times k},C\in \R^{k\times k},V\in \R^{k\times n}$
+
+矩阵求逆 $O(n^3)$, 单次修改 $O(n^2)$
+
+例如给矩阵 $A$ 的第 $i$ 行第 $j$ 列增加 $\Delta$ , 若 $A_{3*3}, (i,j)=(2,3)$
+
+$$UCV=
+\begin{bmatrix}
+{0}&{0}&{0}\\\\
+{0}&{0}&{\Delta}\\\\
+{0}&{0}&{0}
+\end{bmatrix}$$
+
+则有
+
+$U_{n\times 1}=\begin{bmatrix}{0}&{1}&{0}\end{bmatrix}^T,U_i=1$
+
+$C_{1\times 1}=\begin{bmatrix}{\Delta}\end{bmatrix}$
+
+$V_{1\times n}=\begin{bmatrix}{0}&{0}&{1}\end{bmatrix},V_j=1$
+
+注意运算顺序$(A^{-1}U)(C^{-1}+VA^{-1}U)^{-1}(VA^{-1})$
 
 {% endspoiler %}
 ## [高斯消元](https://www.luogu.com.cn/problem/P3389)
@@ -7191,6 +7415,19 @@ for(int i = 1; i <= W; ++i)
 
 ---
 ## [SOS DP](https://codeforces.com/blog/entry/45223)
+## [WQS二分|DP凸优化](https://www.cnblogs.com/CreeperLKF/p/9045491.html)
+题目给了一个选物品的限制条件，要求刚好选m个，让你最大化（最小化）权值, 其特点是函数的斜率单调
+
+例:给你一个N个点M条边无向带权连通图，每条边是黑色或白色。让你求一棵最小权的恰好有K条白色边的生成树。
+
+记 $g(i)$ 是选了 $i$ 条白边的最小生成树值, 发现 $g(i)$ 斜率单调不增 $g(i)-g(i-1) \req g(i+1)-g(i)$
+
+则二分斜率 k, 求切点(截距最大)
+
+设$f(x)$为我在没有固定选多少个点(但是我已经选了x个点)时的答案(也就是截距), $f(x)=g(x)-k*x$
+
+只要把每个数的$h(x)−=k$然后正常求一下在选任意个数的情况下最大$f(x)$是多少 $O(n\log n)$
+
 ## 斜率优化
 
 若dp方程为 $dp[i]=a[i] \cdot b[j]+c[i]+d[j]$ 时,由于存在$a[i] \cdot b[j]$ 这个既有 $i$ 又有 $j$ 的项,就需要使用斜率优化
