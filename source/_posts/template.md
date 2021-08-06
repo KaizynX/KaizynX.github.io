@@ -1526,6 +1526,94 @@ struct zkwSegmentTree {
 
 李超线段树是一种用于维护平面直角坐标系内线段关系的数据结构。它常被用来处理这样一种形式的问题：给定一个平面直角坐标系，支持动态插入一条线段，询问从某一个位置 (x,+∞) 向下看能看到的最高的一条线段（也就是给一条竖线，问这条竖线与所有线段的最高的交点。
 
+## 线段树合并
+
+有 $O(m)$ 棵树(个操作) 结点数量 $O(m\log n)$, 暴力合并,均摊复杂度 $O(\log n)$
+
+{% spoiler "代码" %}
+```cpp
+int merge(int x, int y) { // 太难了,现场全重写吧
+  if (!x || !y) return x+y;
+  int &z = x; // int z = new_node(); // 新建结点?
+  lc[z] = merge(lc[x], lc[y]);
+  rc[z] = merge(rc[x], rc[y]);
+  if (!lc[z] && !rc[z]) tr[z].first = tr[x].first+tr[y].first;
+  else push_up(z); // tr[z] = giao(x, y);
+  // del(y); // del(x); // 保留结点?
+  return z;
+}
+```
+
+{% endspoiler %}
+
+## [线段树分裂](https://www.luogu.com.cn/problem/P5494)
+
+一次分裂复杂度 $O(\log n)$
+
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct Tree {
+  int tot, lc[NLOG], rc[NLOG];
+  T tr[NLOG];
+  T giao(const T &x, const T &y) { return x+y; }
+  void push_up(int i) { tr[i] = giao(tr[lc[i]], tr[rc[i]]); }
+  int new_node(T v = 0) {
+    assert(++tot < NLOG);
+    lc[tot] = rc[tot] = 0;
+    tr[tot] = v;
+    return tot;
+  }
+  void add(int x, T v, int l, int r, int &i) {
+    if (!i) i = new_node();
+    if (l == r) return tr[i] += v, void();
+    int mid = (l+r)>>1;
+    if (x <= mid) add(x, v, l, mid, lc[i]);
+    else add(x, v, mid+1, r, rc[i]);
+    push_up(i);
+  }
+  void merge(int l, int r, int &x, int &y) { // merge y to x
+    if (!x || !y) return x += y, void();
+    if (l == r) return tr[x] += tr[y], void();
+    int mid = (l+r)>>1;
+    merge(l, mid, lc[x], lc[y]);
+    merge(mid+1, r, rc[x], rc[y]);
+    push_up(x); // del(y);
+  }
+  void split(int L, int R, int l, int r, int &x, int &y) { //split x [L, R] to y
+    if (!x) return;
+    if (L <= l && r <= R) return y = x, x = 0, void();
+    if (!y) y = new_node();
+    int mid = (l+r)>>1;
+    if (L <= mid) split(L, R, l, mid, lc[x], lc[y]);
+    if (R >  mid) split(L, R, mid+1, r, rc[x], rc[y]);
+    push_up(x); push_up(y);
+  }
+  T query_sum(int L, int R, int l, int r, int i) {
+    if (!i) return 0;
+    if (L <= l && r <= R) return tr[i];
+    int mid = (l+r)>>1;
+    if (R <= mid) return query_sum(L, R, l, mid, lc[i]);
+    if (L >  mid) return query_sum(L, R, mid+1, r, rc[i]);
+    return query_sum(L, R, l, mid, lc[i])+query_sum(L, R, mid+1, r, rc[i]);
+  }
+  int query_kth(int k, int l, int r, int i) {
+    if (l == r) return l;
+    int mid = (l+r)>>1;
+    if (k <= tr[lc[i]]) return query_kth(k, l, mid, lc[i]);
+    return query_kth(k-tr[lc[i]], mid+1, r, rc[i]);
+  }
+};
+```
+
+{% endspoiler %}
+
+## 猫树
+
+所谓 "猫树" 就是一种不支持修改，仅仅支持快速区间询问的一种静态线段树。
+
+构造一棵这样的静态线段树需要 $O(n\log n)$ 次合并操作，但是此时的查询复杂度被加速至 $O(1)$ 次合并操作。
+
 ## [吉老师线段树|吉司机线段树](https://www.luogu.com.cn/blog/Hakurei-Reimu/seg-beats)
 
 ### 区间最值操作
@@ -3467,489 +3555,6 @@ struct StringHash {
 {% endspoiler %}
 
 ---
-## [后缀数组|SA](https://loj.ac/problem/111)
-
-$sa[i]$ 表示将所有后缀排序后第 $i$ 小的后缀的编号
-
-$rk[i]$ 表示后缀 $i$ 的排名
-
-性质:$sa[rk[i]]=rk[sa[i]]=i$
-
-$lcp(i, j)$ 表示后缀 $i$ 和后缀 $j$ 的最长公共前缀(的长度)
-
-$height[i]=lcp(sa[i], sa[i-1])$
-
-引理 $height[rk[i]] \geq height[rk[i-1]]-1$
-
-$lcp(sa[i],sa[j])=\min\{height[i+1\cdots j]\}$
-
-不同子串数目:$\frac{n(n+1)}{2}-\sum\limits_{i=2}^{n}{height[i]}$
-
-### $O(nlog^2n)$
-{% spoiler "代码" %}
-```cpp
-int sa[N], rk[N<<1], height[N];
-template <typename T> // s start from 1
-inline void SA(const T *s, const int &n) {
-  static int oldrk[N<<1];
-  memset(rk+n+1, 0, sizeof(int)*n);
-  for (int i = 1; i <= n; ++i) rk[i] = s[i];
-  for (int w = 1; w <= n; w <<= 1) {
-    iota(sa+1, sa+n+1, 1);
-    sort(sa+1, sa+n+1, [&](const int &x, const int &y) {
-      return rk[x] == rk[y] ? rk[x+w] < rk[y+w] : rk[x] < rk[y];
-    });
-    memcpy(oldrk+1, rk+1, sizeof(int)*2*n);
-    for (int p = 0, i = 1; i <= n; ++i) {
-      if (oldrk[sa[i]] == oldrk[sa[i-1]] &&
-        oldrk[sa[i]+w] == oldrk[sa[i-1]+w]) {
-        rk[sa[i]] = p;
-      } else {
-        rk[sa[i]] = ++p;
-      }
-    }
-  }
-  for (int i = 1, k = 0; i <= n; ++i) {
-    if (k) --k;
-    while (s[i+k] == s[sa[rk[i]-1]+k]) ++k;
-    height[rk[i]] = k;
-  }
-}
-```
-
-{% endspoiler %}
-
-### $O(nlogn)$
-{% spoiler "代码" %}
-```cpp
-int sa[N], rk[N<<1], height[N];
-template <typename T> // s start from 1
-inline void SA(const T *s, const int &n) {
-#define cmp(x, y, w) oldrk[x] == oldrk[y] && oldrk[x + w] == oldrk[y + w]
-  static int oldrk[N<<1], id[N], px[N], cnt[N], m;
-  memset(cnt, 0, sizeof(int) * (m = 128));
-  for (int i = 1; i <= n; ++i) ++cnt[rk[i] = s[i]];
-  for (int i = 1; i <= m; ++i) cnt[i] += cnt[i - 1];
-  for (int i = n; i; --i) sa[cnt[rk[i]]--] = i;
-  for (int w = 1, p, i; w <= n; w <<= 1, m = p) {
-    for (p = 0, i = n; i > n - w; --i) id[++p] = i;
-    for (int i = 1; i <= n; ++i)
-      if (sa[i] > w) id[++p] = sa[i] - w;
-    memset(cnt + 1, 0, sizeof(int) * m);
-    for (int i = 1; i <= n; ++i) ++cnt[px[i] = rk[id[i]]];
-    for (int i = 1; i <= m; ++i) cnt[i] += cnt[i - 1];
-    for (int i = n; i; --i) sa[cnt[px[i]]--] = id[i];
-    memcpy(oldrk + 1, rk + 1, sizeof(int) * 2 * n);
-    for (p = 0, i = 1; i <= n; ++i) rk[sa[i]] = cmp(sa[i], sa[i - 1], w) ? p : ++p;
-  }
-  for (int i = 1, k = 0; i <= n; ++i) {
-    if (k) --k;
-    while (s[i+k] == s[sa[rk[i]-1]+k]) ++k;
-    height[rk[i]] = k;
-  }
-#undef cmp
-}
-```
-
-{% endspoiler %}
-
-### [$O(n)$](https://loj.ac/submission/653573)
-{% spoiler "代码" %}
-```cpp
-namespace SuffixArray {
-
-int sa[N], rk[N], ht[N];
-bool t[N << 1];
-
-inline bool islms(const int i, const bool *t) { return i > 0 && t[i] && !t[i - 1]; }
-
-template <class T>
-inline void sort(T s, int *sa, const int len, const int sz, const int sigma, bool *t, int *b, int *cb, int *p) {
-  memset(b, 0, sizeof(int) * sigma);
-  memset(sa, -1, sizeof(int) * len);
-  for (register int i = 0; i < len; i++) b[static_cast<int>(s[i])]++;
-  cb[0] = b[0];
-  for (register int i = 1; i < sigma; i++) cb[i] = cb[i - 1] + b[i];
-  for (register int i = sz - 1; i >= 0; i--) sa[--cb[static_cast<int>(s[p[i]])]] = p[i];
-  for (register int i = 1; i < sigma; i++) cb[i] = cb[i - 1] + b[i - 1];
-  for (register int i = 0; i < len; i++)
-    if (sa[i] > 0 && !t[sa[i] - 1])
-      sa[cb[static_cast<int>(s[sa[i] - 1])]++] = sa[i] - 1;
-  cb[0] = b[0];
-  for (register int i = 1; i < sigma; i++) cb[i] = cb[i - 1] + b[i];
-  for (register int i = len - 1; i >= 0; i--)
-    if (sa[i] > 0 && t[sa[i] - 1])
-      sa[--cb[static_cast<int>(s[sa[i] - 1])]] = sa[i] - 1;
-}
-
-template <class T>
-inline void sais(T s, int *sa, const int len, bool *t, int *b, int *b1, const int sigma) {
-  register int i, j, x, p = -1, cnt = 0, sz = 0, *cb = b + sigma;
-  for (t[len - 1] = 1, i = len - 2; i >= 0; i--) t[i] = s[i] < s[i + 1] || (s[i] == s[i + 1] && t[i + 1]);
-  for (i = 1; i < len; i++)
-    if (t[i] && !t[i - 1])
-      b1[sz++] = i;
-  sort(s, sa, len, sz, sigma, t, b, cb, b1);
-  for (i = sz = 0; i < len; i++)
-    if (islms(sa[i], t))
-      sa[sz++] = sa[i];
-  for (i = sz; i < len; i++) sa[i] = -1;
-  for (i = 0; i < sz; i++) {
-    for (x = sa[i], j = 0; j < len; j++) {
-      if (p == -1 || s[x + j] != s[p + j] || t[x + j] != t[p + j]) {
-        cnt++, p = x;
-        break;
-      } else if (j > 0 && (islms(x + j, t) || islms(p + j, t))) {
-        break;
-      }
-    }
-    sa[sz + (x >>= 1)] = cnt - 1;
-  }
-  for (i = j = len - 1; i >= sz; i--)
-    if (sa[i] >= 0)
-      sa[j--] = sa[i];
-  register int *s1 = sa + len - sz, *b2 = b1 + sz;
-  if (cnt < sz)
-    sais(s1, sa, sz, t + len, b, b1 + sz, cnt);
-  else
-    for (i = 0; i < sz; i++) sa[s1[i]] = i;
-  for (i = 0; i < sz; i++) b2[i] = b1[sa[i]];
-  sort(s, sa, len, sz, sigma, t, b, cb, b2);
-}
-
-template <class T>
-inline void getHeight(T s, int n) {
-  for (register int i = 1; i <= n; i++) rk[sa[i]] = i;
-  register int j = 0, k = 0;
-  for (register int i = 0; i < n; ht[rk[i++]] = k)
-    for (k ? k-- : 0, j = sa[rk[i] - 1]; s[i + k] == s[j + k]; k++)
-      ;
-}
-
-template <class T>  // s start from 0
-inline void init(T s, const int len, const int sigma = 128) {
-  sais(s, sa, len + 1, t, rk, ht, sigma);
-  getHeight(s, len);
-  for (int i = 1; i <= len; ++i) ++sa[i];
-  for (int i = len; i; --i) rk[i] = rk[i-1];
-}
-
-}  // namespace SuffixArray
-```
-
-{% endspoiler %}
-
-## 后缀自动机|SAM
-
-一个状态表示一个 $endpos$ 的等价类
-
-$len(v)$ 为该状态最长的字符串长度
-
-后缀链接 $link(v)$ 连接到对应于该状态最长字符串的最长后缀的另一个 $endpos$ 等价类的状态。
-
-### 代码
-空间换时间
-{% spoiler "代码" %}
-```cpp
-struct SAM {
-  static const int A = 26;
-  static const char C = 'a';
-  struct State {
-    int len, link, nex[A];
-    State& operator =(const State &st) {
-      len = st.len;
-      link = st.link;
-      memcpy(nex, st.nex, sizeof(nex));
-      return *this;
-    }
-  } st[N<<1];
-  int sz, last;
-  void init() {
-    memset(st, 0, sizeof(State)*sz);
-    st[0].len = 0;
-    st[0].link = -1;
-    sz = 1;
-    last = 0;
-  }
-  void extend(char ch) {
-    int c = ch-C, cur = sz++;
-    st[cur].len = st[last].len+1;
-    int p = last;
-    while (~p && !st[p].nex[c]) {
-      st[p].nex[c] = cur;
-      p = st[p].link;
-    }
-    if (p == -1) {
-      st[cur].link = 0;
-    } else {
-      int q = st[p].nex[c];
-      if (st[p].len+1 == st[q].len) {
-        st[cur].link = q;
-      } else {
-        int clone = sz++;
-        st[clone] = st[q];
-        st[clone].len = st[p].len+1;
-        while (~p && st[p].nex[c] == q) {
-          st[p].nex[c] = clone;
-          p = st[p].link;
-        }
-        st[q].link = st[cur].link = clone;
-      }
-    }
-    last = cur;
-  }
-};
-```
-
-{% endspoiler %}
-时间换空间
-{% spoiler "代码" %}
-```cpp
-template <typename T>
-struct SAM {
-  struct State {
-    int len, link;
-    map<T, int> nex;
-  } st[N<<1];
-  int sz, last;
-  void init() {
-    st[0].len = 0;
-    st[0].link = -1;
-    sz = 1;
-    last = 0;
-  }
-  void extend(T c) {
-    int cur = sz++;
-    st[cur].len = st[last].len+1;
-    int p = last;
-    while (~p && !st[p].nex.count(c)) {
-      st[p].nex[c] = cur;
-      p = st[p].link;
-    }
-    if (p == -1) {
-      st[cur].link = 0;
-    } else {
-      int q = st[p].nex[c];
-      if (st[p].len+1 == st[q].len) {
-        st[cur].link = q;
-      } else {
-        int clone = sz++;
-        st[clone].len = st[p].len+1;
-        st[clone].nex = st[q].nex;
-        st[clone].link = st[q].link;
-        while (~p && st[p].nex[c] == q) {
-          st[p].nex[c] = clone;
-          p = st[p].link;
-        }
-        st[q].link = st[cur].link = clone;
-      }
-    }
-    last = cur;
-  }
-};
-```
-
-{% endspoiler %}
-
-### 检查字符串是否出现
-
-丢进去转移。这个算法还找到了模式串在文本串中出现的最大前缀长度。
-
-### 不同字串个数
-不同子串的个数等于自动机中以 $t_0$ 为起点的不同路径的条数-1(空串)。令 $d_{v}$ 为从状态 $v$ 开始的路径数量（包括长度为零的路径）
-
-$d_{v}=1+\sum\limits_{w:(v,w,c)\in DAWG}d_{w}$
-
-另一种方法是利用上述后缀自动机的树形结构。统计节点对应的子串数量 $\operatorname{len}(i)-\operatorname{len}(\operatorname{link}(i))$
-
-ps:若新增一个字符,其增量为$len(cur)-len(link(cur))$ 不包括 $clone$ 结点
-
-### 所有不同子串的总长度
-
-$ans_{v}=\sum\limits_{w:(v,w,c)\in DAWG}d_{w}+ans_{w}$
-
-法二:每个节点对应的所有后缀长度是 $\frac{\operatorname{len}(i)\times (\operatorname{len}(i)+1)}{2}$，减去其 $\operatorname{link}$ 节点的对应值就是该节点的净贡献
-
-### 字典序第 k 大子串
-
-不同位置的相同子串算作一个,每个非 clone 状态的数量记为1
-
-不同位置的相同子串算作多个,每个状态的数量为 parent 树上求子树和
-
-在 SAM 的 DAG 求和然后字典序搞搞
-
-### 两个字符串的最长公共子串
-
-{% spoiler "代码" %}
-```cpp
-  int lcs(const string &t) {
-    int v = 0, l = 0, mx = 0;
-    for (char c : t) {
-      while (v && !st[v].nex[c-C]) {
-        v = st[v].link;
-        l = st[v].len;
-      }
-      if (st[v].nex[c-C]) {
-        v = st[v].nex[c-C];
-        ++l;
-      }
-      mx = max(mx, l);
-    }
-    return mx;
-  }
-```
-
-{% endspoiler %}
-
-### 多个字符串间的最长公共子串
-
-记录 $f[i][j]$ 为第 $i$ 个字符串在 sam 上状态 $j$ 的匹配长度
-
-$ans = \max\limits_{j}{(\min\limits_{i}{f[i][j]})}$
-
-
-## 广义后缀自动机
-
-广义后缀自动机 (General Suffix Automaton) 是将后缀自动机整合到字典树中来解决对于多个字符串的子串问题
-
-### 离线构造
-{% spoiler "代码" %}
-```cpp
-struct generalSAM {
-  static const int A = 26;
-  static const int M = N<<1;
-  static const char C = 'a';
-  int sz, len[M], link[M], nex[M][A];
-  void init() {
-    // memset(nex, 0, sizeof(int)*A*sz);
-    link[0] = -1; sz = 1;
-  }
-  int insertSAM(int last, int c) {
-    int cur = nex[last][c];
-    if (len[cur]) return cur;
-    len[cur] = len[last]+1;
-    int p = link[last];
-    for (; ~p && !nex[p][c]; p = link[p]) nex[p][c] = cur;
-    if (p == -1) return link[cur] = 0, cur;
-    int q = nex[p][c];
-    if (len[p]+1 == len[q]) return link[cur] = q, cur;
-    int clone = sz++;
-    for (int i = 0; i < A; ++i)
-      nex[clone][i] = len[nex[q][i]] ? nex[q][i] : 0;
-    len[clone] = len[p]+1;
-    for (; ~p && nex[p][c] == q; p = link[p]) nex[p][c] = clone;
-    link[clone] = link[q];
-    link[q] = link[cur] = clone;
-    return cur;
-  }
-  int insertTrie(int cur, int c) {
-    return nex[cur][c] ? nex[cur][c] : nex[cur][c] = sz++;
-  }
-  void insert(const string &s) {
-    int last = 0; for (char ch : s) last = insertTrie(last, ch-C);
-  }
-  void insert(const char *s, int n) {
-    for (int i = 0, last = 0; i < n; ++i) last = insertTrie(last, s[i]-C);
-  }
-  void build() {
-    queue<pair<int, int>> q;
-    for (int i = 0; i < A; ++i)
-      if (nex[0][i]) q.push({0, i});
-    while (!q.empty()) {
-      auto item = q.front(); q.pop();
-      int last = insertSAM(item.first, item.second);
-      for (int i = 0; i < A; ++i)
-        if (nex[last][i]) q.push({last, i});
-    }
-  }
-};
-```
-
-{% endspoiler %}
-### 在线构造
-
-### 多个字符串间的最长公共子串
-
-设有 $k$ 个字符串,每个结点建立长度为 $k$ 的标记,在 parent 树自底向上合并,若满足所有标记,则记录
-
-(对于本题而言，可以仅为标记数组，若需要求出此子串的个数，则需要改成计数数组)(可用二进制或bitset)
-
-### [根号暴力](https://blog.csdn.net/qq_42925924/article/details/112264228)
-
-在 parent 树上从字符串的每一个前缀的状态暴力往上跳(须标记vis)
-
-例如可用此法记录上述的标记数组
-
-证明:对于第 $i$ 个字符串,它最多会贡献 $\min{(n,\lvert s_i \rvert^2)}, n=\sum{\lvert s_i \rvert},O(n\sqrt{n})$
-
-{% spoiler "代码" %}
-```cpp
-  void jump(const string &s, int id) {
-    int x = 0;
-    for (char ch : s) {
-      x = nex[x][ch-C];
-      for (int y = x; y && vis[y] != id; y = link[y]) {
-        vis[y] = id;
-        ++k[y]; // 记录信息
-      }
-    }
-  }
-```
-
-{% endspoiler %}
-
-## 字典树
-{% spoiler "代码" %}
-```cpp
-struct TireTree {
-  static const int NN = 5e5+7;
-  static const int SZ = 26;
-  char beg;
-  int nex[NN][SZ], num[NN], cnt;
-  bool exist[NN];
-  TireTree(char _beg = 'a') : beg(_beg) { clear(); }
-  void clear() {
-    memset(nex, 0, sizeof nex);
-    memset(num, 0, sizeof num);
-    memset(exist, 0, sizeof exist);
-    cnt = 0;
-  }
-  void insert(const char *s) {
-    int len = strlen(s), p = 0;
-    for (int i = 0, c; i < len; ++i) {
-      c = s[i]-beg;
-      if (!nex[p][c]) nex[p][c] = ++cnt;
-      p = nex[p][c];
-      ++num[p];
-    }
-    exist[p] = true;
-  }
-  bool find(const char *s) {
-    int len = strlen(s), p = 0;
-    for (int i = 0, c; i < len; ++i) {
-      c = s[i]-beg;
-      if (!nex[p][c]) return false;
-      p = nex[p][c];
-    }
-    return exist[p];
-  }
-  int count(const char *s) {
-    int len = strlen(s), p = 0;
-    for (int i = 0, c; i < len; ++i) {
-      c = s[i]-beg;
-      if (!nex[p][c]) return 0;
-      p = nex[p][c];
-    }
-    return num[p];
-  }
-  void insert(const string &s) { insert(s.c_str()); }
-  bool find(const string &s) { return find(s.c_str()); }
-  int count(const string &s) { return count(s.c_str()); }
-};
-```
-
-{% endspoiler %}
-
 ## AC自动机
 AC 自动机是 以 Trie 的结构为基础，结合 KMP 的思想 建立的。
 
@@ -4076,6 +3681,589 @@ struct Aho_Corasick_Automaton {
 
 {% endspoiler %}
 
+
+## [后缀数组|SA](https://loj.ac/problem/111)
+
+$sa[i]$ 表示将所有后缀排序后第 $i$ 小的后缀的编号
+
+$rk[i]$ 表示后缀 $i$ 的排名
+
+性质:$sa[rk[i]]=rk[sa[i]]=i$
+
+$lcp(i, j)$ 表示后缀 $i$ 和后缀 $j$ 的最长公共前缀(的长度)
+
+$height[i]=lcp(sa[i], sa[i-1])$
+
+引理 $height[rk[i]] \geq height[rk[i-1]]-1$
+
+$lcp(sa[i],sa[j])=\min\{height[i+1\cdots j]\}$
+
+不同子串数目:$\frac{n(n+1)}{2}-\sum\limits_{i=2}^{n}{height[i]}$
+
+### $O(nlog^2n)$
+{% spoiler "代码" %}
+```cpp
+int sa[N], rk[N<<1], height[N];
+template <typename T> // s start from 1
+inline void SA(const T *s, const int &n) {
+  static int oldrk[N<<1];
+  memset(rk+n+1, 0, sizeof(int)*n);
+  for (int i = 1; i <= n; ++i) rk[i] = s[i];
+  for (int w = 1; w <= n; w <<= 1) {
+    iota(sa+1, sa+n+1, 1);
+    sort(sa+1, sa+n+1, [&](const int &x, const int &y) {
+      return rk[x] == rk[y] ? rk[x+w] < rk[y+w] : rk[x] < rk[y];
+    });
+    memcpy(oldrk+1, rk+1, sizeof(int)*2*n);
+    for (int p = 0, i = 1; i <= n; ++i) {
+      if (oldrk[sa[i]] == oldrk[sa[i-1]] &&
+        oldrk[sa[i]+w] == oldrk[sa[i-1]+w]) {
+        rk[sa[i]] = p;
+      } else {
+        rk[sa[i]] = ++p;
+      }
+    }
+  }
+  for (int i = 1, k = 0; i <= n; ++i) {
+    if (k) --k;
+    while (s[i+k] == s[sa[rk[i]-1]+k]) ++k;
+    height[rk[i]] = k;
+  }
+}
+```
+
+{% endspoiler %}
+
+### $O(nlogn)$
+{% spoiler "代码" %}
+```cpp
+int sa[N], rk[N<<1], height[N];
+template <typename T> // s start from 1
+inline void SA(const T *s, const int &n) {
+#define cmp(x, y, w) oldrk[x] == oldrk[y] && oldrk[x + w] == oldrk[y + w]
+  static int oldrk[N<<1], id[N], px[N], cnt[N], m;
+  memset(cnt, 0, sizeof(int) * (m = 128));
+  for (int i = 1; i <= n; ++i) ++cnt[rk[i] = s[i]];
+  for (int i = 1; i <= m; ++i) cnt[i] += cnt[i - 1];
+  for (int i = n; i; --i) sa[cnt[rk[i]]--] = i;
+  for (int w = 1, p, i; w <= n; w <<= 1, m = p) {
+    for (p = 0, i = n; i > n - w; --i) id[++p] = i;
+    for (i = 1; i <= n; ++i) if (sa[i] > w) id[++p] = sa[i] - w;
+    memset(cnt + 1, 0, sizeof(int) * m);
+    for (i = 1; i <= n; ++i) ++cnt[px[i] = rk[id[i]]];
+    for (i = 1; i <= m; ++i) cnt[i] += cnt[i - 1];
+    for (i = n; i; --i) sa[cnt[px[i]]--] = id[i];
+    swap(oldrk, rk);
+    for (p = 0, i = 1; i <= n; ++i) rk[sa[i]] = cmp(sa[i], sa[i - 1], w) ? p : ++p;
+  }
+  for (int i = 1, k = 0; i <= n; ++i) {
+    if (k) --k;
+    while (s[i+k] == s[sa[rk[i]-1]+k]) ++k;
+    height[rk[i]] = k;
+  }
+#undef cmp
+}
+```
+
+{% endspoiler %}
+
+### [$O(n)$](https://loj.ac/submission/653573)
+{% spoiler "代码" %}
+```cpp
+namespace SuffixArray {
+
+int sa[N], rk[N], ht[N];
+bool t[N << 1];
+
+inline bool islms(const int i, const bool *t) { return i > 0 && t[i] && !t[i - 1]; }
+
+template <class T>
+inline void sort(T s, int *sa, const int len, const int sz, const int sigma, bool *t, int *b, int *cb, int *p) {
+  memset(b, 0, sizeof(int) * sigma);
+  memset(sa, -1, sizeof(int) * len);
+  for (register int i = 0; i < len; i++) b[static_cast<int>(s[i])]++;
+  cb[0] = b[0];
+  for (register int i = 1; i < sigma; i++) cb[i] = cb[i - 1] + b[i];
+  for (register int i = sz - 1; i >= 0; i--) sa[--cb[static_cast<int>(s[p[i]])]] = p[i];
+  for (register int i = 1; i < sigma; i++) cb[i] = cb[i - 1] + b[i - 1];
+  for (register int i = 0; i < len; i++)
+    if (sa[i] > 0 && !t[sa[i] - 1])
+      sa[cb[static_cast<int>(s[sa[i] - 1])]++] = sa[i] - 1;
+  cb[0] = b[0];
+  for (register int i = 1; i < sigma; i++) cb[i] = cb[i - 1] + b[i];
+  for (register int i = len - 1; i >= 0; i--)
+    if (sa[i] > 0 && t[sa[i] - 1])
+      sa[--cb[static_cast<int>(s[sa[i] - 1])]] = sa[i] - 1;
+}
+
+template <class T>
+inline void sais(T s, int *sa, const int len, bool *t, int *b, int *b1, const int sigma) {
+  register int i, j, x, p = -1, cnt = 0, sz = 0, *cb = b + sigma;
+  for (t[len - 1] = 1, i = len - 2; i >= 0; i--) t[i] = s[i] < s[i + 1] || (s[i] == s[i + 1] && t[i + 1]);
+  for (i = 1; i < len; i++)
+    if (t[i] && !t[i - 1])
+      b1[sz++] = i;
+  sort(s, sa, len, sz, sigma, t, b, cb, b1);
+  for (i = sz = 0; i < len; i++)
+    if (islms(sa[i], t))
+      sa[sz++] = sa[i];
+  for (i = sz; i < len; i++) sa[i] = -1;
+  for (i = 0; i < sz; i++) {
+    for (x = sa[i], j = 0; j < len; j++) {
+      if (p == -1 || s[x + j] != s[p + j] || t[x + j] != t[p + j]) {
+        cnt++, p = x;
+        break;
+      } else if (j > 0 && (islms(x + j, t) || islms(p + j, t))) {
+        break;
+      }
+    }
+    sa[sz + (x >>= 1)] = cnt - 1;
+  }
+  for (i = j = len - 1; i >= sz; i--)
+    if (sa[i] >= 0)
+      sa[j--] = sa[i];
+  register int *s1 = sa + len - sz, *b2 = b1 + sz;
+  if (cnt < sz)
+    sais(s1, sa, sz, t + len, b, b1 + sz, cnt);
+  else
+    for (i = 0; i < sz; i++) sa[s1[i]] = i;
+  for (i = 0; i < sz; i++) b2[i] = b1[sa[i]];
+  sort(s, sa, len, sz, sigma, t, b, cb, b2);
+}
+
+template <class T>
+inline void getHeight(T s, int n) {
+  for (register int i = 1; i <= n; i++) rk[sa[i]] = i;
+  register int j = 0, k = 0;
+  for (register int i = 0; i < n; ht[rk[i++]] = k)
+    for (k ? k-- : 0, j = sa[rk[i] - 1]; s[i + k] == s[j + k]; k++)
+      ;
+}
+
+template <class T>  // s start from 0
+inline void init(T s, const int len, const int sigma = 128) {
+  sais(s, sa, len + 1, t, rk, ht, sigma);
+  getHeight(s, len);
+  for (int i = 1; i <= len; ++i) ++sa[i];
+  for (int i = len; i; --i) rk[i] = rk[i-1];
+}
+
+}  // namespace SuffixArray
+```
+
+{% endspoiler %}
+
+### [树上SA](https://www.luogu.com.cn/problem/P5353)
+
+树上可能出现完全相同的字符串,增加上一轮的有序状态rk为"第三关键字"
+
+{% spoiler "代码" %}
+```cpp
+struct SAonTree {
+  static const int LOGN = 33-__builtin_clz(N);
+  int n, d[N], cnt[N], sa[N], rk[N<<1], _rk[N<<1], _oldrk[N<<1], tp[N<<1];
+  template <typename T>
+  void tsort(int *sa, T *rk, int *tp, int m) {
+    memset(cnt, 0, sizeof(int)*(m+1));
+    for (int i = 1; i <= n; ++i) ++cnt[rk[i]];
+    for (int i = 1; i <= m; ++i) cnt[i] += cnt[i-1];
+    for (int i = n; i; --i) sa[cnt[rk[tp[i]]]--] = tp[i];
+  }
+  template <typename T>
+  void build(int *f, const T *a, const int n) {
+    this->n = n;
+    int p = 128, i;
+    iota(tp+1, tp+n+1, 1);
+    tsort(sa, a, tp, p);
+    for (i = 1, p = 0; i <= n; ++i) {
+      _rk[sa[i]] = a[sa[i-1]] == a[sa[i]] ? p : ++p;
+      rk[sa[i]] = i;
+    }
+    for (int w = 1, t = 0; w < n; w <<= 1, ++t) {
+      for (i = 1; i <= n; ++i) _oldrk[i] = rk[f[i]];
+      tsort(tp, _oldrk, sa, n);
+      tsort(sa, _rk, tp, p);
+      swap(_rk, tp);
+      for (i = 1, p = 0; i <= n; ++i) {
+        _rk[sa[i]] = tp[sa[i-1]] == tp[sa[i]]
+            && tp[f[sa[i-1]]] == tp[f[sa[i]]] ? p : ++p;
+        rk[sa[i]] = i;
+      }
+      for (int i = n; i; --i) f[i] = f[f[i]];
+    }
+  }
+};
+```
+
+{% endspoiler %}
+
+
+## 后缀自动机|SAM
+
+一个状态表示一个 $endpos$ 的等价类
+
+$len(v)$ 为该状态最长的字符串长度
+
+后缀链接 $link(v)$ 连接到对应于该状态最长字符串的最长后缀的另一个 $endpos$ 等价类的状态。
+
+### 代码
+空间换时间
+{% spoiler "代码" %}
+```cpp
+struct SAM {
+  static const int A = 26;
+  static const char C = 'a';
+  struct State {
+    int len, link, nex[A];
+    State& operator =(const State &st) {
+      len = st.len;
+      link = st.link;
+      memcpy(nex, st.nex, sizeof(nex));
+      return *this;
+    }
+  } st[N<<1];
+  SAM() { init(); }
+  int sz, last;
+  void init() {
+    memset(st, 0, sizeof(State)*sz);
+    st[0].len = 0;
+    st[0].link = -1;
+    sz = 1;
+    last = 0;
+  }
+  void extend(char ch) {
+    int c = ch-C, cur = sz++;
+    st[cur].len = st[last].len+1;
+    int p = last;
+    while (~p && !st[p].nex[c]) {
+      st[p].nex[c] = cur;
+      p = st[p].link;
+    }
+    if (p == -1) {
+      st[cur].link = 0;
+    } else {
+      int q = st[p].nex[c];
+      if (st[p].len+1 == st[q].len) {
+        st[cur].link = q;
+      } else {
+        int clone = sz++;
+        st[clone] = st[q];
+        st[clone].len = st[p].len+1;
+        while (~p && st[p].nex[c] == q) {
+          st[p].nex[c] = clone;
+          p = st[p].link;
+        }
+        st[q].link = st[cur].link = clone;
+      }
+    }
+    last = cur;
+  }
+};
+```
+
+{% endspoiler %}
+时间换空间
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+struct SAM {
+  struct State {
+    int len, link;
+    map<T, int> nex;
+  } st[N<<1];
+  int sz, last;
+  SAM() { init(); }
+  void init() {
+    st[0].len = 0;
+    st[0].link = -1;
+    sz = 1;
+    last = 0;
+  }
+  void extend(T c) {
+    int cur = sz++;
+    st[cur].len = st[last].len+1;
+    int p = last;
+    while (~p && !st[p].nex.count(c)) {
+      st[p].nex[c] = cur;
+      p = st[p].link;
+    }
+    if (p == -1) {
+      st[cur].link = 0;
+    } else {
+      int q = st[p].nex[c];
+      if (st[p].len+1 == st[q].len) {
+        st[cur].link = q;
+      } else {
+        int clone = sz++;
+        st[clone].len = st[p].len+1;
+        st[clone].nex = st[q].nex;
+        st[clone].link = st[q].link;
+        while (~p && st[p].nex[c] == q) {
+          st[p].nex[c] = clone;
+          p = st[p].link;
+        }
+        st[q].link = st[cur].link = clone;
+      }
+    }
+    last = cur;
+  }
+};
+```
+
+{% endspoiler %}
+
+### 检查字符串是否出现
+
+丢进去转移。这个算法还找到了模式串在文本串中出现的最大前缀长度。
+
+### 不同字串个数
+不同子串的个数等于自动机中以 $t_0$ 为起点的不同路径的条数-1(空串)。令 $d_{v}$ 为从状态 $v$ 开始的路径数量（包括长度为零的路径）
+
+$d_{v}=1+\sum\limits_{w:(v,w,c)\in DAWG}d_{w}$
+
+另一种方法是利用上述后缀自动机的树形结构。统计节点对应的子串数量 $\operatorname{len}(i)-\operatorname{len}(\operatorname{link}(i))$
+
+ps:若新增一个字符,其增量为$len(cur)-len(link(cur))$ 不包括 $clone$ 结点
+
+### 所有不同子串的总长度
+
+$ans_{v}=\sum\limits_{w:(v,w,c)\in DAWG}d_{w}+ans_{w}$
+
+法二:每个节点对应的所有后缀长度是 $\frac{\operatorname{len}(i)\times (\operatorname{len}(i)+1)}{2}$，减去其 $\operatorname{link}$ 节点的对应值就是该节点的净贡献
+
+### 字典序第 k 大子串
+
+不同位置的相同子串算作一个,每个非 clone 状态的数量记为1
+
+不同位置的相同子串算作多个,每个状态的数量为 parent 树上求子树和
+
+在 SAM 的 DAG 求和然后字典序搞搞
+
+### 两个字符串的最长公共子串
+
+{% spoiler "代码" %}
+```cpp
+  int lcs(const string &t) {
+    int v = 0, l = 0, mx = 0;
+    for (char c : t) {
+      while (v && !st[v].nex[c-C]) {
+        v = st[v].link;
+        l = st[v].len;
+      }
+      if (st[v].nex[c-C]) {
+        v = st[v].nex[c-C];
+        ++l;
+      }
+      mx = max(mx, l);
+    }
+    return mx;
+  }
+```
+
+{% endspoiler %}
+
+### 多个字符串间的最长公共子串
+
+记录 $f[i][j]$ 为第 $i$ 个字符串在 sam 上状态 $j$ 的匹配长度
+
+$ans = \max\limits_{j}{(\min\limits_{i}{f[i][j]})}$
+
+
+## 广义后缀自动机
+
+广义后缀自动机 (General Suffix Automaton) 是将后缀自动机整合到字典树中来解决对于多个字符串的子串问题
+
+### 离线构造
+{% spoiler "代码" %}
+```cpp
+struct generalSAM {
+  static const int A = 26;
+  static const int M = N<<1;
+  static const char C = 'a';
+  int sz, len[M], link[M], nex[M][A];
+  generalSAM() { init(); }
+  void init() {
+    // memset(nex, 0, sizeof(int)*A*sz);
+    link[0] = -1; sz = 1;
+  }
+  int insertSAM(int last, int c) {
+    int cur = nex[last][c];
+    if (len[cur]) return cur;
+    len[cur] = len[last]+1;
+    int p = link[last];
+    for (; ~p && !nex[p][c]; p = link[p]) nex[p][c] = cur;
+    if (p == -1) return link[cur] = 0, cur;
+    int q = nex[p][c];
+    if (len[p]+1 == len[q]) return link[cur] = q, cur;
+    int clone = sz++;
+    for (int i = 0; i < A; ++i)
+      nex[clone][i] = len[nex[q][i]] ? nex[q][i] : 0;
+    len[clone] = len[p]+1;
+    for (; ~p && nex[p][c] == q; p = link[p]) nex[p][c] = clone;
+    link[clone] = link[q];
+    link[q] = link[cur] = clone;
+    return cur;
+  }
+  int insertTrie(int cur, int c) {
+    return nex[cur][c] ? nex[cur][c] : nex[cur][c] = sz++;
+  }
+  void insert(const string &s) {
+    int last = 0; for (char ch : s) last = insertTrie(last, ch-C);
+  }
+  void insert(const char *s, int n) {
+    for (int i = 0, last = 0; i < n; ++i) last = insertTrie(last, s[i]-C);
+  }
+  void build() {
+    queue<pair<int, int>> q;
+    for (int i = 0; i < A; ++i)
+      if (nex[0][i]) q.push({0, i});
+    while (!q.empty()) {
+      auto item = q.front(); q.pop();
+      int last = insertSAM(item.first, item.second);
+      for (int i = 0; i < A; ++i)
+        if (nex[last][i]) q.push({last, i});
+    }
+  }
+};
+```
+
+{% endspoiler %}
+### 在线构造
+
+{% spoiler "代码" %}
+```cpp
+struct generalSAM {
+  static const int A = 26;
+  static const int M = N<<1;
+  static const char C = 'a';
+  int sz, len[M], link[M], nex[M][A];
+  generalSAM() { init(); }
+  void init() {
+    memset(nex, 0, sizeof(int)*A*sz);
+    link[0] = -1; sz = 1;
+  }
+  int extend(int last, int c) {
+    if (nex[last][c]) {
+      int p = last, cur = nex[p][c];
+      if (len[p]+1 == len[cur]) return cur;
+      int q = sz++;
+      len[q] = len[p]+1;
+      memcpy(nex[q], nex[cur], sizeof nex[q]);
+      for ( ; ~p && nex[p][c] == cur; p = link[p]) nex[p][c] = q;
+      link[q] = link[cur];
+      link[cur] = q;
+      return q;
+    }
+    int cur = sz++, p = last;
+    len[cur] = len[p]+1;
+    for ( ; ~p && !nex[p][c]; p = link[p]) nex[p][c] = cur;
+    if (p == -1) return link[cur] = 0, cur;
+    int q = nex[p][c];
+    if (len[p]+1 == len[q]) return link[cur] = q, cur;
+    int clone = sz++;
+    len[clone] = len[p]+1;
+    memcpy(nex[clone], nex[q], sizeof nex[q]);
+    for (; ~p && nex[p][c] == q; p = link[p]) nex[p][c] = clone;
+    link[clone] = link[q];
+    link[q] = link[cur] = clone;
+    return cur;
+  }
+  void insert(const string &s) {
+    int last = 0; for (char ch : s) last = extend(last, ch-C);
+  }
+  void insert(const char *s) {
+    for (int i = 0, last = 0; s[i]; ++i) last = extend(last, s[i]-C);
+  }
+};
+```
+
+{% endspoiler %}
+
+### 多个字符串间的最长公共子串
+
+设有 $k$ 个字符串,每个结点建立长度为 $k$ 的标记,在 parent 树自底向上合并,若满足所有标记,则记录
+
+(对于本题而言，可以仅为标记数组，若需要求出此子串的个数，则需要改成计数数组)(可用二进制或bitset)
+
+### [根号暴力](https://blog.csdn.net/qq_42925924/article/details/112264228)
+
+在 parent 树上从字符串的每一个前缀的状态暴力往上跳(须标记vis)
+
+例如可用此法记录上述的标记数组
+
+证明:对于第 $i$ 个字符串,它最多会贡献 $\min{(n,\lvert s_i \rvert^2)}, n=\sum{\lvert s_i \rvert},O(n\sqrt{n})$
+
+{% spoiler "代码" %}
+```cpp
+  void jump(const string &s, int id) {
+    int x = 0;
+    for (char ch : s) {
+      x = nex[x][ch-C];
+      for (int y = x; y && vis[y] != id; y = link[y]) {
+        vis[y] = id;
+        ++k[y]; // 记录信息
+      }
+    }
+  }
+```
+
+{% endspoiler %}
+
+## 字典树
+{% spoiler "代码" %}
+```cpp
+struct TireTree {
+  static const int NN = 5e5+7;
+  static const int SZ = 26;
+  char beg;
+  int nex[NN][SZ], num[NN], cnt;
+  bool exist[NN];
+  TireTree(char _beg = 'a') : beg(_beg) { clear(); }
+  void clear() {
+    memset(nex, 0, sizeof nex);
+    memset(num, 0, sizeof num);
+    memset(exist, 0, sizeof exist);
+    cnt = 0;
+  }
+  void insert(const char *s) {
+    int len = strlen(s), p = 0;
+    for (int i = 0, c; i < len; ++i) {
+      c = s[i]-beg;
+      if (!nex[p][c]) nex[p][c] = ++cnt;
+      p = nex[p][c];
+      ++num[p];
+    }
+    exist[p] = true;
+  }
+  bool find(const char *s) {
+    int len = strlen(s), p = 0;
+    for (int i = 0, c; i < len; ++i) {
+      c = s[i]-beg;
+      if (!nex[p][c]) return false;
+      p = nex[p][c];
+    }
+    return exist[p];
+  }
+  int count(const char *s) {
+    int len = strlen(s), p = 0;
+    for (int i = 0, c; i < len; ++i) {
+      c = s[i]-beg;
+      if (!nex[p][c]) return 0;
+      p = nex[p][c];
+    }
+    return num[p];
+  }
+  void insert(const string &s) { insert(s.c_str()); }
+  bool find(const string &s) { return find(s.c_str()); }
+  int count(const string &s) { return count(s.c_str()); }
+};
+```
+
+{% endspoiler %}
+
+## 后缀平衡树
+
+
 ## 最小表示法
 
 $S[i\cdots n]+S[1\cdots i-1] = T$ 则称 $S$ 与 $T$ **循环同构**
@@ -4138,6 +4326,101 @@ vector<string> duval(string const& s) {
 {% endspoiler %}
 
 ---
+## 回文树|回文自动机|PAM
+定理:对于一个字符串 $s$,它的本质不同回文子串个数最多只有 $\lvert s \rvert$ 个。
+
+状态数,复杂度 $O(n)$
+
+由于回文树的构造过程中，节点本身就是按照拓扑序插入，因此可以按序枚举所有状态实现树遍历
+
+{% spoiler "代码" %}
+```cpp
+struct PAM {
+  static const int A = 26;
+  static const char C = 'a';
+  int sz, tot, last;
+  int ch[N][A], len[N], fail[N];
+  char s[N];
+  PAM() { init(); }
+  int node(int l) {
+    ++sz;
+    memset(ch[sz], 0, sizeof ch[sz]);
+    len[sz] = l;
+    fail[sz] = 0;
+    return sz;
+  }
+  void init() {
+    sz = -1;
+    last = 0;
+    s[tot = 0] = '$';
+    node(0);
+    fail[0] = node(-1);
+  }
+  int getfail(int x) {
+    while (s[tot-len[x]-1] != s[tot]) x = fail[x];
+    return x;
+  }
+  void insert(char c) {
+    s[++tot] = c;
+    int now = getfail(last);
+    if (!ch[now][c-C]) {
+      int x = node(len[now]+2);
+      fail[x] = ch[getfail(fail[now])][c-C];
+      ch[now][c-C] = x;
+    }
+    last = ch[now][c-C];
+  }
+};
+```
+
+{% endspoiler %}
+
+### 最小回文划分
+
+问题描述:求最小的 $k$,使得字符串能分成 $k$ 段且每段都是回文串
+
+暴力:$dp[i]=1+\min\limits_{s[j+1\cdots i]为回文串}dp[j]$
+
+记字符串 $s$ 长度为 $i$ 的前缀为 $pre(s,i)$，长度为 $i$ 的后缀为 $suf(s,i)$
+
+周期：若 $0< p \le |s|$，$\forall 1 \le i \le |s|-p,s[i]=s[i+p]$，就称 $p$ 是 $s$ 的周期。
+
+border：若 $0 \le r < |s|$，$pre(s,r)=suf(s,r)$，就称 $pre(s,r)$ 是 $s$ 的 border。
+
+周期和 border 的关系：$t$ 是 $s$ 的 border，当且仅当 $|s|-|t|$ 是 $s$ 的周期。
+
+引理 $1$：$t$ 是回文串 $s$ 的后缀，$t$ 是 $s$ 的 border 当且仅当 $t$ 是回文串。
+
+引理 $2$：$t$ 是回文串 $s$ 的 border ($|s|\le 2|t|$)，$s$ 是回文串当且仅当 $t$ 是回文串。
+
+引理 $3$：$t$ 是回文串 $s$ 的 border，则 $|s|-|t|$ 是 $s$ 的周期，$|s|-|t|$ 为 $s$ 的最小周期，当且仅当 $t$ 是 $s$ 的最长回文真后缀。
+
+引理 $4$：$x$ 是一个回文串，$y$ 是 $x$ 的最长回文真后缀，$z$ 是 $y$ 的最长回文真后缀。令 $u,v$ 分别为满足 $x=uy,y=vz$ 的字符串，则有下面三条性质
+
+$|u| \ge |v|$；
+
+如果 $|u| > |v|$，那么 $|u| > |z|$；
+
+如果 $|u| = |v|$，那么 $u=v$。
+
+推论：$s$ 的所有回文后缀按照长度排序后，可以划分成 $\log |s|$ 段等差数列。
+
+回文树上的每个节点 $u$ 需要多维护两个信息，$diff[u]$ 和 $slink[u]$。$diff[u]$ 表示节点 $u$ 和 $fail[u]$ 所代表的回文串的长度差，即 $len[u]-len[fail[u]]$。$slink[u]$ 表示 $u$ 一直沿着 fail 向上跳到第一个节点 $v$，使得 $diff[v] \neq diff[u]$，也就是 $u$ 所在等差数列中长度最小的那个节点。
+
+```cpp
+      diff[x] = len[x]-len[fail[x]];
+      slink[x] = diff[x] == diff[fail[x]] ? slink[fail[x]] : fail[x];
+```
+
+```cpp
+for (int i = 2; i <= sz; ++i)
+  for (int j = i, k = slink[i]; j; j = fail[k], k = slink[j])
+    // 等差数列[len[k], len[j]] d = diff[j]
+```
+
+### [回文级数优化回文树上dp](https://github.com/K0u1e/K0u1e-with-XCPC/blob/master/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8E%E6%A8%A1%E6%9D%BF/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%9B%9E%E6%96%87%E7%BA%A7%E6%95%B0%E4%BC%98%E5%8C%96%E5%9B%9E%E6%96%87%E6%A0%91%E4%B8%8Adp.cpp)
+
+
 # 图论|树论
 ## [DFS树](https://codeforces.com/blog/entry/68138)
 ## [树的重心](https://www.luogu.org/problemnew/show/P2986)
@@ -4267,8 +4550,8 @@ Kruskal (略)
 
 ---
 ## 二分图
-### [二分图匹配](https://www.luogu.org/problemnew/show/P3386)
-匈牙利算法
+### [二分图最大匹配](https://www.luogu.org/problemnew/show/P3386)
+增广路算法 Augmenting Path Algorithm $O(nm)$
 {% spoiler "代码" %}
 ```cpp
 bool check(int u) {
@@ -4295,6 +4578,10 @@ inline int solve() {
 ```
 
 {% endspoiler %}
+网络流 $O(\sqrt{n}m)$
+### 二分图最大权匹配
+Hungarian Algorithm (Kuhn-Munkres Algorithm)
+匈牙利算法又称为 KM 算法，可以在 $O(n^3)$ 时间内求出二分图的 最大权完美匹配。
 ### 二分图最小顶点覆盖
 定义：假如选了一个点就相当于覆盖了以它为端点的所有边。最小顶点覆盖就是选择最少的点来覆盖所有的边。
 
@@ -4343,13 +4630,11 @@ struct LCA {
 {% spoiler "代码" %}
 ```cpp
 struct HLD {
-  int dfn;
-  int fa[N], d[N], num[N], son[N], id[N], tp[N];
+  int fa[N], d[N], num[N], son[N], tp[N];
   vector<int> *e;
-  template <typename E>
-  void build(E *_e, const int &rt = 1) {
-    e = _e;
-    fa[rt] = dfn = 0;
+  void build(vector<int> *e, const int &rt = 1) {
+    this->e = e;
+    fa[rt] = 0;
     dfs1(rt);
     dfs2(rt);
   }
@@ -4366,7 +4651,6 @@ struct HLD {
   }
   void dfs2(const int &u = 1) {
     tp[u] = son[fa[u]] == u ? tp[fa[u]] : u;
-    id[u] = ++dfn;
     if (son[u]) dfs2(son[u]);
     for (const int &v : e[u]) if (v != son[u] && v != fa[u])
       dfs2(v);
@@ -6702,6 +6986,10 @@ namespace FST {
 
 {% endspoiler %}
 
+### 分治FWT
+
+形同分治FFT
+
 ### 倍增子集卷积
 
 [hdu6851](http://acm.hdu.edu.cn/showproblem.php?pid=6851)
@@ -7183,6 +7471,16 @@ inline int getG(const int &m) {
 ```
 
 {% endspoiler %}
+
+### 单位根反演
+
+$[k|n]=\frac{1}{k}\sum\limits_{i=0}^{k-1}w_{k}^{ni}$
+
+$[a\equiv b(\mod n)]=[a-b \equiv 0(\mod n)]=\frac{1}{n}\sum\limits_{i=0}^{n-1}w_n^{(a-b)k}=\frac{1}{n}\sum\limits_{i=0}^{n-1}w_n^{ak}w_n^{-bk}$
+
+### 单位根卷积
+
+$\sum\limits_{i=0}^{n}[i\%k=0]f(i)=\sum\limits_{i=0}^{n}\frac{1}{k}\sum\limits_{j=0}^{k-1}(w_k^i)^jf(i)$
 
 ## [大数阶乘](https://www.cnblogs.com/cax1165/p/6070902.html)
 
