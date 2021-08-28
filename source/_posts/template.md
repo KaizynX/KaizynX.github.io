@@ -412,7 +412,32 @@ void CDQ(int l, int r) {
 
 {% endspoiler %}
 
-## 线段树分治
+## 某区间操作问题
+
+每次操作可以使一个区间+1(或-1),使得序列为0的操作次数下界 $\frac{\sum\limits_{i=1}^{n+1}\lvert a_i-a_{i-1} \rvert}{2}$
+
+## 分数规划
+分数规划用来求一个分式的极值。
+
+形象一点就是，给出 $a_i$ 和 $b_i$，求一组 $w_i\in{0,1}$，最小化或最大化
+
+$$ \displaystyle\frac{\sum\limits_{i=1}^na_i\times w_i}{\sum\limits_{i=1}^nb_i\times w_i} $$
+
+每种物品有两个权值 $a$ 和 $b$，选出若干个物品使得 $\displaystyle\frac{\sum a}{\sum b}$ 最小/最大。
+
+例如代价为 平均值 或 乘积开个数次根(取ln)
+
+分数规划问题的通用方法是二分。
+
+假设我们要求最大值。二分一个答案 $mid$，然后推式子（为了方便少写了上下界）：
+
+$$\displaystyle
+\begin{aligned}
+&\frac{\sum a_i\times w_i}{\sum b_i\times w_i}>mid\\ 
+\Longrightarrow&\sum a_i\times w_i-mid\times \sum b_i\cdot w_i>0\\ 
+\Longrightarrow&\sum w_i\times(a_i-mid\times b_i)>0 \end{aligned}$$
+
+那么只要求出不等号左边的式子的最大值就行了。如果最大值比 $0$ 要大，说明 $mid$ 是可行的，否则不可行。
 
 ---
 # 计算几何
@@ -739,6 +764,8 @@ struct Heap{
 
 ## 二叉查找树
 ## [平衡树](https://www.luogu.org/problemnew/show/P3369)
+### 替罪羊树|Scapegoat Tree
+### Treap
 ### [Splay](https://www.luogu.org/blog/user19027/solution-p3369)
 {% spoiler "代码" %}
 ```cpp
@@ -1556,10 +1583,11 @@ template <typename T>
 struct Tree {
   int tot, lc[NLOG], rc[NLOG];
   T tr[NLOG];
+  void init() { tot = 0; }
   T giao(const T &x, const T &y) { return x+y; }
   void push_up(int i) { tr[i] = giao(tr[lc[i]], tr[rc[i]]); }
   int new_node(T v = 0) {
-    assert(++tot < NLOG);
+    ++tot; // assert(++tot < NLOG);
     lc[tot] = rc[tot] = 0;
     tr[tot] = v;
     return tot;
@@ -1580,6 +1608,17 @@ struct Tree {
     merge(mid+1, r, rc[x], rc[y]);
     push_up(x); // del(y);
   }
+  /*
+  int merge(int l, int r, int x, int y) { // new node
+    if (!x || !y) return x += y;
+    int cur = new_node(), mid = (l+r)>>1;
+    if (l == r) return tr[cur] = tr[x]+tr[y], cur;
+    lc[cur] = merge(l, mid, lc[x], lc[y]);
+    rc[cur] = merge(mid+1, r, rc[x], rc[y]);
+    push_up(cur);
+    return cur;
+  }
+  */
   void split(int L, int R, int l, int r, int &x, int &y) { //split x [L, R] to y
     if (!x) return;
     if (L <= l && r <= R) return y = x, x = 0, void();
@@ -1589,13 +1628,13 @@ struct Tree {
     if (R >  mid) split(L, R, mid+1, r, rc[x], rc[y]);
     push_up(x); push_up(y);
   }
-  T query_sum(int L, int R, int l, int r, int i) {
+  T query(int L, int R, int l, int r, int i) {
     if (!i) return 0;
     if (L <= l && r <= R) return tr[i];
     int mid = (l+r)>>1;
-    if (R <= mid) return query_sum(L, R, l, mid, lc[i]);
-    if (L >  mid) return query_sum(L, R, mid+1, r, rc[i]);
-    return query_sum(L, R, l, mid, lc[i])+query_sum(L, R, mid+1, r, rc[i]);
+    if (R <= mid) return query(L, R, l, mid, lc[i]);
+    if (L >  mid) return query(L, R, mid+1, r, rc[i]);
+    return giao(query(L, R, l, mid, lc[i]), query(L, R, mid+1, r, rc[i]));
   }
   int query_kth(int k, int l, int r, int i) {
     if (l == r) return l;
@@ -2115,8 +2154,6 @@ struct SegmentTree {
 ## 树套树
 
 在第一维线段树的每个结点建立第二维线段树
-
-## 替罪羊树|Scapegoat Tree
 
 ## K-D Tree | KDT
 
@@ -3555,6 +3592,142 @@ struct StringHash {
 {% endspoiler %}
 
 ---
+## 字典树
+{% spoiler "代码" %}
+```cpp
+struct TireTree {
+  static const int NN = 5e5+7;
+  static const int SZ = 26;
+  char beg;
+  int nex[NN][SZ], num[NN], cnt;
+  bool exist[NN];
+  TireTree(char _beg = 'a') : beg(_beg) { clear(); }
+  void clear() {
+    memset(nex, 0, sizeof(nex[0])*(cnt+1));
+    memset(num, 0, sizeof(int)*(cnt+1));
+    memset(exist, 0, sizeof(bool)*(cnt+1));
+    cnt = 0;
+  }
+  void insert(const char *s) {
+    int len = strlen(s), p = 0;
+    for (int i = 0, c; i < len; ++i) {
+      c = s[i]-beg;
+      if (!nex[p][c]) nex[p][c] = ++cnt;
+      p = nex[p][c];
+      ++num[p];
+    }
+    exist[p] = true;
+  }
+  bool find(const char *s) {
+    int len = strlen(s), p = 0;
+    for (int i = 0, c; i < len; ++i) {
+      c = s[i]-beg;
+      if (!nex[p][c]) return false;
+      p = nex[p][c];
+    }
+    return exist[p];
+  }
+  int count(const char *s) {
+    int len = strlen(s), p = 0;
+    for (int i = 0, c; i < len; ++i) {
+      c = s[i]-beg;
+      if (!nex[p][c]) return 0;
+      p = nex[p][c];
+    }
+    return num[p];
+  }
+  void insert(const string &s) { insert(s.c_str()); }
+  bool find(const string &s) { return find(s.c_str()); }
+  int count(const string &s) { return count(s.c_str()); }
+};
+```
+
+{% endspoiler %}
+
+### 求异或
+最大异或
+{% spoiler "代码" %}
+```cpp
+struct TireTree {
+  static const int SZ = 2;
+  static const int B = 30;
+  static const int NN = N*B;
+  int nex[NN][SZ], cnt;
+  void init() { clear(); }
+  void clear() {
+    memset(nex, 0, sizeof(int)*(cnt+1)*SZ);
+    cnt = 0;
+  }
+  void insert(int x) {
+    for (int i = B, c, p = 0; i >= 0; --i) {
+      c = (x>>i)&1;
+      if (!nex[p][c]) nex[p][c] = ++cnt;
+      p = nex[p][c];
+    }
+  }
+  int max_xor(int x) const {
+    int ans = 0;
+    for (int i = B, c, p = 0; i >= 0; --i) {
+      c = (x>>i)&1;
+      if (!nex[p][c^1]) p = nex[p][c];
+      else p = nex[p][c^1], ans |= 1<<i;
+    }
+    return ans;
+  }
+};
+```
+
+{% endspoiler %}
+动态开点+支持合并
+{% spoiler "代码" %}
+```cpp
+struct TireTree {
+  static const int SZ = 2;
+  static const int B = 30;
+  typedef array<int, SZ> T;
+  vector<T> nex;
+  TireTree() { init(); }
+  void init() { nex.assign(1, T()); /* nex.reserve(N); */ }
+  void clear() { nex = vector<T>(); }
+  size_t size() const { return nex.size(); }
+  void extend(int &x) {
+    if (x != 0) return;
+    x = nex.size();
+    nex.emplace_back(T());
+  }
+  void insert(int x) {
+    for (int i = B, c, p = 0; i >= 0; --i) {
+      c = (x>>i)&1;
+      extend(nex[p][c]);
+      p = nex[p][c];
+    }
+  }
+  int max_xor(int x) const {
+    int ans = 0;
+    for (int i = B, c, p = 0; i >= 0; --i) {
+      c = (x>>i)&1;
+      if (!nex[p][c^1]) p = nex[p][c];
+      else p = nex[p][c^1], ans |= 1<<i;
+    }
+    return ans;
+  }
+  void dfs(const TireTree &t, int p = 0, int pt = 0) {
+    for (int c = 0; c < SZ; ++c) {
+      if (t.nex[pt][c] == 0) continue;
+      extend(nex[p][c]);
+      dfs(t, nex[p][c], t.nex[pt][c]);
+    }
+  }
+  void join(TireTree &t) {
+    if (t.size() < size()) swap(*this, t);
+    dfs(t);
+    t.clear();
+  }
+};
+```
+
+{% endspoiler %}
+
 ## AC自动机
 AC 自动机是 以 Trie 的结构为基础，结合 KMP 的思想 建立的。
 
@@ -3742,6 +3915,7 @@ template <typename T> // s start from 1
 inline void SA(const T *s, const int &n) {
 #define cmp(x, y, w) oldrk[x] == oldrk[y] && oldrk[x + w] == oldrk[y + w]
   static int oldrk[N<<1], id[N], px[N], cnt[N], m;
+  // memset(oldrk+n+1, 0, sizeof(int)*n); // multi testcase
   memset(cnt, 0, sizeof(int) * (m = 128));
   for (int i = 1; i <= n; ++i) ++cnt[rk[i] = s[i]];
   for (int i = 1; i <= m; ++i) cnt[i] += cnt[i - 1];
@@ -3753,7 +3927,7 @@ inline void SA(const T *s, const int &n) {
     for (i = 1; i <= n; ++i) ++cnt[px[i] = rk[id[i]]];
     for (i = 1; i <= m; ++i) cnt[i] += cnt[i - 1];
     for (i = n; i; --i) sa[cnt[px[i]]--] = id[i];
-    swap(oldrk, rk);
+    swap(oldrk, rk); // memcpy(oldrk+1, rk+1, sizeof(int)*n);
     for (p = 0, i = 1; i <= n; ++i) rk[sa[i]] = cmp(sa[i], sa[i - 1], w) ? p : ++p;
   }
   for (int i = 1, k = 0; i <= n; ++i) {
@@ -3860,7 +4034,6 @@ inline void init(T s, const int len, const int sigma = 128) {
 {% spoiler "代码" %}
 ```cpp
 struct SAonTree {
-  static const int LOGN = 33-__builtin_clz(N);
   int n, d[N], cnt[N], sa[N], rk[N<<1], _rk[N<<1], _oldrk[N<<1], tp[N<<1];
   template <typename T>
   void tsort(int *sa, T *rk, int *tp, int m) {
@@ -3872,7 +4045,7 @@ struct SAonTree {
   template <typename T>
   void build(int *f, const T *a, const int n) {
     this->n = n;
-    int p = 128, i;
+    int p = 128, i; // p = n
     iota(tp+1, tp+n+1, 1);
     tsort(sa, a, tp, p);
     for (i = 1, p = 0; i <= n; ++i) {
@@ -3889,7 +4062,7 @@ struct SAonTree {
             && tp[f[sa[i-1]]] == tp[f[sa[i]]] ? p : ++p;
         rk[sa[i]] = i;
       }
-      for (int i = n; i; --i) f[i] = f[f[i]];
+      for (int i = n; i; --i) f[i] = f[f[i]]; // attention special tree
     }
   }
 };
@@ -3897,6 +4070,7 @@ struct SAonTree {
 
 {% endspoiler %}
 
+## 后缀平衡树
 
 ## 后缀自动机|SAM
 
@@ -3910,53 +4084,32 @@ $len(v)$ 为该状态最长的字符串长度
 空间换时间
 {% spoiler "代码" %}
 ```cpp
-struct SAM {
+struct SAM { // root 0
   static const int A = 26;
+  static const int M = N<<1;
   static const char C = 'a';
-  struct State {
-    int len, link, nex[A];
-    State& operator =(const State &st) {
-      len = st.len;
-      link = st.link;
-      memcpy(nex, st.nex, sizeof(nex));
-      return *this;
-    }
-  } st[N<<1];
-  SAM() { init(); }
-  int sz, last;
+  int sz, last, len[M], link[M], nex[M][A];
   void init() {
-    memset(st, 0, sizeof(State)*sz);
-    st[0].len = 0;
-    st[0].link = -1;
-    sz = 1;
-    last = 0;
+    memset(nex, 0, sizeof(int)*A*sz);
+    link[0] = -1; sz = 1; last = 0;
   }
-  void extend(char ch) {
-    int c = ch-C, cur = sz++;
-    st[cur].len = st[last].len+1;
-    int p = last;
-    while (~p && !st[p].nex[c]) {
-      st[p].nex[c] = cur;
-      p = st[p].link;
-    }
-    if (p == -1) {
-      st[cur].link = 0;
-    } else {
-      int q = st[p].nex[c];
-      if (st[p].len+1 == st[q].len) {
-        st[cur].link = q;
-      } else {
-        int clone = sz++;
-        st[clone] = st[q];
-        st[clone].len = st[p].len+1;
-        while (~p && st[p].nex[c] == q) {
-          st[p].nex[c] = clone;
-          p = st[p].link;
-        }
-        st[q].link = st[cur].link = clone;
-      }
-    }
-    last = cur;
+  int extend(int c) {
+    int cur = sz++, p = last;
+    len[cur] = len[last]+1;
+    for (; ~p && !nex[p][c]; p = link[p]) nex[p][c] = cur;
+    if (p == -1) return link[cur] = 0, cur;
+    int q = nex[p][c];
+    if (len[p]+1 == len[q]) return link[cur] = q, cur;
+    int clone = sz++;
+    memcpy(nex[clone], nex[q], sizeof nex[q]);
+    link[clone] = link[q];
+    len[clone] = len[p]+1;
+    for (; ~p && nex[p][c] == q; p = link[p]) nex[p][c] = clone;
+    link[q] = link[cur] = clone;
+    return cur;
+  }
+  void insert(const string &s) {
+    init(); for (char ch : s) last = extend(ch-C);
   }
 };
 ```
@@ -3966,7 +4119,7 @@ struct SAM {
 {% spoiler "代码" %}
 ```cpp
 template <typename T>
-struct SAM {
+struct SAM { // root 0
   struct State {
     int len, link;
     map<T, int> nex;
@@ -4012,6 +4165,23 @@ struct SAM {
 
 {% endspoiler %}
 
+{% spoiler "代码" %}
+```cpp
+  void build() { // topo on parent tree
+    static int t[M], rk[M];
+    memset(t, 0, sizeof(int)*sz);
+    for (int i = 0; i < sz; ++i) ++t[len[i]];
+    for (int i = 1; i < sz; ++i) t[i] += t[i-1];
+    for (int i = 0; i < sz; ++i) rk[--t[len[i]]] = i;
+    for (int _ = sz-1, i, j; _; --_) { // assert(rk[0] == 0);
+      i = rk[_];
+      j = link[i];
+      cnt[j] += cnt[i];
+    }
+  }
+```
+
+{% endspoiler %}
 ### 检查字符串是否出现
 
 丢进去转移。这个算法还找到了模式串在文本串中出现的最大前缀长度。
@@ -4043,20 +4213,15 @@ $ans_{v}=\sum\limits_{w:(v,w,c)\in DAWG}d_{w}+ans_{w}$
 
 {% spoiler "代码" %}
 ```cpp
-  int lcs(const string &t) {
-    int v = 0, l = 0, mx = 0;
-    for (char c : t) {
-      while (v && !st[v].nex[c-C]) {
-        v = st[v].link;
-        l = st[v].len;
-      }
-      if (st[v].nex[c-C]) {
-        v = st[v].nex[c-C];
-        ++l;
-      }
-      mx = max(mx, l);
+  int lcs(const string &s) {
+    int u = 0, l = 0, res = 0, c;
+    for (char ch : s) {
+      c = ch-C;
+      while (u && !nex[u][c]) l = len[u = link[u]];
+      if (nex[u][c]) u = nex[u][c], ++l;
+      res = max(res, l);
     }
-    return mx;
+    return res;
   }
 ```
 
@@ -4068,6 +4233,8 @@ $ans_{v}=\sum\limits_{w:(v,w,c)\in DAWG}d_{w}+ans_{w}$
 
 $ans = \max\limits_{j}{(\min\limits_{i}{f[i][j]})}$
 
+### 后缀的最长公共前缀|height
+求两个后缀的最长公共前缀，显然就是两个后缀的节点在Parent树上的LCA
 
 ## 广义后缀自动机
 
@@ -4179,7 +4346,7 @@ struct generalSAM {
 
 {% endspoiler %}
 
-### 多个字符串间的最长公共子串
+### [多个字符串间的最长公共子串](https://www.luogu.com.cn/problem/SP8093)
 
 设有 $k$ 个字符串,每个结点建立长度为 $k$ 的标记,在 parent 树自底向上合并,若满足所有标记,则记录
 
@@ -4209,60 +4376,44 @@ struct generalSAM {
 
 {% endspoiler %}
 
-## 字典树
+### 树上本质不同路径数
+
+一颗无根树上任意一条路径必定可以在以某个叶节点为根时，变成一条从上到下的路径
+
+暴力把所有叶子结点为根的树加入自动机,就这?
+
 {% spoiler "代码" %}
 ```cpp
-struct TireTree {
-  static const int NN = 5e5+7;
-  static const int SZ = 26;
-  char beg;
-  int nex[NN][SZ], num[NN], cnt;
-  bool exist[NN];
-  TireTree(char _beg = 'a') : beg(_beg) { clear(); }
-  void clear() {
-    memset(nex, 0, sizeof nex);
-    memset(num, 0, sizeof num);
-    memset(exist, 0, sizeof exist);
-    cnt = 0;
-  }
-  void insert(const char *s) {
-    int len = strlen(s), p = 0;
-    for (int i = 0, c; i < len; ++i) {
-      c = s[i]-beg;
-      if (!nex[p][c]) nex[p][c] = ++cnt;
-      p = nex[p][c];
-      ++num[p];
-    }
-    exist[p] = true;
-  }
-  bool find(const char *s) {
-    int len = strlen(s), p = 0;
-    for (int i = 0, c; i < len; ++i) {
-      c = s[i]-beg;
-      if (!nex[p][c]) return false;
-      p = nex[p][c];
-    }
-    return exist[p];
-  }
-  int count(const char *s) {
-    int len = strlen(s), p = 0;
-    for (int i = 0, c; i < len; ++i) {
-      c = s[i]-beg;
-      if (!nex[p][c]) return 0;
-      p = nex[p][c];
-    }
-    return num[p];
-  }
-  void insert(const string &s) { insert(s.c_str()); }
-  bool find(const string &s) { return find(s.c_str()); }
-  int count(const string &s) { return count(s.c_str()); }
-};
+void dfs(int u, int fa = 0, int last = 0) {
+  int nex = gsam.extend(last, a[u]);
+  for (int v : e[u]) if (v != fa) dfs(v, u, nex);
+}
 ```
 
 {% endspoiler %}
 
-## 后缀平衡树
+### 循环同构问题
 
+CF235C:SAM 读入字符串是支持删除首字符的! 将一个字符串所有的循环同构串插入到 sam, 外加 vis 去重
+
+{% spoiler "代码" %}
+```cpp
+ll cyclic_query(const string &s) { // 循环同构
+    static int id = 0, vis[M];
+    ++id;
+    ll res = 0;
+    for (int i = 0, c, m = s.size(), u = 0, l = 0; i < m*2-1; ++i) {
+      c = s[i%m]-C;
+      while (u && !nex[u][c]) l = len[u = link[u]];
+      if (nex[u][c]) u = nex[u][c], ++l;
+      if (l > m && --l == len[link[u]]) u = link[u]; // 删除首字符
+      if (l == m && vis[u] != id) res += cnt[u], vis[u] = id; // 去重,记录答案
+    }
+    return res;
+  }
+```
+
+{% endspoiler %}
 
 ## 最小表示法
 
@@ -4375,11 +4526,7 @@ struct PAM {
 
 {% endspoiler %}
 
-### 最小回文划分
-
-问题描述:求最小的 $k$,使得字符串能分成 $k$ 段且每段都是回文串
-
-暴力:$dp[i]=1+\min\limits_{s[j+1\cdots i]为回文串}dp[j]$
+### 特殊log性质
 
 记字符串 $s$ 长度为 $i$ 的前缀为 $pre(s,i)$，长度为 $i$ 的后缀为 $suf(s,i)$
 
@@ -4414,12 +4561,74 @@ $|u| \ge |v|$；
 
 ```cpp
 for (int i = 2; i <= sz; ++i)
-  for (int j = i, k = slink[i]; j; j = fail[k], k = slink[j])
+  for (int j = i, k = slink[i]; j; j = k, k = slink[j])
     // 等差数列[len[k], len[j]] d = diff[j]
 ```
 
+### 最小回文划分
+
+问题描述:求最小的 $k$,使得字符串能分成 $k$ 段且每段都是回文串
+
+暴力:$dp[i]=1+\min\limits_{s[j+1\cdots i]为回文串}dp[j]$
+
+$g[v]$ 表示 $v$ 所在等差数列的 $dp$ 值之和，且 $v$ 是这个等差数列中长度最长的节点，则 $g[v]=\sum_{x,slink[x]=v} dp[i-len[x]]$，这里 $i$ 是当前枚举到的下标。(该题改求和为取min)
+
+假设当前枚举到第 $i$ 个字符，回文树上对应节点为 $x$。$g[x]=g[fail[x]]+dp[i-(len[slink[x]]+diff[x])]$
+
+{% spoiler "代码" %}
+```cpp
+  void solve() {
+    dp[0] = 1;
+    for (int x = 0, i = 1; i <= tot; ++i) {
+      while (s[i-len[x]-1] != s[i]) x = fail[x];
+      x = ch[x][s[i]-C];
+      for (int j = x; j > 1; j = slink[j]) {
+        g[j] = dp[i-len[slink[j]]-diff[j]];
+        if (diff[j] == diff[fail[j]]) update(g[j], g[fail[j]]);
+        update(dp[i], g[j]);
+      }
+    }
+  }
+```
+
+{% endspoiler %}
+
 ### [回文级数优化回文树上dp](https://github.com/K0u1e/K0u1e-with-XCPC/blob/master/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8E%E6%A8%A1%E6%9D%BF/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%9B%9E%E6%96%87%E7%BA%A7%E6%95%B0%E4%BC%98%E5%8C%96%E5%9B%9E%E6%96%87%E6%A0%91%E4%B8%8Adp.cpp)
 
+问题描述:把字符串 $s$ 划分成若干个字符串 $t_1t_2\cdots t_k$,使得 $t_i=t_{k-i+1}$,求方案数
+
+问题转化:将字符串转为 $s_1s_ns_2s_{n-1}\cdots$,原划分方案恰好对应了对新串进行偶数长度的回文划分的方案
+
+tips:只需要考虑偶数下标位置的 $dp$ 值即可
+
+## 序列自动机
+序列自动机是接受且仅接受一个字符串的子序列的自动机。
+
+{% spoiler "代码" %}
+```cpp
+struct SeqAutomaton { // suppose string [1, n]
+  static const int A = 26;
+  static const char C = 'a';
+  int nex[N][A];
+  void build(const string &s) {
+    memset(nex[s.size()], 0, sizeof nex[0]);
+    for (int i = s.size(); i; --i) {
+      memcpy(nex[i-1], nex[i], sizeof nex[0]);
+      nex[i-1][s[i-1]-C] = i;
+    }
+  }
+};
+```
+
+{% endspoiler %}
+
+## Main-Lorentz 算法
+
+我们将一个字符串连续写两遍所产生的新字符串称为 重串 (tandem repetition)。将被重复的这个字符串称为原串。
+
+如果一个重串的原串不是重串，则我们称这个重串为 本原重串 (primitive repetition)。可以证明，本原重串最多有 $O(n \log n)$ 个。
+
+如果我们把一个重串用 Crochemore 三元组 $(i, p, r)$ 进行压缩，其中 $i$ 是重串的起始位置，$p$ 是该重串某个循环节的长度（注意不是原串长度！），$r$ 为这个循环节重复的次数。则某字符串的所有重串可以被 $O(n \log n)$ 个 Crochemore 三元组表示。
 
 # 图论|树论
 ## [DFS树](https://codeforces.com/blog/entry/68138)
@@ -6132,6 +6341,73 @@ p_1f(i-1,j)+p_2f(i,j-1)+p_3f(i+1,j)+p_4f(i,j+1)+1,i^2+j^2\leq R \\\\
 
 #### 主元法 $O(R^3)$
 
+## 树分治
+### 点分治
+按树的重心分治
+{% spoiler "代码" %}
+```cpp
+namespace DFZ {
+int vis[N], siz[N], mxs[N], cnt[K];
+vector<int> pset;
+
+void calc_size(int u, int fa = 0) { // 找重心
+  siz[u] = 1; mxs[u] = 0;
+  pset.emplace_back(u);
+  for (auto p : e[u]) {
+    int v = p.first;
+    if (v == fa || vis[v]) continue;
+    calc_size(v, u);
+    siz[u] += siz[v];
+    mxs[u] = max(mxs[u], siz[v]);
+  }
+}
+
+void query(int u, int fa, int dis) {
+  for (int i = 1; i <= m; ++i) if (q[i] >= dis) ans[i] |= cnt[q[i]-dis];
+  for (auto p : e[u]) {
+    int v = p.first;
+    if (v == fa || vis[v]) continue;
+    query(v, u, dis+p.second);
+  }
+}
+
+void update(int u, int fa, int dis, int k) {
+  if (dis < K) cnt[dis] += k;
+  for (auto p : e[u]) {
+    int v = p.first;
+    if (v == fa || vis[v]) continue;
+    update(v, u, dis+p.second, k);
+  }
+}
+
+void dfz(int u = 1) {
+  pset.clear();
+  calc_size(u);
+  for (int v : pset) { // get centre
+    mxs[v] = max(mxs[v], (int)pset.size()-siz[v]);
+    if (mxs[v] < mxs[u]) u = v;
+  }
+  cnt[0] = 1;
+  for (auto p : e[u]) {
+    int v = p.first;
+    if (vis[v]) continue;
+    query(v, u, p.second);
+    update(v, u, p.second, 1);
+  }
+  update(u, 0, 0, -1); // clear
+  vis[u] = 1;
+  for (auto p : e[u]) {
+    int v = p.first;
+    if (vis[v]) continue;
+    dfz(v);
+  }
+}
+} // namespace 点分治
+```
+
+{% endspoiler %}
+### 边分治
+
 ---
 # 数论
 ## 快排
@@ -6655,42 +6931,41 @@ struct comp {
 ## [快速傅里叶变换|FFT](https://www.luogu.com.cn/problem/P3803)
 {% spoiler "代码" %}
 ```cpp
-// array [0, n)
-namespace FFT {
-  static const int SIZE = (1<<18)+3;
-  int len, bit;
-  int rev[SIZE];
-  // #define comp complex<long double>
-  void fft(comp a[], int flag = 1) {
-    for (int i = 0; i < len; ++i)
-      if (i < rev[i]) swap(a[i], a[rev[i]]);
-    for (int base = 1; base < len; base <<= 1) {
-      comp w, wn = {cos(PI/base), flag*sin(PI/base)};
-      for (int i = 0; i < len; i += base*2) {
-        w = { 1.0, 0.0 };
-        for (int j = 0; j < base; ++j) {
-          comp x = a[i+j], y = w*a[i+j+base];
-          a[i+j] = x+y;
-          a[i+j+base] = x-y;
-          w *= wn;
-        }
+namespace FFT { // array [0, n)
+const int SIZE = (1<<18)+3;
+int len, bit;
+int rev[SIZE];
+// #define comp complex<long double>
+void fft(comp a[], int flag = 1) {
+  for (int i = 0; i < len; ++i)
+    if (i < rev[i]) swap(a[i], a[rev[i]]);
+  for (int base = 1; base < len; base <<= 1) {
+    comp w, wn = {cos(PI/base), flag*sin(PI/base)};
+    for (int i = 0; i < len; i += base*2) {
+      w = { 1.0, 0.0 };
+      for (int j = 0; j < base; ++j) {
+        comp x = a[i+j], y = w*a[i+j+base];
+        a[i+j] = x+y;
+        a[i+j+base] = x-y;
+        w *= wn;
       }
     }
   }
-  void work(comp f[], const int &n, comp g[], const int &m) {
-    len = 1; bit = 0;
-    while (len < n+m) len <<= 1, ++bit;
-    // multi-testcase
-    for (int i = n; i < len; ++i) f[i] = 0;
-    for (int i = m; i < len; ++i) g[i] = 0;
-    for (int i = 0; i < len; ++i)
-      rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
-    fft(f, 1); fft(g, 1);
-    for (int i = 0; i < len; ++i) f[i] *= g[i];
-    fft(f, -1);
-    for (int i = 0; i < n+m; ++i) f[i].real /= len;
-  }
 }
+void work(comp f[], const int &n, comp g[], const int &m) {
+  len = 1; bit = 0;
+  while (len < n+m) len <<= 1, ++bit;
+  // multi-testcase
+  for (int i = n; i < len; ++i) f[i] = 0;
+  for (int i = m; i < len; ++i) g[i] = 0;
+  for (int i = 0; i < len; ++i)
+    rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
+  fft(f, 1); fft(g, 1);
+  for (int i = 0; i < len; ++i) f[i] *= g[i];
+  fft(f, -1);
+  for (int i = 0; i < n+m; ++i) f[i].real /= len;
+}
+} // namespace FFT
 /*
   template <class T>
   void work(T a[], const int &n) {
@@ -6715,48 +6990,47 @@ namespace FFT {
 ## 快速数论变换|NTT
 {% spoiler "代码" %}
 ```cpp
-// array [0, n)
-namespace NTT {
-  static const int SIZE = (1<<18)+3;
-  const int G = 3;
-  int len, bit;
-  int rev[SIZE];
-  long long f[SIZE], g[SIZE];
-  template <class T>
-  void ntt(T a[], int flag = 1) {
-    for (int i = 0; i < len; ++i)
-      if (i < rev[i]) swap(a[i], a[rev[i]]);
-    for (int base = 1; base < len; base <<= 1) {
-      long long wn = qpow(G, (MOD-1)/(base*2)), w;
-      if (flag == -1) wn = qpow(wn, MOD-2);
-      for (int i = 0; i < len; i += base*2) {
-        w = 1;
-        for (int j = 0; j < base; ++j) {
-          long long x = a[i+j], y = w*a[i+j+base]%MOD;
-          a[i+j] = (x+y)%MOD;
-          a[i+j+base] = (x-y+MOD)%MOD;
-          w = w*wn%MOD;
-        }
+namespace NTT { // array [0, n)
+const int SIZE = (1<<18)+3;
+const int G = 3;
+int len, bit;
+int rev[SIZE];
+long long f[SIZE], g[SIZE];
+template <class T>
+void ntt(T a[], int flag = 1) {
+  for (int i = 0; i < len; ++i)
+    if (i < rev[i]) swap(a[i], a[rev[i]]);
+  for (int base = 1; base < len; base <<= 1) {
+    long long wn = qpow(G, (MOD-1)/(base*2)), w;
+    if (flag == -1) wn = qpow(wn, MOD-2);
+    for (int i = 0; i < len; i += base*2) {
+      w = 1;
+      for (int j = 0; j < base; ++j) {
+        long long x = a[i+j], y = w*a[i+j+base]%MOD;
+        a[i+j] = (x+y)%MOD;
+        a[i+j+base] = (x-y+MOD)%MOD;
+        w = w*wn%MOD;
       }
     }
   }
-  template <class T>
-  void work(T a[], const int &n, T b[], const int &m) {
-    len = 1; bit = 0;
-    while (len < n+m) len <<= 1, ++bit;
-    for (int i = 0; i < n; ++i) f[i] = a[i];
-    for (int i = n; i < len; ++i) f[i] = 0;
-    for (int i = 0; i < m; ++i) g[i] = b[i];
-    for (int i = m; i < len; ++i) g[i] = 0;
-    for (int i = 0; i < len; ++i)
-      rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
-    ntt(f, 1); ntt(g, 1);
-    for (int i = 0; i < len; ++i) f[i] = f[i]*g[i]%MOD;
-    ntt(f, -1);
-    long long inv = qpow(len, MOD-2);
-    for (int i = 0; i < n+m-1; ++i) f[i] = f[i]*inv%MOD;
-  }
 }
+template <class T>
+void work(T a[], const int &n, T b[], const int &m) {
+  len = 1; bit = 0;
+  while (len < n+m) len <<= 1, ++bit;
+  for (int i = 0; i < n; ++i) f[i] = a[i];
+  for (int i = n; i < len; ++i) f[i] = 0;
+  for (int i = 0; i < m; ++i) g[i] = b[i];
+  for (int i = m; i < len; ++i) g[i] = 0;
+  for (int i = 0; i < len; ++i)
+    rev[i] = (rev[i>>1]>>1)|((i&1)<<(bit-1));
+  ntt(f, 1); ntt(g, 1);
+  for (int i = 0; i < len; ++i) f[i] = f[i]*g[i]%MOD;
+  ntt(f, -1);
+  long long inv = qpow(len, MOD-2);
+  for (int i = 0; i < n+m-1; ++i) f[i] = f[i]*inv%MOD;
+}
+} // namespace NTT
 ```
 
 {% endspoiler %}
@@ -6764,61 +7038,61 @@ namespace NTT {
 {% spoiler "代码" %}
 ```cpp
 namespace MTT {
-  static const int SIZE = (1<<18)+7;
-  int Mod = MOD;
-  comp w[SIZE];
-  int bitrev[SIZE];
-  long long f[SIZE];
-  void fft(comp *a, const int &n) {
-    for (int i = 0; i < n; ++i) if (i < bitrev[i]) swap(a[i], a[bitrev[i]]);
-    for (int i = 2, lyc = n >> 1; i <= n; i <<= 1, lyc >>= 1)
-      for (int j = 0; j < n; j += i) {
-        comp *l = a + j, *r = a + j + (i >> 1), *p = w;
-        for (int k = 0; k < i>>1; ++k) {
-          comp tmp = *r * *p;
-          *r = *l - tmp, *l = *l + tmp;
-          ++l, ++r, p += lyc;
-        }
+const int SIZE = (1<<18)+7;
+const int Mod = MOD;
+comp w[SIZE];
+int bitrev[SIZE];
+long long f[SIZE];
+void fft(comp *a, const int &n) {
+  for (int i = 0; i < n; ++i) if (i < bitrev[i]) swap(a[i], a[bitrev[i]]);
+  for (int i = 2, lyc = n >> 1; i <= n; i <<= 1, lyc >>= 1)
+    for (int j = 0; j < n; j += i) {
+      comp *l = a + j, *r = a + j + (i >> 1), *p = w;
+      for (int k = 0; k < i>>1; ++k) {
+        comp tmp = *r * *p;
+        *r = *l - tmp, *l = *l + tmp;
+        ++l, ++r, p += lyc;
       }
-  }
-  template <class T>
-  inline void work(T *x, const int &n, T *y, const int &m) {
-    static int bit, L;
-    static comp a[SIZE], b[SIZE];
-    static comp dfta[SIZE], dftb[SIZE];
-
-    for (L = 1, bit = 0; L < n+m-1; ++bit, L <<= 1);
-    for (int i = 0; i < L; ++i) bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << (bit - 1));
-    for (int i = 0; i < L; ++i) w[i] = comp(cos(2 * PI * i / L), sin(2 * PI * i / L));
-
-    for (int i = 0; i < n; ++i) (x[i] += Mod) %= Mod, a[i] = comp(x[i] & 32767, x[i] >> 15);
-    for (int i = n; i < L; ++i) a[i] = 0;
-    for (int i = 0; i < m; ++i) (y[i] += Mod) %= Mod, b[i] = comp(y[i] & 32767, y[i] >> 15);
-    for (int i = m; i < L; ++i) b[i] = 0;
-    fft(a, L), fft(b, L);
-    for (int i = 0; i < L; ++i) {
-      int j = (L - i) & (L - 1);
-      static comp da, db, dc, dd;
-      da = (a[i] + conjugate(a[j])) * comp(.5, 0);
-      db = (a[i] - conjugate(a[j])) * comp(0, -.5);
-      dc = (b[i] + conjugate(b[j])) * comp(.5, 0);
-      dd = (b[i] - conjugate(b[j])) * comp(0, -.5);
-      dfta[j] = da*dc + da*dd*comp(0, 1);
-      dftb[j] = db*dc + db*dd*comp(0, 1);
     }
-    for (int i = 0; i < L; ++i) a[i] = dfta[i];
-    for (int i = 0; i < L; ++i) b[i] = dftb[i];
-    fft(a, L), fft(b, L);
-    for (int i = 0; i < L; ++i) {
-      int da = (long long)(a[i].real / L + 0.5) % Mod;
-      int db = (long long)(a[i].imag / L + 0.5) % Mod;
-      int dc = (long long)(b[i].real / L + 0.5) % Mod;
-      int dd = (long long)(b[i].imag / L + 0.5) % Mod;
-      f[i] = (da + ((long long)(db + dc) << 15) + ((long long)dd << 30)) % Mod;
-    }
-    for (int i = 0; i < n+m-1; ++i) (f[i] += Mod) %= Mod;
-  }
 }
+template <class T>
+inline void work(T *x, const int &n, T *y, const int &m) {
+  static int bit, L;
+  static comp a[SIZE], b[SIZE];
+  static comp dfta[SIZE], dftb[SIZE];
+
+  for (L = 1, bit = 0; L < n+m-1; ++bit, L <<= 1);
+  for (int i = 0; i < L; ++i) bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << (bit - 1));
+  for (int i = 0; i < L; ++i) w[i] = comp(cos(2 * PI * i / L), sin(2 * PI * i / L));
+
+  for (int i = 0; i < n; ++i) (x[i] += Mod) %= Mod, a[i] = comp(x[i] & 32767, x[i] >> 15);
+  for (int i = n; i < L; ++i) a[i] = 0;
+  for (int i = 0; i < m; ++i) (y[i] += Mod) %= Mod, b[i] = comp(y[i] & 32767, y[i] >> 15);
+  for (int i = m; i < L; ++i) b[i] = 0;
+  fft(a, L), fft(b, L);
+  for (int i = 0; i < L; ++i) {
+    int j = (L - i) & (L - 1);
+    static comp da, db, dc, dd;
+    da = (a[i] + conjugate(a[j])) * comp(.5, 0);
+    db = (a[i] - conjugate(a[j])) * comp(0, -.5);
+    dc = (b[i] + conjugate(b[j])) * comp(.5, 0);
+    dd = (b[i] - conjugate(b[j])) * comp(0, -.5);
+    dfta[j] = da*dc + da*dd*comp(0, 1);
+    dftb[j] = db*dc + db*dd*comp(0, 1);
+  }
+  for (int i = 0; i < L; ++i) a[i] = dfta[i];
+  for (int i = 0; i < L; ++i) b[i] = dftb[i];
+  fft(a, L), fft(b, L);
+  for (int i = 0; i < L; ++i) {
+    int da = (long long)(a[i].real / L + 0.5) % Mod;
+    int db = (long long)(a[i].imag / L + 0.5) % Mod;
+    int dc = (long long)(b[i].real / L + 0.5) % Mod;
+    int dd = (long long)(b[i].imag / L + 0.5) % Mod;
+    f[i] = (da + ((long long)(db + dc) << 15) + ((long long)dd << 30)) % Mod;
+  }
+  for (int i = 0; i < n+m-1; ++i) (f[i] += Mod) %= Mod;
+}
+} // namespace MTT
 
 ```
 
@@ -7185,6 +7459,7 @@ inline long long EXCRT(long long a[], long long m[]) {
 ```cpp
 struct Combination {
   int fac[N], inv[N];
+  Combination() {init(N-1); }
   void init(const int &n) {
     fac[0] = inv[0] = fac[1] = inv[1] = 1;
     for (int i = 2; i <= n; ++i) {
