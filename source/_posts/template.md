@@ -3,7 +3,7 @@ title: ACM模板
 author: Kaizyn
 avatar: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg
 authorLink: https://kaizynx.github.io/
-date: 2018-11-05 07:00:00
+date: 2018-11-04 07:00:00
 mathjax: true
 categories:
   - ACM
@@ -3505,6 +3505,9 @@ inline void kmp(const string &s1, const string &s2, int nex[]) {
 ```
 
 {% endspoiler %}
+
+nex 数组往上跳为公差为 i-nex[i] 的等差数列直到 i/2
+
 ## 扩展KMP|Z函数
 {% spoiler "代码" %}
 ```cpp
@@ -4186,7 +4189,7 @@ struct SAM { // root 0
 
 丢进去转移。这个算法还找到了模式串在文本串中出现的最大前缀长度。
 
-### 不同字串个数
+### 不同子串个数
 不同子串的个数等于自动机中以 $t_0$ 为起点的不同路径的条数-1(空串)。令 $d_{v}$ 为从状态 $v$ 开始的路径数量（包括长度为零的路径）
 
 $d_{v}=1+\sum\limits_{w:(v,w,c)\in DAWG}d_{w}$
@@ -7757,7 +7760,7 @@ $[a\equiv b(\mod n)]=[a-b \equiv 0(\mod n)]=\frac{1}{n}\sum\limits_{i=0}^{n-1}w_
 
 $\sum\limits_{i=0}^{n}[i\%k=0]f(i)=\sum\limits_{i=0}^{n}\frac{1}{k}\sum\limits_{j=0}^{k-1}(w_k^i)^jf(i)$
 
-## [大数阶乘](https://www.cnblogs.com/cax1165/p/6070902.html)
+## [大数阶乘](https://www.luogu.com.cn/problem/P5282)
 
 分块打表
 
