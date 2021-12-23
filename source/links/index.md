@@ -58,6 +58,10 @@ links:
       img: http://q2.qlogo.cn/headimg_dl?dst_uin=827308856&spec=100
       name: Willingox
       desc: 刘老师%%%%
+    - url: https://xia0ji233.pro/
+      img: http://q2.qlogo.cn/headimg_dl?dst_uin=2636876456&spec=100
+      name: xia0ji233
+      desc: 学弟%%%%
     # - url: 
     #   img: http://q2.qlogo.cn/headimg_dl?dst_uin=&spec=100
     #   name: 

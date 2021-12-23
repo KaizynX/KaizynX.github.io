@@ -213,6 +213,8 @@ scanf("%[abc]", str); // 读取a,b,c,读到之外的立即停止
 scanf("%[a-z0-9]", str); // 同上,读取小写字母和数字
 scanf("%*[a-z]%s", str); // 过滤掉小写字母读取
 scanf("%[^a-z]", str); // 读取小写字符外字符,^表示非 
+scanf("%*c"); //清理输入缓冲区中第一个字符，也就是上次遗留下的\n
+scanf("%[^\n]%*c",str); // 相当于gets(str), %*c的作用是吸收\n
 ```
 
 {% endspoiler %}
@@ -291,6 +293,7 @@ struct HashNumber {
 {% spoiler "代码" %}
 ```cpp
 #define log(x) (31-__builtin_clz(x))
+// #define log(x) (63-__builtin_clzll(x))
 // lg2[i] = lg2(i) +1
 for(int i = 1; i <= n; ++i) lg2[i] = lg2[i>>1]+1;
 // lg2[i] = (int)log2(i)
@@ -2937,7 +2940,7 @@ signed main() {
 ```cpp
 template <typename T, typename U = std::greater<T>>
 struct ST {
-  static const int NN = (int)log2(N)+3;
+  static const int NN = 31-__builtin_clz(N)+3;
   static const T INF = 1e9;
   int lg2[N];
   U cmp = U();
@@ -5096,6 +5099,9 @@ struct EK {
 #### Dinic
 普通情况下 $O(n^2m)$
 二分图中 $O(\sqrt{n}m)$
+
+**该板子存在可能效率极其低下的问题**
+
 {% spoiler "代码" %}
 ```cpp
 template <typename T>
@@ -6411,6 +6417,36 @@ void dfz(int u = 1) {
 {% endspoiler %}
 ### 边分治
 
+## 欧拉图
+
+### Hierholzer 算法
+
+复杂度 $O(n+m)$
+
+保存答案可以使用 stack ，因为如果找的不是回路的话必须将那一部分放在最后。
+
+如 E{(1,2),(2,3),(3,4),(4,5),(5,3)}
+
+{% spoiler "代码" %}
+```cpp
+vector<EDGE> e[N];
+vector<EDGE>::iterator beg[N];
+void Hierholzer(int u) {
+  for (auto &it = beg[u]; it != e[u].end(); ) {
+    if (vis[这条边]) {
+      ++it;
+    } else {
+      int v = e[*it].x ^ e[*it].y ^ u;
+      vis[这条边] = 1;
+      ++it;
+      Hierholzer(v);
+    }
+  }
+  stk.push(u);
+}
+```
+
+{% endspoiler %}
 ---
 # 数论
 ## 快排
@@ -6464,6 +6500,10 @@ nth_element(a+1, a+k+1, a+n+1);
 ```
 
 {% endspoiler %}
+
+### bfprt 算法
+
+目前解决TOP-K问题最有效的算法即是BFPRT算法，又称为中位数的中位数算法，最坏时间复杂度为O(n)。
 
 ---
 ## [求逆序对(归并排序)](https://www.luogu.org/problemnew/show/P1908)
@@ -7566,18 +7606,16 @@ template <typename T> inline T miu(T x) {
 {% spoiler "代码" %}
 ```cpp
 struct Euler {
-  vector<int> prime;
-  vector<bool> check;
-  bool operator [](const int &i) { return check[i]; }
+  vector<int> prime, check;
+  int& operator [](const int &i) { return check[i]; }
   void init(int n) {
     prime.clear();
-    check = vector<bool>(n+1, true);
-    check[1] = false;
+    check = vector<int>(n+1);
     for (int i = 2; i <= n; ++i) {
-      if (check[i]) prime.emplace_back(i);
+      if (!check[i]) prime.emplace_back(i), check[i] = i;
       for (const int &j : prime) {
         if (i*j > n) break;
-        check[i*j] = false;
+        check[i*j] = j;
         if (i%j == 0) break;
       }
     }
@@ -7587,7 +7625,24 @@ struct Euler {
 
 {% endspoiler %}
 
----
+## 求所有因子
+{% spoiler "代码" %}
+```cpp
+vector<int> get_fac(int x) {
+  vector<int> fac(1, 1), tmp;
+  while (E[x]) {
+    tmp = fac;
+    for (int y = E[x]; x%y == 0; x /= y) {
+      for (int &i : tmp) i *= y;
+      fac.insert(fac.end(), tmp.begin(), tmp.end());
+    }
+  }
+  return fac;
+}
+```
+
+{% endspoiler %}
+
 ## 判断素数(质数)
  某较优方法
 {% spoiler "代码" %}
@@ -7806,14 +7861,26 @@ lon fac(lon n, lon p = MOD) {
 
 ## [全排列和逆序对](https://www.cnblogs.com/saltless/archive/2011/06/01/2065619.html)
 
-### 根据排列求逆序数
-
 ### 根据逆序数推排列数
+
+已知一个n元排列的逆序数为m,这样的n元排列有多少种？
+
+1. 对任意n>=2且0<=m<=C(n,2)时f(n,m)>=1；当m>C(n,2)时,f(n,m)=0
+2. f(n,m)=f(n,C(n,2)-m)
+3. f(n+1,m)=f(n,m)+f(n,m-1)+…+f(n,m-n)
+4. f(n,0)=f(n,C(n,2))=1
+5. f(n,1)=f(n,C(n,2)-1)=n-1(n>1)
+6. f(n,2)=f(n,C(n,2)-2)=C(n,2)-1(n>2)
 
 ### 根据每个数的逆序数求出原排列
 
 ### 根据逆序数求最小排列
 
+1. 对于n的全排列，在它完全倒序的时候（也就是n,n-1,…,2,1的时候）逆序数最多。
+2. 对于一个形如1,2,3,…,i-1,i,n,…i+1的排列q（如n=5时的1,2,5,4,3），即在数n前保证首项为1且严格以公差为1递增而数n之后排列任意的数列
+  - 当数n之后是递减的时候q的逆序数最多，为t=C(n-i,2)。 
+  - 排列q是出现逆序数为t的最小排列。 
+3. 在上一条所设定的排列q的基础上，我们将数n后面的第k小数与数n的前一个数（即i）交换，然后使数n后面保持逆序。这样得到的新排列所含的逆序数为t=C(n-i,2)+k，且这个排列是逆序数为t的最小排列。 
 ### 第k个字典序每个数的逆序对
 
 {% spoiler "代码" %}
@@ -7996,7 +8063,7 @@ for(int i = 1; i <= W; ++i)
 
 例:给你一个N个点M条边无向带权连通图，每条边是黑色或白色。让你求一棵最小权的恰好有K条白色边的生成树。
 
-记 $g(i)$ 是选了 $i$ 条白边的最小生成树值, 发现 $g(i)$ 斜率单调不增 $g(i)-g(i-1) \req g(i+1)-g(i)$
+记 $g(i)$ 是选了 $i$ 条白边的最小生成树值, 发现 $g(i)$ 斜率单调不增 $g(i)-g(i-1) \leq g(i+1)-g(i)$
 
 则二分斜率 k, 求切点(截距最大)
 
