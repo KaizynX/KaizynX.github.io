@@ -8,7 +8,7 @@ categories:
   - interview
 tags:
 description: 第一次面试,面得稀烂
-photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/2020/cover.gif
+photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/AML_interview1/cover.jpg
 ---
 # 序
 
@@ -163,3 +163,9 @@ void insert(string key, string value) {
 无论怎么说，痛苦才是人成长的最大动力，能在第一次面试就暴露出问题，也算一种幸运了
 
 **简历一定要谨慎写**
+
+# 后续
+
+HR不怎么想理我的样子
+
+再三逼问下(不是)，一面过了
