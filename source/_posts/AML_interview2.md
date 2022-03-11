@@ -99,3 +99,7 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/AML_interview2/cover.j
 依然问的是出乎意料的问题，不过基础代码都写得出来，怎么说也比一面好太多了呜呜
 
 据学长说只有两面，等消息了
+
+# 后序
+
+就这两面，过了，offer了
