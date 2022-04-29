@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">递归改迭代 | Kaizyn&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/images/favicon32.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Kaizyn'sBlog";
+  mashiro_option.author_name = "Blog";
+  mashiro_option.site_url = "https://kaizynx.github.io/";
+  mashiro_option.v_appId = "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz";
+  mashiro_option.v_appKey = "RztxTMKSVDyuAaC0BVM1wPM1";
+  mashiro_option.mathjax = "1";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/001.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/002.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/003.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/004.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/005.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/006.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/007.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/008.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/009.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+  
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>
+  .pace .pace-progress {  background: #1E92FB; /*进度条颜色*/
+  height: 3px;  }
+  .pace .pace-progress-inner {  box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+  }
+  .pace .pace-activity {  border-top-color: #1E92FB;    /*上边框颜色*/
+  border-left-color: #1E92FB;    /*左边框颜色*/
+  }</style>
+
+</head>
+</html>
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop ">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://kaizynx.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>一只菜鸡的博客</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/KaizynX" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://www.zhihu.com/people/kaizyn" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="mailto:2291443901@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=2291443901" target="_blank" class="social-github" title="qq">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/qq.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Kaizyn&#39;s</span>
+            <span class="shironeko">Blog</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories">
+                          <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                          分类
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags">
+                          <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/comment/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+                    留言板
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/links/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+                    大佬链
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/donate/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+                    投食
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我?
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="https://github.com/honjun/hexo-theme-sakura">
+                          <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                          主题
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/atom.xml">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+                    RSS
+                  </span>
+                </a>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+<div class="pattern-center single-center">
+  <!-- 有配图默认渲染第一张 -->
+  
+  <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/recursion_to_iteration/cover.jpg);" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/recursion_to_iteration/cover.jpg">
+  </div>
+  
+  <header class="pattern-header single-header">
+    <h1 class="entry-title">
+    递归改迭代</h1>
+    <p class="entry-census">
+        <span>
+          <a href="https://kaizynx.github.io/">
+            <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="https://kaizynx.github.io/">Kaizyn</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2020-4-21<span class="bull">
+        ·</span>
+    <span id="busuanzi_value_page_pv"></span>次阅读</p>
+  </header>
+</div>
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        <!--  -->
+        <div class="entry-content">
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>不得不承认递归是个神奇且强大的东西</p>
+<p>但它却也存在致命的缺陷:递归层数太大会<strong>爆栈</strong></p>
+<p>另一方面递归开销也大于循环,因面临相关方面(时空受限)问题,于此寻找递归改迭代方法</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>思路应该很明了?</p>
+<p>就是自己模拟一个栈,记录函数运行的信息</p>
+<p>栈是先进后出的数据结构,符合递归的要求</p>
+<p>本试图在某度上寻找,结果都是无关紧要的尾递归改迭代?</p>
+<p>下面就以 SCC|Tarjan 算法为例(其实我只会了这个)</p>
+<h2 id="例题汉诺塔"><a href="#例题汉诺塔" class="headerlink" title="例题汉诺塔"></a>例题汉诺塔</h2><p><em>20210406 update</em></p>
+<p>在做程序设计课程实践作业时有一题是用非递归实现汉诺塔</p>
+<p>我当时就震惊了,递归改迭代这么高级的技术都能写吗</p>
+<p>我并不知正解,也许是栈之类,反正我改迭代了,其实这个比下面的例子简单</p>
+<p>自行看代码,懒得写解析了,可以直接看下面的例子</p>
+<pre><code class="cpp">void hanio(int n, int t1 = 1, int t2 = 2, int t3 = 3) {
+  if (n &lt; 1) return;
+  hanio(n-1, t1, t3, t2);
+  cout &lt;&lt; &quot;from &quot; &lt;&lt; t1 &lt;&lt; &quot; to &quot; &lt;&lt; t3 &lt;&lt; &#39;\n&#39;;
+  hanio(n-1, t2, t1, t3);
+}
+</code></pre>
+<pre><code class="cpp">void hanio(int sz) {
+  stack&lt;int&gt; sn, st1, st2, st3, ss;
+  int n, t1, t2, t3, state;
+  function&lt;void()&gt; push = [&amp;]() {
+    sn.push(n);
+    st1.push(t1);
+    st2.push(t2);
+    st3.push(t3);
+    ss.push(state);
+  };
+  function&lt;void()&gt; top = [&amp;]() {
+    n = sn.top();
+    t1 = st1.top();
+    t2 = st2.top();
+    t3 = st3.top();
+    state = ss.top();
+  };
+  function&lt;void()&gt; pop = [&amp;]() {
+    sn.pop();
+    st1.pop();
+    st2.pop();
+    st3.pop();
+    ss.pop();
+  };
+  n = sz; t1 = 1; t2 = 2; t3 = 3; state = 0;
+  push();
+  while (sn.size()) {
+    top();
+    pop();
+    switch (state) {
+    case 0:
+      if (n &lt; 1) continue;
+      state = 1;
+      push();
+      n -= 1; swap(t2, t3); state = 0;
+      push();
+    continue;
+    case 1:
+      cout &lt;&lt; &quot;from &quot; &lt;&lt; t1 &lt;&lt; &quot; to &quot; &lt;&lt; t3 &lt;&lt; &#39;\n&#39;;
+      n -= 1; swap(t1, t2); state = 0;
+      push();
+    }
+  }
+}
+</code></pre>
+<h2 id="例题Tarjan"><a href="#例题Tarjan" class="headerlink" title="例题Tarjan"></a>例题Tarjan</h2><p><a href="https://www.luogu.com.cn/problem/P2863" target="_blank" rel="noopener">[USACO06JAN]The Cow Prom S</a></p>
+<p>题目描述:</p>
+<p>有一个 n 个点，m 条边的有向图，请求出这个图点数大于 1 的强联通分量个数。</p>
+<h2 id="递归版"><a href="#递归版" class="headerlink" title="递归版"></a>递归版</h2><p>接下来将根据这份代码来改成非递归版本</p>
+<div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span>
+
+<span class="comment">// #define DEBUG</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+
+<span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1e4</span>+<span class="number">7</span>;
+<span class="keyword">const</span> <span class="keyword">int</span> MOD = <span class="number">998244353</span>;
+<span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;
+<span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-7</span>;
+<span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1</span>);
+<span class="keyword">typedef</span> pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; pii;
+
+<span class="keyword">int</span> n, m;
+<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; e[N];
+<span class="keyword">int</span> cnt[N];
+
+<span class="keyword">int</span> _dfn, _col, _top;
+<span class="keyword">int</span> dfn[N], low[N], ins[N], col[N], sta[N];
+
+<span class="function"><span class="keyword">void</span> <span class="title">tarjan</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;u)</span></span>
+<span class="function"></span>{
+    dfn[u] = low[u] = ++_dfn;
+    ins[u] = <span class="number">1</span>;
+    sta[++_top] = u;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; (<span class="keyword">int</span>)e[u].size(); ++i) {
+        <span class="keyword">int</span> v = e[u][i];
+        <span class="keyword">if</span> (!dfn[v]) {
+            tarjan(v);
+            low[u] = min(low[u], low[v]);
+        } <span class="keyword">else</span> <span class="keyword">if</span> (ins[v]) {
+            low[u] = min(low[u], low[v]);
+        }
+    }
+    <span class="keyword">if</span> (dfn[u] == low[u]) {
+        ++_col;
+        <span class="keyword">do</span> {
+            col[sta[_top]] = _col;
+            ins[sta[_top]] = <span class="number">0</span>;
+        } <span class="keyword">while</span> (sta[_top--] != u);
+    }
+}
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, u, v; i &lt;= m; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v;
+        e[u].emplace_back(v);
+    }
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        <span class="keyword">if</span> (!dfn[i]) tarjan(i);
+        ++cnt[col[i]];
+        <span class="meta">#<span class="meta-keyword">ifdef</span> DEBUG</span>
+        <span class="built_in">cout</span> &lt;&lt; col[i] &lt;&lt; <span class="string">" \n"</span>[i==n];
+        <span class="meta">#<span class="meta-keyword">endif</span></span>
+    }
+    <span class="keyword">int</span> res = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= _col; ++i) {
+        res += cnt[i] &gt; <span class="number">1</span>;
+    }
+    <span class="built_in">cout</span> &lt;&lt; res &lt;&lt; <span class="built_in">endl</span>;
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h2 id="非递归版本"><a href="#非递归版本" class="headerlink" title="非递归版本"></a>非递归版本</h2><p>先贴代码</p>
+<pre><code class="cpp">int _dfn, _col, _top;
+int dfn[N], low[N], ins[N], col[N], sta[N];
+
+struct Stack_Node {                                         // 1
+    int u;
+    int edge_info;
+    int state;
+} tarjan_stack[N];
+
+void tarjan(const int &amp;u) {
+    static int stack_top;
+    stack_top = 0;                                          // 2
+    tarjan_stack[++stack_top] = {u, 0, 0};
+    while (stack_top) {
+        bool flag = false;                                  // 3
+        int &amp;u = tarjan_stack[stack_top].u;                 // 4
+        auto &amp;i = tarjan_stack[stack_top].edge_info;
+        switch (tarjan_stack[stack_top].state) {
+        case 0 :
+        tarjan_stack[stack_top].state = 1;                  // 5
+        flag = false;
+            dfn[u] = low[u] = ++_dfn;
+            ins[u] = 1;
+            sta[++_top] = u;
+            for (; i &lt; (int)e[u].size(); ++i) {
+#define v e[u][i]                                           // 6
+                if (!dfn[v]) {
+                    tarjan_stack[++stack_top] = {v, 0, 0};  // 7
+        flag = true;
+                    break;
+        case 1 :                                            // 8
+        flag = false;
+                    low[u] = min(low[u], low[v]);
+                } else if (ins[v]) {
+                    low[u] = min(low[u], low[v]);
+                }
+#undef v
+            }
+        if (flag) break;                                     // 9
+            if (dfn[u] == low[u]) {
+                ++_col;
+                do {
+                    col[sta[_top]] = _col;
+                    ins[sta[_top]] = 0;
+                } while (sta[_top--] != u);
+            }
+        --stack_top;
+        }
+    }
+}
+</code></pre>
+<p>以上代码如果只看三层缩进的代码,其实就几乎是递归版本的代码</p>
+<p>一层缩进是模拟栈</p>
+<p>二层缩进就是神奇的 switch 大法控制递归状态了(重点)</p>
+<p>记住一个特性,如果 switch 没有 break, 那么匹配项(case) 之后的代码会一直执行下去,直到 break 或 switch 末尾为止</p>
+<ol>
+<li><p>定义了个结构体用来存储函数运行的信息</p>
+<p>依次存了当前的结点 u</p>
+<p>循环到的边的信息 edge_info(本文存储的是边的序号,也可以存迭代器等等)</p>
+<p>函数的递归状态 state(后面详细讲)</p>
+</li>
+<li><p>因为 tarjan 函数不只执行一次,记得清空栈(虽然不清空一般没事)</p>
+<p>然后就是原本第一层的函数,将它入栈,开始模拟栈</p>
+</li>
+<li><p>这个 flag 标记很重要(重点)后面详细讲</p>
+</li>
+<li><p>取出栈里的信息,得到当前函数的信息</p>
+<p>注意我在这里采用了<strong>引用</strong>的形式,因为函数一般执行那么函数信息就会改变</p>
+<p>比如你遍历了一条边,该轮到下一条边了,栈里存储的信息也要对于改变,用引用就省去了记录</p>
+</li>
+<li><p>修改状态,下面讲</p>
+</li>
+<li><p>注意这里使用了宏替换,也是方便起见,为什么不能像原来一样呢?</p>
+<p>因为如果你直接跳转到了 case 1, 这个 v 就是未定义的</p>
+<p>不过方便的同时这个宏定义也非常危险(宏定义代码块内不得出现字符 v )</p>
+<p>当然最保险的办法还是老老实实写 e[u][i]</p>
+</li>
+<li><p>重点来了,递归部分,我们模拟栈,那么应该入栈(开辟下一层函数)</p>
+<p>然后我们应该暂时跳出当前函数,这里通过 flag 来实现</p>
+<p>这里真就是 switch 的神奇了.注意这里的 break, 跳出的是 for 循环(不是 case)</p>
+<p>也就是说我们来到了 <strong>9</strong> 的位置(通过简单的 gdb 调试易得)</p>
+<p>通过 break,我们就推出了 switch 也就相当于推出了当前函数</p>
+</li>
+<li><p>注意到 <strong>5</strong>, 这一层函数递归状态改为了 1, 如果没有进入下一层(<strong>7</strong>)</p>
+<p>就会继续执行下去没有影响</p>
+<p>但如果有下一层递归,我们知道下一层(<strong>7</strong>)执行完毕后要回到 <strong>8</strong>, state 的记录满足了这一条件,同时不要忘记把 flag 改回去</p>
+</li>
+<li><p>如 <strong>7</strong> 所述</p>
+</li>
+</ol>
+<p>如果不明白想一下所有情况</p>
+<ol>
+<li><p>if(!dfn[v]) 进入下一层递归,在 <strong>7</strong> 处入栈,跳出switch,下一层 while, 此时栈顶就是新加的函数</p>
+</li>
+<li><p>if(dfn[v]) 跳到 elseif 正常执行</p>
+</li>
+<li><p>执行完了回退到上一层递归函数,会进入 case 1, 循环往复</p>
+</li>
+</ol>
+<p>如果还不明白呢,建议单步调试一下看一下过程(毕竟我只会口胡</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>据此可以类比到任何形式递归改迭代了吧?(反正我不行(逃</p>
+<p>总的来说并不是很好写吧(递归不香吗</p>
+<p>如果不是对时间空间有限制的话(汇编手动扩栈不香吗</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://github.com/Yangff/dfs-benchmark" target="_blank" rel="noopener">github Yangff/dfs-benchmark</a></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/donate/AliPayQR.gif"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdnundefined"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2020/04/22/abs/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/abs/cover.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/abs/cover.jpg">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                绝对值</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/2020/04/03/MultiThread/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/MultiThread/cover.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/MultiThread/cover.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                多线程</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz",
+        appKey: "RztxTMKSVDyuAaC0BVM1wPM1",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://kaizynx.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg" itemprop="image" alt="Kaizyn" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://kaizynx.github.io/" itemprop="url" rel="author">Kaizyn</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Kaizyn<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span><script>
+        var now = new Date();
+        function createtime() {
+          var grt= new Date("08/24/2018 00:00:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+          document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+          document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+        setInterval("createtime()",250);</script>
+
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> Powered by Hexo
+        </span>
+      </p>
+    </div>
+    <div id="binft"></div>
+      <script>
+        var binft = function (r) {
+          function t() {
+            return b[Math.floor(Math.random() * b.length)]
+          }
+          function e() {
+            return String.fromCharCode(94 * Math.random() + 33)
+          }
+          function n(r) {
+            for (var n = document.createDocumentFragment(), i = 0; r > i; i++) {
+              var l = document.createElement("span");
+              l.textContent = e(), l.style.color = t(), n.appendChild(l)
+            }
+            return n
+          }
+          function i() {
+            var t = o[c.skillI];
+            c.step ? c.step-- : (c.step = g, c.prefixP < l.length ? (c.prefixP >= 0 && (c.text += l[c.prefixP]), c.prefixP++) : "forward" === c.direction ? c.skillP < t.length ? (c.text += t[c.skillP], c.skillP++) : c.delay ? c.delay-- : (c.direction = "backward", c.delay = a) : c.skillP > 0 ? (c.text = c.text.slice(0, -1), c.skillP--) : (c.skillI = (c.skillI + 1) % o.length, c.direction = "forward")), r.textContent = c.text, r.appendChild(n(c.prefixP < l.length ? Math.min(s, s + c.prefixP) : Math.min(s, t.length - c.skillP))), setTimeout(i, d)
+          }
+          var l = "",
+          o = ["滚动字幕1","滚动字幕233"].map(function (r) {
+          return r + ""
+          }),
+          a = 2,
+          g = 1,
+          s = 5,
+          d = 75,
+          b = ["rgb(110,64,170)", "rgb(150,61,179)", "rgb(191,60,175)", "rgb(228,65,157)", "rgb(254,75,131)", "rgb(255,94,99)", "rgb(255,120,71)", "rgb(251,150,51)", "rgb(226,183,47)", "rgb(198,214,60)", "rgb(175,240,91)", "rgb(127,246,88)", "rgb(82,246,103)", "rgb(48,239,130)", "rgb(29,223,163)", "rgb(26,199,194)", "rgb(35,171,216)", "rgb(54,140,225)", "rgb(76,110,219)", "rgb(96,84,200)"],
+          c = {
+            text: "",
+            prefixP: -s,
+            skillI: 0,
+            skillP: 0,
+            direction: "forward",
+            delay: a,
+            step: g
+          };
+          i()
+          };
+          binft(document.getElementById('binft'));
+      </script>
+
+  </div><!-- .site-info -->
+  
+
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!--浏览器搞笑标题-->
+<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<center>
+  <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/footer/skirt.webp">
+</center>
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas> 
+  <div class="changeSkin-gear no-select">
+  <div class="keys" id="setbtn"> 
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+   </span>
+  </div>
+</div>
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Kaizyn'sBlog</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/KaizynX" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+        <a href="https://wpa.qq.com/msgrd?v=3&uin=2291443901&site=qq&menu=yes" class="fa fa-qq" target="_blank" style="color: #25c6fe; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories">
+                  <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                  分类
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags">
+                  <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/comment/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+            留言板
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/links/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+            大佬链
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/donate/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+            投食
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我?
+                </a>
+              </li>
+            
+              <li>
+                <a href="https://github.com/honjun/hexo-theme-sakura">
+                  <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                  主题
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/atom.xml">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+            RSS
+          </span>
+        </a>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+    id="2509579883"
+
+    server="netease"
+
+    type="playlist"
+
+    fixed="true"
+
+    autoplay="false"
+
+    loop="all"
+
+    order="random"
+
+    preload="auto"
+
+    volume="0.7"
+
+    mutex="true"
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

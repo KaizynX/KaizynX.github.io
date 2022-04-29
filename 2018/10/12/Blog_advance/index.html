@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">博客进阶 | Kaizyn&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/images/favicon32.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Kaizyn'sBlog";
+  mashiro_option.author_name = "Blog";
+  mashiro_option.site_url = "https://kaizynx.github.io/";
+  mashiro_option.v_appId = "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz";
+  mashiro_option.v_appKey = "RztxTMKSVDyuAaC0BVM1wPM1";
+  mashiro_option.mathjax = "1";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/001.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/002.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/003.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/004.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/005.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/006.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/007.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/008.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/009.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+  
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>
+  .pace .pace-progress {  background: #1E92FB; /*进度条颜色*/
+  height: 3px;  }
+  .pace .pace-progress-inner {  box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+  }
+  .pace .pace-activity {  border-top-color: #1E92FB;    /*上边框颜色*/
+  border-left-color: #1E92FB;    /*左边框颜色*/
+  }</style>
+
+</head>
+</html>
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop ">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://kaizynx.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>一只菜鸡的博客</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/KaizynX" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://www.zhihu.com/people/kaizyn" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="mailto:2291443901@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=2291443901" target="_blank" class="social-github" title="qq">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/qq.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Kaizyn&#39;s</span>
+            <span class="shironeko">Blog</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories">
+                          <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                          分类
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags">
+                          <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/comment/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+                    留言板
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/links/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+                    大佬链
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/donate/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+                    投食
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我?
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="https://github.com/honjun/hexo-theme-sakura">
+                          <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                          主题
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/atom.xml">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+                    RSS
+                  </span>
+                </a>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+<div class="pattern-center single-center">
+  <!-- 有配图默认渲染第一张 -->
+  
+  <div class="pattern-attachment-img lazyload" style="background-image: url(https://random.52ecy.cn/randbg.php);" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://random.52ecy.cn/randbg.php">
+  </div>
+  
+  <header class="pattern-header single-header">
+    <h1 class="entry-title">
+    博客进阶</h1>
+    <p class="entry-census">
+        <span>
+          <a href="https://kaizynx.github.io/">
+            <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="https://kaizynx.github.io/">Kaizyn</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2018-10-12<span class="bull">
+        ·</span>
+    <span id="busuanzi_value_page_pv"></span>次阅读</p>
+  </header>
+</div>
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        <!-- 
+          <header class="entry-header">
+            <h1 class="entry-title">博客进阶</h1>
+            <p class="entry-census">Kaizyn&nbsp;·&nbsp;2018-10-12&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+         -->
+        <div class="entry-content">
+          <h1 id="进阶指南"><a href="#进阶指南" class="headerlink" title="进阶指南"></a>进阶指南</h1><h2 id="序"><a href="#序" class="headerlink" title="序"></a>序</h2><p>自博客搭建初以来,就没什么时间进一步社会主义改造了</p>
+<p>直到国庆期间(只有三天假期…),才有时间进行了一番大整改</p>
+<hr>
+<h2 id="主题选择"><a href="#主题选择" class="headerlink" title="主题选择"></a>主题选择</h2><p>真的,被之前的主题坑了太久</p>
+<p>直到我迫不得已改成了 <a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">NexT</a> 主题</p>
+<p>这个一直倍受大家推崇和喜爱的号称 star 第一的主题</p>
+<p>虽然形式简单,但已经集成了很多插件等玩意,比配置之前那个不知道方便多少</p>
+<p>于是我弃坑了,现在的是 NexT 6.4.1</p>
+<hr>
+<h2 id="标配-NexT"><a href="#标配-NexT" class="headerlink" title="标配 NexT"></a>标配 NexT</h2><p><a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">NexT 使用文档</a></p>
+<p>这个还有中午,还有官网,多么好.</p>
+<p>安照上面的一步步来应该没什么问题</p>
+<hr>
+<h2 id="高配-NexT"><a href="#高配-NexT" class="headerlink" title="高配 NexT"></a>高配 NexT</h2><p>百度 <code>next 配置</code></p>
+<p>其实就有很多<del>其实相似度极高</del>的配置教程</p>
+<p>里面好玩的东西很多</p>
+<p>坑点没怎么遇到过</p>
+<hr>
+<h2 id="插件安装和使用"><a href="#插件安装和使用" class="headerlink" title="插件安装和使用"></a>插件安装和使用</h2><p>一般也就在最顶层文件夹输入类似下面的指令</p>
+<pre><code>npm install [插件名字] --save
+</code></pre><p>如果要使得 <code>Travis CI</code> 上也能加载插件</p>
+<p>只要在 <code>.travis.yml</code> 文件中的 <code>install:</code> 部分加上一行即可</p>
+<pre><code>
+# S: Build Lifecycle
+before_install:
+- npm install hexo-cli -g
+install:
+- npm install
+- npm install hexo-deployer-git --save
+- npm install [在这里] --save
+
+script:
+- hexo clean
+- hexo generate
+after_script:
+# 略略略
+# End: Build LifeCycle
+</code></pre><hr>
+<h2 id="提一下自动部署"><a href="#提一下自动部署" class="headerlink" title="提一下自动部署"></a>提一下自动部署</h2><p>这里丑化说在前头,还是老老实实本地 <code>hexo deploy</code> 比较好</p>
+<p>自动部署坑太多,带来很多不必要的麻烦</p>
+<p>因为你很难知道那边的环境到底哪里不同了</p>
+<hr>
+<h2 id="第三方集成服务"><a href="#第三方集成服务" class="headerlink" title="第三方集成服务"></a>第三方集成服务</h2><p>其他主题配置都按照文档来就好</p>
+<p>这里提一下,我们在主题的 <code>_config.yml</code> 配置文件中看到很多集成的插件,例如</p>
+<pre><code class="cpp">
+# 分享条
+# NeedMoreShare2
+# Dependencies: https://github.com/theme-next/theme-next-needmoreshare2
+# See: https://github.com/revir/need-more-share2
+# Also see: https://github.com/DzmVasileusky/needShareButton
+# iconStyle: default | box
+# boxForm: horizontal | vertical
+# position: top / middle / bottom + Left / Center / Right
+# networks: Weibo,Wechat,Douban,QQZone,Twitter,Linkedin,Mailto,Reddit,
+#           Delicious,StumbleUpon,Pinterest,Facebook,GooglePlus,Slashdot,
+#           Technorati,Posterous,Tumblr,GoogleBookmarks,Newsvine,
+#           Evernote,Friendfeed,Vkontakte,Odnoklassniki,Mailru
+needmoreshare2:
+  enable: false
+  postbottom:
+    enable: false
+    options:
+      iconStyle: box
+      boxForm: horizontal
+      position: bottomCenter
+      networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook
+  float:
+    enable: false
+    options:
+      iconStyle: box
+      boxForm: horizontal
+      position: middleRight
+      networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook
+
+</code></pre>
+<p>把 <code>enable: false</code> 改成 <code>enable: true</code> </p>
+<p>在按需求把剩下两个 <code>false</code> 改成 <code>true</code> 即可</p>
+<p>其实不然,你点进去上面一些链接的 <code>github</code> 官网 (第三行的)</p>
+<p>你要按照上面的代码操作,什么 <code>cd</code> 进某个目录再 <code>git clone</code></p>
+<p>就成功添加了</p>
+<p>其实说的很清楚,按照上面的做就好</p>
+<hr>
+<p><strong>坑点</strong></p>
+<p>自动部署时还是没有!</p>
+<ol>
+<li><p>因为你 <code>clone</code> 来的文件夹被 <code>gitignore</code> 掉了</p>
+<p> 修改在主题的文件夹里 <code>\主目录\themes\next\</code> 的 <code>.gitignore</code> 文件</p>
+<p> 你会发现你克隆来的恰好在 <code>\source\lib</code></p>
+<p> 完美被忽略,注释掉即可</p>
+<p> 我现在的 <code>.gitignore</code> 如下</p>
+<pre><code class="gitignore">
+ .DS_Store
+ .idea/
+ *.log
+ *.iml
+ yarn.lock
+ package-lock.json
+ node_modules/
+
+ # Ignore optional external libraries
+ # 就是它,罪魁祸首
+ # source/lib/*
+
+ # Track internal libraries &amp; Ignore unused verdors files
+ source/lib/font-awesome/less/
+ source/lib/font-awesome/scss/
+ !source/lib/font-awesome/*
+
+ !source/lib/jquery/
+
+ source/lib/ua-parser-js/*
+ !source/lib/ua-parser-js/dist/
+
+ !source/lib/velocity/
+</code></pre>
+<p> 其实说实在的这个<strong>全部删掉</strong>都没大碍,不删反而出事了</p>
+</li>
+<li><p>你克隆来的文件夹包括 <code>.git</code> 你 <code>git</code> 提交时会报错</p>
+<p> 你在之前删掉这个文件夹就好了</p>
+<p> 如果你没删之间用了 <code>git</code> 呢</p>
+<p> 那你怕是再也加不上去了</p>
+<p> 骗你的 <a href="https://www.cnblogs.com/howdop/p/5583342.html" target="_blank" rel="noopener">看这里</a></p>
+<pre><code> git rm --cached 那个文件夹
+</code></pre><p> 又可以了</p>
+</li>
+</ol>
+<hr>
+<h2 id="自动部署图标无法显示"><a href="#自动部署图标无法显示" class="headerlink" title="自动部署图标无法显示"></a>自动部署图标无法显示</h2><p>以前自动部署时我的图标无法显示</p>
+<p>就是首页啊归档啊那个旁边的图标</p>
+<p>道理同上,被 <code>.gitignore</code> 掉了</p>
+<p>这个图标系统的根应该在 <code>\themes\next\source\lib\font-awesome</code></p>
+<p>至于图标来源,网上,一个叫做 fontawesome 的网页</p>
+<p>其实不是<a href="https://fontawesome.com/" target="_blank" rel="noopener">这个</a> 里的</p>
+<p>我亲测应该是这个的<a href="http://www.fontawesome.com.cn/" target="_blank" rel="noopener">中国版</a>里的</p>
+<p>至于具体用法,额…百度吧,<del>我不太会</del></p>
+<hr>
+<h2 id="添加背景动画"><a href="#添加背景动画" class="headerlink" title="添加背景动画"></a>添加背景动画</h2><p>这个属于<strong>第三方集成服务</strong></p>
+<p>也是需要 <code>clone</code> 过来才能用的</p>
+<p>光按百度上说法直接改 <code>true</code> 无效</p>
+<pre><code class="yml">
+# 背景动画
+# Canvas-nest
+# 大部分都是这种,网络上应该能轻易找到样例
+# Dependencies: https://github.com/theme-next/theme-next-canvas-nest
+canvas_nest: false
+
+# cpu占用太大
+# JavaScript 3D library.
+# Dependencies: https://github.com/theme-next/theme-next-three
+# three_waves
+# 点点波浪(像海面)cpu占用极高
+three_waves: false
+# canvas_lines
+# 点线几何体,占用最低(还是高)
+# 样例: https://notes.doublemine.me/ 其实我觉得这个最好看
+canvas_lines: false
+# canvas_sphere
+# 球上凸点(柱?)占用高
+canvas_sphere: false
+
+# 背景彩色线条,这个不占cpu但是只适合pisces主题(唉)
+# Only fit scheme Pisces
+# Dependencies: https://github.com/theme-next/theme-next-canvas-ribbon
+# Canvas-ribbon
+# size: The width of the ribbon.
+# alpha: The transparency of the ribbon.
+# zIndex: The display level of the ribbon.
+canvas_ribbon:
+  enable: false
+  size: 300
+  alpha: 0.6
+  zIndex: -1
+
+</code></pre>
+<p>我之所以没加这个特效是因为占用太大了</p>
+<p><del>其实还是我不知道怎么魔改,看样例占用还行</del></p>
+<hr>
+<h2 id="添加-Valine-评论"><a href="#添加-Valine-评论" class="headerlink" title="添加 Valine 评论"></a>添加 Valine 评论</h2><p>我找了找还是这个评论比较好,样式简单,支持匿名</p>
+<p>配合 <a href="https://leancloud.cn/" target="_blank" rel="noopener">LeanCloud</a></p>
+<p>额…找不到之前的教程了,自己找,满地都是</p>
+<h2 id="添加背景"><a href="#添加背景" class="headerlink" title="添加背景"></a>添加背景</h2><p><a href="https://blog.csdn.net/mango_haoming/article/details/78473243" target="_blank" rel="noopener">看这个</a></p>
+<p>然后这里说说使用本地图片的方法</p>
+<pre><code>
+body {
+    background:url(/images/bg.jpg);
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+    background-position:50% 50%;
+}
+</code></pre><p>放到 <code>/images</code> 文件夹即可</p>
+<p>那个你放头像啊图标啊各种东西的文件夹</p>
+<hr>
+<h2 id="未完待续吧"><a href="#未完待续吧" class="headerlink" title="未完待续吧"></a>未完待续<del>吧</del></h2><p>主要还是百度骚配置</p>
+<p>坑点大致如此</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/donate/AliPayQR.gif"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdnundefined"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2018/10/18/Luogu-P2261/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                烹调方案</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/2018/10/08/Luogu-P1447/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                能量采集</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz",
+        appKey: "RztxTMKSVDyuAaC0BVM1wPM1",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://kaizynx.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg" itemprop="image" alt="Kaizyn" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://kaizynx.github.io/" itemprop="url" rel="author">Kaizyn</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Kaizyn<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span><script>
+        var now = new Date();
+        function createtime() {
+          var grt= new Date("08/24/2018 00:00:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+          document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+          document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+        setInterval("createtime()",250);</script>
+
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> Powered by Hexo
+        </span>
+      </p>
+    </div>
+    <div id="binft"></div>
+      <script>
+        var binft = function (r) {
+          function t() {
+            return b[Math.floor(Math.random() * b.length)]
+          }
+          function e() {
+            return String.fromCharCode(94 * Math.random() + 33)
+          }
+          function n(r) {
+            for (var n = document.createDocumentFragment(), i = 0; r > i; i++) {
+              var l = document.createElement("span");
+              l.textContent = e(), l.style.color = t(), n.appendChild(l)
+            }
+            return n
+          }
+          function i() {
+            var t = o[c.skillI];
+            c.step ? c.step-- : (c.step = g, c.prefixP < l.length ? (c.prefixP >= 0 && (c.text += l[c.prefixP]), c.prefixP++) : "forward" === c.direction ? c.skillP < t.length ? (c.text += t[c.skillP], c.skillP++) : c.delay ? c.delay-- : (c.direction = "backward", c.delay = a) : c.skillP > 0 ? (c.text = c.text.slice(0, -1), c.skillP--) : (c.skillI = (c.skillI + 1) % o.length, c.direction = "forward")), r.textContent = c.text, r.appendChild(n(c.prefixP < l.length ? Math.min(s, s + c.prefixP) : Math.min(s, t.length - c.skillP))), setTimeout(i, d)
+          }
+          var l = "",
+          o = ["滚动字幕1","滚动字幕233"].map(function (r) {
+          return r + ""
+          }),
+          a = 2,
+          g = 1,
+          s = 5,
+          d = 75,
+          b = ["rgb(110,64,170)", "rgb(150,61,179)", "rgb(191,60,175)", "rgb(228,65,157)", "rgb(254,75,131)", "rgb(255,94,99)", "rgb(255,120,71)", "rgb(251,150,51)", "rgb(226,183,47)", "rgb(198,214,60)", "rgb(175,240,91)", "rgb(127,246,88)", "rgb(82,246,103)", "rgb(48,239,130)", "rgb(29,223,163)", "rgb(26,199,194)", "rgb(35,171,216)", "rgb(54,140,225)", "rgb(76,110,219)", "rgb(96,84,200)"],
+          c = {
+            text: "",
+            prefixP: -s,
+            skillI: 0,
+            skillP: 0,
+            direction: "forward",
+            delay: a,
+            step: g
+          };
+          i()
+          };
+          binft(document.getElementById('binft'));
+      </script>
+
+  </div><!-- .site-info -->
+  
+
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!--浏览器搞笑标题-->
+<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<center>
+  <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/footer/skirt.webp">
+</center>
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas> 
+  <div class="changeSkin-gear no-select">
+  <div class="keys" id="setbtn"> 
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+   </span>
+  </div>
+</div>
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Kaizyn'sBlog</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/KaizynX" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+        <a href="https://wpa.qq.com/msgrd?v=3&uin=2291443901&site=qq&menu=yes" class="fa fa-qq" target="_blank" style="color: #25c6fe; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories">
+                  <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                  分类
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags">
+                  <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/comment/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+            留言板
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/links/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+            大佬链
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/donate/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+            投食
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我?
+                </a>
+              </li>
+            
+              <li>
+                <a href="https://github.com/honjun/hexo-theme-sakura">
+                  <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                  主题
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/atom.xml">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+            RSS
+          </span>
+        </a>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+    id="2509579883"
+
+    server="netease"
+
+    type="playlist"
+
+    fixed="true"
+
+    autoplay="false"
+
+    loop="all"
+
+    order="random"
+
+    preload="auto"
+
+    volume="0.7"
+
+    mutex="true"
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

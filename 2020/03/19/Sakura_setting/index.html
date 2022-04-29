@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">Hexo-Sakura主题配置 | Kaizyn&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/images/favicon32.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Kaizyn'sBlog";
+  mashiro_option.author_name = "Blog";
+  mashiro_option.site_url = "https://kaizynx.github.io/";
+  mashiro_option.v_appId = "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz";
+  mashiro_option.v_appKey = "RztxTMKSVDyuAaC0BVM1wPM1";
+  mashiro_option.mathjax = "1";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/001.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/002.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/003.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/004.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/005.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/006.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/007.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/008.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/009.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+  
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>
+  .pace .pace-progress {  background: #1E92FB; /*进度条颜色*/
+  height: 3px;  }
+  .pace .pace-progress-inner {  box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+  }
+  .pace .pace-activity {  border-top-color: #1E92FB;    /*上边框颜色*/
+  border-left-color: #1E92FB;    /*左边框颜色*/
+  }</style>
+
+</head>
+</html>
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop ">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://kaizynx.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>一只菜鸡的博客</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/KaizynX" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://www.zhihu.com/people/kaizyn" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="mailto:2291443901@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=2291443901" target="_blank" class="social-github" title="qq">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/qq.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Kaizyn&#39;s</span>
+            <span class="shironeko">Blog</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories">
+                          <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                          分类
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags">
+                          <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/comment/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+                    留言板
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/links/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+                    大佬链
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/donate/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+                    投食
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我?
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="https://github.com/honjun/hexo-theme-sakura">
+                          <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                          主题
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/atom.xml">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+                    RSS
+                  </span>
+                </a>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+<div class="pattern-center single-center">
+  <!-- 有配图默认渲染第一张 -->
+  
+  <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/Sakura_setting/sakura.png);" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/Sakura_setting/sakura.png">
+  </div>
+  
+  <header class="pattern-header single-header">
+    <h1 class="entry-title">
+    Hexo-Sakura主题配置</h1>
+    <p class="entry-census">
+        <span>
+          <a href="https://kaizynx.github.io/">
+            <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="https://kaizynx.github.io/">Kaizyn</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2020-3-19<span class="bull">
+        ·</span>
+    <span id="busuanzi_value_page_pv"></span>次阅读</p>
+  </header>
+</div>
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        <!--  -->
+        <div class="entry-content">
+          <h2 id="主题介绍"><a href="#主题介绍" class="headerlink" title="主题介绍"></a>主题介绍</h2><p><a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" rel="noopener">github</a></p>
+<p>直接整个下载,作为博客的根目录,在此基础上配置</p>
+<h2 id="初级配置"><a href="#初级配置" class="headerlink" title="初级配置"></a>初级配置</h2><p><a href="https://docs.hojun.cn/sakura/docs/#/" target="_blank" rel="noopener">官方文档</a></p>
+<p>参考文档可以完成大部分主流配置</p>
+<h2 id="cdn"><a href="#cdn" class="headerlink" title="cdn"></a>cdn</h2><p>百度搜索例如 <code>jsDelivr+github搭建免费的cdn</code> 的关键字</p>
+<pre><code>$ https://cdn.jsdelivr.net/gh/你的用户名/你的仓库名@发布的版本号/文件路径
+# 栗子：
+$ https://cdn.jsdelivr.net/gh/Fofade/cnblogsThemes@1.0/live2dw/assets/z16.model.json # 加载1.0版本
+
+# 注意： 如果不加  @发布的版本号  默认加载最新版本
+# 栗子：
+$ https://cdn.jsdelivr.net/gh/Fofade/cnblogsThemes/live2dw/assets/z16.model.json # 加载最新版本
+</code></pre><h2 id="进阶配置"><a href="#进阶配置" class="headerlink" title="进阶配置"></a>进阶配置</h2><p>主要参考 <a href="https://yremp.live/hexo-sakura/" target="_blank" rel="noopener">博客链接</a></p>
+<p>这篇超好用 <a href="https://blog.csdn.net/u011759205/article/details/104839472" target="_blank" rel="noopener">博客链接</a></p>
+<p>作者的 <a href="https://www.bilibili.com/video/av43856893" target="_blank" rel="noopener">bilibili</a></p>
+<p>某个使用该主题的大佬，很喜欢他的博客<a href="https://cndrew.cn/" target="_blank" rel="noopener">博客链接</a></p>
+<h2 id="切换背景"><a href="#切换背景" class="headerlink" title="切换背景"></a>切换背景</h2><p>第一次尝试上面博客提供的切换背景方法失败</p>
+<p>于是百度到如下方法 <a href="https://blog.csdn.net/cungudafa/article/details/104295156" target="_blank" rel="noopener">另一篇博客</a></p>
+<p>修改文件  <code>\themes\Sakura\layout\_partial\footer.ejs</code></p>
+<p>在 <code>&lt;/footer&gt;</code> 前添加如下代码</p>
+<pre><code class="html">  &lt;!--壁纸切换--&gt;
+  &lt;div class=&quot;skin-menu no-select&quot; id=&quot;mainskin&quot;  style=&quot;position: fixed&quot;&gt;
+    &lt;div class=&quot;theme-controls row-container&quot;&gt;
+        &lt;ul class=&quot;menu-list&quot;&gt;
+            &lt;li id=&quot;white-bg&quot;&gt; &lt;i class=&quot;fa fa-television&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/li&gt;
+            &lt;li id=&quot;sakura-bg&quot;&gt; &lt;i class=&quot;iconfont icon-sakura&quot;&gt;&lt;/i&gt;&lt;/li&gt;
+            &lt;li id=&quot;gribs-bg&quot;&gt; &lt;i class=&quot;fa fa-slack&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/li&gt;
+            &lt;li id=&quot;KAdots-bg&quot;&gt; &lt;i class=&quot;iconfont icon-dots&quot;&gt;&lt;/i&gt;&lt;/li&gt;
+            &lt;li id=&quot;totem-bg&quot;&gt; &lt;i class=&quot;fa fa-optin-monster&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/li&gt;
+            &lt;li id=&quot;pixiv-bg&quot;&gt; &lt;i class=&quot;iconfont icon-pixiv&quot;&gt;&lt;/i&gt;&lt;/li&gt;
+            &lt;li id=&quot;bing-bg&quot;&gt; &lt;i class=&quot;iconfont icon-bing&quot;&gt;&lt;/i&gt;&lt;/li&gt;
+            &lt;li id=&quot;dark-bg&quot;&gt; &lt;i class=&quot;fa fa-moon-o&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;font-family-controls row-container&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;control-btn-serif selected&quot; data-mode=&quot;serif&quot; onclick=&quot;mashiro_global.font_control.change_font()&quot;&gt;Serif&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;control-btn-sans-serif&quot; data-mode=&quot;sans-serif&quot; onclick=&quot;mashiro_global.font_control.change_font()&quot;&gt;Sans Serif&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;   
+  &lt;canvas id=&quot;night-mode-cover&quot;&gt;&lt;/canvas&gt; 
+    &lt;div class=&quot;changeSkin-gear no-select&quot;&gt;
+      &lt;div class=&quot;keys&quot; id=&quot;setbtn&quot;&gt; &lt;span id=&quot;open-skinMenu&quot;&gt; 切换壁纸 | SCHEME TOOL 
+        &amp;nbsp;&lt;i class=&quot;iconfont icon-gear inline-block rotating&quot;&gt;&lt;/i&gt; &lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;!--skin.end--&gt;
+</code></pre>
+<p>但是令人震惊的是，之前博客的方法突然又起效了。</p>
+<h2 id="背景动画"><a href="#背景动画" class="headerlink" title="背景动画"></a>背景动画</h2><p><a href="https://blog.csdn.net/cungudafa/article/details/104295156" target="_blank" rel="noopener">参考博客</a></p>
+<p>花瓣飘落、文字，爱心，连线，飘动的彩带</p>
+<p>修改文件  <code>\themes\Sakura\layout\_partial\footer.ejs</code></p>
+<pre><code class="html">    &lt;!--浏览器搞笑标题--&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- 🌸飘落 --&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/sakura.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- 雪花飘落 --&gt;
+    &lt;!-- &lt;script src=&quot;https://cdn.jsdelivr.net/gh/Yafine/cdn@2.5/source/js/snow1.js&quot;&gt;&lt;/script&gt; --&gt;
+    &lt;!-- // 文字 --&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/gh/wallleap/cdn/js/shehuizhuyi.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- // 烟花 --&gt;
+    &lt;canvas class=&quot;fireworks&quot; style=&quot;position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;&quot; &gt;&lt;/canvas&gt; 
+    &lt;script type=&quot;text/javascript&quot; src=&quot;//cdn.bootcss.com/animejs/2.2.0/anime.min.js&quot;&gt;&lt;/script&gt; 
+    &lt;script src=&quot;https://cdn.jsdelivr.net/gh/Yafine/cdn@2.5/source/js/fireworks.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- // 星星跟随坠落 --&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.1.2/js/cursor.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- // 爱心 --&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/gh/wallleap/cdn/js/love.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- // 连线 --&gt;
+    &lt;!-- &lt;script src=&quot;https://cdn.jsdelivr.net/gh/wallleap/cdn/js/canvas-nest.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js&quot;&gt;&lt;/script&gt; --&gt;
+    &lt;!-- 样式二（飘动的彩带） --&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/piao.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+     &lt;!--背景切换--&gt;
+     &lt;script src=&quot;//instant.page/3.0.0&quot; type=&quot;module&quot; defer integrity=&quot;sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1&quot;&gt;&lt;/script&gt;
+</code></pre>
+<h2 id="添加页面底部图片"><a href="#添加页面底部图片" class="headerlink" title="添加页面底部图片"></a>添加页面底部图片</h2><p>修改文件  <code>\themes\Sakura\layout\_partial\footer.ejs</code></p>
+<p>在一堆 <code>&lt;script type=&quot;&quot;,url=&quot;&quot;&gt;</code> 之间(其实我不清楚插哪不可以反正这里可以)插入 </p>
+<pre><code class="html">&lt;center&gt;
+  &lt;img src=&quot;&quot;&gt;
+&lt;/center&gt;
+</code></pre>
+<h2 id="代码渲染问题"><a href="#代码渲染问题" class="headerlink" title="代码渲染问题"></a>代码渲染问题</h2><p>根目录下的 <code>_config.yml</code> 文件</p>
+<pre><code class="yml">highlight: 
+  enable: false
+  line_number: false
+  auto_detect: false
+  tab_replace:
+</code></pre>
+<p>上面三个选项之前全写了 <code>true</code> 导致渲染出错</p>
+<h2 id="置顶-和-加密"><a href="#置顶-和-加密" class="headerlink" title="置顶 和 加密"></a>置顶 和 加密</h2><p><a href="https://blog.csdn.net/cungudafa/article/details/104346521" target="_blank" rel="noopener">参考博客</a></p>
+<p>按照博客里的一步一步做</p>
+<p>关于置顶标签的问题，也确实是找不到放哪里哭了</p>
+<p>不过勇于尝试多次之后就找到一个较为合适的位置了。。略</p>
+<h2 id="修改字体"><a href="#修改字体" class="headerlink" title="修改字体"></a>修改字体</h2><p><em>2020-03-20</em></p>
+<p><a href="https://m1314.cn/302.html" target="_blank" rel="noopener">巨佬博客</a></p>
+<p>一个不太大众的博客主题最糟心的事情估计是技术博客不好找吧</p>
+<p>也可能是之前用的 Next 主题太火了，把我惯坏了</p>
+<p>不过这个大佬是用 <code>Wordpress</code> 搭建的，和 <code>Hexo</code> 有很大的出入</p>
+<p>不过还是可以借鉴模仿的(不会网页语言的我感到自己好厉害)</p>
+<p>在这个文件 <code>\themes\Sakura\source\css\style.css</code></p>
+<p>找到里面的关键词 <code>font-family:</code></p>
+<p>类似 <code>font-family:Arial,Helvetica,sans-serif;</code></p>
+<p>这后面就是字体,虽然有很多个,但经过我的盲目分析,显示的应该是第一个</p>
+<p>然后你改一下第一个就好…</p>
+<p>不过文件中有好多,应该是不同地方用不同字体,至于具体什么地方,看括号外名字猜测吧</p>
+<p>暂时不知道外部字体的导入方法,你可以改成一些常用字体或系统自带的字体吧</p>
+<h2 id="修改-关于-我-中的对话内容"><a href="#修改-关于-我-中的对话内容" class="headerlink" title="修改 关于-我 中的对话内容"></a>修改 关于-我 中的对话内容</h2><p><em>2020-03-21</em></p>
+<p>修改文件 <code>\themes\Sakura\source\js\botui.js</code></p>
+<h2 id="图片放大"><a href="#图片放大" class="headerlink" title="图片放大"></a>图片放大</h2><p><em>2020-03-21</em></p>
+<p>在 <code>.md</code> 插入图片时使用如下代码</p>
+<pre><code>&lt;img src=&quot;&quot; data-action=&quot;zoom&quot;&gt;
+</code></pre><p>效果演示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/Sakura_setting/sakura.png" data-action="zoom"></p>
+<h2 id="内容折叠"><a href="#内容折叠" class="headerlink" title="内容折叠"></a>内容折叠</h2><p><em>2020-03-22</em></p>
+<p><a href="https://www.faker.top/2020/02/14/Hexo/h6-折叠文字/" target="_blank" rel="noopener">参考博客</a></p>
+<p>找这个教程也是把我气的，一搜索全是 next 的教程</p>
+<details><br>  <summary>HTML语法测试</summary><br><br>代码渲染失败<br><br><code>cpp
+int main() {
+    return 0;
+}</code><br><br></details>
+
+<div class="spoiler collapsed">
+    <div class="spoiler-title">
+        插件效果测试
+    </div>
+    <div class="spoiler-content">
+        <p><a href="https://github.com/fletchto99/hexo-sliding-spoiler" target="_blank" rel="noopener">插件</a></p>
+<p>代码能渲染</p>
+<pre><code class="cpp"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>{
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h2 id="仿Github文章日历"><a href="#仿Github文章日历" class="headerlink" title="仿Github文章日历"></a>仿Github文章日历</h2><p><em>2020-03-23</em></p>
+<p><a href="https://cndrew.cn/2020/03/03/calender/" target="_blank" rel="noopener">博客链接</a></p>
+<p><strong>另注</strong> 博客末尾中给出的style并不完美(长度宽度设置)，这里提供此博客版本</p>
+<pre><code class="html">&lt;style type=&quot;text/css&quot;&gt;
+  #contentss {
+  position: relative;
+  width: 80%;
+  height: auto;
+  max-height: 1200px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  text-align: center;
+  border: 0;
+  border-radius: 10px;
+  color: rgba(0, 0, 0, .87);
+  background: #fff 50%;
+  background-size: cover;
+  box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07);
+  margin:0 auto;
+  }
+&lt;/style&gt;
+</code></pre>
+<h2 id="随机图片"><a href="#随机图片" class="headerlink" title="随机图片"></a>随机图片</h2><p><em>2020-03-24</em></p>
+<p><a href="https://random.52ecy.cn/" target="_blank" rel="noopener">网址1</a></p>
+<p><a href="https://api.ixiaowai.cn/" target="_blank" rel="noopener">网址2</a></p>
+<p>经测试应该可以直接作为 post 的 photos</p>
+<p>不过鉴于我的博客是由之前的博客换主题而来的，之前的文章都没有封面</p>
+<p>一个一个写岂不是太麻烦了？一劳永逸不香吗</p>
+<p>修改<code>\themes\Sakura\layout\_widget\common-article.ejs</code></p>
+<pre><code class="html">&lt;% if (post.photos &amp;&amp; post.photos.length){ %&gt;
+  &lt;div class=&quot;pattern-center single-center&quot;&gt;
+    &lt;!-- 有配图默认渲染第一张 --&gt;
+    &lt;div class=&quot;pattern-attachment-img lazyload&quot; style=&quot;background-image: url(&lt;%= post.photos[0] %&gt;);&quot; src=&quot;&lt;%- theme.lazyloadImg%&gt;&quot; data-src=&quot;&lt;%= post.photos[0] %&gt;&quot;&gt;
+    &lt;/div&gt;
+    &lt;header class=&quot;pattern-header single-header&quot;&gt;
+      &lt;h1 class=&quot;entry-title&quot;&gt;
+      &lt;%- post.title %&gt;&lt;/h1&gt;
+      &lt;p class=&quot;entry-census&quot;&gt;
+        &lt;span&gt;
+          &lt;a href=&quot;&lt;%- post.authorLink%&gt;&quot;&gt;
+            &lt;img src=&quot;&lt;%- post.avatar%&gt;&quot;&gt;
+          &lt;/a&gt;
+        &lt;/span&gt;
+        &lt;span&gt;
+          &lt;a href=&quot;&lt;%- post.authorLink%&gt;&quot;&gt;&lt;%- post.author %&gt;&lt;/a&gt;
+        &lt;/span&gt;
+        &lt;span class=&quot;bull&quot;&gt;
+        ·&lt;/span&gt;
+        &lt;%= date(post.date, &#39;YYYY-M-D&#39;) %&gt;&lt;span class=&quot;bull&quot;&gt;
+        ·&lt;/span&gt;
+      &lt;span id=&quot;busuanzi_value_page_pv&quot;&gt;&lt;/span&gt;次阅读&lt;/p&gt;
+    &lt;/header&gt;
+  &lt;/div&gt;
+&lt;% } %&gt;
+</code></pre>
+<p>修改为</p>
+<pre><code class="html">&lt;!-- 有配图默认渲染第一张 --&gt;
+  &lt;% if (post.photos &amp;&amp; post.photos.length){ %&gt;
+  &lt;div class=&quot;pattern-attachment-img lazyload&quot; style=&quot;background-image: url(&lt;%= post.photos[0] %&gt;);&quot; src=&quot;&lt;%- theme.lazyloadImg%&gt;&quot; data-src=&quot;&lt;%= post.photos[0] %&gt;&quot;&gt;
+  &lt;/div&gt;
+  &lt;% } else { %&gt;
+  &lt;div class=&quot;pattern-attachment-img lazyload&quot; style=&quot;background-image: url(https://random.52ecy.cn/randbg.php);&quot; src=&quot;&lt;%- theme.lazyloadImg%&gt;&quot; data-src=&quot;https://random.52ecy.cn/randbg.php&quot;&gt;
+  &lt;/div&gt;
+  &lt;% } %&gt;
+  &lt;header class=&quot;pattern-header single-header&quot;&gt;
+    &lt;h1 class=&quot;entry-title&quot;&gt;
+    &lt;%- post.title %&gt;&lt;/h1&gt;
+    &lt;p class=&quot;entry-census&quot;&gt;
+        &lt;span&gt;
+          &lt;a href=&quot;&lt;%- post.authorLink || &#39;https://kaizynx.github.io/&#39; %&gt;&quot;&gt;
+            &lt;img src=&quot;&lt;%- post.avatar || &#39;https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg&#39; %&gt;&quot;&gt;
+          &lt;/a&gt;
+        &lt;/span&gt;
+        &lt;span&gt;
+          &lt;a href=&quot;&lt;%- post.authorLink || &#39;https://kaizynx.github.io/&#39; %&gt;&quot;&gt;&lt;%- post.author || &#39;Kaizyn&#39; %&gt;&lt;/a&gt;
+        &lt;/span&gt;
+        &lt;span class=&quot;bull&quot;&gt;
+        ·&lt;/span&gt;
+        &lt;%= date(post.date, &#39;YYYY-M-D&#39;) %&gt;&lt;span class=&quot;bull&quot;&gt;
+        ·&lt;/span&gt;
+    &lt;span id=&quot;busuanzi_value_page_pv&quot;&gt;&lt;/span&gt;次阅读&lt;/p&gt;
+  &lt;/header&gt;
+&lt;/div&gt;
+</code></pre>
+<p>修改 <code>\themes\Sakura\layout\_widget\index-items.ejs</code></p>
+<p>大概第六行</p>
+<pre><code class="html">      &lt;img class=&quot;lazyload&quot; onerror=&quot;imgError(this,3)&quot; src=&quot;&lt;%- theme.lazyloadImg%&gt;&quot; data-src=&quot;&lt;%= post.photos[0] || &#39;https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/image-404.png&#39; %&gt;&quot;&gt;
+</code></pre>
+<pre><code class="html">      &lt;img class=&quot;lazyload&quot; onerror=&quot;imgError(this,3)&quot; src=&quot;&lt;%- theme.lazyloadImg%&gt;&quot; data-src=&quot;&lt;%= post.photos[0] || &#39;https://random.52ecy.cn/randbg.php&#39; %&gt;&quot;&gt;
+</code></pre>
+<p>但是这么改糟糕的就是可能很多图是一样的,暂时没找到解决方法呢。。不过也总比404强了吧</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>从昨晚一直折腾到今天下午三点半，总算是初步建立好了，累die</p>
+<p>总的来说，想折腾一个好看的博客，可能并不是需要你学多少专业的知识，会多少专业的技能</p>
+<p>而是看你有没有耐心，一颗坚持不懈的狂热的心</p>
+<p>你需要的是借鉴模仿，以及如何从百度等搜索引擎找到解决问题方法的能力</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/donate/AliPayQR.gif"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdnundefined"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2020/03/22/cmd_chinese/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/cmd_chinese/cover.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/cmd_chinese/cover.jpg">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                Windows vscode cmd 中文乱码</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/2020/03/18/Blog_modify/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                博客魔改</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz",
+        appKey: "RztxTMKSVDyuAaC0BVM1wPM1",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://kaizynx.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg" itemprop="image" alt="Kaizyn" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://kaizynx.github.io/" itemprop="url" rel="author">Kaizyn</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Kaizyn<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span><script>
+        var now = new Date();
+        function createtime() {
+          var grt= new Date("08/24/2018 00:00:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+          document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+          document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+        setInterval("createtime()",250);</script>
+
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> Powered by Hexo
+        </span>
+      </p>
+    </div>
+    <div id="binft"></div>
+      <script>
+        var binft = function (r) {
+          function t() {
+            return b[Math.floor(Math.random() * b.length)]
+          }
+          function e() {
+            return String.fromCharCode(94 * Math.random() + 33)
+          }
+          function n(r) {
+            for (var n = document.createDocumentFragment(), i = 0; r > i; i++) {
+              var l = document.createElement("span");
+              l.textContent = e(), l.style.color = t(), n.appendChild(l)
+            }
+            return n
+          }
+          function i() {
+            var t = o[c.skillI];
+            c.step ? c.step-- : (c.step = g, c.prefixP < l.length ? (c.prefixP >= 0 && (c.text += l[c.prefixP]), c.prefixP++) : "forward" === c.direction ? c.skillP < t.length ? (c.text += t[c.skillP], c.skillP++) : c.delay ? c.delay-- : (c.direction = "backward", c.delay = a) : c.skillP > 0 ? (c.text = c.text.slice(0, -1), c.skillP--) : (c.skillI = (c.skillI + 1) % o.length, c.direction = "forward")), r.textContent = c.text, r.appendChild(n(c.prefixP < l.length ? Math.min(s, s + c.prefixP) : Math.min(s, t.length - c.skillP))), setTimeout(i, d)
+          }
+          var l = "",
+          o = ["滚动字幕1","滚动字幕233"].map(function (r) {
+          return r + ""
+          }),
+          a = 2,
+          g = 1,
+          s = 5,
+          d = 75,
+          b = ["rgb(110,64,170)", "rgb(150,61,179)", "rgb(191,60,175)", "rgb(228,65,157)", "rgb(254,75,131)", "rgb(255,94,99)", "rgb(255,120,71)", "rgb(251,150,51)", "rgb(226,183,47)", "rgb(198,214,60)", "rgb(175,240,91)", "rgb(127,246,88)", "rgb(82,246,103)", "rgb(48,239,130)", "rgb(29,223,163)", "rgb(26,199,194)", "rgb(35,171,216)", "rgb(54,140,225)", "rgb(76,110,219)", "rgb(96,84,200)"],
+          c = {
+            text: "",
+            prefixP: -s,
+            skillI: 0,
+            skillP: 0,
+            direction: "forward",
+            delay: a,
+            step: g
+          };
+          i()
+          };
+          binft(document.getElementById('binft'));
+      </script>
+
+  </div><!-- .site-info -->
+  
+
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!--浏览器搞笑标题-->
+<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<center>
+  <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/footer/skirt.webp">
+</center>
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas> 
+  <div class="changeSkin-gear no-select">
+  <div class="keys" id="setbtn"> 
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+   </span>
+  </div>
+</div>
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Kaizyn'sBlog</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/KaizynX" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+        <a href="https://wpa.qq.com/msgrd?v=3&uin=2291443901&site=qq&menu=yes" class="fa fa-qq" target="_blank" style="color: #25c6fe; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories">
+                  <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                  分类
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags">
+                  <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/comment/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+            留言板
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/links/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+            大佬链
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/donate/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+            投食
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我?
+                </a>
+              </li>
+            
+              <li>
+                <a href="https://github.com/honjun/hexo-theme-sakura">
+                  <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                  主题
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/atom.xml">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+            RSS
+          </span>
+        </a>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+    id="2509579883"
+
+    server="netease"
+
+    type="playlist"
+
+    fixed="true"
+
+    autoplay="false"
+
+    loop="all"
+
+    order="random"
+
+    preload="auto"
+
+    volume="0.7"
+
+    mutex="true"
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

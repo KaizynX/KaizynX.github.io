@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">Codeforces Round 510 (Div. 2) | Kaizyn&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/images/favicon32.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Kaizyn'sBlog";
+  mashiro_option.author_name = "Blog";
+  mashiro_option.site_url = "https://kaizynx.github.io/";
+  mashiro_option.v_appId = "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz";
+  mashiro_option.v_appKey = "RztxTMKSVDyuAaC0BVM1wPM1";
+  mashiro_option.mathjax = "1";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/001.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/002.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/003.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/004.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/005.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/006.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/007.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/008.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/009.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+  
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>
+  .pace .pace-progress {  background: #1E92FB; /*进度条颜色*/
+  height: 3px;  }
+  .pace .pace-progress-inner {  box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+  }
+  .pace .pace-activity {  border-top-color: #1E92FB;    /*上边框颜色*/
+  border-left-color: #1E92FB;    /*左边框颜色*/
+  }</style>
+
+</head>
+</html>
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop ">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://kaizynx.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>一只菜鸡的博客</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/KaizynX" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://www.zhihu.com/people/kaizyn" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="mailto:2291443901@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=2291443901" target="_blank" class="social-github" title="qq">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/qq.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Kaizyn&#39;s</span>
+            <span class="shironeko">Blog</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories">
+                          <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                          分类
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags">
+                          <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/comment/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+                    留言板
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/links/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+                    大佬链
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/donate/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+                    投食
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我?
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="https://github.com/honjun/hexo-theme-sakura">
+                          <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                          主题
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/atom.xml">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+                    RSS
+                  </span>
+                </a>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+<div class="pattern-center single-center">
+  <!-- 有配图默认渲染第一张 -->
+  
+  <div class="pattern-attachment-img lazyload" style="background-image: url(https://random.52ecy.cn/randbg.php);" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://random.52ecy.cn/randbg.php">
+  </div>
+  
+  <header class="pattern-header single-header">
+    <h1 class="entry-title">
+    Codeforces Round 510 (Div. 2)</h1>
+    <p class="entry-census">
+        <span>
+          <a href="https://kaizynx.github.io/">
+            <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="https://kaizynx.github.io/">Kaizyn</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2018-9-18<span class="bull">
+        ·</span>
+    <span id="busuanzi_value_page_pv"></span>次阅读</p>
+  </header>
+</div>
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        <!-- 
+          <header class="entry-header">
+            <h1 class="entry-title">Codeforces Round 510 (Div. 2)</h1>
+            <p class="entry-census">&nbsp;·&nbsp;2018-9-18&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+         -->
+        <div class="entry-content">
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这是一场惨痛的翻车案</p>
+<h1 id="A-Benches"><a href="#A-Benches" class="headerlink" title="A. Benches"></a><a href="http://codeforces.com/contest/1042/problem/A" target="_blank" rel="noopener">A. Benches</a></h1><h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>有n个沙滩,第i个沙滩原本有ai个人</p>
+<p>后来来了m个人,每人去往任意一个沙滩</p>
+<p>最终所有人数最多的一个沙滩的人数记为k</p>
+<p>求k的最小值和最大值</p>
+<h2 id="数据范围"><a href="#数据范围" class="headerlink" title="数据范围"></a>数据范围</h2><p>1 &lt;= n &lt;= 100</p>
+<p>1 &lt;= m &lt;= 10000</p>
+<p>1 &lt;= ai &lt;= 100</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>一眼看出的水题</p>
+<p>最大的k就是m个人都去原本人最多的沙滩</p>
+<p>$k_{max} = \max (ai) + m$</p>
+<p>那么问题就是最少</p>
+<p>我的第一想法就是均摊嘛</p>
+<p>原本人少的多去几个,原本人多的少去几个</p>
+<p>尽量让每个沙滩的人数平均</p>
+<p>答案就是均摊量</p>
+<p>设sum是ai的和,也就是原本沙滩上的总人数</p>
+<p><code>k = (sum+m)/n+((sum+m)%n != 0))</code></p>
+<p>能均摊就<code>(sum+m)/n</code></p>
+<p>不能均摊就是<code>(sum+m)/n+1</code></p>
+<p><strong>然后</strong></p>
+<p>就被Hack了</p>
+<p>看这样一组数据:</p>
+<hr>
+<p>输入</p>
+<pre><code>3
+2
+5 0 0
+</code></pre><p>我的输出</p>
+<pre><code>3 7
+</code></pre><p>正确答案</p>
+<pre><code>5 7
+</code></pre><hr>
+<p>发现了并不一定能”均摊”</p>
+<p>调整为<code>k = max(maxa, (sum+m)/n+((sum+m)%n != 0))</code></p>
+<p>正确代码如下</p>
+<pre><code class="cpp">#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+int n, m, sum, maxa, a;
+
+int main()
+{
+    scanf(&quot;%d%d&quot;, &amp;n, &amp;m);
+    for(int i = 1; i &lt;= n; ++i)
+    {
+        scanf(&quot;%d&quot;, &amp;a);
+        maxa = max(a, maxa);
+        sum += a;
+    }
+    printf(&quot;%d %d\n&quot;, max(maxa, (sum+m)/n+((sum+m)%n != 0)), maxa+m);
+    return 0;
+}
+</code></pre>
+<hr>
+<h1 id="B-Vitamins"><a href="#B-Vitamins" class="headerlink" title="B. Vitamins"></a>B. <a href="http://codeforces.com/contest/1042/problem/B" target="_blank" rel="noopener">Vitamins</a></h1><h2 id="题意-1"><a href="#题意-1" class="headerlink" title="题意"></a>题意</h2><p>商店卖n种饮料,每种饮料有一种或多种维生素(A,B,C),价格为ci</p>
+<p>问得到A,B,C三种最少要多少钱</p>
+<p>ps:输入保证只出现A,B,C且每种最多出现一次</p>
+<h2 id="数据范围-1"><a href="#数据范围-1" class="headerlink" title="数据范围"></a>数据范围</h2><p>1 &lt;= n &lt;= 1000</p>
+<p>1 &lt;= ci &lt;= 100000</p>
+<h2 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h2><p>这个看着其实挺简单的呀</p>
+<p>用头想都知道怎么办</p>
+<p>可是想敲代码又愣住了</p>
+<p>怎么敲</p>
+<p>还是<strong>暴力</strong></p>
+<p>想要ABC,可以有一下凑法</p>
+<pre><code>A+B+C
+AB+C
+AC+B
+BC+A
+ABC
+</code></pre><p>假如A的饮料有k个</p>
+<p>我们选的肯定是k个中价值最小的</p>
+<p>所以只需要一个简单数组记录各种饮料的最低价格</p>
+<p>再配凑出ABC</p>
+<p>饮料的种类可分为以下几种</p>
+<pre><code>A
+B
+C
+AB
+AC
+BC
+ABC
+</code></pre><p>很暴力了</p>
+<p>但这样有些太过麻烦了</p>
+<p>于是想到了二进制优化</p>
+<p>假如把A,B,C看成以下数字</p>
+<pre><code>A == 1
+B == 2
+C == 4
+</code></pre><p>这样形成的组合就不会有重复</p>
+<p>那么1~7就能完美覆盖所有饮料的种类</p>
+<p>以下是我的代码</p>
+<pre><code class="cpp">#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+const int INF = 1e8+7;
+
+int n, c[8];
+string str;
+
+// a 1 b 2 c 4
+// ab 3 ac 5 bc 6 abc 7
+
+int main()
+{
+    for(int i = 1; i &lt;= 7; ++i) c[i] = INF;
+    cin &gt;&gt; n;
+    for(int i = 1, tmp, k; i &lt;= n; ++i)
+    {
+        cin &gt;&gt; tmp &gt;&gt; str;
+        k = 0;
+        for(int i = 0; i &lt; str.length(); ++i)
+            k += 1&lt;&lt;(str[i]-&#39;A&#39;);
+        c[k] = min(c[k], tmp);
+    }
+    int res = c[7];
+    res = min(res, c[1]+c[2]+c[4]);
+    res = min(res, c[3]+c[4]);
+    res = min(res, c[5]+c[2]);
+    res = min(res, c[6]+c[1]);
+    res = min(res, c[3]+c[5]);
+    res = min(res, c[3]+c[6]);
+    res = min(res, c[5]+c[6]);
+    printf(&quot;%d\n&quot;, res == INF ? -1 : res);
+    return 0;
+}
+</code></pre>
+<p>没错,你们发现有坑点了吗</p>
+<p>想组合出ABC其实还有3种方法</p>
+<pre><code>AB+AC
+AB+BC
+AC+BC
+</code></pre><p>而<code>AB+AC+BC</code>是显然不行的啦</p>
+<p>就是因为忘了这三种我第一次提交错了</p>
+<p>后来,没错,我的B题也被Hack了!</p>
+<p>原因是我一开始INF定义为c的最大值1e5</p>
+<p>如果有这样的饮料</p>
+<pre><code>A 1e5
+B 1e5
+C 1e5
+</code></pre><p>按照我的做法得出答案1e5</p>
+<p>其实是3e5 唉</p>
+<hr>
+<h1 id="C-Array-Product"><a href="#C-Array-Product" class="headerlink" title="C. Array Product"></a>C. <a href="http://codeforces.com/contest/1042/problem/C" target="_blank" rel="noopener">Array Product</a></h1><p>这题无疑让我最头疼</p>
+<h2 id="题意-2"><a href="#题意-2" class="headerlink" title="题意"></a>题意</h2><p>给n个数字ai</p>
+<p>操作1: 把aj = ai*aj,删去ai</p>
+<p>操作2: 删去ai(只能进行一次)</p>
+<p>n-1次操作后只剩1个数字</p>
+<p>求使最后数字最大的方案</p>
+<h2 id="数据范围-2"><a href="#数据范围-2" class="headerlink" title="数据范围"></a>数据范围</h2><p>2 &lt;= n &lt;= 2*10^5</p>
+<p>-10^9 &lt;= ai &lt;= 10^9</p>
+<h2 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h2><p>思路还算简单</p>
+<p>以下进行分类讨论</p>
+<ol>
+<li><p>对于正数</p>
+<p> 反正全部乘起来就对了,因为都&gt;=1</p>
+<p> 所以对于任意个数的正数不做考虑</p>
+</li>
+<li><p>对于0(没有负数的情况)</p>
+<p> 我们知道任何数乘0得到0</p>
+<p> 所以如果有0,结果会是0小于正数</p>
+<p> 因此我们选择删去0(操作2)</p>
+<p> 而且无论任意数量的0</p>
+<p> 都可以两两相乘(操作1)得到1个0</p>
+</li>
+<li><p>对于负数(没有0)</p>
+<ul>
+<li><p>假如有偶数个负数</p>
+<p>  因为负负得正</p>
+<p>  视为正数,无脑相乘</p>
+</li>
+<li><p>假如有奇数个负数</p>
+<p>  全部相乘一定为负</p>
+<p>  我第一次想法是两两相乘再删掉</p>
+<p>  其实正确做法是:</p>
+<p>  删去一个乘积就是正数</p>
+<p>  那么删去哪个呢</p>
+<p>  要使剩下偶数个乘起来最大</p>
+<p>  就要剩下的负数的绝对值最大</p>
+<p>  意思是删去绝对值最小的</p>
+<p>  因为是负数比较</p>
+<p>  等价于删去负数中值最大的</p>
+</li>
+</ul>
+</li>
+<li><p>如果同时存在0和负数</p>
+<p> 这是我第三次提交了</p>
+<p> 之前两次是考虑错了这种情况</p>
+<p> 因为0可以看成一个0</p>
+<ul>
+<li><p>负数有偶数个</p>
+<p>  相乘为正数,不特殊考虑</p>
+<p>  故删去0</p>
+</li>
+<li><p>负数有奇数个</p>
+<p>  第一想法是乘0和乘负数</p>
+<p>  嗯,删去负数</p>
+<p>  于是乎我就错了2次了</p>
+<p>  于是又仔细想想</p>
+<p>  发现可以这样操作</p>
+<p>  把0和多出的负数相乘得到0</p>
+<p>  再删去这个0</p>
+<p>  两全其美</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>我想这应该就是正确思路了</p>
+<p>如上所示分类也挺麻烦的</p>
+<p>因此代码也是相当暴力,敲的贼长,也贼烦</p>
+<p>如果你们看了样例</p>
+<p>那么在实践过程中还会发现</p>
+<p>我们需要记录一下进行了几步,是否会超出n-1</p>
+<p>这个超出特判是在进行操作2的时候</p>
+<p>因为我们的方案像把0相乘到一个0再删去</p>
+<p>如果数据全是0,那么最后结果就是相乘的一个0</p>
+<p>并不需要删除操作</p>
+<p>赛后我看AC代码,感觉也确实如此的思路<del>吧</del></p>
+<p>可我就是WA了</p>
+<p>C题3WA滚粗(至此不知所错)</p>
+<p>以下是我赛后稍加思考改进的代码</p>
+<p>起码比赛时的超暴力好看些</p>
+<p>注意:是不知所错的代码</p>
+<pre><code class="cpp">#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+const int Maxn = 2e5+7;
+
+// 00 1+ 2-
+int n, cnt[3], pos[3], step;
+pair&lt;int, int&gt; a[Maxn];
+
+int main()
+{
+    scanf(&quot;%d&quot;, &amp;n);
+    for(int i = 1; i &lt;= n; ++i)
+    {
+        scanf(&quot;%d&quot;, &amp;a[i].first);
+        a[i].second = i;
+        if(a[i].first == 0) cnt[0]++;
+        else if(a[i].first &gt; 0) cnt[1]++;
+        else cnt[2]++;
+    }
+    sort(a+1, a+n+1);
+    for(int i = 1; i &lt;= n; ++i)
+    {
+        if(a[i].first == 0 &amp;&amp; !pos[0]) pos[0] = i;
+        else if(a[i].first &gt; 0 &amp;&amp; !pos[1]) pos[1] = i;
+        else if(a[i].first &lt; 0 &amp;&amp; !pos[2]) pos[2] = i;
+    }
+
+    while(step &lt; n-1 &amp;&amp; cnt[0] &gt; 1)
+    {
+        printf(&quot;1 %d %d\n&quot;, a[pos[0]].second, a[pos[0]+1].second);
+        pos[0]++; cnt[0]--; step++;
+    }
+    // now cnt[0] &lt;= 1
+    if(step &lt; n-1 &amp;&amp; cnt[2]&amp;1)
+    {
+        if(cnt[0])
+        {
+            printf(&quot;1 %d %d\n&quot;, a[pos[0]].second, a[pos[2]+cnt[2]-1].second);
+            cnt[2]--; step++;
+            if(step &lt; n-1)
+            {
+                printf(&quot;2 %d\n&quot;, a[pos[0]].second);
+                cnt[0]--; step++;
+            }
+        }
+        else
+        {
+            printf(&quot;2 %d\n&quot;, a[pos[2]+cnt[2]-1].second);
+            cnt[2]--; step++;
+        }
+    }
+    // now cnt[2]&amp;1 == 0
+    if(step &lt; n-1 &amp;&amp; cnt[0])
+    {
+        printf(&quot;2 %d\n&quot;, a[pos[0]].second);
+        cnt[0]--; step++;
+    }
+    // now cnt[0] == 0
+    while(step &lt; n-1 &amp;&amp; cnt[2] &gt; 1)
+    {
+        printf(&quot;1 %d %d\n&quot;, a[pos[2]].second, a[pos[2]+1].second);
+        pos[2]++; cnt[2]--; step++;
+    }
+    // now cnt[2] &lt;= 1
+    while(step &lt; n-1 &amp;&amp; cnt[1] &gt; 1)
+    {
+        printf(&quot;1 %d %d\n&quot;, a[pos[1]].second, a[pos[1]+1].second);
+        pos[1]++; cnt[1]--; step++;
+    }
+    // now cnt[0] == 0, cnt[1] &lt;= 1, cnt[2] &lt;= 1
+    if(step &lt; n-1)
+        printf(&quot;1 %d %d\n&quot;, a[pos[1]].second, a[pos[2]].second);
+    return 0;
+}
+</code></pre>
+<p>再以下是我<strong>借鉴</strong>AC代码的代码</p>
+<pre><code class="cpp">#include &lt;stack&gt;
+#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+const int Maxn = 2e5+7;
+const int INF = 1e9+7;
+
+int n, nega = -INF, negid, cnt, negn;
+stack&lt;int&gt; s, zero;
+
+int main()
+{
+    scanf(&quot;%d&quot;, &amp;n);
+    for(int i = 1, a; i &lt;= n; ++i)
+    {
+        scanf(&quot;%d&quot;, &amp;a);
+        if(a == 0) zero.push(i);
+        else
+        {
+            if(a &lt; 0) negn++;
+            if(a &lt; 0 &amp;&amp; a &gt; nega)
+            {
+                nega = a;
+                negid = i;
+            }
+            s.push(i);
+        }
+    }
+    int tmp;
+    while(zero.size() &gt; 1)
+    {
+        tmp = zero.top(); zero.pop();
+        printf(&quot;1 %d %d\n&quot;, tmp, zero.top());
+        cnt++;
+    }
+    if(negn&amp;1)
+    {
+        if(zero.size())
+        {
+            printf(&quot;1 %d %d\n&quot;, zero.top(), negid);
+            cnt++;
+            zero.pop();
+        }
+        if(cnt &lt; n-1)
+        {
+            printf(&quot;2 %d\n&quot;, negid);
+            cnt++;
+        }
+    }
+    if(cnt &lt; n-1 &amp;&amp; zero.size())
+    {
+        printf(&quot;2 %d\n&quot;, zero.top());
+        cnt++;
+    }
+    if(cnt &gt;= n-1) return 0;
+    while(s.size() &gt; 1 &amp;&amp; cnt &lt; n-1)
+    {
+        tmp = s.top(); s.pop();
+        if(negn&amp;1 &amp;&amp; tmp == negid)
+        {
+            tmp = s.top(); s.pop();
+        }
+        if(negn&amp;1 &amp;&amp; s.top() == negid)
+        {
+            s.pop();
+        }
+        printf(&quot;1 %d %d\n&quot;, tmp, s.top());
+        cnt++;
+    }
+    return 0;
+}
+</code></pre>
+<h1 id="D-Petya-and-Array"><a href="#D-Petya-and-Array" class="headerlink" title="D. Petya and Array"></a>D. <a href="http://codeforces.com/contest/1042/problem/D" target="_blank" rel="noopener">Petya and Array</a></h1><p>这题别看我写出来了,其实是在群里py来的</p>
+<p>我因被Hack被大佬看重</p>
+<p>他从我这寻找Hack点</p>
+<p>我交易得到D题代码</p>
+<p>实在是有些罪过啊</p>
+<h2 id="题意-3"><a href="#题意-3" class="headerlink" title="题意"></a>题意</h2><p>有长度n的数组ai</p>
+<p>求有多少个区间的区间和小于t</p>
+<h2 id="数据范围-3"><a href="#数据范围-3" class="headerlink" title="数据范围"></a>数据范围</h2><p>1 &lt;= n &lt;= 200000</p>
+<p>|t| &lt;= 2*10^14</p>
+<p>|ai| &lt;= 10^9</p>
+<h2 id="思路-3"><a href="#思路-3" class="headerlink" title="思路"></a>思路</h2><p>当时感到爆炸,而且精力还放在C题找错上</p>
+<p>就<del>抄</del>了一遍代码交上去了</p>
+<p>我们用sum[]表示前缀和</p>
+<p>区间<code>[i+1,j],(i&lt;j)</code>和就是<code>sum[j]-sum[i]</code></p>
+<p>我们固定右端点为j</p>
+<p>求<code>sum[j]-sum[i] &lt; t</code></p>
+<p>即<code>sum[j]-t &lt; sum[i]</code></p>
+<p>即求多少个<code>i (0&lt;i&lt;j)</code>的sum满足上述条件</p>
+<p>我们用树状数组tr[x]</p>
+<p>记录sum小于x的个数</p>
+<p>每次扩大右端点j后,更新tr[]</p>
+<p>即加入sum[j]</p>
+<p>然后对于每个右端点j</p>
+<p>查询<code>&gt; sum[j]-t</code>的个数即可</p>
+<p>由于查询<code>&gt;</code>并不方便</p>
+<p>不妨查询<code>&lt;= sum[j]-t</code></p>
+<p>求出不满足<code>&lt; t</code>的的区间个数</p>
+<p>显然可得区间总数为<code>n*(n+1)/2</code></p>
+<p>另外由于数据范围贼大</p>
+<p>需采用离散化</p>
+<p>最终代码如下</p>
+<pre><code class="cpp">#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+const int Maxn = 2e5+7;
+
+int n, a[Maxn], tr[Maxn], tot;
+long long t, ans, sum[Maxn], dis[Maxn];
+
+inline void update(int x)
+{
+    for( ; x &lt;= n; x += x&amp;-x) tr[x]++;
+}
+
+inline int query(int x)
+{
+    int res = 0;
+    for( ; x; x -= x&amp;-x) res += tr[x];
+    return res;
+}
+
+int main()
+{
+    scanf(&quot;%d%I64d&quot;, &amp;n, &amp;t);
+    for(int i = 1; i &lt;= n; ++i)
+    {
+        scanf(&quot;%d&quot;, a+i);
+        dis[i] = sum[i] = sum[i-1]+a[i];
+    }
+    dis[n] = 0;
+    sort(dis+1, dis+n+1);
+    tot = unique(dis+1, dis+n+1)-(dis+1);
+    for(int i = 1, cur; i &lt;= n; ++i)
+    {
+        cur = lower_bound(dis+1, dis+tot+1, sum[i-1])-dis;
+        update(cur);
+        cur = upper_bound(dis+1, dis+tot+1, sum[i]-t)-(dis+1);
+        ans += query(cur);
+    }
+    printf(&quot;%I64d\n&quot;, ((n+1ll)*n)/2-ans);
+    return 0;
+}
+</code></pre>
+<hr>
+<p>总之某种意义上说我是一题也没写出来</p>
+<p>前两题的教训告诉我,不能太急</p>
+<p>再者比赛16:05~18:05</p>
+<p>光荣地牺牲了晚餐</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/donate/AliPayQR.gif"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdnundefined"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2018/09/24/AtCoder-ABC110/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                AtCoder ABC110 D-Factorization</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/2018/09/16/CodeforcesR509div2/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Codeforces Round 509 (Div. 2)</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz",
+        appKey: "RztxTMKSVDyuAaC0BVM1wPM1",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="" class="profile gravatar"><img src="" itemprop="image" alt="" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="" itemprop="url" rel="author"></a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Kaizyn<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span><script>
+        var now = new Date();
+        function createtime() {
+          var grt= new Date("08/24/2018 00:00:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+          document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+          document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+        setInterval("createtime()",250);</script>
+
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> Powered by Hexo
+        </span>
+      </p>
+    </div>
+    <div id="binft"></div>
+      <script>
+        var binft = function (r) {
+          function t() {
+            return b[Math.floor(Math.random() * b.length)]
+          }
+          function e() {
+            return String.fromCharCode(94 * Math.random() + 33)
+          }
+          function n(r) {
+            for (var n = document.createDocumentFragment(), i = 0; r > i; i++) {
+              var l = document.createElement("span");
+              l.textContent = e(), l.style.color = t(), n.appendChild(l)
+            }
+            return n
+          }
+          function i() {
+            var t = o[c.skillI];
+            c.step ? c.step-- : (c.step = g, c.prefixP < l.length ? (c.prefixP >= 0 && (c.text += l[c.prefixP]), c.prefixP++) : "forward" === c.direction ? c.skillP < t.length ? (c.text += t[c.skillP], c.skillP++) : c.delay ? c.delay-- : (c.direction = "backward", c.delay = a) : c.skillP > 0 ? (c.text = c.text.slice(0, -1), c.skillP--) : (c.skillI = (c.skillI + 1) % o.length, c.direction = "forward")), r.textContent = c.text, r.appendChild(n(c.prefixP < l.length ? Math.min(s, s + c.prefixP) : Math.min(s, t.length - c.skillP))), setTimeout(i, d)
+          }
+          var l = "",
+          o = ["滚动字幕1","滚动字幕233"].map(function (r) {
+          return r + ""
+          }),
+          a = 2,
+          g = 1,
+          s = 5,
+          d = 75,
+          b = ["rgb(110,64,170)", "rgb(150,61,179)", "rgb(191,60,175)", "rgb(228,65,157)", "rgb(254,75,131)", "rgb(255,94,99)", "rgb(255,120,71)", "rgb(251,150,51)", "rgb(226,183,47)", "rgb(198,214,60)", "rgb(175,240,91)", "rgb(127,246,88)", "rgb(82,246,103)", "rgb(48,239,130)", "rgb(29,223,163)", "rgb(26,199,194)", "rgb(35,171,216)", "rgb(54,140,225)", "rgb(76,110,219)", "rgb(96,84,200)"],
+          c = {
+            text: "",
+            prefixP: -s,
+            skillI: 0,
+            skillP: 0,
+            direction: "forward",
+            delay: a,
+            step: g
+          };
+          i()
+          };
+          binft(document.getElementById('binft'));
+      </script>
+
+  </div><!-- .site-info -->
+  
+
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!--浏览器搞笑标题-->
+<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<center>
+  <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/footer/skirt.webp">
+</center>
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas> 
+  <div class="changeSkin-gear no-select">
+  <div class="keys" id="setbtn"> 
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+   </span>
+  </div>
+</div>
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Kaizyn'sBlog</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/KaizynX" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+        <a href="https://wpa.qq.com/msgrd?v=3&uin=2291443901&site=qq&menu=yes" class="fa fa-qq" target="_blank" style="color: #25c6fe; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories">
+                  <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                  分类
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags">
+                  <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/comment/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+            留言板
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/links/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+            大佬链
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/donate/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+            投食
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我?
+                </a>
+              </li>
+            
+              <li>
+                <a href="https://github.com/honjun/hexo-theme-sakura">
+                  <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                  主题
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/atom.xml">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+            RSS
+          </span>
+        </a>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+    id="2509579883"
+
+    server="netease"
+
+    type="playlist"
+
+    fixed="true"
+
+    autoplay="false"
+
+    loop="all"
+
+    order="random"
+
+    preload="auto"
+
+    volume="0.7"
+
+    mutex="true"
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

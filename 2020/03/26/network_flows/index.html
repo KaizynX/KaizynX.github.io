@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">网络流 | Kaizyn&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/images/favicon32.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Kaizyn'sBlog";
+  mashiro_option.author_name = "Blog";
+  mashiro_option.site_url = "https://kaizynx.github.io/";
+  mashiro_option.v_appId = "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz";
+  mashiro_option.v_appKey = "RztxTMKSVDyuAaC0BVM1wPM1";
+  mashiro_option.mathjax = "1";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/001.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/002.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/003.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/004.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/005.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/006.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/007.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/008.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/009.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+  
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>
+  .pace .pace-progress {  background: #1E92FB; /*进度条颜色*/
+  height: 3px;  }
+  .pace .pace-progress-inner {  box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+  }
+  .pace .pace-activity {  border-top-color: #1E92FB;    /*上边框颜色*/
+  border-left-color: #1E92FB;    /*左边框颜色*/
+  }</style>
+
+</head>
+</html>
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop ">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://kaizynx.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>一只菜鸡的博客</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/KaizynX" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://www.zhihu.com/people/kaizyn" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="mailto:2291443901@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=2291443901" target="_blank" class="social-github" title="qq">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/qq.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Kaizyn&#39;s</span>
+            <span class="shironeko">Blog</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories">
+                          <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                          分类
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags">
+                          <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/comment/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+                    留言板
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/links/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+                    大佬链
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/donate/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+                    投食
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我?
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="https://github.com/honjun/hexo-theme-sakura">
+                          <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                          主题
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/atom.xml">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+                    RSS
+                  </span>
+                </a>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+<div class="pattern-center single-center">
+  <!-- 有配图默认渲染第一张 -->
+  
+  <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/network_flows/cover.gif);" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/network_flows/cover.gif">
+  </div>
+  
+  <header class="pattern-header single-header">
+    <h1 class="entry-title">
+    网络流</h1>
+    <p class="entry-census">
+        <span>
+          <a href="https://kaizynx.github.io/">
+            <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="https://kaizynx.github.io/">Kaizyn</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2020-3-26<span class="bull">
+        ·</span>
+    <span id="busuanzi_value_page_pv"></span>次阅读</p>
+  </header>
+</div>
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        <!--  -->
+        <div class="entry-content">
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>引用hjt巨佬的语录，网络流主要在建图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/network_flows/hjt001.png" data-action="zoom"><br><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/network_flows/hjt002.png" data-action="zoom"><br><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/network_flows/hjt003.png" data-action="zoom"></p>
+<h1 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h1><p>部分转载自<a href="https://www.cnblogs.com/axiomofchoice/p/template.html#网络流" target="_blank" rel="noopener">hjt巨佬博客</a></p>
+<ul>
+<li>$c(u,v)$ 为 $u$ 到 $v$ 的容量，$f(u,v)$ 为 $u$ 到 $v$ 的流量，$f(u,v)&lt;c(u,v)$</li>
+<li>$c[X,Y]$ 为 $X$ 到 $Y$ 的容量和，不包括 $Y$ 到 $X$ 的容量；$f(X,Y)$ 为 $X$ 到 $Y$ 的流量和，要减去 $Y$ 到 $X$ 的流量</li>
+<li>费用流（最小费用最大流）：保证最大流后的最小费用<br>割：割 $[S,T]$ 是点集的一个分割且 $S$ 包含源点，$T$ 包含汇点，称 $f(S,T)$ 为割的净流，$c[S,T]$ 为割的容量</li>
+<li>最大流最小割定理：最大流即最小割容量</li>
+<li>求最小割：在最大流残量网络中，令源点可达的点集为 $S$，其余的为 $T$ 即可（但是满流边不一定都在 $S,T$ 之间）</li>
+<li>简单割：割集中所有的边，都与s或t相连接。</li>
+<li>最小点权覆盖集：在二分图中，对于每条边，两个端点至少选一个，求所选取的点最小权值和。</li>
+<li>最大点权独立集：在二分图中，对于每条边，两个端点至多选一条边，求所选取的点的最大权值和。</li>
+<li>最小点权覆盖集=最小割，最大点权独立集=总权值-最小点权覆盖集</li>
+</ul>
+<h1 id="网络流模板"><a href="#网络流模板" class="headerlink" title="网络流模板"></a>网络流模板</h1><p>见<a href="https://kaizynx.github.io/2018/11/04/template/#网络流">模板</a></p>
+<h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><h2 id="二分图匹配"><a href="#二分图匹配" class="headerlink" title="二分图匹配"></a>二分图匹配</h2><p>设二分图一边为左，一边为右</p>
+<p>从 s 向左边每个点连权为 1 的边 (保证左边每个最多被匹配一次)</p>
+<p>左右之间的边权为 1 (其实任意)</p>
+<p>从右边每个点向 t 连权为 1 的边 (保证右边每个最多被匹配一次)</p>
+<h3 id="loj6000「网络流-24-题」搭配飞行员"><a href="#loj6000「网络流-24-题」搭配飞行员" class="headerlink" title="loj6000「网络流 24 题」搭配飞行员"></a><a href="https://loj.ac/problem/6000" target="_blank" rel="noopener">loj6000「网络流 24 题」搭配飞行员</a></h3><h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">int</span> n, m;
+ISAP&lt;<span class="keyword">int</span>&gt; isap;
+
+<span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span> </span>{
+    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;
+    <span class="keyword">int</span> s = <span class="number">0</span>, t = n + <span class="number">1</span>;
+    isap.init(n + <span class="number">1</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; ++i) isap.add_edge(s, i, <span class="number">1</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = m + <span class="number">1</span>; i &lt;= n; ++i) isap.add_edge(i, t, <span class="number">1</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> a, b; <span class="built_in">cin</span> &gt;&gt; a &gt;&gt; b;) isap.add_edge(a, b, <span class="number">1</span>);
+    <span class="built_in">cout</span> &lt;&lt; isap.work(s, t) &lt;&lt; <span class="built_in">endl</span>;
+}
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span> </span>{
+    ios::sync_with_stdio(<span class="literal">false</span>);
+    <span class="built_in">cin</span>.tie(<span class="literal">NULL</span>);
+    <span class="built_in">cout</span>.tie(<span class="literal">NULL</span>);
+    <span class="keyword">int</span> testcase = <span class="number">1</span>;
+    <span class="comment">// cin &gt;&gt; testcase;</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= testcase; ++i) {
+        solve();
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h2 id="最大流"><a href="#最大流" class="headerlink" title="最大流"></a>最大流</h2><h3 id="hdu3572-Task-Schedule"><a href="#hdu3572-Task-Schedule" class="headerlink" title="hdu3572 Task Schedule"></a><a href="http://acm.hdu.edu.cn/showproblem.php?pid=3572" target="_blank" rel="noopener">hdu3572 Task Schedule</a></h3><h4 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h4><p>要完成 n 个任务，每个任务需要在某个时间段 [s, e] 执行 p 时间(不一定连续),同一时间可以同时执行 m 个任务， 求是否能完成所有任务</p>
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>我们把时间看作流量，每个时间点一开始有 m 个流量</p>
+<p>一个任务完成的条件就是是否有 p 流量流经</p>
+<p>所以从每个任务往 T 连一条边权为 p 的边，判断最大流是否为 所有任务 p 之和</p>
+<p>对于每个任务 [s, e] 中每个时间都可以给这个任务 1 点流量</p>
+<h4 id="建图"><a href="#建图" class="headerlink" title="建图"></a>建图</h4><p>S 向每个时间点连边 权为 m</p>
+<p>每个 [s, e] 向任务连边 权为1</p>
+<p>每个任务向 T 连边 权为 p</p>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp">ISAP&lt;<span class="keyword">int</span>&gt; isap;
+
+<span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">solve</span><span class="params">()</span></span>
+<span class="function"></span>{
+    <span class="keyword">int</span> n, m;
+    <span class="keyword">static</span> <span class="keyword">int</span> vis[N];
+    <span class="built_in">scanf</span>(<span class="string">"%d %d"</span>, &amp;n ,&amp;m);
+    <span class="keyword">int</span> src = <span class="number">0</span>, dst = <span class="number">500</span>+n+<span class="number">1</span>;
+    <span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="keyword">int</span>)*(<span class="number">500</span>+n+<span class="number">3</span>));
+    isap.init(<span class="number">500</span>+n+<span class="number">1</span>);
+    <span class="keyword">int</span> sum = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, p, s, e; i &lt;= n; ++i) {
+        <span class="built_in">scanf</span>(<span class="string">"%d %d %d"</span>, &amp;p, &amp;s, &amp;e);
+        isap.add_edge(src, <span class="number">500</span>+i, p);
+        sum += p;
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = s; j &lt;= e; ++j) {
+            isap.add_edge(<span class="number">500</span>+i, j, <span class="number">1</span>);
+            vis[j] = <span class="number">1</span>;
+        }
+    }
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">500</span>; ++i) <span class="keyword">if</span> (vis[i]) {
+        isap.add_edge(i, dst, m);
+    }
+    <span class="keyword">return</span> isap.work(<span class="number">0</span>, dst) == sum;
+}
+
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    <span class="keyword">int</span> T = <span class="number">1</span>;
+    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;T);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= T; ++i) {
+        <span class="built_in">printf</span>(<span class="string">"Case %d: %s\n\n"</span>, i, solve() ? <span class="string">"Yes"</span> : <span class="string">"No"</span>);
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h3 id="hdoj2883-kebab"><a href="#hdoj2883-kebab" class="headerlink" title="hdoj2883 kebab"></a><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2883" target="_blank" rel="noopener">hdoj2883 kebab</a></h3><h4 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h4><p>一样的题型，只不过需要离散化，把时间点合成时间段</p>
+<h4 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span></span>
+<span class="class">{</span>
+    <span class="keyword">int</span> s, n, e, t;
+    <span class="keyword">friend</span> istream&amp; <span class="keyword">operator</span> &gt;&gt; (istream &amp;is, Node &amp;nd) {
+        <span class="keyword">return</span> is &gt;&gt; nd.s &gt;&gt; nd.n &gt;&gt; nd.e &gt;&gt; nd.t;
+    }
+};
+
+<span class="keyword">int</span> n, m;
+Node a[N];
+<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; d;
+ISAP&lt;<span class="keyword">int</span>&gt; isap;
+
+<span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">solve</span><span class="params">()</span></span>
+<span class="function"></span>{
+    d.clear();
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        d.emplace_back(a[i].s);
+        d.emplace_back(a[i].e);
+    }
+    sort(d.begin(), d.end());
+    d.erase(unique(d.begin(), d.end()), d.end());
+    <span class="keyword">int</span> tm = d.size()<span class="number">-1</span>, s = tm+n+<span class="number">1</span>, t = tm+n+<span class="number">2</span>;
+    <span class="comment">// time zone[i] =  [d[i-1], d[i]], i [1, tm]</span>
+    <span class="comment">// custom [tm+1, tm+n]</span>
+    isap.init(tm+n+<span class="number">2</span>);
+    <span class="keyword">int</span> sum = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= tm; ++i)
+        isap.add_edge(s, i, (d[i]-d[i<span class="number">-1</span>])*m);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        a[i].s = lower_bound(d.begin(), d.end(), a[i].s)-d.begin();
+        a[i].e = lower_bound(d.begin(), d.end(), a[i].e)-d.begin();
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = a[i].s+<span class="number">1</span>; j &lt;= a[i].e; ++j)
+            isap.add_edge(j, tm+i, INF);
+            <span class="comment">// isap.add_edge(j, tm+i, (d[j]-d[j-1])*min(m, a[i].n));</span>
+        isap.add_edge(tm+i, t, a[i].n*a[i].t);
+        sum += a[i].n*a[i].t;
+    }
+    <span class="keyword">return</span> isap.work(s, t) == sum;
+}
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    ios::sync_with_stdio(<span class="literal">false</span>); <span class="built_in">cin</span>.tie(<span class="literal">NULL</span>); <span class="built_in">cout</span>.tie(<span class="literal">NULL</span>);
+    d.reserve(N);
+    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) <span class="built_in">cin</span> &gt;&gt; a[i];
+        <span class="built_in">cout</span> &lt;&lt; (solve() ? <span class="string">"Yes"</span> : <span class="string">"No"</span>) &lt;&lt; <span class="built_in">endl</span>;
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h2 id="拆点"><a href="#拆点" class="headerlink" title="拆点"></a>拆点</h2><p>一般网络流对每条边有流量限制</p>
+<p>遇到对点有流量限制,如结点 u 有限制 f</p>
+<p>拆成两点一边 u-&gt;v 边权 f</p>
+<h3 id="hdoj2732-Leapin’-Lizards"><a href="#hdoj2732-Leapin’-Lizards" class="headerlink" title="hdoj2732 Leapin’ Lizards"></a><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2732" target="_blank" rel="noopener">hdoj2732 Leapin’ Lizards</a></h3><h4 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">int</span> n, m, d, s, t;
+<span class="keyword">char</span> a[<span class="number">25</span>][<span class="number">25</span>], b[<span class="number">25</span>][<span class="number">25</span>];
+ISAP&lt;<span class="keyword">int</span>&gt; isap;
+
+<span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">mp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;x, <span class="keyword">const</span> <span class="keyword">int</span> &amp;y)</span> </span>{ <span class="keyword">return</span> (x*m+y)&lt;&lt;<span class="number">1</span>; }
+
+<span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">walk</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;x, <span class="keyword">const</span> <span class="keyword">int</span> &amp;y)</span></span>
+<span class="function"></span>{
+    <span class="keyword">int</span> flag = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = -d, nx, ny; i &lt;= d; ++i) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="built_in">abs</span>(i)-d; j &lt;= d-<span class="built_in">abs</span>(i); ++j) {
+            <span class="keyword">if</span> (i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) <span class="keyword">continue</span>;
+            nx = x+i; ny = y+j;
+            <span class="keyword">if</span> (nx &lt; <span class="number">0</span> || ny &lt; <span class="number">0</span> || nx &gt;= n || ny &gt;= m) {
+                <span class="keyword">if</span> (!flag) isap.add_edge(mp(x, y)^<span class="number">1</span>, t, INF), flag = <span class="number">1</span>;
+                <span class="keyword">continue</span>;
+            }
+            <span class="keyword">if</span> (a[nx][ny] == <span class="string">'0'</span>) <span class="keyword">continue</span>;
+            isap.add_edge(mp(x, y)^<span class="number">1</span>, mp(nx, ny), INF);
+        }
+    }
+}
+
+<span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">solve</span><span class="params">()</span></span>
+<span class="function"></span>{
+    <span class="built_in">scanf</span>(<span class="string">"%d %d"</span>, &amp;n, &amp;d);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) <span class="built_in">scanf</span>(<span class="string">"%s"</span>, a[i]);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) <span class="built_in">scanf</span>(<span class="string">"%s"</span>, b[i]);
+
+    <span class="keyword">int</span> num = <span class="number">0</span>;
+    m = <span class="built_in">strlen</span>(a[<span class="number">0</span>]);
+    s = <span class="number">2</span>*n*m; t= <span class="number">2</span>*n*m+<span class="number">1</span>;
+    isap.init(<span class="number">2</span>*n*m+<span class="number">2</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; ++j) {
+            <span class="keyword">if</span> (a[i][j] != <span class="string">'0'</span>) isap.add_edge(mp(i, j), mp(i, j)^<span class="number">1</span>, a[i][j]-<span class="string">'0'</span>);
+            <span class="keyword">if</span> (b[i][j] == <span class="string">'L'</span>) isap.add_edge(s, mp(i, j), <span class="number">1</span>), ++num;
+            walk(i, j);
+        }
+    }
+    <span class="keyword">return</span> num-isap.work(s, t);
+}
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    <span class="keyword">int</span> testcase = <span class="number">1</span>;
+    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;testcase);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= testcase; ++i) {
+        <span class="keyword">int</span> res = solve();
+        <span class="built_in">printf</span>(<span class="string">"Case #%d: "</span>, i);
+        <span class="keyword">if</span> (res == <span class="number">0</span>) <span class="built_in">puts</span>(<span class="string">"no lizard was left behind."</span>);
+        <span class="keyword">else</span> <span class="keyword">if</span> (res == <span class="number">1</span>) <span class="built_in">puts</span>(<span class="string">"1 lizard was left behind."</span>);
+        <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"%d lizards were left behind.\n"</span>, res);
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h3 id="codeforces-546E-Soldier-and-Traveling"><a href="#codeforces-546E-Soldier-and-Traveling" class="headerlink" title="codeforces 546E. Soldier and Traveling"></a><a href="https://codeforces.com/contest/546/problem/E" target="_blank" rel="noopener">codeforces 546E. Soldier and Traveling</a></h3><h4 id="题意-1"><a href="#题意-1" class="headerlink" title="题意"></a>题意</h4><p>给一张图，每个点有一些人，每个人只能最多移动 1 步</p>
+<p>问能否使每个点的人数达到给定值</p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>简单题,每个点拆成移动前和移动后</p>
+<h4 id="代码-4"><a href="#代码-4" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">int</span> n, m;
+<span class="keyword">int</span> res[N][N];
+ISAP&lt;<span class="keyword">int</span>&gt; isap;
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    ios::sync_with_stdio(<span class="literal">false</span>); <span class="built_in">cin</span>.tie(<span class="literal">NULL</span>); <span class="built_in">cout</span>.tie(<span class="literal">NULL</span>);
+    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;
+    <span class="comment">// turn pt i to i*2-1, i*2</span>
+    <span class="keyword">int</span> s = <span class="number">2</span>*n+<span class="number">1</span>, t = <span class="number">2</span>*n+<span class="number">2</span>,
+        suma = <span class="number">0</span>, sumb = <span class="number">0</span>;
+    isap.init(t);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, a; i &lt;= n; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; a;
+        suma += a;
+        isap.add_edge(s, i*<span class="number">2</span><span class="number">-1</span>, a);
+        isap.add_edge(i*<span class="number">2</span><span class="number">-1</span>, i*<span class="number">2</span>, INF);
+    }
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, b; i &lt;= n; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; b;
+        sumb += b;
+        isap.add_edge(i*<span class="number">2</span>, t, b);
+    }
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, u, v; i &lt;= m; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v;
+        isap.add_edge(u*<span class="number">2</span><span class="number">-1</span>, v*<span class="number">2</span>, INF);
+        isap.add_edge(v*<span class="number">2</span><span class="number">-1</span>, u*<span class="number">2</span>, INF);
+    }
+    <span class="keyword">if</span> (suma != sumb || isap.work(s, t) != sumb) <span class="keyword">return</span> <span class="built_in">cout</span> &lt;&lt; <span class="string">"NO\n"</span>, <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> u = <span class="number">1</span>; u &lt;= n; ++u) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = isap.fir[u*<span class="number">2</span>], v; i != <span class="number">-1</span>; i = isap.e[i].nex) {
+            v = (isap.e[i].v+<span class="number">1</span>)/<span class="number">2</span>;
+            res[v][u] = isap.e[i].w;
+        }
+    }
+    <span class="built_in">cout</span> &lt;&lt; <span class="string">"YES\n"</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; ++j) {
+            <span class="built_in">cout</span> &lt;&lt; res[i][j] &lt;&lt; <span class="string">" \n"</span>[j==n];
+        }
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h3 id="luoguP2153-SDOI2009-晨跑"><a href="#luoguP2153-SDOI2009-晨跑" class="headerlink" title="luoguP2153 [SDOI2009]晨跑"></a><a href="https://www.luogu.com.cn/problem/P2153" target="_blank" rel="noopener">luoguP2153 [SDOI2009]晨跑</a></h3><h4 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h4><p>费用流板子题,限制:路口只能走一次</p>
+<h4 id="代码-5"><a href="#代码-5" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">int</span> n, m;
+ZKW_SPFA&lt;<span class="keyword">int</span>&gt; zkw;
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    <span class="comment">// pt i ==&gt; i*2-1, i*2</span>
+    ios::sync_with_stdio(<span class="literal">false</span>); <span class="built_in">cin</span>.tie(<span class="literal">NULL</span>); <span class="built_in">cout</span>.tie(<span class="literal">NULL</span>);
+    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;
+    zkw.init(n*<span class="number">2</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; n; ++i) zkw.add_edge(i*<span class="number">2</span><span class="number">-1</span>, i*<span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, u, v, w; i &lt;= m; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+        zkw.add_edge(u*<span class="number">2</span>, v*<span class="number">2</span><span class="number">-1</span>, <span class="number">1</span>, w);
+    }
+    pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; res = zkw.work(<span class="number">2</span>, n*<span class="number">2</span><span class="number">-1</span>);
+    <span class="built_in">cout</span> &lt;&lt; res.first &lt;&lt; <span class="string">" "</span> &lt;&lt; res.second &lt;&lt; <span class="built_in">endl</span>;
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h3 id="luoguP1251-餐巾计划问题"><a href="#luoguP1251-餐巾计划问题" class="headerlink" title="luoguP1251 餐巾计划问题"></a><a href="https://www.luogu.com.cn/problem/P1251" target="_blank" rel="noopener">luoguP1251 餐巾计划问题</a></h3><h4 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h4><p>把每天拆成早上(可用毛巾)晚上(待洗毛巾) // 详情见洛谷题解</p>
+<h4 id="代码-6"><a href="#代码-6" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">int</span> r[N];
+ZKW_SPFA&lt;<span class="keyword">long</span> <span class="keyword">long</span>&gt; zkw;
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    <span class="comment">// day i ==&gt; i to wash | evening, i+n can use | morning</span>
+    ios::sync_with_stdio(<span class="literal">false</span>); <span class="built_in">cin</span>.tie(<span class="literal">NULL</span>); <span class="built_in">cout</span>.tie(<span class="literal">NULL</span>);
+    <span class="keyword">int</span> n, p, t1, m1, t2, m2;
+    <span class="built_in">cin</span> &gt;&gt; n;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) <span class="built_in">cin</span> &gt;&gt; r[i];
+    <span class="built_in">cin</span> &gt;&gt; p &gt;&gt; t1 &gt;&gt; m1 &gt;&gt; t2 &gt;&gt; m2;
+    <span class="keyword">int</span> s = <span class="number">0</span>, t = n*<span class="number">2</span>+<span class="number">1</span>;
+    zkw.init(t);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        zkw.add_edge(s, i, r[i], <span class="number">0</span>);
+        zkw.add_edge(i+n, t, r[i], <span class="number">0</span>);
+        <span class="keyword">if</span> (i+<span class="number">1</span> &lt;= n) zkw.add_edge(i, i+<span class="number">1</span>, INF, <span class="number">0</span>); <span class="comment">// do not wash</span>
+        <span class="keyword">if</span> (i+t1 &lt;= n) zkw.add_edge(i, i+n+t1, INF, m1); <span class="comment">// fast</span>
+        <span class="keyword">if</span> (i+t2 &lt;= n) zkw.add_edge(i, i+n+t2, INF, m2); <span class="comment">// slow</span>
+        zkw.add_edge(s, i+n, INF, p); <span class="comment">// buy new</span>
+    }
+    <span class="built_in">cout</span> &lt;&lt; zkw.work(s, t).second &lt;&lt; <span class="built_in">endl</span>;
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h3 id="另见于-有向无环图最小不相交路径覆盖"><a href="#另见于-有向无环图最小不相交路径覆盖" class="headerlink" title="另见于 有向无环图最小不相交路径覆盖"></a>另见于 <a href="#有向无环图最小不相交路径覆盖">有向无环图最小不相交路径覆盖</a></h3><h2 id="拆边"><a href="#拆边" class="headerlink" title="拆边"></a>拆边</h2><p>动态费用</p>
+<p>如果对于某条边，其费用是关于流量的一个函数，并且这个函数的斜率是单调增加的，我们就可以拆边，第x条费用设为𝑓(𝑥)−𝑓(𝑥−1)</p>
+<h3 id="hdoj3667-Transportation"><a href="#hdoj3667-Transportation" class="headerlink" title="hdoj3667 Transportation"></a><a href="http://acm.hdu.edu.cn/showproblem.php?pid=3667" target="_blank" rel="noopener">hdoj3667 Transportation</a></h3><h4 id="题意-2"><a href="#题意-2" class="headerlink" title="题意"></a>题意</h4><p>N个城市，M条边，你要从1号点运送k个货物到N号点。每条边(u,v,a,c)表示u-&gt;v有一条边容量为c，从这条边运送x个物品花费为 ，问最小花费为多少？</p>
+<p>N &lt;= 100, M &lt;= 5000, c &lt;= 5</p>
+<h4 id="思路-3"><a href="#思路-3" class="headerlink" title="思路"></a>思路</h4><p>对于每一条边，原本的容量为c，我们可以把它拆成c条边</p>
+<p>这c条边的容量都为1，花费为1a,3a,5a,7a…(c&lt;=5)</p>
+<p>由于费用流会优先流花费较小的边，因此假设最终的流中我们的流量经过了前k小的边，花费就是1a+3a+..+2(k-1)a=ak^2，与题意相符</p>
+<h4 id="代码-7"><a href="#代码-7" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">int</span> n, m, k;
+ZKW_SPFA&lt;<span class="keyword">int</span>&gt; zkw;
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    ios::sync_with_stdio(<span class="literal">false</span>); <span class="built_in">cin</span>.tie(<span class="literal">NULL</span>); <span class="built_in">cout</span>.tie(<span class="literal">NULL</span>);
+    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m &gt;&gt; k) {
+        <span class="keyword">int</span> s = <span class="number">0</span>, t = n;
+        zkw.init(n);
+        zkw.add_edge(s, <span class="number">1</span>, k, <span class="number">0</span>);
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, u, v, a, c; i &lt;= m; ++i) {
+            <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v &gt;&gt; a &gt;&gt; c;
+            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= c; ++j) {
+                zkw.add_edge(u, v, <span class="number">1</span>, (<span class="number">2</span>*j<span class="number">-1</span>)*a);
+            }
+        }
+        pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; res = zkw.work(s, t);
+        <span class="built_in">cout</span> &lt;&lt; (res.first == k ? res.second : <span class="number">-1</span>) &lt;&lt; <span class="built_in">endl</span>;
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h2 id="虚点"><a href="#虚点" class="headerlink" title="虚点"></a>虚点</h2><p>其实没什么好讲的</p>
+<h3 id="luoguP1361-小M的作物"><a href="#luoguP1361-小M的作物" class="headerlink" title="luoguP1361 小M的作物"></a><a href="https://www.luogu.com.cn/problem/P1361" target="_blank" rel="noopener">luoguP1361 小M的作物</a></h3><h4 id="思路-4"><a href="#思路-4" class="headerlink" title="思路"></a>思路</h4><p>考虑最小割</p>
+<p>每个点向 S, T 连边，设 S 是种在 A, B 是种在 B, 通过最小割拆成两个图即为所求</p>
+<p>对于每个组合，建立一个虚点往 A 连边权为额外收益的边，再往组合里的每个点连 INF 边</p>
+<p>这样如果某个作物要种在 B (割掉与 A 连边),此时因为该点还通过组合与 A 有连边</p>
+<p>所以如果不种在 A 此时组合的边必定被割掉</p>
+<h4 id="代码-8"><a href="#代码-8" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">int</span> n, m;
+<span class="keyword">int</span> a[N], b[N];
+ISAP&lt;<span class="keyword">int</span>&gt; isap;
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    ios::sync_with_stdio(<span class="literal">false</span>); <span class="built_in">cin</span>.tie(<span class="literal">NULL</span>); <span class="built_in">cout</span>.tie(<span class="literal">NULL</span>);
+    <span class="built_in">cin</span> &gt;&gt; n;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) <span class="built_in">cin</span> &gt;&gt; a[i];
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) <span class="built_in">cin</span> &gt;&gt; b[i];
+    <span class="built_in">cin</span> &gt;&gt; m;
+    <span class="comment">// plant [1, n] combination n+i*2-1, n+i*2</span>
+    isap.init(n+m*<span class="number">2</span>+<span class="number">2</span>);
+    <span class="keyword">int</span> s = n+m*<span class="number">2</span>+<span class="number">1</span>, t = n+m*<span class="number">2</span>+<span class="number">2</span>, sum = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, k, c1, c2; i &lt;= m; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; k &gt;&gt; c1 &gt;&gt; c2;
+        isap.add_edge(s, n+i*<span class="number">2</span><span class="number">-1</span>, c1);
+        isap.add_edge(n+i*<span class="number">2</span>, t, c2);
+        sum += c1+c2;
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>, x; j &lt;= k; ++j) {
+            <span class="built_in">cin</span> &gt;&gt; x;
+            isap.add_edge(n+i*<span class="number">2</span><span class="number">-1</span>, x, INF);
+            isap.add_edge(x, n+i*<span class="number">2</span>, INF);
+        }
+    }
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        sum += a[i]+b[i];
+        isap.add_edge(s, i, a[i]);
+        isap.add_edge(i, t, b[i]);
+    }
+    <span class="built_in">cout</span> &lt;&lt; sum-isap.work(s, t) &lt;&lt; <span class="built_in">endl</span>;
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h2 id="最小点权覆盖和最大点权独立集"><a href="#最小点权覆盖和最大点权独立集" class="headerlink" title="最小点权覆盖和最大点权独立集"></a>最小点权覆盖和最大点权独立集</h2><p>原二分图中的边(u,v)替换为容量为INF的有向边(u,v)，设立源点s和汇点t，将s和x集合中的点相连，容量为该点的权值；将y中的点同t相连，容量为该点的权值。求最小割</p>
+<h3 id="hdoj1565-方格取数-1"><a href="#hdoj1565-方格取数-1" class="headerlink" title="hdoj1565 方格取数(1)"></a><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1565" target="_blank" rel="noopener">hdoj1565 方格取数(1)</a></h3><h4 id="题意-3"><a href="#题意-3" class="headerlink" title="题意"></a>题意</h4><p>给你一个n*n的格子的棋盘，每个格子里面有一个非负数。从中取出若干个数，使得任意的两个数所在的格子没有公共边，就是说所取的数所在的2个格子不能相邻，并且取出的数的和最大。</p>
+<h4 id="建图-1"><a href="#建图-1" class="headerlink" title="建图"></a>建图</h4><p>黑白染色成二分图</p>
+<p>S 连黑，权值为黑点权值</p>
+<p>黑与相邻的白连，权值为 INF</p>
+<p>白连 T, 权值白点权值</p>
+<h4 id="分析-2"><a href="#分析-2" class="headerlink" title="分析"></a>分析</h4><p>求最小割</p>
+<p>那么就不可能割 INF 边，反证，有一方案，割掉所有 S 与黑的边，比 INF 小</p>
+<p>所以每对点中连向源汇点边权最小的边被割断，整体来看，就是对于任意一对端点，都选了一个较小权值，得到我们要的结果。</p>
+<h4 id="代码-9"><a href="#代码-9" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">int</span> n;
+<span class="keyword">int</span> a[<span class="number">25</span>][<span class="number">25</span>];
+ISAP&lt;<span class="keyword">int</span>&gt; isap;
+
+<span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span></span>
+<span class="function"></span>{
+    <span class="keyword">int</span> sum = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; ++j) {
+            <span class="built_in">cin</span> &gt;&gt; a[i][j];
+            sum += a[i][j];
+        }
+    }
+    <span class="keyword">int</span> s = n*n+<span class="number">1</span>, t = n*n+<span class="number">2</span>;
+    isap.init(t);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; ++j) {
+            <span class="keyword">if</span> ((i+j)&amp;<span class="number">1</span>) {
+                isap.add_edge(s, i*n+j+<span class="number">1</span>, a[i][j]);
+                <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>, nx, ny; k &lt; <span class="number">4</span>; ++k) {
+                    nx = i+dir[k];
+                    ny = j+dir[k+<span class="number">1</span>];
+                    <span class="keyword">if</span> (nx &lt; <span class="number">0</span> || ny &lt; <span class="number">0</span> || nx &gt;= n || ny &gt;= n) <span class="keyword">continue</span>;
+                    isap.add_edge(i*n+j+<span class="number">1</span>, nx*n+ny+<span class="number">1</span>, INF);
+                }
+            } <span class="keyword">else</span> {
+                isap.add_edge(i*n+j+<span class="number">1</span>, t, a[i][j]);
+            }
+        }
+    }
+    <span class="built_in">cout</span> &lt;&lt; sum-isap.work(s, t) &lt;&lt; <span class="built_in">endl</span>;
+}
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    ios::sync_with_stdio(<span class="literal">false</span>); <span class="built_in">cin</span>.tie(<span class="literal">NULL</span>); <span class="built_in">cout</span>.tie(<span class="literal">NULL</span>);
+    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; n) solve();
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h3 id="hdoj3657-Game"><a href="#hdoj3657-Game" class="headerlink" title="hdoj3657 Game"></a><a href="http://acm.hdu.edu.cn/showproblem.php?pid=3657" target="_blank" rel="noopener">hdoj3657 Game</a></h3><h4 id="题意-4"><a href="#题意-4" class="headerlink" title="题意"></a>题意</h4><p>与上题类似，不同的是</p>
+<ol>
+<li>相邻的可以选，但要付出一定代价</li>
+<li>有些点必选</li>
+</ol>
+<h4 id="建图-2"><a href="#建图-2" class="headerlink" title="建图"></a>建图</h4><p>同上</p>
+<ol>
+<li>相邻两点的边权由 INF 改为代价，要么割掉其中一个，要么割掉两点连边表示两个都选</li>
+<li>这个点到源点(汇点)的边权改为 INF ,以防被割掉</li>
+</ol>
+<h4 id="代码-10"><a href="#代码-10" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <p><code>`</code>cpp<br>int n, m, k;<br>int a[N][N], c[N][N];<br>Dinic<int> dinic;</int></p>
+<p>inline int mp(const int &amp;x, const int &amp;y) { return (x-1)*m+y; }</p>
+<p>inline void solve()<br>{<br>    int sum = 0;<br>    for (int i = 1; i &lt;= n; ++i) {<br>        for (int j = 1; j &lt;= m; ++j) {<br>            cin &gt;&gt; a[i][j];<br>            sum += a[i][j];<br>            c[i][j] = a[i][j];<br>        }<br>    }<br>    for (int i = 1, x, y; i &lt;= k; ++i) {<br>        cin &gt;&gt; x &gt;&gt; y;<br>        c[x][y] = INF;<br>    }<br>    int s = n<em>m+1, t = n</em>m+2;<br>    dinic.init(n<em>m+2);<br>    for (int i = 1; i &lt;= n; ++i) {<br>        for (int j = 1; j &lt;= m; ++j) {<br>            if ((i+j)&amp;1) {<br>                dinic.add_edge(s, mp(i, j), c[i][j]);<br>                for (int k = 0, x, y; k &lt; 4; ++k) {<br>                    x = i+dir[k];<br>                    y = j+dir[k+1];<br>                    if (x &lt; 1 || y &lt; 1 || x &gt; n || y &gt; m) continue;<br>                    dinic.add_edge(mp(i, j), mp(x, y), 2</em>(a[i][j]&amp;a[x][y]));<br>                }<br>            } else {<br>                dinic.add_edge(mp(i, j), t, c[i][j]);<br>            }<br>        }<br>    }<br>    cout &lt;&lt; sum-dinic.work(s, t) &lt;&lt; endl;<br>}<br><code>`</code>cpp</p>
+
+    </div>
+</div>
+<h2 id="最大权闭合图"><a href="#最大权闭合图" class="headerlink" title="最大权闭合图"></a>最大权闭合图</h2><p><a href="https://www.cnblogs.com/dilthey/p/7565206.html" target="_blank" rel="noopener">定义参考博客</a><br><a href="https://blog.csdn.net/ii0789789789/article/details/81532319" target="_blank" rel="noopener">证明参考博客</a></p>
+<p>S 连正点，权值为点值</p>
+<p>正连负，权值为INF</p>
+<p>负点连 T，权值为点值绝对值</p>
+<p>答案为所有正点权值和-最小割</p>
+<h3 id="loj6001-「网络流-24-题」太空飞行计划"><a href="#loj6001-「网络流-24-题」太空飞行计划" class="headerlink" title="loj6001    「网络流 24 题」太空飞行计划"></a><a href="https://loj.ac/problem/6001" target="_blank" rel="noopener">loj6001    「网络流 24 题」太空飞行计划</a></h3><h4 id="分析-3"><a href="#分析-3" class="headerlink" title="分析"></a>分析</h4><p>用Dninc求最大流的好处是便于我们输出，因为层数如果为0，那么显然该边容量大于0，这就说明这条边并没有流量流过，那么显然与它相连的实验或者器材没有被使用（因为使用过的话，边的容量会变为0）</p>
+<h4 id="代码-11"><a href="#代码-11" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">int</span> n, m;
+<span class="built_in">string</span> str;
+<span class="built_in">stringstream</span> ss;
+Dinic&lt;<span class="keyword">int</span>&gt; dinic;
+
+<span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span></span>
+<span class="function"></span>{
+    getline(<span class="built_in">cin</span>, str);
+    ss.clear();
+    ss &lt;&lt; str;
+    ss &gt;&gt; n &gt;&gt; m;
+    <span class="keyword">int</span> s = <span class="number">0</span>, t = n+m+<span class="number">1</span>;
+    dinic.init(t);
+    <span class="keyword">int</span> sum = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, j, w; i &lt;= n; ++i) {
+        getline(<span class="built_in">cin</span>, str);
+        ss.clear();
+        ss &lt;&lt; str;
+        ss &gt;&gt; w;
+        sum += w;
+        dinic.add_edge(s, i, w);
+        <span class="keyword">while</span> (ss &gt;&gt; j)
+            dinic.add_edge(i, j+n, INF);
+    }
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, w; i &lt;= m; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; w;
+        dinic.add_edge(i+n, t, w);
+    }
+    <span class="keyword">int</span> res = sum-dinic.work(s, t);
+    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; choose;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i)
+        <span class="keyword">if</span> (dinic.dep[i]) choose.emplace_back(i);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, sz = choose.size(); i &lt; sz; ++i)
+        <span class="built_in">cout</span> &lt;&lt; choose[i] &lt;&lt; <span class="string">" \n"</span>[i==sz<span class="number">-1</span>];
+    choose.clear();
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; ++i)
+        <span class="keyword">if</span> (dinic.dep[i+n]) choose.emplace_back(i);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, sz = choose.size(); i &lt; sz; ++i)
+        <span class="built_in">cout</span> &lt;&lt; choose[i] &lt;&lt; <span class="string">" \n"</span>[i==sz<span class="number">-1</span>];
+    <span class="built_in">cout</span> &lt;&lt; res &lt;&lt; <span class="built_in">endl</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h2 id="有向无环图最小不相交路径覆盖"><a href="#有向无环图最小不相交路径覆盖" class="headerlink" title="有向无环图最小不相交路径覆盖"></a>有向无环图最小不相交路径覆盖</h2><p><a href="https://www.cnblogs.com/justPassBy/p/5369930.html" target="_blank" rel="noopener">参考博客</a></p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>在一个有向图中，找出最少的路径，使得这些路径经过了所有的点。</p>
+<p>最小不相交路径覆盖：每一条路径经过的顶点各不相同。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>把原图的每个点V拆成Vx和Vy两个点，如果有一条有向边A-&gt;B，那么就加边Ax−&gt;By。这样就得到了一个二分图。那么最小路径覆盖=原图的结点数-新图的最大匹配数。</p>
+<h3 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h3><p>一开始每个点都是独立的为一条路径，总共有n条不相交路径。我们每次在二分图里找一条匹配边就相当于把两条路径合成了一条路径，也就相当于路径数减少了1。所以找到了几条匹配边，路径数就减少了多少。所以有最小路径覆盖=原图的结点数-新图的最大匹配数。</p>
+<h3 id="loj6002「网络流-24-题」最小路径覆盖"><a href="#loj6002「网络流-24-题」最小路径覆盖" class="headerlink" title="loj6002「网络流 24 题」最小路径覆盖"></a><a href="https://loj.ac/problem/6002" target="_blank" rel="noopener">loj6002「网络流 24 题」最小路径覆盖</a></h3><h4 id="分析-4"><a href="#分析-4" class="headerlink" title="分析"></a>分析</h4><p>二分图匹配求方案</p>
+<p>如果两个点被匹配了，那么这两个点之间的边就有流量，则剩余流量为0</p>
+<h4 id="代码-12"><a href="#代码-12" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">int</span> n, m;
+<span class="keyword">int</span> du[N], to[N];
+ISAP&lt;<span class="keyword">int</span>&gt; isap;
+
+<span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span></span>
+<span class="function"></span>{
+    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;
+    <span class="comment">// pt i ==&gt; i*2-1 - i*2</span>
+    <span class="keyword">int</span> s = <span class="number">0</span>, t = n*<span class="number">2</span>+<span class="number">1</span>;
+    isap.init(t);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        isap.add_edge(s, i*<span class="number">2</span><span class="number">-1</span>, <span class="number">1</span>);
+        isap.add_edge(i*<span class="number">2</span>, t, <span class="number">1</span>);
+    }
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, u, v; i &lt;= m; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v;
+        isap.add_edge(u*<span class="number">2</span><span class="number">-1</span>, v*<span class="number">2</span>, <span class="number">1</span>);
+    }
+    <span class="keyword">int</span> res = n-isap.work(s, t);
+    <span class="keyword">for</span> (<span class="keyword">int</span> u = <span class="number">1</span>; u &lt;= n*<span class="number">2</span>; u += <span class="number">2</span>) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = isap.fir[u], v; i != <span class="number">-1</span>; i = isap.e[i].nex) {
+            v = isap.e[i].v;
+            <span class="keyword">if</span> (v == s || isap.e[i].w) <span class="keyword">continue</span>;
+            to[u/<span class="number">2</span>+<span class="number">1</span>] = v/<span class="number">2</span>;
+            ++du[v/<span class="number">2</span>];
+            <span class="keyword">break</span>;
+        }
+    }
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        <span class="keyword">if</span> (du[i]) <span class="keyword">continue</span>;
+        <span class="keyword">for</span> (<span class="keyword">int</span> u = i; u; u = to[u])
+            <span class="built_in">cout</span> &lt;&lt; u &lt;&lt; <span class="string">" \n"</span>[to[u]==<span class="number">0</span>];
+    }
+    <span class="built_in">cout</span> &lt;&lt; res &lt;&lt; <span class="built_in">endl</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h3 id="loj6003「网络流-24-题」魔术球"><a href="#loj6003「网络流-24-题」魔术球" class="headerlink" title="loj6003「网络流 24 题」魔术球"></a><a href="https://loj.ac/problem/6003" target="_blank" rel="noopener">loj6003「网络流 24 题」魔术球</a></h3><h2 id="有向无环图最小可相交路径覆盖"><a href="#有向无环图最小可相交路径覆盖" class="headerlink" title="有向无环图最小可相交路径覆盖"></a>有向无环图最小可相交路径覆盖</h2><h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>在一个有向图中，找出最少的路径，使得这些路径经过了所有的点。</p>
+<p>最小可相交路径覆盖：每一条路径经过的顶点可以相同。</p>
+<h2 id="切糕模型"><a href="#切糕模型" class="headerlink" title="切糕模型"></a>切糕模型</h2><h3 id="codeforces434-D-Nanami’s-Power-Plant"><a href="#codeforces434-D-Nanami’s-Power-Plant" class="headerlink" title="codeforces434 D. Nanami’s Power Plant"></a><a href="https://codeforces.com/problemset/problem/434/D" target="_blank" rel="noopener">codeforces434 D. Nanami’s Power Plant</a></h3><p>详情见文末郑学长pdf,有图有真相(逃</p>
+<h4 id="题意-5"><a href="#题意-5" class="headerlink" title="题意"></a>题意</h4><p>给N个二次方程f(x)=ax^2+bx+c,每个方程的x取值范围为[l, r],并给出M个限制条件(u, v, d),表示要求满足xu &lt;= xv+d,问你所有函数值之和的最大值</p>
+<h4 id="思路-5"><a href="#思路-5" class="headerlink" title="思路"></a>思路</h4><p><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/network_flows/cf434D.png" data-action="zoom"></p>
+<p>最小割,建图略了.(注:大致思路如此，我的代码略有不同)</p>
+<p>如果割了f1(l1+2),我们发现如果割f2(l2)的话S,T还是联通,所以(贪心)没必要割,只能割后面的，因此做到了限制条件</p>
+<p>但周知最小割是最小值,那么求最大值就把边权改为负,如果是负数求出来最大流量可能是0(逃)所以边权再加上一个很大的值使之为正，最后减去即可</p>
+<h4 id="代码-13"><a href="#代码-13" class="headerlink" title="代码"></a>代码</h4><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">const</span> <span class="keyword">int</span> LIM = <span class="number">1e6</span>;
+
+<span class="class"><span class="keyword">struct</span> <span class="title">F</span> {</span>
+    <span class="keyword">int</span> a, b, c, l, r;
+    <span class="function"><span class="keyword">int</span> <span class="title">calc</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;x)</span> <span class="keyword">const</span> </span>{
+        <span class="keyword">return</span> LIM-(a*x*x+b*x+c);
+    }
+};
+
+<span class="keyword">int</span> n, m;
+<span class="keyword">int</span> sum[<span class="number">55</span>];
+F f[<span class="number">55</span>];
+ISAP&lt;<span class="keyword">long</span> <span class="keyword">long</span>&gt; isap;
+
+<span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">id</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;i, <span class="keyword">const</span> <span class="keyword">int</span> &amp;j)</span> </span>{ <span class="keyword">return</span> sum[i<span class="number">-1</span>]+j-f[i].l; }
+
+<span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    ios::sync_with_stdio(<span class="literal">false</span>); <span class="built_in">cin</span>.tie(<span class="literal">NULL</span>); <span class="built_in">cout</span>.tie(<span class="literal">NULL</span>);
+    <span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; f[i].a &gt;&gt; f[i].b &gt;&gt; f[i].c;
+    }
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; f[i].l &gt;&gt; f[i].r;
+        sum[i] = sum[i<span class="number">-1</span>]+(f[i].r-f[i].l+<span class="number">2</span>);
+    }
+    <span class="keyword">int</span> s = sum[n], t = sum[n]+<span class="number">1</span>;
+    isap.init(t+<span class="number">1</span>); <span class="comment">// start from 0</span>
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        isap.add_edge(s, id(i, f[i].l), INF);
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = f[i].l; j &lt;= f[i].r; ++j) {
+            isap.add_edge(id(i, j), id(i, j+<span class="number">1</span>), f[i].calc(j));
+        }
+        isap.add_edge(id(i, f[i].r+<span class="number">1</span>), t, INF);
+    }
+    <span class="comment">// xu &lt;= xv+d</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>, u, v, d; i &lt;= m; ++i) {
+        <span class="built_in">cin</span> &gt;&gt; u &gt;&gt; v &gt;&gt; d;
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = f[u].l; j &lt;= f[u].r; ++j) {
+            <span class="keyword">if</span> (j-d &gt;= f[v].l &amp;&amp; j-d &lt;= f[v].r+<span class="number">1</span>) {
+                isap.add_edge(id(u, j), id(v, j-d), INF);
+            }
+        }
+    }
+    <span class="built_in">cout</span> &lt;&lt; (LIM*n-isap.work(s, t)) &lt;&lt; <span class="built_in">endl</span>;
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+
+    </div>
+</div>
+<h2 id="二分"><a href="#二分" class="headerlink" title="二分"></a>二分</h2><p>最大流：新加进一条边不会使最大流变小；</p>
+<p>费用流：费用流中费用是单调的；</p>
+<h2 id="优化建图"><a href="#优化建图" class="headerlink" title="优化建图"></a>优化建图</h2><h3 id="POJ1149-PIGS"><a href="#POJ1149-PIGS" class="headerlink" title="POJ1149 PIGS"></a><a href="http://poj.org/problem?id=1149" target="_blank" rel="noopener">POJ1149 PIGS</a></h3><h4 id="题意-6"><a href="#题意-6" class="headerlink" title="题意"></a>题意</h4><p>有N个顾客，M个猪圈，每个猪圈有若干头猪，在开始的时候猪圈都是关闭的，每个顾客有一些猪圈的钥匙，每个顾客可以买最多hi头猪；</p>
+<p>顾客依次来买猪，当一个顾客打开一些猪圈并且买完猪之后，你可以调整这些开着门的猪圈中猪的数量，然后再关门，等下一个顾客；求最多能卖多少头猪；</p>
+<p>n &lt;= 100, m &lt;= 1000</p>
+<h4 id="思路-6"><a href="#思路-6" class="headerlink" title="思路"></a>思路</h4><p>见文末郑学长pdf</p>
+<h2 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h2><h1 id="一些资料"><a href="#一些资料" class="headerlink" title="一些资料"></a>一些资料</h1><p><a href="https://github.com/KaizynX/cdn/tree/master/file/network_flows" target="_blank" rel="noopener">郑学长的讲座</a> 收获很多</p>
+<p><a href="https://www.luogu.com.cn/problem/list?tag=332" target="_blank" rel="noopener">luogu网络流24题</a></p>
+<p><a href="https://github.com/enkerewpo/OI-Public-Library/blob/master/IOI%E4%B8%AD%E5%9B%BD%E5%9B%BD%E5%AE%B6%E5%80%99%E9%80%89%E9%98%9F%E8%AE%BA%E6%96%871999-2019/2007/day2/7.%E8%83%A1%E4%BC%AF%E6%B6%9B%E3%80%8A%E6%9C%80%E5%B0%8F%E5%89%B2%E6%A8%A1%E5%9E%8B%E5%9C%A8%E4%BF%A1%E6%81%AF%E5%AD%A6%E7%AB%9E%E8%B5%9B%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E3%80%8B.pdf" target="_blank" rel="noopener">胡伯涛《最小割模型在信息学竞赛中的应用》</a></p>
+<p><a href="https://loj.ac/problems/tag/30" target="_blank" rel="noopener">LibreOJ网络流24题(不全)</a></p>
+<p><a href="https://codeforces.com/problemset?tags=flows" target="_blank" rel="noopener">codeforces网络流标签</a></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/donate/AliPayQR.gif"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdnundefined"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2020/03/30/Atcoder-ABC160F/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/Atcoder-ABC160F/cover.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/Atcoder-ABC160F/cover.jpg">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                abc160F - Distributing Integers</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/2020/03/22/cmd_chinese/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/cmd_chinese/cover.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/cmd_chinese/cover.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Windows vscode cmd 中文乱码</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz",
+        appKey: "RztxTMKSVDyuAaC0BVM1wPM1",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://kaizynx.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg" itemprop="image" alt="Kaizyn" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://kaizynx.github.io/" itemprop="url" rel="author">Kaizyn</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Kaizyn<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span><script>
+        var now = new Date();
+        function createtime() {
+          var grt= new Date("08/24/2018 00:00:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+          document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+          document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+        setInterval("createtime()",250);</script>
+
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> Powered by Hexo
+        </span>
+      </p>
+    </div>
+    <div id="binft"></div>
+      <script>
+        var binft = function (r) {
+          function t() {
+            return b[Math.floor(Math.random() * b.length)]
+          }
+          function e() {
+            return String.fromCharCode(94 * Math.random() + 33)
+          }
+          function n(r) {
+            for (var n = document.createDocumentFragment(), i = 0; r > i; i++) {
+              var l = document.createElement("span");
+              l.textContent = e(), l.style.color = t(), n.appendChild(l)
+            }
+            return n
+          }
+          function i() {
+            var t = o[c.skillI];
+            c.step ? c.step-- : (c.step = g, c.prefixP < l.length ? (c.prefixP >= 0 && (c.text += l[c.prefixP]), c.prefixP++) : "forward" === c.direction ? c.skillP < t.length ? (c.text += t[c.skillP], c.skillP++) : c.delay ? c.delay-- : (c.direction = "backward", c.delay = a) : c.skillP > 0 ? (c.text = c.text.slice(0, -1), c.skillP--) : (c.skillI = (c.skillI + 1) % o.length, c.direction = "forward")), r.textContent = c.text, r.appendChild(n(c.prefixP < l.length ? Math.min(s, s + c.prefixP) : Math.min(s, t.length - c.skillP))), setTimeout(i, d)
+          }
+          var l = "",
+          o = ["滚动字幕1","滚动字幕233"].map(function (r) {
+          return r + ""
+          }),
+          a = 2,
+          g = 1,
+          s = 5,
+          d = 75,
+          b = ["rgb(110,64,170)", "rgb(150,61,179)", "rgb(191,60,175)", "rgb(228,65,157)", "rgb(254,75,131)", "rgb(255,94,99)", "rgb(255,120,71)", "rgb(251,150,51)", "rgb(226,183,47)", "rgb(198,214,60)", "rgb(175,240,91)", "rgb(127,246,88)", "rgb(82,246,103)", "rgb(48,239,130)", "rgb(29,223,163)", "rgb(26,199,194)", "rgb(35,171,216)", "rgb(54,140,225)", "rgb(76,110,219)", "rgb(96,84,200)"],
+          c = {
+            text: "",
+            prefixP: -s,
+            skillI: 0,
+            skillP: 0,
+            direction: "forward",
+            delay: a,
+            step: g
+          };
+          i()
+          };
+          binft(document.getElementById('binft'));
+      </script>
+
+  </div><!-- .site-info -->
+  
+
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!--浏览器搞笑标题-->
+<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<center>
+  <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/footer/skirt.webp">
+</center>
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas> 
+  <div class="changeSkin-gear no-select">
+  <div class="keys" id="setbtn"> 
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+   </span>
+  </div>
+</div>
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Kaizyn'sBlog</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/KaizynX" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+        <a href="https://wpa.qq.com/msgrd?v=3&uin=2291443901&site=qq&menu=yes" class="fa fa-qq" target="_blank" style="color: #25c6fe; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories">
+                  <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                  分类
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags">
+                  <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/comment/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+            留言板
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/links/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+            大佬链
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/donate/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+            投食
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我?
+                </a>
+              </li>
+            
+              <li>
+                <a href="https://github.com/honjun/hexo-theme-sakura">
+                  <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                  主题
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/atom.xml">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+            RSS
+          </span>
+        </a>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+    id="2509579883"
+
+    server="netease"
+
+    type="playlist"
+
+    fixed="true"
+
+    autoplay="false"
+
+    loop="all"
+
+    order="random"
+
+    preload="auto"
+
+    volume="0.7"
+
+    mutex="true"
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

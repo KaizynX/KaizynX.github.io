@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">2021 | Kaizyn&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/images/favicon32.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" type="text/css" href="/css/matery.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Kaizyn'sBlog";
+  mashiro_option.author_name = "Blog";
+  mashiro_option.site_url = "https://kaizynx.github.io/";
+  mashiro_option.v_appId = "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz";
+  mashiro_option.v_appKey = "RztxTMKSVDyuAaC0BVM1wPM1";
+  mashiro_option.mathjax = "1";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/001.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/002.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/003.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/004.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/005.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/006.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/007.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/008.jpg,https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/cover/009.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+  
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>
+  .pace .pace-progress {  background: #1E92FB; /*进度条颜色*/
+  height: 3px;  }
+  .pace .pace-progress-inner {  box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+  }
+  .pace .pace-activity {  border-top-color: #1E92FB;    /*上边框颜色*/
+  border-left-color: #1E92FB;    /*左边框颜色*/
+  }</style>
+
+</head>
+</html>
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop ">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://kaizynx.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>一只菜鸡的博客</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/KaizynX" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://www.zhihu.com/people/kaizyn" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="mailto:2291443901@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=2291443901" target="_blank" class="social-github" title="qq">
+                    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/social/qq.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Kaizyn&#39;s</span>
+            <span class="shironeko">Blog</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories">
+                          <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                          分类
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags">
+                          <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/comment/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+                    留言板
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/links/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+                    大佬链
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/donate/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+                    投食
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我?
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="https://github.com/honjun/hexo-theme-sakura">
+                          <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                          主题
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/atom.xml">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+                    RSS
+                  </span>
+                </a>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+<div class="pattern-center single-center">
+  <!-- 有配图默认渲染第一张 -->
+  
+  <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/2021/cover.gif);" src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/post-loading.gif" data-src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/2021/cover.gif">
+  </div>
+  
+  <header class="pattern-header single-header">
+    <h1 class="entry-title">
+    2021</h1>
+    <p class="entry-census">
+        <span>
+          <a href="https://kaizynx.github.io/">
+            <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="https://kaizynx.github.io/">Kaizyn</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2022-1-25<span class="bull">
+        ·</span>
+    <span id="busuanzi_value_page_pv"></span>次阅读</p>
+  </header>
+</div>
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        <!--  -->
+        <div class="entry-content">
+          <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="410425438cc116bff21e79bca1bb23b14ff06525200c33ce3d13faeb5d4e8513">94f00afea32c0266ade37fdb656f69449fc25f39e53b75644aed0aad0bc4db39921b5d13e6953addf092bf8e2dd6f6c474eb7c13247be9b802c9f24a5ce88e70d27af089c33ec052d5157865720f443b19c6a57d8b56b01f0cad85feae2a0a708ff34cc68983ae9861341bc8ca6ea0bf9b4ef1d19e7c5dd4664ab1bd2e66179f41f72f3f512e49f2c6855625c9aea3f3c0dc516a09d342dbc57fd7afce6d3d7080ec0b068369e27c9b91e1fb43d87e35bb3b6ddac3a685ae5ff85a4692b37b50075247dad85130591f0d54d8b4ddd5afa3a1e6e8b12ec95d54829c4f7d609dd98ac8341469e1cc295994522e800fa23edd634dd8a47536c21e14d2c6051866157adeb322dcff27d256a47da813d6468f3a28f1e52c43eb5d5d6d8ce783f846af80c217fe5a63872e671324e4f3e24be81f3d359db113a0868b01e04e8464fcad479dca1d6c0c218a1b0d2492cced83150fcd10d1667f6d67b53e6c21b09da9e9565daf2277bd028386870197fdf2a44c3adc9ec1c836ed565b8e97d48543d4f64f1b86b91870106fc2c50c66a39e3b5d8bab3907524f3ee0f07338d799179e18b83aa7e8a87a36cc8ce11829daf4541ca3fbc18d2720ea1bf8c430ea25c9044b38d0c5521c7a5f49def4063c335670cc230cd94a0123c9e868b51eda5b7755004d08b0e83308ff3a871a55a490df4ee332f11156a06a13f9b394a22b6e9b7dbe7ea85f2748f0c815b6111f9224a99766f555b39c9e394f0ca79c25e4581f29243ae8a0c76b7cdbd220b3e65bfa209fcd027c1163415e9596aafd9099677f0d5bdfb789fb235fdb514880d5bc3664554d449066d66c167a35586e8b15ed83413a46131d4dc3b78a5a0fc66b0002f32c46ae59870c383d46efa85ec12541886ce29b5f74977590f8de9684e2c72a35da220182f21095c4ff97754fcef5583589ac00e35674317f63e198a50841bb18edc569a51429990b4f367cdd1267cae879c56ea8f87df167edb4e01df7bace1bfa7541462c8ccb496fdd7f8cd45dbcca4aa97d8f10fdb222d2794d77d19be1ecefa43ff0c06afce7c8e796f30a53e8f1174262da24a2ee89f255433f63f44b5fc5940f60d36819acb6f588fa5618d5a8c10400b71ef74124a244381ea05696765028ebd57aae6c7640c98a5317fe0dc04d8bb289aec7d5a6df81141722e9bee3d6b33c988be1033e4009baafb21f317f35323f6e24940bd4305bfb9da29a4cf67e2d15fc457854e7346e591175ed3c77f20fabf22072827d9328ebbaa5d8ee61c91e6765361cf1744bf30145f82742944cbb0b0b5c170b038f7c3d98f538213342b2127a828149e2192d4b6b3789983aa93f2f4c077614185f0b352ed8edb5d420363551057544a1a847a69336bdd4c3953695f4b481228d0c3d3fa27b9e7e49acf75e730db391f110b59553cb5b968c32f7e4901b22d9f66568d0ecaea4c67cb171301a934a9f4b7a2cbae090c1a675811a66d4d506e5f5b2649e1453da82a45ed19714adc5897ac88bf97983e7ead55cf83a092d8bdfae06004fae7d4fc293548bd5280963cf33ed92c4637a432206bd422c8186308e9fa574a9d155bd9ce405cd09db5a91060ab1782701ff3bc4b04743a91e6a6e7ac762e683602a1e00713d716c2291b622859233562be9e5d2068bba0eac269bd6dc2ebc0b09745298e28cfdd0dcb88085bdb09113cccfa6a8ecd246c27373ffe7e6516170821eba9f6ae3b1036473015e64dfb4216a67b5275abf5022d401b5d8480650f69d831ae4eab2e736682e6855bbf2fa026c3ee60857710a53982e68f344e78b67dc515f16600021d472dda2dae318632d0b57a835ddae7f3aa4d7890e34452e8241c1ff11f41778fc93a00adb95059c10f1877178513b2cc5afdf42eaec20b8fbaaa4afa653442334e4d306af2db9a5130ed39a942731a8b3c79224aa03b53cf263ea74cf83f8abae7bd85cb85247fb4d007ad3e5f96188c1293f589aec39868e3345c3993cfe5bceb47fb150c18cad313a09becb56862722f429370aaed4dac5114081634743cf043875dc4b03c5a2b9c768fb108359a38b4492f600d8838ecdc64a1ea4add13615f2f0ced8928de2ebbd29c9740b0e5bc5af682a5391077e03a422831c519396ecaceb05814975dba2ca677db22b93bbf9de67f56fa4565488847578d29264b49e868afcc8e2acc2097e6e278fe9bba2d7e94902fbfdb0ef56e5cd1be67610c852c06974242f8e04e97a02822cb2e195abb7058ce9b4238da88ec749ba4e9dae340045bb20eef489f681cde659b315d5690fb72f5b4c9ae84302abb3baa959f795010f4eba8e77b585311cd8dfafd014e69677fcdf6b86046a3def70d393634a903a127aa96ea465bb75adeed45140b61073116e1fd2c60bfae52a9ed74368c5c01294cafbfed02949ab6a76dcd2f48a3e62bcd421457a3d934765c2b4bc9c26d69512da029e2ae557100a82265b03d4d7b22d5f199cb764c971096bac097bdf7588b7bc179ac3070817370c217b55332011b9e201e55f7bd630819b268b18d9326cfbb1c31a4c9a0375fbd971edf38bd0f56f7d7a9f4ba703583fd50bc0793644c4ec8f167d923c7545ca5cfc807d5ae743bdd228de381a0f761cad799148e7d62d422d7019c50f7b231b11052477f7ef5b327090478d52a31c37077a7c85e6fe4b2cff7c63c76a36a0914449588bcec982159ced883f6db156826ca6d9505007f17e86d6d14e0789b86d07fc5e3bd1fb1a14530cbe41e2ff594687d047321bcf0f90b9a35bf9f144e36d3cb9519d10350ef09fdf2968501a2fa311da035ec87192de249da4f755083e9bc700c37d9b7ed87e0804fed4e9b27044083e28e31889a0d3f0e0d710f870bdb8ea275e5f3c948a248a2cc85c4ecf95c3c1d268435712929a0fef117348c0a9374088abd1612c47fea1f450844f2d52ea3d0ffaaf47b9a0d245d0e3a192a1e2210b8c1426fac40e3d05b62bd428abccbff949b7fcee05c7dc3f127bee16286f0a81803a3695817e34f42ba51085c2cb0063f9ac82a988e0363da090fde41efc81639a1bc18ffcc7d9020469d29993308c72b16eadbd32c31b9a0737ad3eff9f3c0e38a43095210d1e23b2365f2c555226553f21259b65eb2d88b30eb67b6852561b78a00391dde7b3a410379f4afd4f58941c4d5be51ca68822b82f89a74f85e085039abbafab43c1d6af6702511dab3034e765a751ce02bf7fcf9ab2ec5228e063e7e197b8209b591f8ccd4cb315b5617d2dd5cc80dea824ffd9a6c72d1e6db56f51dd3bedbdc23a531a0bfc4e83f85c4c10d46733fc8a0d2e269e1c3457e9ca8d58e315329907ab69e770020a48e0e256b45b1dd8a29c8e80596e65ae56bf132747ed351b463bbf54df55a0352ee329a42f0c013440ffc994114fe7687ad938eda6ab394de683728459fd389d5cd45345bd1267fb09b3aea09aeaf3ce7d7461871195ae508e126c11d40eaaf6397572c0e45f4d0f59e5d9d152f6cb83fed4ba667d8479f42a582e31df38fed0bf6016e3f625ef943dab31b552cde58cdda71b9381eec56ef1cff1494915c0d8b1af7312d4d797489ecdf3bbe1a496870e1f14164df8f27ae5bdd3ecc29a4bdf611717d6d020d1a0990b6fdc9896ce2fb46d1191b1d683634b676908c725feb7525533fb22681595b461552d3ed2d804f3ebd3f8850a5d2886941350f58d426d659df50753c5b6c884257cdaf107b9d8784b7b01ecfe8940f026a2a75ae548562f6adf2e1353ee66c2bde065b579927e0becf5e96cf6fdba74df6658efb7d2a13561a7254dc873f9e68b4cd6ad5e11ead6527117a59b859d55b0cc94f16e6bfc0a9db00ec69c67ae021aa533816227d3f2a6bb8ad678e3c5f0a9a11ad72df2538270e3922b0c554a6c351e5c218c8581c1075d43c87bd1e79bfd9f3541eb72eabbdfa6e769b0e9a9f1f98fe337da342a0690e47d746e5fb33b2e2b9834c05b26c349ed47b55a8acdb43fccd3334f509cb3a654844ad800061130260964f2d250a0374d03490eebb143b2c3dadddfb73ae874285f3aa6bfa2a22d914519fb36edf37ea6bb32f156fd247456fa831689f181e28a670a95e45b6aa9fe8e62f640d40b7aafe18b7cf681da63aeeb95802792a19dad564f0859e52d660fedb2b03e81af92a5099cd882b946fd0e5ed143c08302ad3737fbfb77fffea2010358dd1ed06adab10fb4b282c874273ab26712a4d092fabc18fe8c6d23fb298e2065c15588a533f75884b64156d4e141cfa82286f48ff230a8f92a348594bece53385065b470d3c22cb4286cc052a5ac9fd95c9b744d81c7faa1854baef5b4e609c6c223ff27cf54e4567d0b26919b5f0625a6ddd5c19688c52ea9b041ad9d782800dba928fed2f731b23311b95288b1696557e6dddd5f30872d1f71898ed06c209e13769c65748b924c91af78ec5a8e810c6493effd111c82679591f909ca9bc19d3f5f3fba4c185e1ddff16a556f07ebfe85d0aa54d96cab7c8cc4bf5fc70725c4ed9e6c5584c5c749b87001835098a83dcb676167d0cc5963a21522be4a27356c2bf584c714a09a9d12feb8d704ca0d1d896291175363f8e34bcc3d8100c24552b215726f0b1b58de1ad99c08dfd16f0979583dfc417f96d83c3a5a2f9f6a5641926d25a9b5825eb4e02d9cb098cf5e81c74b31c4fc5b12f16b5d6065522b6988497438964c498272031affee8da1d6de62998eac14e854b5cfa386537267d943530cdf3e5399b29d389e9f9cba3975ac486f68e5c23056273e86fde15591ee08ba42ca9468e646abfecedcf000cdc90ae84bec4226749be58521424a6bef1d766f7cced2f16618b65222ca6a2765d0439a584010e23dcd5a0de6f6b0ef913acc6ec51fc18766f13054b7892c13e66da2e322d8f18a030993c74792d95c75267a31d5ef6945ada866eb6c6ded39e048fcf858ad1e9844ed3a797c2fe50a295da61d2e187bdea208611817efdf15331c8d72991542500610da7ac8228a0361ff74023116a2f5b85d660995facfa5e7062ea5b54fa2699719b4bedd2bf539edbb7ac0a9887d3f89f3eaef8e23c1123b2de928dcfae5f9c60957b28ec33bd05b9258c2cb3d17a0945cbbc40cfa93719c433db42bfb39c7596e3f8447080c943d15dba4975259d74031042a843a7a199b3820f84b7777f93e2f16b25186f0f868a58687abbaa3d5db8b2f62f93f3a7230ed53c540d902c7b30a985bb2263069e33390773a9d13c3ca43cab26926a3fab0d807a69a7502a384dc75ded5a2959637407683f2973f36d69b84d6672629953b905468fa4faa1d0a00478a7639abe340c8d3a95193788f9d3d41b99077e1e975418e5f28c7e501c3815d493a2c45d257ac70bcca6f28cd1d23e0e5ad8a354f5544674138e718ffbfa71710d0181bb899d00448a8bb19c2f943715c51e195766765f7ce7fb0985653972273349a7a93cb7c9d9d8a4aa86c6cde041092ead272ffde92315d630686e9b2ed7412979094e89b37870555fcd2319849c1ad8ed64f33145e1c8a86e340c3aba38803bdee0f605cbe61d7ec32b8b65befeb74e5d7a13a6b4704403f308cd12397ba22dff4add23f25a228d2206ed6f301aa32ae1981e25f178215fe67318af8d84465c287f530aba053533d232119aaa595bb1fcffa5ade0542b0b4df0db22e5383d506040d15c3a5a689120aa50e689ffbb7d59d985a4a105da2799b4f01167bd4e7db580959a2155f064284cef817b95ca33bda9de4a4262cb64b9513eb037575cf64e2ee7db42143b70f20ae82808df7fc6d8eac02830366c0d3ab7b8b215cfbd5aff895da33ea1de630f2a71127a22e65e316eef0f230684e3b918c272f5d1df11b7c30f35aeabe2c54c72e5174fcb7926bba557eb7f54fbc3e1e3c11dfbec40d0499a429837ac63a77d02d88d18391a4560643b79f919eb5cce2b12d27d58f1270eff70be6fccb0951d6c37f90bc82004ae7166e0ce464029cd6a892f937f011a6c51a46e4f22d1ea8ba4d7ae53eac94820d6a328d1f4d3c7427c64397522e301772c7de2d4c7220c70be467ba5f698003078272347c9c2bcd356f236e8fd86961acba4f77d9859670337061b1ae4ef645e58f255b24a7db4e916722923088d5440fe376205502c578c0ac4a3beee3e7ac1183e7ef401299a8e6c2f04f4481b1eaf9460148f707704e2418d9bde0ad7b30356d6c9ac45f61c4a747e9967b44d4702635556c28e7b1e85927aebf3d85e1c7b9d43b2763aadc655cb4fc8c14a51e383327c3b1295070bdb6374854a6f4a1f07f258d24b6d7dd86e418c489869d623a3a261941e628c962081390cee5a2cb80af60fe48c53d3960d986f998f2c571ed1abeb402d6b745b43dc87361f27b9eee0ec6a349246e813b124a096fcf38b1bcc28ee389eebc750f904ce489f09c70ba9ede99543773dfe61ffe4d17ce597d4ff4eb7714255c89a241b6b977a83f072bb536f149a55a751cc75682aee5f2104ae3d8b07c9b15d0602a8efa3e4a61fe54db44259d9043d8c83e40b3e853ea2aa1a968d792e2b3d88ff13f414f95bc654a4ca3082569514761a6852764114fe958d8c01067cc0ebe7e202eb3b81c1bb328fcfcaa18d9bc331b5dcbe7868537698473d9a34f020a7078f12162dc5526e93f66d891daffe39bf746ecdf1b6b48d78d9eb8c3e3af2818c706745f99376388a54e5d3fb4b4495ac70926c1f0ac747f078062a1ea43277ed121a002703e70fdde19096874e66a8645f56dc1d1155587bcb3acdb68698ed1d579233d41bc42e49ae974d1517cf5011d02e5b50f500812d4b6811629902a394a5ff6f393f355befa37ba9513ec93c6e961a667aa22d294aaa0d0787c65e4a28d9bd34dc4776aeeb70a07ac112562e777d3d0c49e05d3f2d302c42345ad0f8c7ed9523db94f92de734d2288a8a9f2d91492e25f379c71f398261de9a641efb42fb4de1a0342385ef77bae6b36333f7cdf808588d4f55644eed6b9415dcb7bcbd6d54cf229e04a481d4c9d343f54fea50a213787efa4b3b6a82aa8f2bbede6fabe297aa3748084d73e32b4074621a3426e84e1e3eb3565d2d38a19ecf09ebdb1feeaec29e98514f557b362f29e5c0098b61e068524980f3296b166d0199717e9ec320fb5f512c847e5540e507cc50ad30ee5ef2b45d306f5bd328c4372996038f812d7e042e3bf96548c5a975d1dc37830bfd7e7531c71e4a77be9f9e6b4788a7ae117bc5a94231b0e6e1f9cb7499314699abfdb4e4660c09147079e4d7e4e1e0b3d81fe7a6f0eb81ca5a030c13a0b0ce4ee9bf9d29aa7000a770c22ea60c90bf30f3bf990d7962e31e2e3159a46fbe0a0228794a1a522aa291f5615b101b7cd760c591cd62f139cd2</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">封印!</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/donate/AliPayQR.gif"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdnundefined"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "thHO16MtUqCFt5ytzki9wwNG-gzGzoHsz",
+        appKey: "RztxTMKSVDyuAaC0BVM1wPM1",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://kaizynx.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg" itemprop="image" alt="Kaizyn" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://kaizynx.github.io/" itemprop="url" rel="author">Kaizyn</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Kaizyn<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span><script>
+        var now = new Date();
+        function createtime() {
+          var grt= new Date("08/24/2018 00:00:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+          document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+          document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+        }
+        setInterval("createtime()",250);</script>
+
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> Powered by Hexo
+        </span>
+      </p>
+    </div>
+    <div id="binft"></div>
+      <script>
+        var binft = function (r) {
+          function t() {
+            return b[Math.floor(Math.random() * b.length)]
+          }
+          function e() {
+            return String.fromCharCode(94 * Math.random() + 33)
+          }
+          function n(r) {
+            for (var n = document.createDocumentFragment(), i = 0; r > i; i++) {
+              var l = document.createElement("span");
+              l.textContent = e(), l.style.color = t(), n.appendChild(l)
+            }
+            return n
+          }
+          function i() {
+            var t = o[c.skillI];
+            c.step ? c.step-- : (c.step = g, c.prefixP < l.length ? (c.prefixP >= 0 && (c.text += l[c.prefixP]), c.prefixP++) : "forward" === c.direction ? c.skillP < t.length ? (c.text += t[c.skillP], c.skillP++) : c.delay ? c.delay-- : (c.direction = "backward", c.delay = a) : c.skillP > 0 ? (c.text = c.text.slice(0, -1), c.skillP--) : (c.skillI = (c.skillI + 1) % o.length, c.direction = "forward")), r.textContent = c.text, r.appendChild(n(c.prefixP < l.length ? Math.min(s, s + c.prefixP) : Math.min(s, t.length - c.skillP))), setTimeout(i, d)
+          }
+          var l = "",
+          o = ["滚动字幕1","滚动字幕233"].map(function (r) {
+          return r + ""
+          }),
+          a = 2,
+          g = 1,
+          s = 5,
+          d = 75,
+          b = ["rgb(110,64,170)", "rgb(150,61,179)", "rgb(191,60,175)", "rgb(228,65,157)", "rgb(254,75,131)", "rgb(255,94,99)", "rgb(255,120,71)", "rgb(251,150,51)", "rgb(226,183,47)", "rgb(198,214,60)", "rgb(175,240,91)", "rgb(127,246,88)", "rgb(82,246,103)", "rgb(48,239,130)", "rgb(29,223,163)", "rgb(26,199,194)", "rgb(35,171,216)", "rgb(54,140,225)", "rgb(76,110,219)", "rgb(96,84,200)"],
+          c = {
+            text: "",
+            prefixP: -s,
+            skillI: 0,
+            skillP: 0,
+            direction: "forward",
+            delay: a,
+            step: g
+          };
+          i()
+          };
+          binft(document.getElementById('binft'));
+      </script>
+
+  </div><!-- .site-info -->
+  
+
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!--浏览器搞笑标题-->
+<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<center>
+  <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/footer/skirt.webp">
+</center>
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/KaizynX/cdn/video","name":"Lion.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas> 
+  <div class="changeSkin-gear no-select">
+  <div class="keys" id="setbtn"> 
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+   </span>
+  </div>
+</div>
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.gif">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Kaizyn'sBlog</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/KaizynX" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+        <a href="https://wpa.qq.com/msgrd?v=3&uin=2291443901&site=qq&menu=yes" class="fa fa-qq" target="_blank" style="color: #25c6fe; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome fa-headphones" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories">
+                  <i class="fa fa-list-ul faa-vertical" aria-hidden="true"></i>
+                  分类
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags">
+                  <i class="fa fa-tags faa-bounce" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/comment/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-pencil-square-o faa-tada" aria-hidden="true"></i>
+            留言板
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/links/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-link faa-shake" aria-hidden="true"></i>
+            大佬链
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/donate/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+            投食
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我?
+                </a>
+              </li>
+            
+              <li>
+                <a href="https://github.com/honjun/hexo-theme-sakura">
+                  <i class="fa iconfont icon-sakura" aria-hidden="true"></i>
+                  主题
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/atom.xml">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-rss faa-pulse" aria-hidden="true"></i>
+            RSS
+          </span>
+        </a>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+    id="2509579883"
+
+    server="netease"
+
+    type="playlist"
+
+    fixed="true"
+
+    autoplay="false"
+
+    loop="all"
+
+    order="random"
+
+    preload="auto"
+
+    volume="0.7"
+
+    mutex="true"
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

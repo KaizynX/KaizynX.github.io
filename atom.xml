@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Kaizyn&#39;s Blog</title>
+  
+  <subtitle>日常划水</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://kaizynx.github.io/"/>
+  <updated>2022-04-29T08:15:48.698Z</updated>
+  <id>http://kaizynx.github.io/</id>
+  
+  <author>
+    <name>Kaizyn</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Metabit 实习面试</title>
+    <link href="http://kaizynx.github.io/2022/04/28/Metabit_interview/"/>
+    <id>http://kaizynx.github.io/2022/04/28/Metabit_interview/</id>
+    <published>2022-04-28T15:00:00.000Z</published>
+    <updated>2022-04-29T08:15:48.698Z</updated>
+    
+    <summary type="html">
+    
+      一条龙
+    
+    </summary>
+    
+      <category term="interview" scheme="http://kaizynx.github.io/categories/interview/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>微软暑期实习 leader 面</title>
+    <link href="http://kaizynx.github.io/2022/03/11/MS_interview2/"/>
+    <id>http://kaizynx.github.io/2022/03/11/MS_interview2/</id>
+    <published>2022-03-11T07:45:00.000Z</published>
+    <updated>2022-04-29T08:15:34.430Z</updated>
+    
+    <summary type="html">
+    
+      就写了道题
+    
+    </summary>
+    
+      <category term="interview" scheme="http://kaizynx.github.io/categories/interview/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>微软暑期实习 IC 面</title>
+    <link href="http://kaizynx.github.io/2022/03/11/MS_interview1/"/>
+    <id>http://kaizynx.github.io/2022/03/11/MS_interview1/</id>
+    <published>2022-03-11T07:30:00.000Z</published>
+    <updated>2022-04-10T07:52:45.146Z</updated>
+    
+    <summary type="html">
+    
+      我太难了
+    
+    </summary>
+    
+      <category term="interview" scheme="http://kaizynx.github.io/categories/interview/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>字节跳动AML实习二面</title>
+    <link href="http://kaizynx.github.io/2022/01/05/AML_interview2/"/>
+    <id>http://kaizynx.github.io/2022/01/05/AML_interview2/</id>
+    <published>2022-01-05T13:50:00.000Z</published>
+    <updated>2022-04-29T08:34:35.722Z</updated>
+    
+    <summary type="html">
+    
+      AML二面
+    
+    </summary>
+    
+      <category term="interview" scheme="http://kaizynx.github.io/categories/interview/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>ACM2021小结</title>
+    <link href="http://kaizynx.github.io/2022/01/04/ACM2021/"/>
+    <id>http://kaizynx.github.io/2022/01/04/ACM2021/</id>
+    <published>2022-01-04T03:30:00.000Z</published>
+    <updated>2022-04-10T07:52:45.118Z</updated>
+    
+    <summary type="html">
+    
+      我的ACM2021
+    
+    </summary>
+    
+      <category term="ACM" scheme="http://kaizynx.github.io/categories/ACM/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>字节跳动AML实习一面</title>
+    <link href="http://kaizynx.github.io/2021/12/29/AML_interview1/"/>
+    <id>http://kaizynx.github.io/2021/12/29/AML_interview1/</id>
+    <published>2021-12-29T15:59:59.000Z</published>
+    <updated>2022-04-29T08:34:29.411Z</updated>
+    
+    <summary type="html">
+    
+      第一次面试,面得稀烂
+    
+    </summary>
+    
+      <category term="interview" scheme="http://kaizynx.github.io/categories/interview/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>访问博客空无一物</title>
+    <link href="http://kaizynx.github.io/2021/04/06/NonePage/"/>
+    <id>http://kaizynx.github.io/2021/04/06/NonePage/</id>
+    <published>2021-04-06T14:40:00.000Z</published>
+    <updated>2022-04-10T07:52:45.148Z</updated>
+    
+    <summary type="html">
+    
+      记一次博客崩溃
+    
+    </summary>
+    
+      <category term="技术" scheme="http://kaizynx.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>浅谈位运算卷积</title>
+    <link href="http://kaizynx.github.io/2021/04/03/FWT/"/>
+    <id>http://kaizynx.github.io/2021/04/03/FWT/</id>
+    <published>2021-04-03T14:00:00.000Z</published>
+    <updated>2022-04-10T07:52:45.134Z</updated>
+    
+    <summary type="html">
+    
+      俗称FWT
+    
+    </summary>
+    
+      <category term="ACM" scheme="http://kaizynx.github.io/categories/ACM/"/>
+    
+    
+      <category term="位运算" scheme="http://kaizynx.github.io/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/"/>
+    
+      <category term="卷积" scheme="http://kaizynx.github.io/tags/%E5%8D%B7%E7%A7%AF/"/>
+    
+      <category term="FWT" scheme="http://kaizynx.github.io/tags/FWT/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>远程桌面</title>
+    <link href="http://kaizynx.github.io/2021/03/07/Remote/"/>
+    <id>http://kaizynx.github.io/2021/03/07/Remote/</id>
+    <published>2021-03-07T09:00:00.000Z</published>
+    <updated>2022-04-10T07:52:45.149Z</updated>
+    
+    <summary type="html">
+    
+      实现外网远程桌面
+    
+    </summary>
+    
+      <category term="技术" scheme="http://kaizynx.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="远程桌面连接" scheme="http://kaizynx.github.io/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%BF%9E%E6%8E%A5/"/>
+    
+      <category term="SakuraFrp" scheme="http://kaizynx.github.io/tags/SakuraFrp/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ACL Beginner Contest F - Heights and Pairs</title>
+    <link href="http://kaizynx.github.io/2020/09/30/AtCoder-ABL-F/"/>
+    <id>http://kaizynx.github.io/2020/09/30/AtCoder-ABL-F/</id>
+    <published>2020-09-30T14:30:00.000Z</published>
+    <updated>2022-04-10T07:52:45.122Z</updated>
+    
+    <summary type="html">
+    
+      用分治NTT解决容斥问题
+    
+    </summary>
+    
+      <category term="AtCoder" scheme="http://kaizynx.github.io/categories/AtCoder/"/>
+    
+    
+      <category term="排列组合" scheme="http://kaizynx.github.io/tags/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/"/>
+    
+      <category term="分治" scheme="http://kaizynx.github.io/tags/%E5%88%86%E6%B2%BB/"/>
+    
+      <category term="NTT" scheme="http://kaizynx.github.io/tags/NTT/"/>
+    
+      <category term="容斥" scheme="http://kaizynx.github.io/tags/%E5%AE%B9%E6%96%A5/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TZOJ6200 图的生成树</title>
+    <link href="http://kaizynx.github.io/2020/08/30/tzoj6200/"/>
+    <id>http://kaizynx.github.io/2020/08/30/tzoj6200/</id>
+    <published>2020-08-30T13:30:00.000Z</published>
+    <updated>2022-04-10T07:52:45.156Z</updated>
+    
+    <summary type="html">
+    
+      树论题
+    
+    </summary>
+    
+      <category term="ACM" scheme="http://kaizynx.github.io/categories/ACM/"/>
+    
+    
+      <category term="最小生成树" scheme="http://kaizynx.github.io/tags/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/"/>
+    
+      <category term="树上倍增" scheme="http://kaizynx.github.io/tags/%E6%A0%91%E4%B8%8A%E5%80%8D%E5%A2%9E/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TZOJ6199 异或序列</title>
+    <link href="http://kaizynx.github.io/2020/08/30/tzoj6199/"/>
+    <id>http://kaizynx.github.io/2020/08/30/tzoj6199/</id>
+    <published>2020-08-30T13:15:00.000Z</published>
+    <updated>2022-04-10T07:52:45.155Z</updated>
+    
+    <summary type="html">
+    
+      巧妙呵
+    
+    </summary>
+    
+      <category term="ACM" scheme="http://kaizynx.github.io/categories/ACM/"/>
+    
+    
+      <category term="位运算" scheme="http://kaizynx.github.io/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/"/>
+    
+      <category term="KMP" scheme="http://kaizynx.github.io/tags/KMP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ABC176F Brave CHAIN</title>
+    <link href="http://kaizynx.github.io/2020/08/23/AtCoder-ABC176F/"/>
+    <id>http://kaizynx.github.io/2020/08/23/AtCoder-ABC176F/</id>
+    <published>2020-08-23T10:00:00.000Z</published>
+    <updated>2022-04-10T07:52:45.122Z</updated>
+    
+    <summary type="html">
+    
+      特殊转移的DP题
+    
+    </summary>
+    
+      <category term="AtCoder" scheme="http://kaizynx.github.io/categories/AtCoder/"/>
+    
+    
+      <category term="DP" scheme="http://kaizynx.github.io/tags/DP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>杭电多校2020第9场1009 Yajilin</title>
+    <link href="http://kaizynx.github.io/2020/08/19/hdu6875/"/>
+    <id>http://kaizynx.github.io/2020/08/19/hdu6875/</id>
+    <published>2020-08-19T13:15:00.000Z</published>
+    <updated>2022-04-10T07:52:45.151Z</updated>
+    
+    <summary type="html">
+    
+      插头DP
+    
+    </summary>
+    
+      <category term="ACM" scheme="http://kaizynx.github.io/categories/ACM/"/>
+    
+    
+      <category term="插头DP" scheme="http://kaizynx.github.io/tags/%E6%8F%92%E5%A4%B4DP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CF914G Sum the Fibonacci</title>
+    <link href="http://kaizynx.github.io/2020/08/16/Codeforces914G/"/>
+    <id>http://kaizynx.github.io/2020/08/16/Codeforces914G/</id>
+    <published>2020-08-16T10:00:00.000Z</published>
+    <updated>2022-04-10T07:52:45.132Z</updated>
+    
+    <summary type="html">
+    
+      一道涉及方方面面的关于二进制卷积的题
+    
+    </summary>
+    
+      <category term="Codeforces" scheme="http://kaizynx.github.io/categories/Codeforces/"/>
+    
+    
+      <category term="卷积" scheme="http://kaizynx.github.io/tags/%E5%8D%B7%E7%A7%AF/"/>
+    
+      <category term="FWT" scheme="http://kaizynx.github.io/tags/FWT/"/>
+    
+      <category term="FST" scheme="http://kaizynx.github.io/tags/FST/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2020牛客暑期多校训练营(第五场)G</title>
+    <link href="http://kaizynx.github.io/2020/08/08/nowcoder5670G/"/>
+    <id>http://kaizynx.github.io/2020/08/08/nowcoder5670G/</id>
+    <published>2020-08-08T14:30:00.000Z</published>
+    <updated>2022-04-10T07:52:45.153Z</updated>
+    
+    <summary type="html">
+    
+      牛客多校一道好难的题
+    
+    </summary>
+    
+      <category term="ACM" scheme="http://kaizynx.github.io/categories/ACM/"/>
+    
+    
+      <category term="网络流" scheme="http://kaizynx.github.io/tags/%E7%BD%91%E7%BB%9C%E6%B5%81/"/>
+    
+      <category term="虚树" scheme="http://kaizynx.github.io/tags/%E8%99%9A%E6%A0%91/"/>
+    
+      <category term="线段树优化建图" scheme="http://kaizynx.github.io/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%BC%98%E5%8C%96%E5%BB%BA%E5%9B%BE/"/>
+    
+      <category term="树链剖分" scheme="http://kaizynx.github.io/tags/%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Educational Codeforces Round 87 (Rated for Div. 2)</title>
+    <link href="http://kaizynx.github.io/2020/05/17/Codeforces1354/"/>
+    <id>http://kaizynx.github.io/2020/05/17/Codeforces1354/</id>
+    <published>2020-05-17T12:30:00.000Z</published>
+    <updated>2022-04-10T07:52:45.131Z</updated>
+    
+    <summary type="html">
+    
+      CF1354题解(ABCDEF)
+    
+    </summary>
+    
+      <category term="Codeforces" scheme="http://kaizynx.github.io/categories/Codeforces/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>2020华为软挑小结</title>
+    <link href="http://kaizynx.github.io/2020/04/30/HuaweiCodecraft2020/"/>
+    <id>http://kaizynx.github.io/2020/04/30/HuaweiCodecraft2020/</id>
+    <published>2020-04-30T15:00:00.000Z</published>
+    <updated>2022-04-10T07:52:45.134Z</updated>
+    
+    <summary type="html">
+    
+      2020华为软件精英挑战赛小结
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>hexo-mathjax 转义问题</title>
+    <link href="http://kaizynx.github.io/2020/04/23/hexo_mathjax/"/>
+    <id>http://kaizynx.github.io/2020/04/23/hexo_mathjax/</id>
+    <published>2020-04-23T11:30:00.000Z</published>
+    <updated>2022-04-10T07:52:45.151Z</updated>
+    
+    <summary type="html">
+    
+      解决 mathjax 公式无法换行问题
+    
+    </summary>
+    
+      <category term="技术" scheme="http://kaizynx.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>绝对值</title>
+    <link href="http://kaizynx.github.io/2020/04/22/abs/"/>
+    <id>http://kaizynx.github.io/2020/04/22/abs/</id>
+    <published>2020-04-22T01:50:00.000Z</published>
+    <updated>2022-04-10T07:52:45.150Z</updated>
+    
+    <summary type="html">
+    
+      绝对值的仨题
+    
+    </summary>
+    
+      <category term="ACM" scheme="http://kaizynx.github.io/categories/ACM/"/>
+    
+    
+      <category term="abs" scheme="http://kaizynx.github.io/tags/abs/"/>
+    
+  </entry>
+  
+</feed>
