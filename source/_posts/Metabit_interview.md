@@ -1,5 +1,5 @@
 ---
-title: Metabit 面试
+title: Metabit 实习面试
 author: Kaizyn
 avatar: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg
 authorLink: https://kaizynx.github.io/

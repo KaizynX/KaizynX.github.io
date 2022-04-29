@@ -44,3 +44,7 @@ photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/MS_interview2/cover.jp
 然后经过他点播，我想到优先队列里面也是只存十个就够了, 把 `priority_queue` 换成 `set`
 
 结束了大概 13:35 左右的样子，问我有什么问题，我就问他们在做那块，他说是 bing ad 扯到 13:40 多点就结束了，迟到早退，太喜欢这种上来写道题完事的！
+
+# 结果
+
+结果就挂了呜呜呜，收到了感谢信

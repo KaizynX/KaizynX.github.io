@@ -1,5 +1,5 @@
 ---
-title: 字节跳动AML一面
+title: 字节跳动AML实习一面
 author: Kaizyn
 avatar: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/custom/avatar.jpg
 authorLink: https://kaizynx.github.io/
