@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://kaizynx.github.io/"/>
-  <updated>2022-04-29T08:15:48.698Z</updated>
+  <updated>2022-04-10T07:52:45.118Z</updated>
   <id>http://kaizynx.github.io/</id>
   
   <author>
@@ -15,78 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Metabit 实习面试</title>
-    <link href="http://kaizynx.github.io/2022/04/28/Metabit_interview/"/>
-    <id>http://kaizynx.github.io/2022/04/28/Metabit_interview/</id>
-    <published>2022-04-28T15:00:00.000Z</published>
-    <updated>2022-04-29T08:15:48.698Z</updated>
-    
-    <summary type="html">
-    
-      一条龙
-    
-    </summary>
-    
-      <category term="interview" scheme="http://kaizynx.github.io/categories/interview/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>微软暑期实习 leader 面</title>
-    <link href="http://kaizynx.github.io/2022/03/11/MS_interview2/"/>
-    <id>http://kaizynx.github.io/2022/03/11/MS_interview2/</id>
-    <published>2022-03-11T07:45:00.000Z</published>
-    <updated>2022-04-29T08:15:34.430Z</updated>
-    
-    <summary type="html">
-    
-      就写了道题
-    
-    </summary>
-    
-      <category term="interview" scheme="http://kaizynx.github.io/categories/interview/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>微软暑期实习 IC 面</title>
-    <link href="http://kaizynx.github.io/2022/03/11/MS_interview1/"/>
-    <id>http://kaizynx.github.io/2022/03/11/MS_interview1/</id>
-    <published>2022-03-11T07:30:00.000Z</published>
-    <updated>2022-04-10T07:52:45.146Z</updated>
-    
-    <summary type="html">
-    
-      我太难了
-    
-    </summary>
-    
-      <category term="interview" scheme="http://kaizynx.github.io/categories/interview/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>字节跳动AML实习二面</title>
-    <link href="http://kaizynx.github.io/2022/01/05/AML_interview2/"/>
-    <id>http://kaizynx.github.io/2022/01/05/AML_interview2/</id>
-    <published>2022-01-05T13:50:00.000Z</published>
-    <updated>2022-04-29T08:34:35.722Z</updated>
-    
-    <summary type="html">
-    
-      AML二面
-    
-    </summary>
-    
-      <category term="interview" scheme="http://kaizynx.github.io/categories/interview/"/>
-    
-    
-  </entry>
   
   <entry>
     <title>ACM2021小结</title>
@@ -102,24 +30,6 @@
     </summary>
     
       <category term="ACM" scheme="http://kaizynx.github.io/categories/ACM/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>字节跳动AML实习一面</title>
-    <link href="http://kaizynx.github.io/2021/12/29/AML_interview1/"/>
-    <id>http://kaizynx.github.io/2021/12/29/AML_interview1/</id>
-    <published>2021-12-29T15:59:59.000Z</published>
-    <updated>2022-04-29T08:34:29.411Z</updated>
-    
-    <summary type="html">
-    
-      第一次面试,面得稀烂
-    
-    </summary>
-    
-      <category term="interview" scheme="http://kaizynx.github.io/categories/interview/"/>
     
     
   </entry>
@@ -417,6 +327,118 @@
     
     
       <category term="abs" scheme="http://kaizynx.github.io/tags/abs/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>递归改迭代</title>
+    <link href="http://kaizynx.github.io/2020/04/21/recursion_to_iteration/"/>
+    <id>http://kaizynx.github.io/2020/04/21/recursion_to_iteration/</id>
+    <published>2020-04-21T06:00:00.000Z</published>
+    <updated>2022-04-10T07:52:45.154Z</updated>
+    
+    <summary type="html">
+    
+      switch大法好
+    
+    </summary>
+    
+      <category term="技术" scheme="http://kaizynx.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="递归" scheme="http://kaizynx.github.io/tags/%E9%80%92%E5%BD%92/"/>
+    
+      <category term="常数优化" scheme="http://kaizynx.github.io/tags/%E5%B8%B8%E6%95%B0%E4%BC%98%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>多线程</title>
+    <link href="http://kaizynx.github.io/2020/04/03/MultiThread/"/>
+    <id>http://kaizynx.github.io/2020/04/03/MultiThread/</id>
+    <published>2020-04-03T10:00:00.000Z</published>
+    <updated>2022-04-10T07:52:45.147Z</updated>
+    
+    <summary type="html">
+    
+      C++多线程学习笔记
+    
+    </summary>
+    
+      <category term="技术" scheme="http://kaizynx.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="多线程" scheme="http://kaizynx.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>KMP+数位DP</title>
+    <link href="http://kaizynx.github.io/2020/04/02/kmp_and_dp/"/>
+    <id>http://kaizynx.github.io/2020/04/02/kmp_and_dp/</id>
+    <published>2020-04-02T03:00:00.000Z</published>
+    <updated>2022-04-10T07:52:45.152Z</updated>
+    
+    <summary type="html">
+    
+      两道 KMP+数位DP 题
+    
+    </summary>
+    
+      <category term="ACM" scheme="http://kaizynx.github.io/categories/ACM/"/>
+    
+    
+      <category term="DP" scheme="http://kaizynx.github.io/tags/DP/"/>
+    
+      <category term="矩阵快速幂" scheme="http://kaizynx.github.io/tags/%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82/"/>
+    
+      <category term="KMP" scheme="http://kaizynx.github.io/tags/KMP/"/>
+    
+      <category term="数位DP" scheme="http://kaizynx.github.io/tags/%E6%95%B0%E4%BD%8DDP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>卷积</title>
+    <link href="http://kaizynx.github.io/2020/04/01/convolution/"/>
+    <id>http://kaizynx.github.io/2020/04/01/convolution/</id>
+    <published>2020-04-01T15:00:00.000Z</published>
+    <updated>2022-04-10T07:52:45.150Z</updated>
+    
+    <summary type="html">
+    
+      卷积学习笔记
+    
+    </summary>
+    
+      <category term="ACM" scheme="http://kaizynx.github.io/categories/ACM/"/>
+    
+    
+      <category term="卷积" scheme="http://kaizynx.github.io/tags/%E5%8D%B7%E7%A7%AF/"/>
+    
+      <category term="FFT" scheme="http://kaizynx.github.io/tags/FFT/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>abc160F - Distributing Integers</title>
+    <link href="http://kaizynx.github.io/2020/03/30/Atcoder-ABC160F/"/>
+    <id>http://kaizynx.github.io/2020/03/30/Atcoder-ABC160F/</id>
+    <published>2020-03-30T00:30:00.000Z</published>
+    <updated>2022-04-10T07:52:45.124Z</updated>
+    
+    <summary type="html">
+    
+      一道略有难度的换根DP题
+    
+    </summary>
+    
+      <category term="AtCoder" scheme="http://kaizynx.github.io/categories/AtCoder/"/>
+    
+    
+      <category term="排列组合" scheme="http://kaizynx.github.io/tags/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/"/>
+    
+      <category term="换根DP" scheme="http://kaizynx.github.io/tags/%E6%8D%A2%E6%A0%B9DP/"/>
     
   </entry>
   
