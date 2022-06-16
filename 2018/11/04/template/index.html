@@ -759,6 +759,69 @@ Printer pr = Printer(<span class="built_in">stdout</span>);
 <p>假设我们要求最大值。二分一个答案 $mid$，然后推式子（为了方便少写了上下界）：</p>
 <p>$$\displaystyle<br>\begin{aligned}<br>&amp;\frac{\sum a_i\times w_i}{\sum b_i\times w_i}&gt;mid\<br>\Longrightarrow&amp;\sum a_i\times w_i-mid\times \sum b_i\cdot w_i&gt;0\<br>\Longrightarrow&amp;\sum w_i\times(a_i-mid\times b_i)&gt;0 \end{aligned}$$</p>
 <p>那么只要求出不等号左边的式子的最大值就行了。如果最大值比 $0$ 要大，说明 $mid$ 是可行的，否则不可行。</p>
+<h2 id="不转义"><a href="#不转义" class="headerlink" title="不转义"></a>不转义</h2><p>R”()”</p>
+<h2 id="十六进制输出内存"><a href="#十六进制输出内存" class="headerlink" title="十六进制输出内存"></a>十六进制输出内存</h2><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
+<span class="function"><span class="keyword">void</span> <span class="title">hex_print</span><span class="params">(<span class="keyword">const</span> T &amp;y)</span> </span>{
+  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span> HEX[] = <span class="string">"0123456789ABCDEF"</span>;
+  <span class="keyword">char</span> *x = (<span class="keyword">char</span>*)(&amp;y);
+  <span class="built_in">printf</span>(<span class="string">"0x"</span>);
+  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="keyword">sizeof</span>(T) - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) { <span class="comment">// 小端存储</span>
+    <span class="keyword">char</span> a = *(x + i);
+    <span class="built_in">printf</span>(<span class="string">"%c%c"</span>,HEX[(a&amp;<span class="number">0xF0</span>)&gt;&gt;<span class="number">4</span>],HEX[a&amp;<span class="number">0x0F</span>]);
+  }
+  <span class="built_in">puts</span>(<span class="string">""</span>);
+}
+</code></pre>
+
+    </div>
+</div>
+<h2 id="两两组合"><a href="#两两组合" class="headerlink" title="两两组合"></a>两两组合</h2><p>2n 个人两两组合方案数 $(2n-1)<em>(2n-3)</em>\dots$</p>
+<h2 id="INF"><a href="#INF" class="headerlink" title="INF"></a>INF</h2><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">static</span> <span class="keyword">constexpr</span> T inf = numeric_limits&lt;T&gt;::max() / <span class="number">2</span>;
+</code></pre>
+
+    </div>
+</div>
+<h2 id="高维前缀和"><a href="#高维前缀和" class="headerlink" title="高维前缀和"></a>高维前缀和</h2><p>可以将高维数组映射成一维，从小到大枚举即可</p>
+<div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="comment">// 二维</span>
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)
+        a[i][j] += a[i - <span class="number">1</span>][j];
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)
+        a[i][j] += a[i][j - <span class="number">1</span>];
+<span class="comment">// 三维</span>
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)
+        <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= n; k++) 
+            a[i][j][k] += a[i - <span class="number">1</span>][j][k];
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)
+        <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= n; k++)
+            a[i][j][k] += a[i][j - <span class="number">1</span>][k];
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)
+        <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= n; k++)
+            a[i][j][k] += a[i][j][k - <span class="number">1</span>];
+<span class="comment">// 以此类推,每一维度都做一遍前缀和</span>
+</code></pre>
+
+    </div>
+</div>
 <hr>
 <h1 id="计算几何"><a href="#计算几何" class="headerlink" title="计算几何"></a>计算几何</h1><h2 id="向量-坐标-直线-圆-结构体"><a href="#向量-坐标-直线-圆-结构体" class="headerlink" title="向量 坐标 直线 圆 (结构体)"></a>向量 坐标 直线 圆 (结构体)</h2><div class="spoiler collapsed">
     <div class="spoiler-title">
@@ -6830,10 +6893,9 @@ ll od[N], dis[N&lt;&lt;<span class="number">1</span>], cir[N];
   <span class="built_in">vector</span>&lt;T&gt; b, rb, p;
   LinearBase(){ init(); }
   <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>{
-    tot = zero = <span class="number">0</span>;;
-    <span class="built_in">vector</span>&lt;T&gt;(sz, <span class="number">0</span>).swap(b);
-    <span class="built_in">vector</span>&lt;T&gt;().swap(rb);
-    <span class="built_in">vector</span>&lt;T&gt;().swap(p);
+    tot = zero = <span class="number">0</span>;
+    b = <span class="built_in">vector</span>&lt;T&gt;(sz, <span class="number">0</span>);
+    rb = p = <span class="built_in">vector</span>&lt;T&gt;();
   }
   <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TT&gt;
   <span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">(TT a[], <span class="keyword">const</span> <span class="keyword">int</span> &amp;n)</span> </span>{
@@ -7400,11 +7462,12 @@ comp w[SIZE];
       }
     }
 }
+<span class="comment">// 定义在函数内static Compilation Error: "Compiled file is too large" </span>
+comp a[SIZE], b[SIZE];
+comp dfta[SIZE], dftb[SIZE];
 <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span>
 <span class="class"><span class="title">inline</span> <span class="title">void</span> <span class="title">work</span>(<span class="title">T</span> *<span class="title">x</span>, <span class="title">const</span> <span class="title">int</span> &amp;<span class="title">n</span>, <span class="title">T</span> *<span class="title">y</span>, <span class="title">const</span> <span class="title">int</span> &amp;<span class="title">m</span>) {</span>
   <span class="keyword">static</span> <span class="keyword">int</span> bit, L;
-  <span class="keyword">static</span> comp a[SIZE], b[SIZE];
-  <span class="keyword">static</span> comp dfta[SIZE], dftb[SIZE];
 
   <span class="keyword">for</span> (L = <span class="number">1</span>, bit = <span class="number">0</span>; L &lt; n+m<span class="number">-1</span>; ++bit, L &lt;&lt;= <span class="number">1</span>);
   <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; L; ++i) bitrev[i] = bitrev[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span> | ((i &amp; <span class="number">1</span>) &lt;&lt; (bit - <span class="number">1</span>));
@@ -7906,7 +7969,7 @@ comp w[SIZE];
   <span class="keyword">int</span>&amp; <span class="keyword">operator</span> [](<span class="keyword">const</span> <span class="keyword">int</span> &amp;i) { <span class="keyword">return</span> check[i]; }
   <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(<span class="keyword">int</span> n)</span> </span>{
     prime.clear();
-    check = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>);
+    check = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>,<span class="number">0</span>);
     <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; ++i) {
       <span class="keyword">if</span> (!check[i]) prime.emplace_back(i), check[i] = i;
       <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">int</span> &amp;j : prime) {
@@ -7926,13 +7989,14 @@ comp w[SIZE];
         代码
     </div>
     <div class="spoiler-content">
-        <pre><code class="cpp"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">get_fac</span><span class="params">(<span class="keyword">int</span> x)</span> </span>{
-  vector&lt;int&gt; fac(1, 1), tmp;
+        <pre><code class="cpp"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
+<span class="function"><span class="built_in">vector</span>&lt;T&gt; <span class="title">get_fac</span><span class="params">(T x)</span> </span>{
+  <span class="built_in">vector</span>&lt;T&gt; fac = {<span class="number">1</span>};
   <span class="keyword">while</span> (E[x]) {
-    tmp = fac;
-    <span class="keyword">for</span> (<span class="keyword">int</span> y = E[x]; x%y == <span class="number">0</span>; x /= y) {
-      <span class="keyword">for</span> (<span class="keyword">int</span> &amp;i : tmp) i *= y;
-      fac.insert(fac.end(), tmp.begin(), tmp.end());
+    <span class="keyword">for</span> (T y = E[x], z = y, sz = fac.size(); x % y == <span class="number">0</span>; x /= y, z *= y) {
+      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; sz; ++i) {
+        fac.emplace_back(fac[i] * z);
+      }
     }
   }
   <span class="keyword">return</span> fac;
@@ -8002,13 +8066,18 @@ comp w[SIZE];
         代码
     </div>
     <div class="spoiler-content">
-        <pre><code class="cpp"><span class="comment">// x = pi^ki...</span>
-<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i*i &lt;= x; ++i)
-  <span class="keyword">if</span>(x%i == <span class="number">0</span>) {
-    p[++tot] = i;
-    <span class="keyword">for</span>(; x%i == <span class="number">0</span>; x /= i) k[tot]++;
+        <pre><code class="cpp"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
+vector&lt;pair&lt;T, int&gt;&gt; get_fac(T x) {
+  <span class="built_in">vector</span>&lt;pair&lt;T, <span class="keyword">int</span>&gt;&gt; ans;
+  <span class="keyword">for</span> (T i = <span class="number">2</span>; i * i &lt;= x; ++i) {
+    <span class="keyword">if</span> (x % i) <span class="keyword">continue</span>;
+    <span class="keyword">int</span> k = <span class="number">0</span>;
+    <span class="keyword">for</span> ( ; x % i == <span class="number">0</span>; x /= i) ++k;
+    ans.emplace_back(i, k);
   }
-<span class="keyword">if</span>(x &gt; <span class="number">1</span>) p[++tot] = x, k[tot] = <span class="number">1</span>;
+  <span class="keyword">if</span> (x &gt; <span class="number">1</span>) ans.emplace_back(x, <span class="number">1</span>);
+  <span class="keyword">return</span> ans;
+}
 </code></pre>
 
     </div>
@@ -8912,9 +8981,24 @@ lon a[<span class="number">110</span>]={<span class="number">1</span>,<span clas
     </div>
 </div>
 <hr>
-<h1 id="高精度"><a href="#高精度" class="headerlink" title="高精度"></a>高精度</h1><p>食用前请必须注意位数是否足够!</p>
+<h1 id="高精度"><a href="#高精度" class="headerlink" title="高精度"></a>高精度</h1><h2 id="一个小技巧"><a href="#一个小技巧" class="headerlink" title="一个小技巧"></a>一个小技巧</h2><p>a + b == (a ^ b) + ((a &amp; b) &lt;&lt; 1)</p>
+<div class="spoiler collapsed">
+    <div class="spoiler-title">
+        代码
+    </div>
+    <div class="spoiler-content">
+        <pre><code class="cpp"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{
+    <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="keyword">return</span> a;
+    <span class="keyword">return</span> add(a ^ b, (a &amp; b) &lt;&lt; <span class="number">1</span>);
+}
+</code></pre>
+
+    </div>
+</div>
+<p>可以使用 bitset 实现高精度加法</p>
 <h2 id="vector版本"><a href="#vector版本" class="headerlink" title="vector版本"></a>vector版本</h2><p><a href="https://github.com/KaizynX/Oier/blob/master/BigInteger/BigInteger.cpp" target="_blank" rel="noopener">压位+vector+符号 版本</a></p>
-<h2 id="int-版本"><a href="#int-版本" class="headerlink" title="int[]版本"></a>int[]版本</h2><p><a href="http://ybt.ssoier.cn:8088/" target="_blank" rel="noopener">一本通习题</a><br><a href="https://www.luogu.org/problemnew/lists?name=a%2Bb" target="_blank" rel="noopener">洛谷习题</a></p>
+<h2 id="int-版本"><a href="#int-版本" class="headerlink" title="int[]版本"></a>int[]版本</h2><p>食用前请必须注意位数是否足够!</p>
+<p><a href="http://ybt.ssoier.cn:8088/" target="_blank" rel="noopener">一本通习题</a><br><a href="https://www.luogu.org/problemnew/lists?name=a%2Bb" target="_blank" rel="noopener">洛谷习题</a></p>
 <p>此版本 压位+数组,支持cin,cout,string,long long转换,比较运算符,四则运算(包括高精度乘/除低精度,取模),支持带符号的减法运算,支持幂运算,开根运算</p>
 <p>可以通过开根外所有习题<br><div class="spoiler collapsed">
     <div class="spoiler-title">

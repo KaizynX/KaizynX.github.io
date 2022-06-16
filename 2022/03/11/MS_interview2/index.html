@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">微软暑期实习 leader 面 | Kaizyn&#39;s Blog</title><meta name="robots" content="noindex">
+  <title itemprop="name">微软暑期实习 leader 面 | Kaizyn&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon32.ico">
   
@@ -331,28 +331,18 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         <!--  -->
         <div class="entry-content">
-          <h1 id="面试"><a href="#面试" class="headerlink" title="面试"></a>面试</h1><p>面试官迟到了几分钟，还不开摄像头</p>
-<p>也没叫我自我介绍，问了一下项目，13:07 直接发个链接开始写题，是个系统设计题</p>
-<p>设计一个朋友圈，有四个函数，用户和朋友圈都用 int 表示，其中朋友圈按时间id递增</p>
-<ol>
-<li>发一条朋友圈 <code>void(int userId, int momentId)</code></li>
-<li>关注一个人 <code>void(int followerId, int follweeId)</code></li>
-<li>取关一个人 <code>void(int followerId, int follweeId)</code></li>
-<li>获取所有关注者(包括自己)最新的10条朋友圈 <code>list&lt;int&gt;(int userId)</code></li>
-</ol>
-<p>用 <code>map&lt;int, set&lt;int&gt;&gt;</code> 表示 用户 -&gt; 关注者</p>
-<p>用 <code>map&lt;int, vector&lt;int&gt;&gt;</code> 表示 用户 -&gt; 朋友圈</p>
-<p>1，2，3 非常容易，至于 4 则遍历所有关注者(以及自己)，将这人的最新朋友圈放入优先队列，维护并取出10个即可</p>
-<p><code>priority_queue&lt;array&lt;int, 3&gt;&gt;</code> 其中 <code>array&lt;int, 3&gt; {momentId, userId, idx_of_monment}</code></p>
-<p>大根堆 ，第一关键字是朋友圈id，还有存用户id，以及这条朋友圈是用户的第几条朋友圈 idx</p>
-<p>以上，细节不再赘述</p>
-<p>一开始他有问为什么想到优先队列。额，如果不是暴力遍历，我就只想到这个了呗(不知道怎么解释，就是想到了嘛)</p>
-<p>写完后问我内存上有没有可以优化的地方，我没想出来</p>
-<p>他提示我说朋友圈只存最近十条就够了，于是存朋友圈的改为 <code>deque&lt;int&gt;</code> 或 <code>list&lt;int&gt;</code> 这样</p>
-<p>然后经过他点播，我想到优先队列里面也是只存十个就够了, 把 <code>priority_queue</code> 换成 <code>set</code></p>
-<p>结束了大概 13:35 左右的样子，问我有什么问题，我就问他们在做那块，他说是 bing ad 扯到 13:40 多点就结束了，迟到早退，太喜欢这种上来写道题完事的！</p>
-<h1 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h1><p>结果就挂了呜呜呜，收到了感谢信</p>
-<!-- flag of hidden posts --><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+          <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="a9791b68ca088d3fa9f23f1eb95ea5a689a75435f57bdeb99abc01ad4d7e0216">94f00afea32c0266ade37fdb656f69449fc25f39e53b75644aed0aad0bc4db39b073dea2ac52076b787ffc8a4ad4239d07cf33ccf239bc426fa3bfc7f81e28d452855d4f4e9ede43441d9a02284b5a8fd357208a767151e5502c9ec6f32924d951a0acf624f1f65fbe27a23e215005cdf78fc70d18b63d7013d7325b8ba3e598e75f37e89e66e8e1b5471442ee7daeaa8ec255d0f49be2dfb3fa2d13762fd90c82f481a430e9c8c6c5400da8197f0b02c78c7781058eb4abd8572024d568b51b651dff23491b265e51a3635f5f403a99cbca21099da18f3fef21d3c028d617f857f5092fcb79b29196f52c8f440c69fdf6a99e4651f9eafa55bb2d61d2a1d85df4bdf027d2497c028b53caab9bfb60a2a12e61355a3e18b30c7a2e6b7f4e7cd6dabca74c58a310c9c91d7c46ab7ed343cd6d4ff5a23fd189247bb96889724f13319fa08319c7ca077445263bfa92434f155817426cb58d346350f22768105f8d580f461e033e00c32ca6389bf21602747f7fd7b64a28da9471068b9caba115f234f8d6ad5b5539da7c43e4354124f65d6003c9da4e98ad23c471cb603ee90b21bff2be6298ad28f6af066f6ef605e7a4abdb364070502ea0996750128a68cfcd9ecdd1aa0b6168c368c3b300b9be6d2dbc1253cc297844d8999229ebd362e10558fd652e005b1066fdb5f48be407f2feb18bf640916cd747464d69b5a2785859f61e6ff35d52323589dce620b311e2a0ac53d4a41a442b9ed9dbd8806dc4f0190591f169477b9a339a80a10a25ad9065a5467b7689e356d892dc98d6d69502a21837015d1a4c3b5f981895c79898172a9443f750d38d1c1802b787a8c183108f3e6a787b823e5a3de360101cefb457b71f9c6e72675aa52a18c7ee0aa2a9253bdcbf809480a81f2262115626dbc26a37e43016ab3dce29bd477f4ed9c19be3287ec46432eb844dde2589e14a061f50f9b55df4da1766530a842e501e5da6ef6854fc0ac0486e060af45fe7474888781c9a71a9dbdd06903da9f9e58c339b06ecd8f27088964c278ad5a39daaf5151e1a1811feb77c92af4842d6bf590ffcd3deabf20ab23a5cc8181baa550fbd111bd8def2b414847df2e2b8013f78a9f4c21a0c48fefd963cfb327197a6a73e6f6f5bbcba8414f68d74fcc779925b6197a8fb06361ae929892f81e2503971e313a863a94511526a3e77ea4941379372daa063c5a327c96ecd60536bc1daf99602f8348783f3f3c5c1274c30628cc3f24a5088d4a9b876298441a09132f903e90872796e5db381435e4f527ca23dfee10fbbf409eda9ea2c82848adef304573da358d1d5f2f0fc180cedbd38d44b621d90a6525d3fd9b9ef1a929ae551b5a03999d828853b492bd8cb84f90f441fa1f2af54d36bf2afa1480ffb7c6f774bc68758f06021b0ed5cda0c8e4ee7032a3d3b26826be631e3520d9dc3eb036e9bda1c74e7fb02917b2f6d3e8d324f2a74b4bc5b1f1ee05b9d873582f621902dcbfc4523d151c17ffdb1420244c9bfa1b303309d61ba055f2dc4b3badb094a13a12f910f637ac906ab2a7d515119070abddaea782e1fe1418e33f8a47d29f85ce280072342143115c405196d1b6e4676b498583604cab4ec9e005cc1d2409ac83183549b3bc9b50278afaf69220aed54ee29ab18f953c9d3814dbdab7e89bc92baf79358c8f54a1ae00030a08c09f48df0f105cb0046284b095bb7ca86333a92da9f5493ee69ae16ae47f36ebb6ae1bc56fa0a83866853c4a11a031052035737fd40900cffa95f5101efa30bf522e8b9f0ede74468147f87b7564a32d3dffdee50d1f3331ce71fb8d1592b380424ae5e498aa1d9ee932a837183cc40b47ecb177e0f4d4dd801a5cf70e171d7059ff8634ee8f5f1fbeebd0996b39f159e7dfdba050f6cb7b2422869f9b6a45ee566f7924330bc58334cdfcddad9f770d7ff38f809fdcc2de41a3cbc15d602bf24aa8c556dbb1d7bd7ec340f4d6d8857759798fef082b480b23c9ca4e172c9c26a3a08cab1ac144f9471c0e716498857d27946824c72be1a9941e0f51120243bae8ec5cda334608a6b8ea332b98f0f8384a3679593c5d116d8e85b698dfc8f7c715dbb0186eb9c8b1d225c9f5df0219f56ed50167c0034978f68271f4ea6f4aeff163aca83c23533ea88124829ce1b1d4f829d47938198cfb60e1e4c783d0f16adf6597d1aa73379a7aefb24ee75169e0a4987f826fac46bed0aded75502dcaaaaf1f845679c9b8ac4e6c1154b6a7168f39b9acc3d2d8b95979cc85c1ed16311de31d95f29be90fa1fd83feba13e35059466fdcbf45ab5da6f91dcae83427e2dcc48386d3e3f619d39ac7eeb5e3e3602d97bc855d0a03862433fd5651a205be533f75e69f8d0bec6edfdd8e67bf8b32690074b9dad73dcc2d66a9ca898abd69ffdf47f9cda60389e7cd7b1a87d049fb0817a0c1e2870dec67aee4dd609543dbfb3369b18a54e9e6b4456304cda8cbe84797348f9389a6b684f5b94b17d4991026ee3e1748d6fffc8ad9dfeda7812cf679693d5a2f54ff7e78c002fa5eb705a4d44b79de4c9c7821da2ab5dc38c9a88779335e63bd318b7ace38f761c8ec6e325b03e21ec646d32c2ed023171b8f4da21659afaa6c905ac8bc17af1f08ec7e490f9091128cce606ec0f7d5d293d7f92f16cd3c7307f6369bf7cb0ab0f3d5ecdb47268ad24c1ff2233c107e8f1dcd18e1e7fc9b8cde0d21133a470825caab1e3b647d4732f09b1d2949938b958f62220a3924b2781fa7a5c402aa9fd91d803f8b4f569803703532a9f8cba2163e8704f3f86be06b87029f4621464c3f7e8057c51402148f56d07f05285c0fe14fb4a51851f1cf8406ec93a9831d8d5064e24000c7254daa47014030cc79c79ef0c9f5cf95c380e0f48589503863925e446d36e639e480543b1596dec706d2b81474fc7c38c805dc4d54bd4d67acb6dc0e9bc3e67ac17bff8030fa97817c5b465b1003ab12667aa1cc6c97ec489c441f4e9947be99391bfdf2b0916806413d5b1ef2067bc35384763c9bb1e42beb843c78d031f606741c77b703fd21042809a8de1eda0a81cd6b94a6cfab7eecd5b5740810821d6b46140013e24b9f3a6426a4897e1ca96f5d36eba8e3fc04239037713e195f2bc754543d1c732d5bd6a12120a0a8a1787f82c944a968874b8ba714faa23aedc179d0517da57c3b0feffc697e830ef6f72fc03afbccb885787081f1499d5ed44cf390106691f95b9be844b894c747d8de422af744099358128b3effd5b62e606d14357116e3cee8c93cd61fed2900415d3b8a9532d328ec4f4519402c1e8fea9352f538bd1d58ae8ac46b9e0d7e44646aed155f4c6e60420aa50d908f6273aaf50b1787a2cc989d58e5aa9faf493a7bba5b707195e822cd46db415d1e2953cd27fff4827bce0514989e387</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">责令删除</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
