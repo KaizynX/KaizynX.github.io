@@ -8,6 +8,8 @@ categories:
   - interview
 tags:
 hidden: true
+message: 责令删除
+password: "******"
 description: 一条龙
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/Metabit_interview/cover.jpg
 ---

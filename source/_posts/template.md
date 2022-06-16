@@ -442,6 +442,73 @@ $$\displaystyle
 
 那么只要求出不等号左边的式子的最大值就行了。如果最大值比 $0$ 要大，说明 $mid$ 是可行的，否则不可行。
 
+## 不转义
+
+R"()"
+
+## 十六进制输出内存
+
+{% spoiler "代码" %}
+```cpp
+template <typename T>
+void hex_print(const T &y) {
+  static const char HEX[] = "0123456789ABCDEF";
+  char *x = (char*)(&y);
+  printf("0x");
+  for (int i = sizeof(T) - 1; i >= 0; --i) { // 小端存储
+    char a = *(x + i);
+    printf("%c%c",HEX[(a&0xF0)>>4],HEX[a&0x0F]);
+  }
+  puts("");
+}
+```
+
+{% endspoiler %}
+
+## 两两组合
+
+2n 个人两两组合方案数 $(2n-1)*(2n-3)*\dots$
+
+## INF
+
+{% spoiler "代码" %}
+```cpp
+template <typename T> static constexpr T inf = numeric_limits<T>::max() / 2;
+```
+
+{% endspoiler %}
+
+## 高维前缀和
+
+可以将高维数组映射成一维，从小到大枚举即可
+
+{% spoiler "代码" %}
+```cpp
+// 二维
+for(int i = 1; i <= n; i++)
+    for(int j = 1; j <= n; j++)
+        a[i][j] += a[i - 1][j];
+for(int i = 1; i <= n; i++)
+    for(int j = 1; j <= n; j++)
+        a[i][j] += a[i][j - 1];
+// 三维
+for(int i = 1; i <= n; i++)
+    for(int j = 1; j <= n; j++)
+        for(int k = 1; k <= n; k++) 
+            a[i][j][k] += a[i - 1][j][k];
+for(int i = 1; i <= n; i++)
+    for(int j = 1; j <= n; j++)
+        for(int k = 1; k <= n; k++)
+            a[i][j][k] += a[i][j - 1][k];
+for(int i = 1; i <= n; i++)
+    for(int j = 1; j <= n; j++)
+        for(int k = 1; k <= n; k++)
+            a[i][j][k] += a[i][j][k - 1];
+// 以此类推,每一维度都做一遍前缀和
+```
+
+{% endspoiler %}
+
 ---
 # 计算几何
 ## 向量 坐标 直线 圆 (结构体)
@@ -6542,10 +6609,9 @@ struct LinearBase {
   vector<T> b, rb, p;
   LinearBase(){ init(); }
   void init() {
-    tot = zero = 0;;
-    vector<T>(sz, 0).swap(b);
-    vector<T>().swap(rb);
-    vector<T>().swap(p);
+    tot = zero = 0;
+    b = vector<T>(sz, 0);
+    rb = p = vector<T>();
   }
   template <typename TT>
   void build(TT a[], const int &n) {
@@ -7098,11 +7164,12 @@ void fft(comp *a, const int &n) {
       }
     }
 }
+// 定义在函数内static Compilation Error: "Compiled file is too large" 
+comp a[SIZE], b[SIZE];
+comp dfta[SIZE], dftb[SIZE];
 template <class T>
 inline void work(T *x, const int &n, T *y, const int &m) {
   static int bit, L;
-  static comp a[SIZE], b[SIZE];
-  static comp dfta[SIZE], dftb[SIZE];
 
   for (L = 1, bit = 0; L < n+m-1; ++bit, L <<= 1);
   for (int i = 0; i < L; ++i) bitrev[i] = bitrev[i >> 1] >> 1 | ((i & 1) << (bit - 1));
@@ -7610,7 +7677,7 @@ struct Euler {
   int& operator [](const int &i) { return check[i]; }
   void init(int n) {
     prime.clear();
-    check = vector<int>(n+1);
+    check = vector<int>(n+1,0);
     for (int i = 2; i <= n; ++i) {
       if (!check[i]) prime.emplace_back(i), check[i] = i;
       for (const int &j : prime) {
@@ -7628,13 +7695,14 @@ struct Euler {
 ## 求所有因子
 {% spoiler "代码" %}
 ```cpp
-vector<int> get_fac(int x) {
-  vector<int> fac(1, 1), tmp;
+template <typename T>
+vector<T> get_fac(T x) {
+  vector<T> fac = {1};
   while (E[x]) {
-    tmp = fac;
-    for (int y = E[x]; x%y == 0; x /= y) {
-      for (int &i : tmp) i *= y;
-      fac.insert(fac.end(), tmp.begin(), tmp.end());
+    for (T y = E[x], z = y, sz = fac.size(); x % y == 0; x /= y, z *= y) {
+      for (int i = 0; i < sz; ++i) {
+        fac.emplace_back(fac[i] * z);
+      }
     }
   }
   return fac;
@@ -7696,13 +7764,18 @@ inline void gcd_init(const int &n) {
 ## [分解质因数](https://www.luogu.org/problemnew/show/P1075)
 {% spoiler "代码" %}
 ```cpp
-// x = pi^ki...
-for(int i = 2; i*i <= x; ++i)
-  if(x%i == 0) {
-    p[++tot] = i;
-    for(; x%i == 0; x /= i) k[tot]++;
+template <typename T>
+vector<pair<T, int>> get_fac(T x) {
+  vector<pair<T, int>> ans;
+  for (T i = 2; i * i <= x; ++i) {
+    if (x % i) continue;
+    int k = 0;
+    for ( ; x % i == 0; x /= i) ++k;
+    ans.emplace_back(i, k);
   }
-if(x > 1) p[++tot] = x, k[tot] = 1;
+  if (x > 1) ans.emplace_back(x, 1);
+  return ans;
+}
 ```
 
 {% endspoiler %}
@@ -8649,10 +8722,27 @@ using Mint = Modular<std::integral_constant<decay<decltype(md)>::type, md>>;
 
 ---
 # 高精度
-食用前请必须注意位数是否足够!
+
+## 一个小技巧
+a + b == (a ^ b) + ((a & b) << 1)
+
+{% spoiler "代码" %}
+```cpp
+int add(int a, int b) {
+    if (b == 0) return a;
+    return add(a ^ b, (a & b) << 1);
+}
+```
+
+{% endspoiler %}
+
+可以使用 bitset 实现高精度加法
+
 ## vector版本
 [压位+vector+符号 版本](https://github.com/KaizynX/Oier/blob/master/BigInteger/BigInteger.cpp)
 ## int[]版本
+食用前请必须注意位数是否足够!
+
 [一本通习题](http://ybt.ssoier.cn:8088/)
 [洛谷习题](https://www.luogu.org/problemnew/lists?name=a%2Bb)
 

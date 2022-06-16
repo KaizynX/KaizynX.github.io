@@ -8,6 +8,8 @@ categories:
   - interview
 tags:
 hidden: true
+message: 责令删除
+password: "******"
 description: 第一次面试,面得稀烂
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/AML_interview1/cover.jpg
 ---

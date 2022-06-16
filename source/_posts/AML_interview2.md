@@ -8,6 +8,8 @@ categories:
   - interview
 tags:
 hidden: true
+message: 责令删除
+password: "******"
 description: AML二面
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/AML_interview2/cover.jpg
 ---

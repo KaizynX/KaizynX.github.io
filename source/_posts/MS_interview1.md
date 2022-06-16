@@ -8,6 +8,8 @@ categories:
   - interview
 tags:
 hidden: true
+message: 责令删除
+password: "******"
 description: 我太难了
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/MS_interview1/cover.jpg
 ---

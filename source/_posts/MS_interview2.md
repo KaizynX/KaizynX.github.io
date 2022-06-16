@@ -8,6 +8,8 @@ categories:
   - interview
 tags:
 hidden: true
+message: 责令删除
+password: "******"
 description: 就写了道题
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/MS_interview2/cover.jpg
 ---
