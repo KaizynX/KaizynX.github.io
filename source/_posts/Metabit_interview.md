@@ -7,6 +7,7 @@ date: 2022-04-28 23:00:00
 categories:
   - interview
 tags:
+hidden: true
 description: 一条龙
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/Metabit_interview/cover.jpg
 ---
@@ -229,3 +230,7 @@ private:
 其他不多说
 
 hr说前两面反馈也不错 (大概率就是稳了
+
+# 结果
+
+offer了，并没有1k呜呜呜

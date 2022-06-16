@@ -7,6 +7,7 @@ date: 2022-03-11 15:45:00
 categories:
   - interview
 tags:
+hidden: true
 description: 就写了道题
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/MS_interview2/cover.jpg
 ---

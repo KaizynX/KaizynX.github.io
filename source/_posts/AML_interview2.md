@@ -7,6 +7,7 @@ date: 2022-01-05 21:50:00
 categories:
   - interview
 tags:
+hidden: true
 description: AML二面
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/AML_interview2/cover.jpg
 ---

@@ -7,6 +7,7 @@ date: 2022-03-11 15:30:00
 categories:
   - interview
 tags:
+hidden: true
 description: 我太难了
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/MS_interview1/cover.jpg
 ---

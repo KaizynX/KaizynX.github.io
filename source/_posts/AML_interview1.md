@@ -7,6 +7,7 @@ date: 2021-12-29 23:59:59
 categories:
   - interview
 tags:
+hidden: true
 description: 第一次面试,面得稀烂
 photos: https://cdn.jsdelivr.net/gh/KaizynX/cdn/img/posts/AML_interview1/cover.jpg
 ---
